@@ -6,5 +6,8 @@ h=re.sub(r'<script src="([^"?]+)[^"]*"></script>',lambda m:'<script>\n'+open(os.
 assert 'src="' not in h.replace('src=""','') or True
 h=h.replace("'assets/esquina-atlas.png'", "'data:image/png;base64,"+base64.b64encode(open(os.path.join(d,'assets/esquina-atlas.png'),'rb').read()).decode('ascii')+"'")
 h=h.replace("'assets/esquina-walk.png'", "'data:image/png;base64,"+base64.b64encode(open(os.path.join(d,'assets/esquina-walk.png'),'rb').read()).decode('ascii')+"'")
+h=h.replace("'assets/esquina-cook-source.png'", "'data:image/png;base64,"+base64.b64encode(open(os.path.join(d,'assets/esquina-cook-source.png'),'rb').read()).decode('ascii')+"'")
 h=h.replace("'assets/esquina-food.png'", "'data:image/png;base64,"+base64.b64encode(open(os.path.join(d,'assets/esquina-food.png'),'rb').read()).decode('ascii')+"'")
+h=h.replace("'assets/esquina-tools.png'", "'data:image/png;base64,"+base64.b64encode(open(os.path.join(d,'assets/esquina-tools.png'),'rb').read()).decode('ascii')+"'")
+h=h.replace("'assets/esquina-frame.png'", "'data:image/png;base64,"+base64.b64encode(open(os.path.join(d,'assets/esquina-frame.png'),'rb').read()).decode('ascii')+"'")
 out=sys.argv[1]; open(out,'w',encoding='utf-8').write(h); print(out,len(h))

@@ -1,3 +1,33 @@
+# Entre Esquinas — Restaurante 0.21.2
+
+Cozinheira do jogador usa a nova folha de 16 poses, quatro direções e quatro fases de caminhada. A imagem gerada de 1254 × 1254 é recortada em grade 4 × 4 e normalizada uma vez no carregamento para células 64 × 64, sem suavização. Parada usa a segunda pose da direção mantida. Essa normalização não substitui retoque artístico manual dos quadros.
+
+# Entre Esquinas — Restaurante 0.21.1
+
+Tela inicial compacta com botão Tutorial junto às opções de começar. As instruções ficam recolhidas até a escolha do jogador.
+
+# Entre Esquinas — Restaurante 0.21.0
+
+Interface de gestão, opções, inventários, computador e construção com molduras de madeira e abas douradas. A loja e a mochila usam as ilustrações de utensílios da prévia aprovada. O catálogo lateral reúne sprite, preço, setor e posicionamento de cada móvel.
+
+# Entre Esquinas — Restaurante 0.20.2
+
+Mover, girar e guardar/reembolsar móveis ficam exclusivamente no Modo construção. Clique no objeto instalado em qualquer setor do restaurante, sem aproximar o personagem; escolha nova posição e confirme. Cancelar preserva a posição original. Guardar e reembolsar aparece somente para objeto já instalado; continua impedido quando há itens, preparo ou louça que precisam ser retirados. Áreas permitidas, colisão e bloqueio durante serviço preservados. Computador e recebimento continuam infraestruturas fixas.
+
+Validação: `RELATORIO_TESTES_0_20_2.md`.
+
+# Entre Esquinas — Restaurante 0.20.1
+
+Compra de panela, talher e pratos transferida do Modo construção para Computador → Utensílios. Cada cartão tem uma arte em pixels, preço e quantidade na mochila; saldo disponível acima. Panela e prato reutilizam a renderização do cenário; talher segue sua paleta. Custos, capacidade, destino imediato na mochila e funcionamento da cozinha preservados. Construção mostra somente Móveis.
+
+Validação: `RELATORIO_TESTES_0_20_1.md`.
+
+# Entre Esquinas — Restaurante 0.20.0
+
+Gestão → Modo construção pausa a simulação inteira e oculta a HUD operacional. O modo inicia com catálogo recolhido: o botão Construção abre/fecha o painel lateral, com móveis, sprites, preços e saldo. Selecionar um móvel recolhe o painel para posicionamento. A cobrança ocorre ao confirmar uma posição válida; cancelar não compra. Confirmar/cancelar continua no modo pausado. Voltar ao jogo fica no painel; Escape cancela a colocação, recolhe o painel ou sai do modo, nessa ordem. Arrastar o cenário ou WASD/setas move a câmera sem mover o personagem. Serviço em andamento continua impedindo reformas. Receitas, preços, saves e regras físicas preservados.
+
+Validação: `RELATORIO_TESTES_0_20_0.md`.
+
 # Entre Esquinas — Restaurante 0.19.0
 
 - Garçom: a função em Gestão → Equipe agora anota pedidos nas mesas e serve pratos. Pratos disponíveis têm prioridade; sem prato para levar, procura clientes aguardando pedido, priorizando menor paciência restante entre os acessíveis. A anotação exige presença física, respeita a paciência e usa a mesma operação do jogador, impedindo pedidos duplicados. Trocar para Parado interrompe novas tarefas; pratos em trânsito seguem as regras anteriores.

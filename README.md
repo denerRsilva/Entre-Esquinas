@@ -1,4 +1,4 @@
-# Entre Esquinas — Restaurante 0.19.0
+# Entre Esquinas — Restaurante 0.21.2
 
 Simulação de restaurante e vida na cidade, em HTML/JavaScript/Canvas.
 
@@ -10,6 +10,6 @@ Simulação de restaurante e vida na cidade, em HTML/JavaScript/Canvas.
 
 ## Novidades
 
-Garçom anota pedidos e serve; zoom de 70% a 200%; Montagem dentro da Gestão, com sprites dos móveis no catálogo. Inclui horários configuráveis de almoço/jantar, cozinha por ações rápidas, qualidade dos alimentos e risco de queima. Salvamento local no navegador, formato 9.
+Versão 0.21.2 importada do pacote Entre_Esquinas_Restaurante_0_21_2.zip fornecido pelo usuário. Inclui modo construção, utensílios com artes próprias, interface com molduras de madeira, tutorial recolhível e cozinheira com 16 poses em quatro direções. Detalhes e histórico em `projeto/README.md`.
 
-Snapshot da versão publicada, origem `bcf15a3eace33f4df91f576de8230dda4d67b3d6`. Arquivos históricos em `projeto/legacy/` e relatórios anteriores mantidos para referência. Os testes registrados no relatório foram executados durante a implementação; esta importação não altera as mecânicas do jogo.
+Teste adicional da animação: `cd projeto && node cook-art.test.cjs`.

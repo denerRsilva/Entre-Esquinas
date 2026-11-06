@@ -76,3 +76,127 @@ main{display:block;overflow:hidden}#world{position:absolute;inset:0;max-width:no
 
 /* Catálogo usa o mesmo atlas dos móveis do cenário. */
 #panel .card:has(.furnitureSprite){display:flex;flex-direction:column}.furnitureSprite{order:-1;width:100%;height:112px;object-fit:contain;image-rendering:pixelated;background:#183d36;border-radius:8px;margin-bottom:10px}
+
+/* Modo construção: simulação congelada e catálogo recolhível. */
+html.construction{--top:0px}
+.construction header,.construction #dock,.construction #actions,.construction #hint,.construction #notice,.construction #ordersHud,.construction #context,.construction #kitchenStatus,.construction #openBtn{display:none!important}
+#constructionControls{position:fixed;left:12px;bottom:12px;z-index:21}
+#catalogToggle{min-height:48px;border:2px solid #bf9a62;background:#254b3e;color:#fff0d0}
+#constructionDrawer{position:fixed;left:12px;bottom:72px;z-index:20;width:min(400px,calc(100vw - 24px));max-height:calc(100dvh - 90px);overflow:auto;padding:16px;border:2px solid #bf9a62;border-radius:14px;background:#193f3df5;box-shadow:0 8px 30px #0006}
+.constructionHead{display:flex;gap:12px;align-items:center;justify-content:space-between}.constructionHead>b{font-size:18px}.constructionHead button{font-size:12px}
+#constructionCash{margin:10px 0;color:#e7b96d;font-weight:bold}#constructionPanel .cards{grid-template-columns:repeat(2,minmax(0,1fr))}#constructionPanel .card{min-width:0;padding:10px}#constructionPanel .card p{font-size:12px}#constructionPanel .furnitureSprite{height:85px}#constructionPanel>p{font-size:12px}
+#constructionNotice{font-size:12px;margin-bottom:0}#constructionNotice:empty{display:none}
+.construction #buildBar{bottom:72px;left:auto;right:12px;transform:none;min-width:0;width:min(430px,calc(100vw - 24px))}
+@media(max-height:500px){#constructionDrawer{max-height:calc(100dvh - 82px);bottom:66px;padding:10px}#constructionPanel .furnitureSprite{height:54px}#constructionPanel .card{padding:8px}}
+
+#constructionPanel .card:has(.furnitureSprite){display:flex;flex-direction:column}
+
+#panel .card:has(.toolSprite){display:flex;flex-direction:column}.toolSprite{order:-1}
+
+/* Marcenaria e metal do catálogo aprovado. A moldura usa nove fatias para
+   manter os cantos na mesma escala em painéis de tamanhos diferentes. */
+:root {
+  --felt: #203925;
+  --parchment: #fff0ca;
+  --brass: #cba457;
+  --leaf: linear-gradient(#344e31, #223922);
+  --honey: linear-gradient(#ffdb88, #ecaf48 65%, #d49636);
+  --wood-frame: url('assets/esquina-frame.png') 24 / 13px repeat;
+}
+#management, #welcome, #constructionDrawer, .construction #buildBar {
+  color: var(--parchment);
+  background: radial-gradient(ellipse at 20% 0%, #30482b, var(--felt) 65%);
+  border: 13px solid #86542a;
+  border-image: var(--wood-frame);
+  border-radius: 4px;
+  box-shadow: 0 4px 2px #1a160fc9, 0 12px 35px #10160fb3;
+  scrollbar-color: #af864d #203422;
+}
+dialog::backdrop { background: #142017ae; }
+.dialogHead, .constructionHead {
+  background: var(--felt);
+  border-bottom: 1px solid #a28e54;
+  padding-bottom: 10px;
+}
+.dialogHead b, .constructionHead>b, #welcome h1, .card>b, .inventoryPane h2 {
+  font-family: Georgia, 'Times New Roman', serif;
+  color: var(--parchment);
+}
+.dialogHead b, .constructionHead>b { font-size: clamp(19px, 3vw, 25px); }
+#management button, #welcome button, #constructionDrawer button,
+#buildBar button, #dock button, #actions button, #catalogToggle {
+  border: 1px solid #a77a34;
+  border-radius: 5px;
+  background: var(--honey);
+  color: #382711;
+  box-shadow: inset 0 0 0 1px #ffe6ab, inset 0 -3px #cb913d, 0 2px #132314;
+}
+#management nav button, #constructionDrawer nav button, #closeDialog,
+#management .dialogHead button, #constructionDrawer .constructionHead button,
+#actions .secondary, #catalogToggle, #welcome .secondary {
+  background: var(--leaf);
+  color: var(--parchment);
+  box-shadow: inset 0 0 0 1px #657247, 0 2px #152517;
+}
+#management nav button.active, #constructionDrawer nav button.active {
+  background: var(--honey);
+  color: #35250f;
+  box-shadow: inset 0 0 0 1px #ffe8a0, inset 0 -3px #c88b37;
+}
+button:enabled:hover { filter: brightness(1.09); }
+button:enabled:active { filter: brightness(.92); }
+button:focus-visible { outline: 3px solid #fff6cc; outline-offset: 2px; }
+button:disabled { filter: saturate(.48); }
+#management select, #management input:not([type=checkbox]) {
+  border-radius: 4px; color: var(--parchment); background: #182e20; border: 1px solid #82794c;
+}
+.card, .inventoryPane {
+  border: 1px solid #9b894f; border-radius: 6px;
+  background: linear-gradient(135deg,#31492c,#263d27);
+  box-shadow: inset 0 0 0 2px #1d3524;
+}
+.card>b { font-size: 18px; }
+#panel>.card { margin-block: 8px; }
+#management .inventorySlot {
+  border-radius: 4px;
+  box-shadow: inset 0 0 0 2px #fae4b4, inset 0 -4px #bc995e;
+}
+#management .inventorySlot.selected { outline: 3px solid #ffce70; outline-offset: 1px; }
+.controlIcon { display:inline-block; width:20px; height:20px; vertical-align:middle; flex:none; }
+.controlIcon svg { display:block; width:100%; height:100%; }
+#dock button, #fullscreenBtn, #catalogToggle { display:inline-flex; flex-direction:row-reverse; align-items:center; justify-content:center; gap:6px; }
+#context .objectAction .controlIcon { width:25px; height:25px; }
+#constructionDrawer { width:min(380px,calc(100vw - 24px)); padding:12px; }
+#constructionPanel .cards { grid-template-columns:1fr; gap:6px; }
+#constructionPanel .card:has(.furnitureSprite) {
+  display:grid; grid-template-columns:56px minmax(0,1fr) auto; column-gap:8px;
+  align-items:center; padding:6px;
+}
+#constructionPanel .card .furnitureSprite {
+  grid-row:1 / 3; grid-column:1; width:56px; height:52px; margin:0; background:transparent; box-shadow:none;
+}
+#constructionPanel .card>b { grid-column:2; grid-row:1; margin:0; align-self:end; font-size:16px; }
+#constructionPanel .card p { grid-column:2; grid-row:2; align-self:start; margin:2px 0; font-size:11px; }
+#constructionPanel .card button { grid-column:3; grid-row:1 / 3; padding-inline:9px; }
+#constructionPanel>p { margin-block:6px 10px; }
+#constructionCash, .shopBalance { font-weight:bold; color:#f6d791; }
+.shopBalance { text-align:center; border-block:1px solid #847748; padding:7px; }
+#panel .card:has(.toolSprite) { text-align:center; align-items:center; }
+#panel .card:has(.toolSprite)>button { margin-top:auto; }
+.toolSprite { background:transparent; box-shadow:none; object-fit:contain; margin:0 auto; }
+.inventorySlot .toolSprite { width:68px; height:48px; }
+#panel .card .toolSprite { height:104px; }
+@media(max-width:420px) {
+  #constructionDrawer { padding:6px; }
+  #constructionPanel .card:has(.furnitureSprite) { grid-template-columns:44px minmax(0,1fr) auto; gap:4px; }
+  #constructionPanel .card .furnitureSprite { width:44px; }
+  #dock .controlIcon { width:16px; }
+}
+
+/* Entrada breve, instruções disponíveis por escolha do jogador. */
+#welcome:has(#welcomeTutorial[hidden]) { width:670px; }
+.welcomeActions { display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-top:20px; }
+#welcomeTutorial { border-top:1px solid #847748; margin-top:18px; padding-top:8px; }
+#welcomeTutorial h2 { font: bold 22px Georgia,serif; color:var(--parchment); }
+#welcomeTutorial ol { padding-left:24px; }
+@media(max-width:540px) { .welcomeActions button { flex:1 1 145px; } }
