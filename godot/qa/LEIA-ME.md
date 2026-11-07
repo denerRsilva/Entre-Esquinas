@@ -50,3 +50,17 @@ quando a geometria/posição/rotação muda e revalidação obrigatória ao conf
 O benchmark imprime tempos reais, sem limites absolutos dependentes da máquina.
 Para incluir renderização, rode em sessão gráfica, sem `--headless`, e acrescente
 `-- --render`. O primeiro quadro pode incluir compilação e aquecimento do driver.
+
+## Movimento livre
+
+```sh
+node qa/movimento.test.cjs
+XDG_DATA_HOME="$(mktemp -d)" godot --headless --script res://qa/MovimentoUI.gd
+```
+
+A suíte de física cobre 13 cenários: posição subcélula, parada e inversão
+imediatas, velocidade independente da frequência dos quadros, diagonais,
+paredes, cantos, móveis, passagem estreita, quadro lento, reservas dos atores,
+salvamento e retomada da navegação por clique. O teste Godot envia teclas ao
+viewport e verifica também animação, foco e atualização em cada quadro.
+Pode ser executado em sessão gráfica sem `--headless`, como CozinhaUI.

@@ -205,13 +205,61 @@ function route(s,room,from,to,a=null,avoid=new Set(),objects=s.objects){
  if(!end)return null;let out=[];while(prev.get(key(end))){out.unshift({x:end.x,y:end.y});end=prev.get(key(end))}return out;
 }
 function position(a){if(a.motion){let m=a.motion,t=Math.min(1,m.elapsed/m.duration);return {x:m.fromX+(m.toX-m.fromX)*t,y:m.fromY+(m.toY-m.fromY)*t}}let p=a.settled;return p&&p.room===a.room&&p.x===a.x&&p.y===a.y?{x:p.px,y:p.py}:{x:a.x,y:a.y};}
+// Continuous player input is transient; only the settled world position is saved.
+const PLAYER_SPEED=4.5,PLAYER_RADIUS=.20,playerInput=new WeakMap();
+function playerVelocity(a){return playerInput.get(a)||null;}
+function isMoving(a){return !!a.motion||!!playerInput.get(a)?.moving;}
+function setPlayerInput(s,dx,dy){
+ const a=s.player,input=playerInput.get(a);
+ if(!Number.isFinite(dx)||!Number.isFinite(dy))return;
+ const length=Math.hypot(dx,dy);
+ if(!length){if(input)playerInput.delete(a);return;}
+ const p=position(a);
+ a.x=Math.floor(p.x+.5);a.y=Math.floor(p.y+.5);
+ a.settled={room:a.room,x:a.x,y:a.y,px:p.x,py:p.y};
+ a.motion=null;a.goal=null;
+ playerInput.set(a,{dx:dx/length,dy:dy/length,moving:input?.moving||false});
+}
+function moveFreePlayer(s,a,input,dt){
+ const p=position(a),before={...p},occupied=occupants(s,a),solid=new Map();
+ function collision(x,y){
+  const cx=x+.5,cy=y+.5,r=PLAYER_RADIUS;
+  for(let iy=Math.floor(cy-r);iy<=Math.floor(cy+r);iy++)for(let ix=Math.floor(cx-r);ix<=Math.floor(cx+r);ix++){
+   const k=ix+','+iy;
+   if(!solid.has(k))solid.set(k,blocked(s,a.room,ix,iy,a)||occupied.has(k));
+   if(!solid.get(k))continue;
+   const ox=Math.max(ix-cx,0,cx-ix-1),oy=Math.max(iy-cy,0,cy-iy-1);
+   if(ox*ox+oy*oy<r*r-1e-10)return true;
+  }
+  return false;
+ }
+ function axis(dx,dy){
+  if(!dx&&!dy)return;
+  let amount=1;
+  if(collision(p.x+dx,p.y+dy)){
+   let lo=0,hi=1;
+   for(let i=0;i<14;i++){const mid=(lo+hi)/2;if(collision(p.x+dx*mid,p.y+dy*mid))hi=mid;else lo=mid;}
+   amount=lo;
+  }
+  p.x+=dx*amount;p.y+=dy*amount;
+ }
+ // Short swept steps prevent tunnelling even after a slow frame. Resolve each
+ // axis independently, so a blocked diagonal slides instead of locking both axes.
+ const distance=PLAYER_SPEED*dt,count=Math.max(1,Math.ceil(distance/.08));
+ for(let i=0;i<count;i++){axis(input.dx*distance/count,0);axis(0,input.dy*distance/count);}
+ a.x=Math.floor(p.x+.5);a.y=Math.floor(p.y+.5);
+ a.settled={room:a.room,x:a.x,y:a.y,px:p.x,py:p.y};
+ a.motion=null;a.goal=null;a.wait=0;
+ input.moveX=p.x-before.x;input.moveY=p.y-before.y;
+ input.moving=Math.hypot(input.moveX,input.moveY)>1e-7;
+}
 function startMotion(a,to,offsetX=0,offsetY=0){let p=position(a),x=to.x+offsetX,y=to.y+offsetY,d=Math.hypot(x-p.x,y-p.y);if(d<1e-7)return false;a.motion={fromX:p.x,fromY:p.y,toX:x,toY:y,x:to.x,y:to.y,elapsed:0,duration:d*WALK_TIME};return true;}
 function advanceMotion(a,dt){let m=a.motion;if(!m)return dt;let used=Math.min(dt,m.duration-m.elapsed);m.elapsed+=used;if(m.elapsed>=m.duration-1e-8){a.x=m.x;a.y=m.y;a.settled={room:a.room,x:a.x,y:a.y,px:m.toX,py:m.toY};a.motion=null;}return Math.max(0,dt-used);}
-function reserved(a){let out=[{x:a.x,y:a.y}];if(a.motion){out.push({x:a.motion.x,y:a.motion.y});if(a.motion.x!==a.x&&a.motion.y!==a.y)out.push({x:a.motion.x,y:a.y},{x:a.x,y:a.motion.y})}return out.filter((p,i)=>out.findIndex(q=>q.x===p.x&&q.y===p.y)===i);}
+function reserved(a){let out=[{x:a.x,y:a.y}];if(a.id==='player'&&!a.motion){const p=position(a),r=PLAYER_RADIUS;for(let y=Math.floor(p.y+.5-r);y<=Math.floor(p.y+.5+r);y++)for(let x=Math.floor(p.x+.5-r);x<=Math.floor(p.x+.5+r);x++){const dx=Math.max(x-p.x-.5,0,p.x-.5-x),dy=Math.max(y-p.y-.5,0,p.y-.5-y);if(dx*dx+dy*dy<r*r-1e-10)out.push({x,y});}}if(a.motion){out.push({x:a.motion.x,y:a.motion.y});if(a.motion.x!==a.x&&a.motion.y!==a.y)out.push({x:a.motion.x,y:a.y},{x:a.x,y:a.motion.y})}return out.filter((p,i)=>out.findIndex(q=>q.x===p.x&&q.y===p.y)===i);}
 function accessPoints(s,o,objects=s.objects){let r=rect(o),ps=[];for(let y=r.y-1;y<=r.y+r.h;y++)for(let x=r.x-1;x<=r.x+r.w;x++){if((x===r.x-1||x===r.x+r.w)&&(y>=r.y&&y<r.y+r.h)||(y===r.y-1||y===r.y+r.h)&&(x>=r.x&&x<r.x+r.w)){if(!blocked(s,o.room,x,y,null,objects))ps.push({room:o.room,x,y})}}return ps;}
 function closestAccess(s,a,o){let ps=accessPoints(s,o);if(a.room!==o.room)return ps[0]||null;return ps.map(p=>({p,path:route(s,a.room,a,p,a)})).filter(v=>v.path).sort((a,b)=>a.path.length-b.path.length)[0]?.p||null;}
-function goObject(s,a,o){let p=closestAccess(s,a,o);if(!p)return false;a.goal=p;return true;}
-function go(a,p){a.goal={room:p.room||a.room,x:p.x,y:p.y};if(Number.isFinite(p.offsetX)&&Number.isFinite(p.offsetY)){a.goal.offsetX=Math.max(-.25,Math.min(.25,p.offsetX));a.goal.offsetY=Math.max(-.25,Math.min(.25,p.offsetY))}}
+function goObject(s,a,o){let p=closestAccess(s,a,o);if(!p)return false;playerInput.delete(a);a.goal=p;return true;}
+function go(a,p){playerInput.delete(a);a.goal={room:p.room||a.room,x:p.x,y:p.y};if(Number.isFinite(p.offsetX)&&Number.isFinite(p.offsetY)){a.goal.offsetX=Math.max(-.25,Math.min(.25,p.offsetX));a.goal.offsetY=Math.max(-.25,Math.min(.25,p.offsetY))}}
 function arrived(a){return a.goal&&!a.motion&&near(a,a.goal,0)&&Math.hypot(position(a).x-a.goal.x-(a.goal.offsetX||0),position(a).y-a.goal.y-(a.goal.offsetY||0))<1e-6;}
 function occupants(s,a){return new Set(allActors(s).filter(b=>b!==a&&b.room===a.room).flatMap(b=>reserved(b).map(key)));}
 function goalInRoom(a){if(!a.goal)return null;if(a.goal.room===a.room)return a.goal;return PORTALS[a.room].find(p=>p.to===a.goal.room)||PORTALS[a.room][0];}
@@ -224,6 +272,11 @@ function pushAside(s,b,requester,locked,seen=new Set()){
 function moveActors(s,dt=WALK_TIME){
  const locked=new Set();
  for(const a of allActors(s)){
+  const manual=a===s.player&&playerInput.get(a);
+  if(manual){moveFreePlayer(s,a,manual,dt);continue;}
+  // Return from a free position to a safe cell centre before an automatic route.
+  // This is interpolated, never snapped, and prevents cutting wall corners.
+  if(a===s.player&&!a.motion&&a.goal&&(a.goal.room!==a.room||a.goal.x!==a.x||a.goal.y!==a.y))startMotion(a,{x:a.x,y:a.y});
   let budget=dt;
   if(a.motion){let before={room:a.room,x:a.x,y:a.y};budget=advanceMotion(a,budget);if(!a.motion)locked.add(before.room+':'+key(before));if(a.motion||budget<1e-8)continue;}
   if(!a.goal||a.hold>s.time)continue;let g=goalInRoom(a);if(!g)continue;
@@ -345,7 +398,7 @@ function step(s,dt,rng=Math.random){
 function foodConserved(s){return Object.keys(FOODS).every(p=>Object.values(s.inv).reduce((n,loc)=>n+loc[p],0)+s.deliveries.filter(o=>o.food===p).reduce((n,o)=>n+o.pending,0)+allActors(s).reduce((n,a)=>n+(a.carry?.kind==='food'&&a.carry.food===p?a.carry.n:0),0)+inventoryCount(s,p)+(s.recovery||[]).reduce((n,q)=>n+(q.item===p?q.n:0),0)+s.used[p]===s.purchased[p]);}
 function valid(s){try{if(!validQuality(s)||!validExperience(s)||!validTimeReputation(s)||!validKitchen(s))return false;for(const o of s.objects.filter(o=>['shelf','cold','fridge'].includes(o.type))){if(!Array.isArray(o.inventory)||o.inventory.length!==10||o.inventory.some(p=>p!==null&&(!accepts(o,p.item)||!Number.isInteger(p.n)||p.n<1||p.n>itemLimit(p.item))))return false;}for(const loc of ['storage','kitchen'])for(const p of Object.keys(FOODS))if(s.inv[loc][p]!==s.objects.filter(o=>o.inventory&&objectLocation(o)===loc).reduce((n,o)=>n+objectCount(o,p),0))return false;if(!Array.isArray(s.inventory)||s.inventory.length!==10||!Number.isInteger(s.selectedSlot)||s.selectedSlot<0||s.selectedSlot>9||s.inventory.some(slot=>slot!==null&&(!ITEMS[slot.item]||!Number.isInteger(slot.n)||slot.n<1||slot.n>itemLimit(slot.item))))return false;let reservations=new Map();for(const a of allActors(s))for(const p of reserved(a)){let k=a.room+':'+key(p);if(reservations.has(k)&&reservations.get(k)!==a.id)return false;reservations.set(k,a.id)}if(!Number.isInteger(s.serial)||s.serial<1||typeof s.open!=='boolean'||typeof s.closing!=='boolean'||!Number.isFinite(s.tick)||!Number.isFinite(s.arrival)||!s.tools||typeof s.tools.pot!=='boolean'||typeof s.tools.spoon!=='boolean'||!Array.isArray(s.residents)||s.residents.length!==3||!Array.isArray(s.ready)||!Array.isArray(s.reports))return false;for(const v of Object.values(s.ledger))if(!Number.isFinite(v))return false;for(const k of ['lia','beto','nina'])if(!Number.isInteger(s.friends[k])||s.friends[k]<0)return false;for(const w of s.workers)if(!['none','logistics','waiter'].includes(w.task))return false;let orderIds=new Set();for(const o of s.orders){if(!Number.isInteger(o.id)||orderIds.has(o.id)||!RECIPES[o.recipe]||!['ordered','cooking','ready','eating','paid','lost'].includes(o.state)||!Number.isFinite(o.price)||o.price<1||!Number.isFinite(o.age)||o.age<0)return false;orderIds.add(o.id)}if(new Set(s.ready).size!==s.ready.length||s.ready.some(id=>!s.orders.some(o=>o.id===id&&o.state==='ready')))return false;if(s.cooking&&(!RECIPES[s.cooking.recipe]||!s.objects.some(o=>o.id===s.cooking.stove&&o.type==='stove'&&o.pan==='cookingPot')||!Number.isFinite(s.cooking.left)||s.cooking.left<0))return false;for(const c of s.customers)if(!RECIPES[c.recipe]||!['walk','waiting','ordered','eating','leave'].includes(c.state)||!s.objects.some(o=>o.id===c.seat&&o.type==='chair')||c.order!==null&&!s.orders.some(o=>o.id===c.order&&o.customer===c.id))return false;if(s.version!==VERSION||!Number.isFinite(s.cash)||!Number.isInteger(s.day)||s.day<1||![0,1].includes(s.period)||!Number.isFinite(s.time)||!Array.isArray(s.objects)||s.objects.length>180||!Array.isArray(s.orders)||s.orders.length>5000||!Array.isArray(s.customers)||s.customers.length>50||s.workers.length!==2)return false;let ids=new Set();for(const o of s.objects){if(!CATALOG[o.type]||!Number.isInteger(o.id)||ids.has(o.id)||!Number.isInteger(o.x)||!Number.isInteger(o.y)||!Number.isInteger(o.rot)||o.rot<0||o.rot>3||o.room!==CATALOG[o.type].room)return false;ids.add(o.id);for(const p of cells(o))if(wall(o.room,p.x,p.y)||fixed(o.room,p.x,p.y))return false}let occupied=new Set();for(const o of s.objects)for(const p of cells(o)){let k=o.room+':'+key(p);if(occupied.has(k))return false;occupied.add(k)}let persons=new Set();for(const a of allActors(s)){if(!PORTALS[a.room]||!Number.isInteger(a.x)||!Number.isInteger(a.y)||a.x<1||a.x>=W-1||a.y<1||a.y>=H-1||blocked(s,a.room,a.x,a.y,a))return false;if(a.goal&&(!PORTALS[a.goal.room]||!Number.isInteger(a.goal.x)||!Number.isInteger(a.goal.y)||a.goal.x<1||a.goal.x>=W-1||a.goal.y<1||a.goal.y>=H-1))return false;if(a.motion){let m=a.motion;if(!['fromX','fromY','toX','toY','duration','elapsed','x','y'].every(k=>Number.isFinite(m[k]))||m.duration<=0||m.duration>WALK_TIME*3||m.elapsed<0||m.elapsed>=m.duration||!Number.isInteger(m.x)||!Number.isInteger(m.y)||Math.abs(m.x-a.x)>1||Math.abs(m.y-a.y)>1||Math.abs(m.toX-m.x)>.25||Math.abs(m.toY-m.y)>.25||blocked(s,a.room,m.x,m.y,a))return false;}if(a.settled&&!['x','y','px','py'].every(k=>Number.isFinite(a.settled[k])))return false;if(a.goal&&['offsetX','offsetY'].some(k=>a.goal[k]!==undefined&&(!Number.isFinite(a.goal[k])||Math.abs(a.goal[k])>.25)))return false;if(!Number.isFinite(a.hold)||!Number.isFinite(a.wait))return false;if(a.carry&&!['food','dish'].includes(a.carry.kind))return false;if(a.carry?.kind==='dish'&&!s.orders.some(o=>o.id===a.carry.order&&['ready','lost'].includes(o.state)))return false;let k=a.room+':'+key(a);if(persons.has(k))return false;persons.add(k);if(a.carry&&a.carry.kind==='food'&&(!FOODS[a.carry.food]||!Number.isInteger(a.carry.n)||a.carry.n<1))return false;}for(const loc of Object.keys(s.inv))for(const p of Object.keys(FOODS))if(!Number.isInteger(s.inv[loc][p])||s.inv[loc][p]<0||amount(s,loc,p)>capacity(s,loc,p))return false;for(const o of s.deliveries)if(!FOODS[o.food]||!Number.isInteger(o.total)||o.total<1||o.pending<0||o.received<0||o.total!==o.pending+o.received||!Number.isFinite(o.eta))return false;for(const p of Object.keys(FOODS))if(!Number.isInteger(s.purchased[p])||!Number.isInteger(s.used[p])||s.purchased[p]<0||s.used[p]<0)return false;for(const r of Object.keys(RECIPES))if(!Number.isFinite(s.prices[r])||s.prices[r]<1||s.prices[r]>100||typeof s.menu[r]!=='boolean')return false;return foodConserved(s)&&equipmentConserved(s)&&mealsConserved(s);}catch{return false}}
 function talk(s,id){if(!['lia','beto','nina'].includes(id))return '';const p=s.residents.find(a=>a.id===id);if(!near(s.player,{room:'street',...p},1))return 'Aproxime-se para conversar.';let k=s.day+':'+id;if(!s.talked[k]){s.friends[id]++;s.talked[k]=true}return {lia:'Lia • agricultora: "Estou testando legumes para os restaurantes do bairro. Prepare sua cozinha antes de abrir!"',beto:'Beto • cozinheiro: "Uma panela e um utensílio já rendem os primeiros pratos. Duas mesas não ajudam quando o fogão é o gargalo."',nina:'Nina • moradora: "Gosto de uma sopa no jantar. Deixe um corredor livre: ninguém quer esbarrar no garçom."'}[id]+' Vínculo: '+s.friends[id]+'. Conversas demonstrativas; desbloqueios e economia social ainda pendentes.';}
-function objectNear(s,o,a=s.player){return !!o&&!a.motion&&o.room===a.room&&accessPoints(s,o).some(p=>near(a,p,0));}
+function objectNear(s,o,a=s.player){return !!o&&!isMoving(a)&&o.room===a.room&&accessPoints(s,o).some(p=>near(a,p,0));}
 function result(s,ok,message){s.message=message;return {ok,error:ok?null:message,message};}
 
 
@@ -559,5 +612,5 @@ function batchQuality(s,o){const b=o.readyBatch;if(!b)return 0;const t=Math.max(
 function heatState(s,o){const t=Math.max(0,s.time-(o.readyBatch?.doneAt??s.time))+1e-8;if(t>=25||o.burned)return {stage:'burned',label:'✕ Queimado — retirar e descartar',value:1};if(t>=20)return {stage:'danger',label:'⚠ Perto de queimar',value:(t-8)/17};if(t>=8)return {stage:'over',label:'⚠ Passando do ponto',value:(t-8)/17};return {stage:'ready',label:'✓ No ponto — retirar',value:1-t/8};}
 function validQuality(s){const qok=q=>q===undefined||Number.isInteger(q)&&q>=0&&q<=3;for(const loc of allItemLocations(s))for(const p of loc.filter(Boolean))if(!qok(p.quality)||p.burned!==undefined&&(typeof p.burned!=='boolean'||!p.item.startsWith('pot_')))return false;for(const a of allActors(s))if(a.carry&&!qok(a.carry.quality))return false;for(const d of s.deliveries)if(!qok(d.quality))return false;for(const [food,a]of Object.entries(s.receivingQuality||{}))if(!FOODS[food]||!Array.isArray(a)||a.length!==4||a.some(n=>!Number.isInteger(n)||n<0)||a.slice(1).reduce((x,y)=>x+y,0)>s.inv.receiving[food])return false;for(const o of s.objects){for(const [dish,a]of Object.entries(o.dishQuality||{}))if(!ITEMS[dish]||!Array.isArray(a)||a.length!==4||a.some(n=>!Number.isInteger(n)||n<0)||a.slice(1).reduce((x,y)=>x+y,0)>(o.dishes[dish]||0))return false;if(o.readyBatch&&(!Number.isFinite(o.readyBatch.doneAt)||o.readyBatch.doneAt>s.time||!qok(o.readyBatch.quality)||!RECIPES[o.readyBatch.recipe]))return false;}return !s.cooking||qok(s.cooking.quality);}
 
-const api={takeOrder,serviceHours,serviceTimeText,serviceOpenError,setServiceHours,QUALITY_CONFIG,ingredientPlan,batchQuality,heatState,objectQualityCount,firstDishQuality,receivingCount,ARRIVAL_CONFIG,seatTable,KITCHEN_CONFIG,stationSlots,readyCount,kitchenAction,platingPlan,cancelPlating,recoverItems,TIME_CONFIG,REPUTATION_CONFIG,calendarDate,clockText,reputationLevel,applyVisitReputation,servicePending,CUSTOMER_CONFIG,newExperience,customerIndicator,satisfactionFor,canceledCarry,migrateSave,serve,furnishedTest,clearTestScene,itemLimit,itemName,itemIcon,objectNear,cookError,startCook,plateFood,discardFood,washPlates,collectDirty,equipmentConserved,mealsConserved,objectLocation,accepts,objectCount,objectSpace,syncContainers,putObject,takeObject,transferSlot,ITEMS,inventoryCount,inventorySpace,addInventory,removeInventory,collectReceiving,storageObject,W,H,CELL,VERSION,NAV,WALK_TIME,position,reserved,FOODS,CATALOG,RECIPES,PORTALS,DIRS,key,actor,fresh,rect,cells,hit,wall,fixed,blocked,near,allActors,route,accessPoints,closestAccess,goObject,go,arrived,moveActors,pushAside,place,remove,layoutError,seats,kit,buyTool,capacity,amount,transfer,purchase,deliver,supplyAction,toggleOpen,spawn,interact,pickupDish,atStove,kitchenEnough,step,foodConserved,valid,talk,mealCost};root.Restaurant=api;if(typeof module!=='undefined')module.exports=api;
+const api={PLAYER_SPEED,PLAYER_RADIUS,setPlayerInput,playerVelocity,isMoving,takeOrder,serviceHours,serviceTimeText,serviceOpenError,setServiceHours,QUALITY_CONFIG,ingredientPlan,batchQuality,heatState,objectQualityCount,firstDishQuality,receivingCount,ARRIVAL_CONFIG,seatTable,KITCHEN_CONFIG,stationSlots,readyCount,kitchenAction,platingPlan,cancelPlating,recoverItems,TIME_CONFIG,REPUTATION_CONFIG,calendarDate,clockText,reputationLevel,applyVisitReputation,servicePending,CUSTOMER_CONFIG,newExperience,customerIndicator,satisfactionFor,canceledCarry,migrateSave,serve,furnishedTest,clearTestScene,itemLimit,itemName,itemIcon,objectNear,cookError,startCook,plateFood,discardFood,washPlates,collectDirty,equipmentConserved,mealsConserved,objectLocation,accepts,objectCount,objectSpace,syncContainers,putObject,takeObject,transferSlot,ITEMS,inventoryCount,inventorySpace,addInventory,removeInventory,collectReceiving,storageObject,W,H,CELL,VERSION,NAV,WALK_TIME,position,reserved,FOODS,CATALOG,RECIPES,PORTALS,DIRS,key,actor,fresh,rect,cells,hit,wall,fixed,blocked,near,allActors,route,accessPoints,closestAccess,goObject,go,arrived,moveActors,pushAside,place,remove,layoutError,seats,kit,buyTool,capacity,amount,transfer,purchase,deliver,supplyAction,toggleOpen,spawn,interact,pickupDish,atStove,kitchenEnough,step,foodConserved,valid,talk,mealCost};root.Restaurant=api;if(typeof module!=='undefined')module.exports=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

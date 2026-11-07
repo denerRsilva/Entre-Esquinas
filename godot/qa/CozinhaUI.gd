@@ -56,7 +56,7 @@ func run():
 	key.keycode=KEY_A;key.pressed=true;root.push_input(key)
 	g.tick(.3)
 	key=key.duplicate();key.pressed=false;root.push_input(key);g.tick(.3)
-	check(float(js("R.position(state.player).x"))<x_before,"WASD mantém movimentação do HTML")
+	check(float(js("R.position(state.player).x"))<x_before,"WASD movimenta o jogador continuamente")
 	click_at(Vector2(680,150))
 	check(js("state.objects.find(o=>o.id===selectedObject)?.type")=="stove","Clique no fogão atravessa HUD passiva")
 	walk_to_selected()

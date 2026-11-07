@@ -96,7 +96,7 @@ isso custava cerca de 4 segundos para começar e mais de 1 segundo por prévia.
 
 A validação agora preenche uma grade de ocupação e calcula conectividade uma
 única vez. Isso verifica as mesmas passagens sem calcular caminhos individuais.
-A função de movimentação/rotas do jogador permanece inalterada. Como diagonais
+A otimização preservou o método de busca de rotas; o controle livre foi acrescentado na revisão descrita abaixo. Como diagonais
 só são permitidas entre células ortogonais livres, os dois métodos encontram
 exatamente o mesmo conjunto de células acessíveis.
 
@@ -121,3 +121,29 @@ as bibliotecas nativas para aplicar a otimização.
 Validação: 1.173 comparações com o algoritmo anterior, cache e invalidação,
 sete suítes de regras em Node.js e QuickJS, teste integrado e construção com
 cliques reais na janela Godot; todos passaram. Fontes HTML preservados.
+
+## Movimento livre do jogador
+
+WASD/setas agora controlam uma velocidade contínua, normalizada nas diagonais,
+com parada e inversão imediatas. O jogador deixa de precisar concluir uma célula
+antes de responder à próxima direção. A posição subcélula é mantida no campo
+`settled`, já existente no formato de save 9; as teclas pressionadas são transitórias.
+
+O corpo do jogador usa raio de 0,20 célula. O deslocamento é varrido em passos
+curtos e resolvido em eixos separados: ao encostar na parede, o eixo livre
+continua avançando. Contato não impede recuar; quadros lentos não atravessam
+obstáculos. As células ocupadas pelo corpo são reservadas para impedir que
+móveis e NPCs entrem nelas. NPCs e construção continuam usando a grade.
+
+O clique para caminhar e se aproximar dos objetos permanece disponível. Uma
+transição interpolada recoloca a posição no caminho de navegação quando o
+jogador troca do teclado para o clique, sem teletransportar para a grade.
+Animação acompanha o movimento real e para quando o corpo fica bloqueado.
+
+O mundo é atualizado em cada quadro renderizado, com limite de 60 FPS, sem o
+temporizador que podia descartar quadros alternados perto de 60 Hz. Menus e
+perda de foco continuam pausando a simulação e liberando as teclas.
+
+Validação: 13 cenários de física, eventos de teclado na janela Godot, animação,
+colisões, salvamento e perda de foco; suítes de regras, cozinha, construção,
+menus e teste integrado passaram. Arquivos da versão HTML preservados.

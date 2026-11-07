@@ -2,7 +2,6 @@ extends Node
 const STORE = "user://restaurante.json"
 const SCRIPTS = ["apresentacao","restaurant-core","comidas","cenografia","acoes","sessao"]
 var events:Array=[]
-var elapsed:=0.0
 var active:=false
 var frame_data:Dictionary
 var values:Dictionary={}
@@ -116,9 +115,9 @@ func play_tone(hz:float) -> void:
 func _process(delta:float) -> void:
 	if not active or not focused:return
 	if events.is_empty() and frame_data.get("modal","")!="":return
-	elapsed+=delta
-	if elapsed>=1.0/30.0 or not events.is_empty():
-		tick(elapsed);elapsed=0.0
+	# Update on every rendered frame; a timer threshold can skip alternating
+	# frames when the monitor delta is slightly below 1/60 second.
+	tick(delta)
 
 func map_input(event:InputEvent) -> void:
 	if not active or frame_data.get("modal","")!="":return
@@ -142,7 +141,6 @@ func _input(event:InputEvent) -> void:
 func _notification(what:int) -> void:
 	if what==NOTIFICATION_APPLICATION_FOCUS_OUT and active:
 		focused = false
-		elapsed = 0.0
 		events.clear()
 		RestauranteVM.executar("document.hidden=true;releaseKeyboard()")
 		palco.pause_actors()
