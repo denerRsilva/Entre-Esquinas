@@ -51,7 +51,7 @@ function snapshot(dt,events) {
  else if(constructionMode){
   ui.catalog=section('constructionControls');ui.drawer=section('constructionDrawer');ui.build=section('buildBar');
  }else{
-  for(const id of ['hud','dock','actions','context','ordersHud','kitchenStatus','openBtn','hint'])ui[id]=section(id);
+  for(const id of ['hud','dock','actions','context','ordersHud','kitchenStatus','openBtn'])ui[id]=section(id);
   ui.notice=$('notice').style.opacity==='1'?section('notice'):null;
  }
  const writes=Host.writes;Host.writes={};

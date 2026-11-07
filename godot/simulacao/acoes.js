@@ -329,7 +329,7 @@ $('tutorialBtn').onclick=()=>{
  $('tutorialBtn').setAttribute('aria-expanded',String(!tutorial.hidden));
  $('tutorialBtn').textContent=tutorial.hidden?'Tutorial':'Fechar tutorial';
 };
-$('startFurnishedBtn').onclick=()=>{state=R.furnishedTest();building=null;hover=null;selectedObject=null;renderedKey='';resetFrameClock();$('welcome').close();setCameraLevel(cameraLevel);refresh();tell(state.message)};
+$('startFurnishedBtn').onclick=()=>{state=R.furnishedTest();building=null;hover=null;selectedObject=null;renderedKey='';resetFrameClock();$('welcome').close();setCameraLevel(cameraLevel);refresh()};
 $('startBtn').onclick=()=>{resetFrameClock();$('welcome').close();refresh()};$('welcome').showModal();
 function drawKitchenStatus(){
  const box=$('kitchenStatus');box.replaceChildren();
