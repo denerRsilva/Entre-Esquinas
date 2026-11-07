@@ -105,7 +105,7 @@ function actor(c,R,s,a,selected,construction=false){
  if(construction)return;
  if(a.id==='player')label(c,'Você',x,bottom+12,'#77603a');
  else if(a.id.startsWith('worker'))label(c,a.id==='worker1'?'Logística':'Garçom',x,bottom+11);
- else if(a.recipe&&['waiting','ordered','eating'].includes(a.state)&&typeof FoodArt!=='undefined'){box(c,x-17,bottom-82,34,28,'#25473df2');FoodArt.draw(c,a.recipe,x-15,bottom-82,30,26);}else if(selected===a.id)label(c,({lia:'Lia',beto:'Beto',nina:'Nina'})[a.id]||'Cliente',x,bottom+11);
+ else if(a.recipe&&a.order&&['ordered','eating'].includes(a.state)&&typeof FoodArt!=='undefined'){box(c,x-17,bottom-82,34,28,'#25473df2');FoodArt.draw(c,a.recipe,x-15,bottom-82,30,26);}else if(selected===a.id)label(c,({lia:'Lia',beto:'Beto',nina:'Nina'})[a.id]||'Cliente',x,bottom+11);
  if(a.wait>=5)label(c,'Aguardando passagem',x,bottom-68,'#78503a');
  if(a.experience){const indicator=R.customerIndicator(s,a);if(indicator){box(c,x+18,bottom-82,28,25,'#25473df2');c.font='20px system-ui';c.textAlign='center';c.fillStyle='#fff3d5';c.fillText(indicator.emoji,x+32,bottom-62);}}
 }
