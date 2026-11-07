@@ -14,6 +14,10 @@ Versão 0.21.2 importada do pacote Entre_Esquinas_Restaurante_0_21_2.zip forneci
 
 Teste adicional da animação: `cd projeto && node cook-art.test.cjs`.
 
+## Documento de design
+
+O [GDD consolidado](GDD.md) registra as regras atuais da Godot, as decisões recentes e os parâmetros ainda provisórios.
+
 ## Projeto Godot
 
 A migração editável está em `godot/project.godot` (Godot 4.6.3 Standard).

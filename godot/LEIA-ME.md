@@ -2,6 +2,8 @@
 
 **Projeto editável para Godot 4.6.3 Standard • PC x86-64 • 0.21.2-godot.1**
 
+Regras e decisões de design: [GDD consolidado](../GDD.md).
+
 ## Abrir e jogar
 
 1. Extraia o ZIP por completo. Mantenha a pasta `nativo` junto ao projeto.
