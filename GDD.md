@@ -1,17 +1,39 @@
 # Entre Esquinas — Game Design Document
 
-**Revisão:** consolidado Godot — 7 de novembro de 2026
+**Revisão:** consolidação do GDD v1.4 com a versão Godot — 7 de novembro de 2026
+
+**Editor usado pelo proprietário:** Godot **4.7.2**, informado por Dener nesta revisão.
+
+**Fonte de design:** `GDD_Entre_Esquinas_Restaurante_v1_4.pdf`, revisão de 03/11/2026 e adendos de 04/11/2026, fornecido pelo proprietário.
 
 **Base do jogo:** 0.21.2 e revisões posteriores da versão Godot
 
 **Última implementação considerada:** [f0fd4e9](https://github.com/denerRsilva/Entre-Esquinas/commit/f0fd4e9)
 
-Este documento reúne as decisões aprovadas para o jogo e o funcionamento atual
-verificado no projeto. O GDD original não está versionado neste repositório;
-os arquivos históricos mencionam um GDD Restaurante v1.3. Este consolidado não
-reconstitui capítulos ausentes nem transforma ideias futuras em funcionalidades
-implementadas. O escopo abaixo é o da versão Godot; o HTML permanece preservado
-como versão anterior e não recebe automaticamente as mesmas mudanças.
+Este documento integra a visão e as decisões do PDF v1.4 às evoluções já
+registradas no repositório. O PDF descreve historicamente a base 0.10.3; suas
+menções a funcionalidades ausentes e ao save formato 4 não descrevem
+automaticamente a versão Godot atual. As seções 1–14 preservam o registro técnico
+anterior, com os ajustes desta revisão; as seções 15–23 integram o design do PDF,
+as divergências e as pendências.
+
+### Como interpretar o documento
+
+| Marcador | Significado |
+| --- | --- |
+| CONFIRMADO / APROVADO | Decisão de design registrada; pode ainda depender de implementação. |
+| ATUAL DOCUMENTADO | Comportamento descrito no GDD e nos registros anteriores do repositório; esta revisão documental não o revalidou executando o jogo. |
+| PROPOSTO | Sugestão para discussão ou parâmetro provisório, sem aprovação final de balanceamento. |
+| EM ABERTO / PENDENTE | Exige especificação, decisão ou validação. |
+| EXEMPLO | Situação ilustrativa; não fixa conteúdo, números ou compromisso de produção. |
+| NÃO APROVADO | Ideia preservada para consulta, fora do escopo autorizado de implementação. |
+
+Decisões expressas mais recentes do proprietário prevalecem sobre decisões
+anteriores. Código e documentação técnica registram o comportamento existente;
+não convertem automaticamente uma diferença em aprovação de design. Onde PDF e
+registro atual diferem sem decisão rastreada, a diferença é explicitada na seção
+21, sem alterar o jogo nesta revisão. O HTML preservado não recebe
+automaticamente as mudanças da Godot.
 
 ## 1. Visão do jogo
 
@@ -323,9 +345,15 @@ não devem ser considerados validados apenas pelos testes em Linux.
 
 ## 13. Base técnica e limites de escopo
 
-O projeto atual usa **Godot 4.6.3 Standard**, com apresentação e controles nativos
-Godot e simulação JavaScript embarcada via QuickJS/GDExtension. A migração é
-híbrida; não está integralmente convertida para GDScript.
+O proprietário usa **Godot 4.7.2** como editor de trabalho, conforme informação
+expressa de 07/11/2026. A migração e as validações históricas foram documentadas
+em **Godot 4.6.3 Standard**. A compatibilidade da extensão nativa, a importação,
+a execução e a exportação em 4.7.2 ainda precisam de validação específica; esta
+atualização não declara esses testes realizados nem altera configurações do projeto.
+
+A apresentação e os controles são nativos Godot, com simulação JavaScript
+embarcada via QuickJS/GDExtension. A migração é híbrida; não está integralmente
+convertida para GDScript.
 
 O pacote tem bibliotecas e perfis para Windows e Linux x86-64. A validação
 registrada foi feita em Linux. Web, Android e macOS exigem trabalho adicional na
@@ -353,3 +381,396 @@ documentá-las aqui como recursos já entregues.
 Fontes complementares: [guia Godot](godot/LEIA-ME.md),
 [histórico do projeto HTML](projeto/README.md) e
 [registro de migração histórico](projeto/MIGRACAO_RESTAURANTE.md).
+
+## 15. Visão completa, referências e pilares
+
+**CONFIRMADO —** Restaurante e vida na cidade em equilíbrio. A promessa é cuidar
+de um pequeno restaurante, conhecer moradores e transformar a gastronomia e a
+vida da cidade, equilibrando trabalho, relacionamentos e crescimento. A prioridade
+de produção é consolidar a diversão dentro do restaurante e desenvolver cidade
+e narrativa progressivamente. Essa ordem não elimina a dimensão social da visão.
+
+| Referência confirmada | Inspiração desejada | Cuidado |
+| --- | --- | --- |
+| Stardew Valley | Cidade, rotinas, vínculos, passagem dos dias e liberdade de movimento | Não reproduzir agricultura ou sistemas sem relação com a proposta. |
+| Travellers Rest | Operação prática, produção e melhorias do estabelecimento | Evitar serviço repetitivo sem escolhas. |
+| Chef RPG | Receitas, estética gastronômica e conexão com o entorno | Preservar identidade própria e escopo viável. |
+
+Big Ambitions não integra as referências deste conceito.
+
+| Pilar | Atividade | Relação com os demais |
+| --- | --- | --- |
+| Operação | Preparar, organizar estações, atender e priorizar pedidos | Capacidade e qualidade afetam satisfação e resultado. |
+| Cidade | Explorar, conhecer moradores e participar de eventos | Relações podem revelar fornecedores, receitas e oportunidades. |
+| Gestão | Comprar, definir cardápio e preços, calcular margens e coordenar equipe | Recursos e escolhas sustentam operação e crescimento. |
+| Progressão | Reformar, melhorar equipamentos, desenvolver receitas e reputação | Novas possibilidades mudam decisões e liberam tempo para a cidade. |
+
+Cada pilar deve afetar ao menos outro. A fantasia é começar pequeno, dominar a
+operação, delegar tarefas e construir identidade gastronômica e vínculos locais.
+**EM ABERTO —** Origem do protagonista e acesso ao restaurante: herança, compra
+ou outra forma. Quase falência e quatro mesas são premissas ilustrativas.
+O tópico 7 de um brainstorm anterior consta como excluído no PDF; seu conteúdo
+não foi fornecido e não é reconstituído aqui.
+
+## 16. Operação significativa, economia e autonomia
+
+### Cozinha e receitas
+
+A cozinha deve oferecer escolhas de sequência, lotes, recursos e tempo, evitando
+microcliques repetidos sem decisão. Pedidos que disputam uma estação, ingredientes
+insuficientes e garçom ocupado devem gerar consequências compreensíveis.
+Sugerir outra receita ao cliente permanece **PROPOSTO**.
+
+**PROPOSTO —** Cada receita deve declarar nome, ingredientes e quantidades,
+estações, ordem das etapas, tempos, capacidade, custo por porção, preço, margem,
+critérios de qualidade, desperdício e requisitos de desbloqueio. O exemplo de
+hambúrguer e batatas com chapa e fritadeira paralelas é ilustrativo; não acrescenta
+receita, equipamento nem produção paralela ao protótipo.
+
+### Compras e perdas
+
+**PROPOSTO —** Fornecedores diferenciados por preço, prazo, qualidade,
+disponibilidade e relacionamento. Quantidade inicial de fornecedores, validade,
+temperatura, congelamento e intensidade das perdas seguem **EM ABERTO**.
+Queima aprovada no adendo não significa aprovação de deterioração dos ingredientes.
+
+Recebimento físico e armazenamento por categoria são o funcionamento documentado.
+Pallets, carrinhos e fila de entregas da mercearia histórica não são automaticamente
+regras aprovadas para o restaurante.
+
+### Economia compreensível
+
+O fechamento deve explicar as causas do ganho ou perda de dinheiro. A visão de
+economia completa é uma **PROPOSTA**, não uma declaração de implementação de
+salários, aluguel e todos os indicadores abaixo.
+
+| Indicador | Interpretação |
+| --- | --- |
+| Receita de vendas | Total recebido pelos pratos vendidos. |
+| Custos variáveis | Ingredientes consumidos e demais despesas por prato. |
+| Margem de contribuição | Receita menos custos variáveis. |
+| Resultado operacional | Margem menos salários, aluguel e outras despesas fixas. |
+| Caixa disponível | Dinheiro para despesas e investimentos. |
+
+**EXEMPLO —** Venda de 30 e ingredientes de 12 deixam 18 antes das demais
+despesas; esses valores não substituem preços ou custos atuais.
+
+### Equipe e autonomia
+
+**CONFIRMADO —** Funcionários mantêm tarefas atribuídas, com intervenção do
+jogador nas prioridades. A evolução desejada vai de executar tarefas a coordenar
+gargalos e decidir capacidade, cardápio e investimentos. Deve continuar havendo
+escolhas relevantes mesmo com uma equipe desenvolvida.
+
+**PROPOSTO —** Mostrar falta de ingredientes, estação ocupada ou caminho
+bloqueado. Funcionário sem demanda aguarda na função. Cozinha e lavagem
+automáticas, contratação comercial, salários e progressão de equipe não são
+acrescentados por esta revisão.
+
+## 17. Cidade, relações, ecossistema e progressão
+
+A cidade é parte da visão de jogo: moradores com rotinas e preferências
+observáveis, vínculos que abrem oportunidades e acontecimentos com efeitos
+compreensíveis no restaurante. Esses sistemas amplos ainda são **PROPOSTOS**,
+além do espaço de demonstração atual.
+
+| Exemplo de relação ou acontecimento | Efeito possível, ainda proposto |
+| --- | --- |
+| Amizade com agricultor | Ingrediente sazonal e receita exclusiva. |
+| Moradora vegetariana | Preferências refletidas na procura e nos comentários. |
+| Evento em praça próxima | Mais visitantes em horários e pratos específicos. |
+| Escassez de fornecedor | Mudança de preço, oferta ou prazo. |
+
+Começar com poucos NPCs de função clara. Romances, diálogos extensos e histórias
+longas aguardam a validação do ciclo principal.
+
+O **Ecossistema Vivo da Cidade** é uma hipótese de diferencial: notícia de
+festival dá tempo para planejar; demanda e oferta mudam; o jogador decide comprar
+antes, adaptar o cardápio ou manter operação enxuta; vendas, perdas e relações
+expressam o resultado. As causas devem ser visíveis, sem variações arbitrárias e
+ocultas. A reputação atual não altera demanda automaticamente.
+
+| Fase proposta | Conteúdo | Experiência desejada |
+| --- | --- | --- |
+| Início | Poucos pratos e mesas, trabalho direto, primeiros vínculos | Conseguir fazer o restaurante funcionar. |
+| Intermediária | Equipe, especialização, novas estações e eventos | Perceber o efeito da organização. |
+| Avançada | Reputação, novas clientelas, reformas e eventos complexos | Construir um negócio com identidade. |
+
+Concorrência e um segundo estabelecimento são hipóteses de maior escopo. Uma
+segunda unidade fica fora do primeiro planejamento de produção até validar o
+jogo principal.
+
+## 18. Espaço, inventários, circulação e upgrades
+
+### Diretrizes do PDF
+
+**APROVADO —** A partida regular começa vazia; o cenário mobiliado é ferramenta
+de teste. Abrir não exige estrutura mínima. Salão, cozinha e estoque têm funções
+distintas, e o estoque equipado é opcional para abrir.
+
+Cozinha e estoque integram a mesma cena; parede separa o estoque e o acesso se dá
+pela cozinha, sem porta externa própria. Computador e recebimento integram esse
+espaço. A prateleira pode ficar na cozinha ou no estoque. Esses requisitos de
+layout devem ser confrontados com o cenário atual antes de qualquer alteração.
+
+A mochila tem dez espaços e pilhas de até 99 conforme compatibilidade do item;
+panelas com conteúdo são exceções unitárias. Armazenamentos têm inventários
+próprios por categoria. A direção aprovada é tela dividida, mochila à esquerda
+e objeto à direita; compras de utensílios e panelas entram na mochila.
+
+Ações contextuais pertencem ao alvo selecionado, exigem proximidade e ficam
+agrupadas acima dele. Clicar no chão cancela e outro alvo substitui a seleção.
+Aproximar-se sem selecionar não deve abrir ações ou a lista de recebimento.
+O PDF posicionava Inventário entre Gestão e Montar; o acesso atual à construção
+por Gestão é registrado na seção 5 e essa posição antiga não é restaurada aqui.
+
+**CONFIRMADO —** Grade para organização, colocação livre nas áreas autorizadas,
+ocupação e colisão física; movimento visual livre e fluido. O controle contínuo
+posterior da Godot permanece documentado na seção 4. Grade 24 × 16 e células de
+40 px pertencem ao registro histórico da 0.10.3, sem fixar dimensões comerciais.
+
+Corredores de largura de uma pessoa devem produzir espera ou desvio e tornar
+perceptível a diferença entre lotação e eficiência. Prioridade entre personagens,
+cruzamento diagonal, tempo máximo de espera e resolução de impasses continuam
+**PENDENTES** onde não houver especificação ou teste atual. Não se declara
+comprovada a ausência de deadlocks nesta revisão documental.
+
+### Melhorias por setor
+
+**APROVADO COMO DIREÇÃO —** Cada setor terá upgrades com efeitos perceptíveis.
+Catálogo final, preços e disponibilidade por fase permanecem pendentes.
+
+| Proposta de melhoria | Benefício a avaliar |
+| --- | --- |
+| Panela adicional ou fogão com mais bocas | Alternância ou paralelismo, conforme capacidade a definir. |
+| Frigideira, chapa e utensílios especializados | Técnicas e receitas novas. |
+| Geladeira maior ou freezer | Capacidade e conservação, quando esses sistemas forem definidos. |
+| Câmara fria | Expansão futura com investimento, espaço e custo; sem armazenamento infinito. |
+
+Antes da compra, mostrar preço, espaço, instalação e consequência prática.
+Melhoria cosmética deve ser identificada como personalização. Recepção, retirada
+para viagem, decoração com efeito de reputação, plantas e divisórias são propostas,
+sem constituir requisitos de abertura.
+
+Os detalhes de freezer, validade, compartilhamento entre geladeiras, custo
+definitivo de reorganização/revenda e upgrades do MVP seguem **EM ABERTO**.
+Reembolso integral e restrições atuais de setores descrevem o protótipo, não
+balanceamento comercial definitivo.
+
+## 19. Qualidade e ponto de cozimento — adendo de 04/11
+
+Esta seção incorpora o adendo aprovado do PDF, que substitui a antiga exclusão
+de queima. É requisito de design; detalhes visuais e sonoros abaixo não são
+declarados testados ou integralmente implementados nesta atualização.
+
+### Escala e apresentação
+
+**APROVADO —** Ingredientes e pratos usam a mesma escala: Comum sem estrela,
+Prata com estrela cinza/prateada, Ouro com estrela amarela e Roxa com estrela
+roxa. O nome do nível roxo não depende de “Irídio”.
+
+A qualidade do lote deve derivar da média ponderada pelas quantidades de
+ingredientes efetivamente consumidas, sem sorteio oculto, e ser preservada no
+empratamento. Fórmula, limiares e seleção das pilhas precisam de especificação
+rastreável; o simples fato de existirem no protótipo não aprova seu balanceamento.
+
+**Regra obrigatória:** estrelas somente nos itens de ingredientes e pratos
+prontos, inclusive em inventários, armazenamento, compras e serviço.
+Não mostrar estrelas no preparo da receita, barra, fogão/panela ou alertas de
+cozimento, nem antecipar qualidade atual, prevista ou potencial durante o preparo.
+A degradação continua internamente e é comunicada pelos estados de cozimento.
+
+### Estados e feedback aprovado
+
+Tempos contados após concluir a receita, em segundos ativos; são parâmetros
+provisórios para teste.
+
+| Estado | Intervalo de referência | Barra e sinais | Panela e som |
+| --- | --- | --- | --- |
+| Cozinhando | Até concluir a receita | Barra preenche com símbolo de chama | Fogo e vapor leve. |
+| No ponto | 0 até 8 s | Verde cheia com confirmação; esvazia na janela segura | Breve brilho e som curto de conclusão. |
+| Passando do ponto | 8 até 20 s | Laranja preenchendo com alerta | Vapor intenso, início de fumaça e novo aviso sonoro. |
+| Perto de queimar | 20 até 25 s | Vermelha quase cheia e alerta evidente | Fumaça escura e conteúdo escurecendo. |
+| Queimado | A partir de 25 s | Símbolo próprio substitui a barra | Conteúdo escuro e orientação para retirar e descartar. |
+
+Uma única barra muda de função. Usar símbolos além das cores, evitar piscadas e
+alarmes constantes e reservar a maior urgência para perto da queima. Nenhuma
+etapa mostra estrelas. Os instantes exatos das transições exigem teste de limite.
+
+Retirar a panela cheia encerra cozimento e perda por calor. Empratar conserva o
+resultado. Menus que pausam a simulação também pausam esses contadores.
+Queimado é estado de perda separado das quatro qualidades; não pode ser servido
+e deve ser descartado. Incêndio não integra esta primeira versão.
+
+O aviso compacto fora da câmera pode mostrar arte da receita e símbolos de
+pronto/alerta, sem estrela e sem mover a câmera. A qualidade participa da
+satisfação juntamente com as esperas. O cliente paga o preço combinado ao
+registrar o pedido; não há preço automático por qualidade aprovado neste adendo.
+
+### Aceitação e conservação
+
+- Preservar qualidade em compras, entregas, transporte, armazenamento, retirada,
+  sobras, pratos e salvamento; especificar separação de pilhas diferentes.
+- Testar pausa, limites de tempo, retirada no instante da queima, mochila cheia,
+  empratamento parcial, descarte e serviço por funcionário.
+- Confirmar ausência de estrelas em todo preparo e em alertas fora da câmera,
+  e apresentação correta nos ingredientes e pratos finais.
+- Preservar receitas, rendimento, rotas e funções de equipe, salvo necessidade
+  explicitamente especificada para esse sistema.
+- Tratar migrações sem apagar ou substituir indevidamente a partida original.
+
+## 20. Vertical slice, experiência e validação
+
+O vertical slice deve demonstrar preparação, almoço, intervalo, jantar e
+fechamento. A validação operacional vem primeiro; metas sociais e de eventos
+são posteriores e não bloqueiam o teste do restaurante.
+
+| Elemento | Escopo sugerido pelo PDF, ainda proposto |
+| --- | --- |
+| Restaurante | 3–4 mesas, duas estações e 3–5 receitas. |
+| Cidade | Uma rua ou praça, três NPCs significativos e um fornecedor. |
+| Trabalho | Dois serviços com pedidos, preparo, serviço e pagamento. |
+| Gestão | Compras, estoque simplificado, relatório e uma melhoria. |
+| Relações | Uma amizade que altera oferta ou oportunidade. |
+| Equipe | Uma tarefa contínua com feedback de impedimentos. |
+| Evento | Uma situação local com efeito visível na demanda. |
+
+### Critérios de Game Design
+
+- Completar um dia sem instruções externas extensas.
+- Entender por que pedidos disputam um recurso e perceber ao menos duas escolhas
+  com consequências diferentes e observáveis.
+- Cozinhar sem microcliques repetidos que não acrescentam decisão.
+- Reconhecer no relatório as principais causas do resultado.
+- Na etapa social, perceber o efeito concreto de um morador ou evento no negócio.
+- Registrar interesse real em jogar outro dia, clareza, erros, espera e tempo em
+  transferências. Testes automatizados não comprovam diversão.
+
+### Cobertura funcional herdada do PDF
+
+Os critérios COZ-01 a COZ-10 pedem: encaixes compatíveis; ingredientes completos
+antes do consumo; confirmação sem duplicar lote; retirada sem espaço conservando
+comida; empratamento sem perda; bloqueios explícitos ao mover/guardar; save e
+migração preservando progresso; regressão de serviços, garçom e limpeza; estados
+operacionais claros; playtest do fluxo. A ausência de espaço conserva itens,
+mas não interrompe automaticamente a degradação de comida que continua no fogo.
+
+GRID-01 a GRID-09 pedem: dimensões e encaixe corretos; ausência de sobreposição
+indevida; passagem unitária; resolução de impasses; rotas alternativas; atualização
+dos caminhos após reformas; colocação inválida sem cobrança/perda; acessibilidade
+das áreas essenciais; diferença perceptível entre layouts.
+
+CA-01 a CA-08 incluem abertura vazia sem clientes inválidos, requisitos por tarefa,
+estoque opcional, compatibilidade de receitas, distinção dos serviços, conservação
+ao comprar/remover, melhorias mensuráveis e proteção de pontos indispensáveis.
+
+Esses são critérios a verificar na versão atual, não resultados novos de QA.
+O PDF relata testes da 0.10.3; os registros Godot relatam verificações posteriores
+em Linux/4.6.3. Nenhum deles comprova execução na 4.7.2 informada pelo proprietário.
+
+## 21. Conciliação entre PDF e repositório
+
+| Assunto | PDF v1.4 e adendos | Registro atual / tratamento nesta revisão |
+| --- | --- | --- |
+| Base | 0.10.3, save 4 | Godot derivada da 0.21.2, save 9. Preservar registro atual; não retroceder formato. |
+| Editor | Não estabelece a versão atual do proprietário | Godot 4.7.2 informada nesta conversa; histórico de testes em 4.6.3 preservado. |
+| Referências | Stardew Valley, Travellers Rest e Chef RPG | Restaurada a visão completa, além da referência de movimento. |
+| Fogão | Retirar inventário genérico; slot de panela e consumo da mochila | Simplificação já documentada; manter conservação e ações contextuais. |
+| Modelo híbrido C | Intervenções e presença ainda pendentes | Cozimento autônomo documentado. Não considerar que isso resolve ou aprova todas as intervenções do híbrido. |
+| Comida transportável | Mochila como destino; panela instalada entre receitas; representação ainda pendente | Panela cheia móvel documentada. Diferença de design a confirmar antes de eventual mudança; não criar recipiente novo nem apagar o atual. |
+| Bancada | Slot de pratos; utensílio e fonte do garçom pendentes | Pratos, talher instalado e pratos prontos documentados. Registrar solução atual sem eliminar a rastreabilidade da diferença. |
+| Empratamento | Ação imediata na base antiga | Dois segundos junto à bancada no registro atual; parâmetro provisório. |
+| Horários e calendário | Propostos ou pendentes na base antiga | Horários configuráveis, calendário e reputação já documentados; não retornar ao avanço de dia pelo jantar. |
+| Satisfação | Pesos da qualidade por definir | 35%/35%/30% documentados como teste, sem aprovação de balanceamento final. |
+| Qualidade/queima | Aprovadas em adendo; estrelas apenas nos itens | Requisitos detalhados incorporados; verificar conformidade visual e sonora na versão atual. |
+| Construção e navegação | Prévia, rotação e regras de circulação parcialmente propostas | Preservar evoluções registradas e manter QA de gargalos/impasses. |
+| Cidade e relações | Parte central da visão; desenvolvimento progressivo | Rua demonstrativa atual não equivale ao ecossistema completo. |
+| Plataforma | PC principal | Windows/Linux previstos; não assumir Android, web ou macOS prontos na migração. |
+
+Pendências antigas não devem ser repetidas como ausência técnica quando o
+repositório já registra uma solução. Tampouco uma solução existente deve apagar
+uma divergência de design sem decisão identificada.
+
+## 22. Decisões, prioridades e riscos
+
+### Registro consolidado
+
+- D01: almoço e jantar, abertura voluntária sem estrutura mínima; a versão atual
+  acrescenta janelas de horário documentadas.
+- D02: estoque opcional para abrir, integrado e acessível pela cozinha.
+- D03: mochila de dez espaços, pilhas compatíveis até 99 e armazenamento dividido.
+- D04: organização por grade com movimento livre e fluido.
+- D05: simplificação do fogão/bancada e modelo híbrido C aprovados no PDF;
+  diferenças e intervenções ainda por conciliar na seção 21.
+- D06: comida recolhida vai à mochila, sem desaparecimento por falta de espaço;
+  representação transportável permanece diferença rastreada.
+- D07: 0.10.3 era a base histórica selecionada no PDF; a base desta consolidação
+  é o repositório Godot derivado da 0.21.2.
+- D08: diversão do restaurante primeiro; cidade e narrativa avançam progressivamente.
+- D09: adendo de 04/11 aprova qualidade e queima, com estrelas somente nos itens.
+- D10: em 07/11, Dener informa uso de Godot 4.7.2 e solicita esta atualização
+  documental diretamente no repositório.
+
+### Backlog recomendado, sem implementação nesta revisão
+
+1. Validar importação, extensão nativa, execução, saves e exportação na Godot
+   4.7.2 utilizada pelo proprietário.
+2. Conciliar as diferenças de cozinha da seção 21 e especificar o que ainda
+   exigir decisão, sem refazer sistemas já documentados.
+3. Verificar cozinha, qualidade, conservação, circulação e interface; fazer
+   playtest de um dia com almoço, intervalo, jantar e fechamento.
+4. Ajustar ritmo, capacidade e economia com evidência; definir upgrades do MVP.
+5. Desenvolver poucos vínculos e um evento com efeitos comerciais verificáveis,
+   antes de ampliar narrativa e cidade.
+
+### Riscos e mitigação
+
+| Risco | Mitigação recomendada |
+| --- | --- |
+| Escopo excessivo | Marcos pequenos por dependência e um dia jogável antes de ampliar sistemas. |
+| Cozinha cansativa | Lotes, sequência e ações com decisão, medindo transferências e repetição. |
+| Cidade decorativa | Relações e acontecimentos com efeitos concretos e causas legíveis. |
+| Automação sem escolhas | Trocar esforço manual por decisões gerenciais relevantes. |
+| Economia opaca | Relatório com receitas, custos e causas do resultado. |
+| IA cara ou impasses | Simulação proporcional ao valor percebido e testes de fluxo em corredores. |
+| Alteração de inventários e recipientes | Rastrear identidade, conteúdo, garçom e migração sem perda/duplicação. |
+| Mudança de versão da Godot | Validar extensão e exportações na versão efetivamente utilizada. |
+
+Relatos antigos, como travamento ao posicionar prateleira, exigem reprodução na
+base atual antes de serem classificados como bugs confirmados. Otimizações
+posteriores registradas não substituem esse teste específico.
+
+## 23. Ideias potenciais e histórico documental
+
+### IP-001 — Levar a câmera ao fogão pelo aviso
+
+**NÃO APROVADA para implementação.** Origem: 04/11/2026, adendo do PDF.
+
+Ideia: tocar no aviso de comida pronta ou passando do ponto levaria a câmera ao
+fogão correspondente, sem retirar automaticamente a panela. Benefício possível:
+localizar equipamento fora da tela. Risco: interromper o controle e a leitura do
+cenário.
+
+**Regra de design vigente no PDF:** avisos não deslocam a câmera, nem por toque
+nem automaticamente. Retomada depende de nova aprovação explícita do proprietário,
+com retorno da câmera e teste de usabilidade definidos. Guardar a ideia não a
+transforma em requisito aprovado.
+
+### Histórico e fontes
+
+| Data | Registro |
+| --- | --- |
+| 30/10/2026 | Direção de grade e circulação referenciada no PDF. |
+| 31/10/2026 | Decisões de layout e inventário referenciadas no PDF. |
+| 03/11/2026 | GDD v1.4 consolidado sobre a base 0.10.3. |
+| 04/11/2026 | Adendo de qualidade, ponto e queima; IP-001 preservada sem aprovação. |
+| 07/11/2026 | Integração do PDF ao GDD do repositório, preservando evoluções Godot e registrando uso da versão 4.7.2. |
+
+Fonte primária desta integração: PDF enviado pelo proprietário,
+`GDD_Entre_Esquinas_Restaurante_v1_4.pdf`. O arquivo PDF não foi adicionado ao
+repositório nesta revisão; seu conteúdo de design foi consolidado neste Markdown.
+Fontes técnicas complementares permanecem vinculadas na seção 14.
+
+Esta revisão altera somente o GDD. Não executa migração de engine, mudanças de
+mecânica ou novos testes; os estados e resultados anteriores permanecem
+atribuídos às suas respectivas bases.
