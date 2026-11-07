@@ -26,7 +26,16 @@ function resize(){const w=innerWidth,h=Math.max(1,innerHeight-parseInt(getComput
 function positionDoorSign(){const b=$('openBtn');const p=screenPoint(345,615),r=canvas.getBoundingClientRect();b.hidden=state.player.room!=='restaurant'||constructionMode||$('management').open||$('welcome').open||p.x<r.left+28||p.x>r.left+r.width-28||p.y<r.top+22||p.y>r.top+r.height-12;b.style.left=p.x+'px';b.style.top=p.y+'px';}
 window.addEventListener('resize',resize);document.addEventListener('fullscreenchange',resize);resize();
 function RECIPENAME(id){return R.RECIPES[id]?.name||'Morador'}
-function previewError(o){if(o.room!==state.player.room)return 'Vá ao setor indicado para colocar este objeto.';return R.layoutError(state,state.objects.filter(q=>q.id!==building.moving).concat({...o,id:building.moving||state.serial}));}
+let previewCache=null;
+function previewError(o){
+ if(o.room!==state.player.room)return 'Vá ao setor indicado para colocar este objeto.';
+ // Cache only the latest candidate. Include geometry and reserved actor cells,
+ // so moving, rotating, placing and loading a game cannot reuse a stale result.
+ const stamp=JSON.stringify([o.type,o.room,o.x,o.y,o.rot,building.moving,state.objects.map(q=>[q.type,q.room,q.x,q.y,q.rot]),R.allActors(state).map(a=>[a.room,R.reserved(a)])]);
+ if(previewCache?.state===state&&previewCache.stamp===stamp)return previewCache.error;
+ const error=R.layoutError(state,state.objects.filter(q=>q.id!==building.moving).concat({...o,id:building.moving||state.serial}));
+ previewCache={state,stamp,error};return error;
+}
 function enterConstruction(){
  if(state.open||state.closing||state.customers.length)return tell('Conclua o serviço antes de construir.',true);
  if(state.player.room!=='restaurant')return tell('Entre no restaurante para construir.',true);

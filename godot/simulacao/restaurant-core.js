@@ -240,7 +240,25 @@ function moveActors(s,dt=WALK_TIME){
 }
 function editError(s){return s.open||s.customers.length||s.orders.some(o=>!['paid','lost'].includes(o.state))?'Feche o serviço e conclua os clientes antes de reorganizar.':null;}
 function layoutError(s,objects){let occupied=new Set();for(const o of objects){if(!CATALOG[o.type]||o.room!==CATALOG[o.type].room)return 'Objeto fora do setor permitido.';for(const p of cells(o)){if(wall(o.room,p.x,p.y)||fixed(o.room,p.x,p.y)||PORTALS[o.room].some(d=>Math.abs(d.x-p.x)+Math.abs(d.y-p.y)<=1))return 'Parede, porta ou infraestrutura reservada.';if(o.room==='restaurant'&&((CATALOG[o.type].area==='hall'&&p.x>=14)||(CATALOG[o.type].area==='kitchen'&&(p.x<=14||p.y>=10))||(CATALOG[o.type].area==='storage'&&(p.x<=14||p.y<=10))||(CATALOG[o.type].area==='dryStorage'&&p.x<=14)))return 'Mesas e cadeiras: salão. Fogão e geladeira de cozinha: cozinha. Prateleira: cozinha ou estoque. Geladeira de estoque: estoque.';let k=o.room+':'+key(p);if(occupied.has(k))return 'Esta célula já está ocupada.';occupied.add(k);if(allActors(s).some(a=>a.room===o.room&&reserved(a).some(q=>q.x===p.x&&q.y===p.y)))return 'Há uma pessoa nesta posição.';}}
- for(const room of ['restaurant']){let start=room==='stock'?{x:21,y:13}:{x:7,y:13};for(const d of PORTALS[room])if(!route(s,room,start,d,null,new Set(),objects))return 'A disposição bloqueia uma porta.';for(const o of objects.filter(o=>o.room===room)){let access=accessPoints(s,o,objects);if(!access.some(p=>route(s,room,start,p,null,new Set(),objects)))return 'Deixe uma passagem até cada móvel.';}}
+ // Layout validation needs connectivity, not a separate shortest path per object.
+ // A legal diagonal requires both adjacent cardinal cells to be free, so a
+ // cardinal flood reaches exactly the same cells as route(), without changing it.
+ const room='restaurant',solid=new Uint8Array(W*H),reached=new Uint8Array(W*H);
+ for(let y=0;y<H;y++)for(let x=0;x<W;x++)solid[y*W+x]=wall(room,x,y)||fixed(room,x,y)||occupied.has(room+':'+x+','+y)?1:0;
+ const start=13*W+7,queue=[start];
+ // route() may leave an occupied start, but cannot use it as a destination.
+ reached[start]=1;
+ for(let head=0;head<queue.length;head++){
+  const cell=queue[head],x=cell%W,y=Math.floor(cell/W);
+  for(const [dx,dy]of DIRS){const nx=x+dx,ny=y+dy;
+   if(nx<0||ny<0||nx>=W||ny>=H)continue;
+   const next=ny*W+nx;if(solid[next]||reached[next])continue;
+   reached[next]=1;queue.push(next);
+  }
+ }
+ if(solid[start])reached[start]=0;
+ for(const d of PORTALS[room])if(!reached[d.y*W+d.x])return 'A disposição bloqueia uma porta.';
+ for(const o of objects.filter(o=>o.room===room))if(!accessPoints(s,o,objects).some(p=>reached[p.y*W+p.x]))return 'Deixe uma passagem até cada móvel.';
  return null;}
 function place(s,type,x,y,rot=0,moving=null){let error=editError(s);if(error)return {ok:false,error};let d=CATALOG[type];if(!d)return {ok:false,error:'Objeto desconhecido.'};if(!Number.isInteger(x)||!Number.isInteger(y)||!Number.isInteger(rot))return {ok:false,error:'Posição inválida.'};let old=moving?s.objects.find(o=>o.id===moving):null;if(moving&&(!old||old.type!==type))return {ok:false,error:'Objeto não encontrado.'};if(old&&(s.cooking?.stove===old.id||s.plating?.prep===old.id))return {ok:false,error:'Conclua o preparo antes de mover.'};if(old&&(s.dirtyTables[old.id]||old.type==='table'&&s.objects.some(c=>c.type==='chair'&&seatTable(s,c)?.id===old.id&&s.dirtyTables[c.id])))return {ok:false,error:'Recolha os pratos sujos antes de mover.'};let o={id:old?.id||s.serial,type,x,y,rot:((rot%4)+4)%4,room:d.room,...(type==='stove'?{pan:old?.pan||null,...(old?.readyBatch?{readyBatch:{...old.readyBatch},burned:!!old.burned}:{} )}:type==='prep'?{plates:old?.plates||0,utensil:old?.utensil||false,dishes:old?.dishes||{},dishQuality:old?.dishQuality||{}}:['shelf','cold','fridge'].includes(type)?{inventory:old?.inventory||Array(10).fill(null)}:{})};let objects=s.objects.filter(q=>q.id!==moving).concat(o);error=layoutError(s,objects);if(error)return {ok:false,error};if(!old&&s.cash<d.price)return {ok:false,error:'Dinheiro insuficiente.'};if(!old){s.cash-=d.price;s.ledger.investment+=d.price;s.serial++}s.objects=objects;syncContainers(s);return {ok:true,object:o};}
 function remove(s,id){let error=editError(s);if(error)return {ok:false,error};let o=s.objects.find(o=>o.id===id);if(!o)return {ok:false,error:'Objeto não encontrado.'};if(o.type==='table'&&s.objects.some(c=>c.type==='chair'&&seatTable(s,c)?.id===o.id&&s.dirtyTables[c.id]))return {ok:false,error:'Recolha os pratos sujos antes de guardar a mesa.'};if(s.cooking?.stove===id||s.plating?.prep===id||stationSlots(o).some(Boolean)||s.dirtyTables[o.id])return {ok:false,error:'Retire os itens instalados e a comida antes de guardar.'};s.objects=s.objects.filter(o=>o.id!==id);s.cash+=CATALOG[o.type].price;s.ledger.investment-=CATALOG[o.type].price;return {ok:true};}

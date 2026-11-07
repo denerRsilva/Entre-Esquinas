@@ -34,3 +34,19 @@ som, use `--audio-driver Dummy`; isso não valida a saída sonora real.
 Um código de saída zero deve vir acompanhado de `FALHAS: 0`. Verifique também
 se há `SCRIPT ERROR` no log: falhas de compilação de GDScript podem acontecer
 antes do executor de testes e precisam ser tratadas como falha.
+
+## Desempenho de entrada e construção
+
+```sh
+node qa/layout.test.cjs
+node qa/preview-cache.test.cjs
+XDG_DATA_HOME="$(mktemp -d)" godot --headless --script res://qa/Desempenho.gd
+```
+
+`layout.test.cjs` compara 1.173 disposições com o validador anterior, incluindo
+233 aceitas, portas, obstáculos, acesso aos móveis e reservas dos personagens.
+`preview-cache.test.cjs` verifica reutilização durante o desenho, invalidação
+quando a geometria/posição/rotação muda e revalidação obrigatória ao confirmar.
+O benchmark imprime tempos reais, sem limites absolutos dependentes da máquina.
+Para incluir renderização, rode em sessão gráfica, sem `--headless`, e acrescente
+`-- --render`. O primeiro quadro pode incluir compilação e aquecimento do driver.

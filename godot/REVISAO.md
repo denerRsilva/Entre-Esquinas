@@ -66,8 +66,9 @@ validado com `--regressoes`: FALHAS: 0, sem erros ou avisos no log.
 - Ações principais da bancada em duas colunas e painel com rolagem delimitada.
   Avisos ficam acima do painel para não cobrir os botões.
 - Tela cheia removida da barra inferior e disponível em Opções → Câmera.
-- Mantidas as regras e os controles de movimento da versão HTML. O núcleo
-  de simulação permanece idêntico ao HTML; nenhum arquivo HTML foi alterado.
+- Mantidas as regras e os controles de movimento da versão HTML. As rotas
+  e a velocidade permanecem iguais ao HTML; a validação de construção recebeu
+  a otimização descrita abaixo. Nenhum arquivo HTML foi alterado.
 - Gravar após recuperar um arquivo corrompido preserva o último backup válido.
   JSON inválido é recusado sem lançar exceção na extensão nativa.
 - Dimensões dos painéis são reaplicadas após a atualização dos controles,
@@ -85,3 +86,38 @@ Windows, exportação e saída de áudio física não foram validados nesta audi
 As sete suítes de regras também passaram dentro da extensão nativa QuickJS
 na Godot, além da execução em Node.js. Os fluxos de interface foram acionados
 por eventos de mouse/teclado enviados ao viewport, incluindo rolagem dos painéis.
+
+## Desempenho: início mobiliado e posicionamento
+
+O validador anterior chamava o cálculo de menor rota para cada móvel. Cada uma
+das 22 instalações do cenário de teste repetia esse trabalho; a prévia também
+validava ao atualizar o cursor e novamente ao desenhar. Na extensão QuickJS,
+isso custava cerca de 4 segundos para começar e mais de 1 segundo por prévia.
+
+A validação agora preenche uma grade de ocupação e calcula conectividade uma
+única vez. Isso verifica as mesmas passagens sem calcular caminhos individuais.
+A função de movimentação/rotas do jogador permanece inalterada. Como diagonais
+só são permitidas entre células ortogonais livres, os dois métodos encontram
+exatamente o mesmo conjunto de células acessíveis.
+
+A prévia reutiliza apenas a última validação, com chave que inclui posição,
+rotação, móvel em edição, geometria instalada e células reservadas pelos atores.
+A confirmação usa a validação real novamente: o cache não autoriza compras.
+
+Medições na mesma máquina Linux/Godot 4.6.3 (tempos de processamento):
+
+| Operação | Antes | Depois |
+| --- | ---: | ---: |
+| Gerar cenário mobiliado nas regras | 4.049 ms | 38 ms |
+| Começar mobiliado e atualizar interface | 3.992 ms | 61 ms |
+| Atualizar prévia do cursor, mediana de 12 quadros | 1.103 ms | 6 ms |
+| Dez consultas à mesma prévia | 5.828 ms | 4,5 ms |
+
+Com OpenGL/Mesa por software, as atualizações incluindo renderização ficaram
+em 14–20 ms após o primeiro quadro (56 ms de aquecimento). São medições locais,
+não uma garantia de FPS em outros computadores. Não foi necessário alterar
+as bibliotecas nativas para aplicar a otimização.
+
+Validação: 1.173 comparações com o algoritmo anterior, cache e invalidação,
+sete suítes de regras em Node.js e QuickJS, teste integrado e construção com
+cliques reais na janela Godot; todos passaram. Fontes HTML preservados.
