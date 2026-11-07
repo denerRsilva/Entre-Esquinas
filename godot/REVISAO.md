@@ -57,3 +57,31 @@ apenas o smoke inicial e os testes das correções, sem os percursos extensos.
 
 O ZIP final foi extraído em outra pasta, reimportado sem cache prévio e
 validado com `--regressoes`: FALHAS: 0, sem erros ou avisos no log.
+
+## Revisão funcional de novembro de 2026
+
+- Corrigido bloqueio de mouse por contêineres invisíveis da HUD. Todos os
+  descendentes decorativos deixam passar os cliques; o status não aumenta
+  a área da barra superior ao quebrar linhas.
+- Ações principais da bancada em duas colunas e painel com rolagem delimitada.
+  Avisos ficam acima do painel para não cobrir os botões.
+- Tela cheia removida da barra inferior e disponível em Opções → Câmera.
+- Mantidas as regras e os controles de movimento da versão HTML. O núcleo
+  de simulação permanece idêntico ao HTML; nenhum arquivo HTML foi alterado.
+- Gravar após recuperar um arquivo corrompido preserva o último backup válido.
+  JSON inválido é recusado sem lançar exceção na extensão nativa.
+- Dimensões dos painéis são reaplicadas após a atualização dos controles,
+  quando os tamanhos mínimos dos filhos já podem ser recalculados.
+
+Testes nativos adicionais e instruções estão em `qa/LEIA-ME.md`.
+
+Na auditoria ampliada, passaram 63 verificações de interface nativa: 21 na
+cozinha/movimentação/câmera, 28 nos menus e salvamentos e 14 na construção.
+Também passaram as sete suítes de regras no Node.js. A importação de JSON
+corrompido e duas corrupções sucessivas do arquivo principal foram exercitadas
+com diretórios de dados descartáveis. Os testes gráficos usaram Godot 4.6.3,
+Linux x86-64 e Mesa; um aviso de V-Sync indisponível pertence ao driver virtual.
+Windows, exportação e saída de áudio física não foram validados nesta auditoria.
+As sete suítes de regras também passaram dentro da extensão nativa QuickJS
+na Godot, além da execução em Node.js. Os fluxos de interface foram acionados
+por eventos de mouse/teclado enviados ao viewport, incluindo rolagem dos painéis.

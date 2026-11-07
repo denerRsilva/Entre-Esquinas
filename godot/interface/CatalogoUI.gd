@@ -162,6 +162,7 @@ func render(d: Dictionary, parent: Control) -> void:
 		var grid := GridContainer.new()
 		grid.columns = 1 if compact else (5 if cls=="inventoryGrid" else 3 if cls in ["cards","recipeGrid"] else 2)
 		if cls=="inventoryGrid" and compact: grid.columns=2
+		if cls in ["prepSlots","prepPrimary"]: grid.columns=2
 		group=grid
 	elif tag=="nav" or id in ["dock","actions","buildBar"] or cls in ["welcomeActions","dialogHead","objectActions"]:
 		group=HFlowContainer.new()

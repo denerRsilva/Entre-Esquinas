@@ -15,7 +15,7 @@ func _ready() -> void:
 	area("ordersHud",Rect2(710,74,245,170))
 	area("kitchenStatus",Rect2(8,74,320,120))
 	area("openBtn",Rect2(0,0,100,38),false,false)
-	area("context",Rect2(150,398,660,218))
+	area("context",Rect2(150,360,660,240))
 	area("hint",Rect2(10,604,610,42),false,true)
 	area("notice",Rect2(10,500,520,70),false,true)
 	area("dock",Rect2(10,651,528,44),false,false)
@@ -45,6 +45,7 @@ func area(key:String,rect:Rect2,scrollable:=true,boxed:=true) -> void:
 		background.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		root.add_child(background)
+	if key=="context": root.clip_contents=true
 	root.position=rect.position
 	root.size=rect.size
 	root.mouse_filter=Control.MOUSE_FILTER_IGNORE if key in ["hint","notice","hud"] else Control.MOUSE_FILTER_STOP
@@ -57,6 +58,7 @@ func area(key:String,rect:Rect2,scrollable:=true,boxed:=true) -> void:
 		parent=scroll
 	var content:=VBoxContainer.new()
 	content.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	if key in ["hud","hint","notice"]: content.mouse_filter=Control.MOUSE_FILTER_IGNORE
 	parent.add_child(content)
 	if overlay:
 		content.position = Vector2(6,3)
@@ -77,6 +79,7 @@ func sync(data: Dictionary) -> void:
 			var welcome_small:bool=data.modal=="welcome" and not JSON.stringify(item).contains("Fechar tutorial")
 			entry[2]=Rect2(178,218,604,234) if welcome_small else Rect2(58,44,844,612)
 			root.position=entry[2].position
+		if key=="notice": root.position=Vector2(10,280) if slots.context[0].visible else Vector2(10,500)
 		if key=="openBtn": root.position=Vector2(data.door[0]-50,minf(data.door[1]-19,570.0))
 		var signature:String=JSON.stringify(item)
 		if cache.get(key)==signature: continue
@@ -88,6 +91,7 @@ func sync(data: Dictionary) -> void:
 		builder.compact=key in ["drawer","context","ordersHud","kitchenStatus"]
 		if key=="hud":
 			var bar:=HBoxContainer.new()
+			bar.mouse_filter=Control.MOUSE_FILTER_IGNORE
 			content.add_child(bar)
 			var title:Label=builder.label("ENTRE ESQUINAS",20)
 			title.autowrap_mode=TextServer.AUTOWRAP_OFF
@@ -95,13 +99,14 @@ func sync(data: Dictionary) -> void:
 			title.size_flags_horizontal=Control.SIZE_SHRINK_BEGIN
 			bar.add_child(title)
 			var status:Label=builder.label(item.children[0].text,13)
+			status.autowrap_mode=TextServer.AUTOWRAP_OFF
+			status.clip_text=true
 			status.horizontal_alignment=HORIZONTAL_ALIGNMENT_RIGHT
 			bar.add_child(status)
+		elif key=="hint":
+			content.add_child(builder.label(item.children[0].text,12))
 		else:
 			builder.render(item,content)
-			if key=="hint":
-				for text in content.find_children("*","Label",true,false):
-					text.add_theme_font_size_override("font_size",12)
 		if key=="modal" and signature.contains("Salvar restaurante") and signature.contains("Carregar restaurante"):
 			var b:=Button.new();b.text="Importar salvamento (.json)"
 			b.pressed.connect(func():import_dialog.popup_centered_ratio(0.72))
@@ -110,5 +115,8 @@ func sync(data: Dictionary) -> void:
 			archive.text="Abrir protótipo histórico da mercearia"
 			archive.pressed.connect(func():command.emit({"id":"mercearia"}))
 			content.add_child(archive)
+		if key in ["hud","hint","notice"]:
+			for decoration in content.find_children("*","Control",true,false):
+				decoration.mouse_filter=Control.MOUSE_FILTER_IGNORE
 		if scroll and scroll_y: scroll.set_deferred("scroll_vertical",scroll_y)
-		root.size=entry[2].size
+		root.set_deferred("size",entry[2].size)

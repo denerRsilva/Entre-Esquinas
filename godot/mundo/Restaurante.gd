@@ -26,11 +26,16 @@ func _ready() -> void:
 	active=true
 	tick(0)
 
+func saved_dictionary(path: String):
+	if not FileAccess.file_exists(path): return null
+	var parser := JSON.new()
+	if parser.parse(FileAccess.get_file_as_string(path)) != OK: return null
+	return parser.data if parser.data is Dictionary else null
+
 func read_values() -> Dictionary:
 	for path in [STORE,STORE+".bak"]:
-		if FileAccess.file_exists(path):
-			var saved=JSON.parse_string(FileAccess.get_file_as_string(path))
-			if saved is Dictionary: return saved
+		var saved = saved_dictionary(path)
+		if saved is Dictionary: return saved
 	return {}
 
 func persist(next: Dictionary) -> bool:
@@ -40,13 +45,13 @@ func persist(next: Dictionary) -> bool:
 	var err:=file.get_error()
 	file.close()
 	if err!=OK:return false
-	if FileAccess.file_exists(STORE):
+	if saved_dictionary(STORE) is Dictionary:
 		if DirAccess.copy_absolute(ProjectSettings.globalize_path(STORE),ProjectSettings.globalize_path(STORE+".bak"))!=OK:return false
 	return DirAccess.rename_absolute(ProjectSettings.globalize_path(STORE+".tmp"),ProjectSettings.globalize_path(STORE))==OK
 
 func import_save(path:String) -> void:
 	var raw:=FileAccess.get_file_as_string(path)
-	var valid:String=RestauranteVM.executar("Boolean(R.migrateSave(JSON.parse("+JSON.stringify(raw)+")))")
+	var valid:String=RestauranteVM.executar("(()=>{try{return Boolean(R.migrateSave(JSON.parse("+JSON.stringify(raw)+")))}catch{return false}})()")
 	if valid!="true":
 		RestauranteVM.executar("tell('Arquivo de salvamento inválido.',true)")
 		tick(0)
