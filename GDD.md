@@ -1,7 +1,9 @@
 # Entre Esquinas — Game Design Document
 
-**Revisão:** consolidado Godot — 7 de novembro de 2026  
-**Base do jogo:** 0.21.2 e revisões posteriores da versão Godot  
+**Revisão:** consolidado Godot — 7 de novembro de 2026
+
+**Base do jogo:** 0.21.2 e revisões posteriores da versão Godot
+
 **Última implementação considerada:** [f0fd4e9](https://github.com/denerRsilva/Entre-Esquinas/commit/f0fd4e9)
 
 Este documento reúne as decisões aprovadas para o jogo e o funcionamento atual
@@ -174,7 +176,8 @@ consumo dos recipientes conforme o item, sem gerar recursos indevidos.
 ### Qualidade
 
 Ingredientes e pratos usam quatro qualidades: Comum, Prata, Ouro e Roxa. A
-qualidade é conservada nas transferências, no preparo, no transporte e no save.
+qualidade do lote deriva dos ingredientes efetivamente consumidos. Transferências,
+transporte e salvamento preservam a qualidade dos itens.
 Deixar a panela pronta no fogão reduz a qualidade e pode queimar a comida;
 retirá-la interrompe a degradação pelo calor. Comida queimada deve ser descartada.
 
