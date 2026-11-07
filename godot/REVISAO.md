@@ -1,0 +1,59 @@
+# Revisão da migração Godot 0.21.2
+
+O projeto Godot está nesta pasta; a versão HTML continua no diretório pai.
+A migração é híbrida: a apresentação usa Godot 4.6.3 Standard e a simulação
+JavaScript usa a extensão QuickJS fornecida no pacote original. Esta revisão
+não converte as regras para GDScript e não altera as bibliotecas nativas.
+
+## Correções
+
+- Interface e mensagens de erro ficam acima dos sprites do mundo. Antes,
+  os índices de profundidade dos móveis os desenhavam sobre os menus.
+- Título da HUD mantém largura legível, com estado compacto. O cabeçalho
+  da construção ocupa linhas separadas para evitar palavras cortadas.
+- Avisos possuem fundo e ficam afastados da placa de abertura.
+- Quadros lentos preservam o tempo transcorrido; o motor de regras já o
+  subdivide em passos de até 80 ms.
+- Perda de foco pausa a simulação, limpa entradas pendentes e pausa sprites.
+  Retomar não adiciona o tempo passado em segundo plano.
+- Digitar em campos numéricos não aciona os atalhos do mundo.
+- Sprites fora da sala param de animar; segmentos gráficos vazios não
+  criam nós; alertas reutilizam as amostras de áudio.
+
+## Verificação reproduzível
+
+Execute na pasta deste projeto, com Godot 4.6.3 disponível no PATH:
+
+```sh
+XDG_DATA_HOME="$(mktemp -d)" XDG_CACHE_HOME="$(mktemp -d)" godot --headless --editor --import
+XDG_DATA_HOME="$(mktemp -d)" XDG_CACHE_HOME="$(mktemp -d)" godot --headless --script res://qa/Verificar.gd
+```
+
+`-- --rapido` ao final omite as sete suítes extensas de regras, mas executa
+os percursos integrados e as novas regressões. Os testes gravam saves e por
+isso precisam de diretório de dados separado. A execução QuickJS destas
+suítes pode levar vários minutos.
+
+`qa/Visual.gd` captura início, salão e construção em `/tmp/esquinas-*.png`.
+Execute com uma sessão gráfica Linux e `--audio-driver Dummy` se não houver
+saída de áudio. O teste usa uma partida de teste; também isole XDG_DATA_HOME.
+
+A validação feita aqui é em Linux x86-64. A DLL Windows é a fornecida no ZIP;
+Windows, exportação final, áudio real e jogabilidade prolongada precisam de
+teste na plataforma alvo. Não há garantia de ausência de todos os bugs.
+
+Para repetir somente as sete suítes de regras com Node.js (opcional):
+`node qa/Regras.cjs`. O modo `-- --regressoes` no verificador Godot executa
+apenas o smoke inicial e os testes das correções, sem os percursos extensos.
+
+## Resultados desta revisão
+
+- Importação e execução em Godot 4.6.3 Linux x86-64.
+- Sete suítes de regras executadas com sucesso em Node.js e na extensão QuickJS da Godot.
+- Percursos integrados executados pela extensão QuickJS na Godot: sem falhas.
+- Regressões de foco, tempo, edição de campos, camadas e cache de áudio: sem falhas.
+- Capturas renderizadas por OpenGL/Mesa e inspecionadas: início, salão e construção.
+  Exemplos em `qa/capturas/`.
+
+O ZIP final foi extraído em outra pasta, reimportado sem cache prévio e
+validado com `--regressoes`: FALHAS: 0, sem erros ou avisos no log.

@@ -1,0 +1,9 @@
+[gd_scene format=3]
+[ext_resource type="SpriteFrames" path="res://personagens/Moradora.tres" id="frames"]
+[node name="Moradora" type="AnimatedSprite2D"]
+sprite_frames = ExtResource("frames")
+animation = &"baixo"
+frame = 1
+offset = Vector2(0, -30)
+scale = Vector2(1, 1)
+texture_filter = 1

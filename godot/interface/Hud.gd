@@ -1,0 +1,114 @@
+extends Control
+signal command(event: Dictionary)
+const Builder = preload("res://interface/CatalogoUI.gd")
+var builder = Builder.new()
+var slots := {}
+var cache := {}
+var by_id := {}
+var modal_background: ColorRect
+var import_dialog: FileDialog
+signal import_save(path:String)
+func _ready() -> void:
+	mouse_filter=Control.MOUSE_FILTER_IGNORE
+	builder.send=func(e): command.emit(e)
+	area("hud",Rect2(8,5,940,47),false,false)
+	area("ordersHud",Rect2(710,74,245,170))
+	area("kitchenStatus",Rect2(8,74,320,120))
+	area("openBtn",Rect2(0,0,100,38),false,false)
+	area("context",Rect2(150,398,660,218))
+	area("hint",Rect2(10,604,610,42),false,true)
+	area("notice",Rect2(10,500,520,70),false,true)
+	area("dock",Rect2(10,651,528,44),false,false)
+	area("actions",Rect2(642,641,312,54),false,false)
+	area("catalog",Rect2(10,649,168,44),false,false)
+	area("drawer",Rect2(7,7,352,628))
+	area("build",Rect2(188,583,762,112))
+	modal_background=ColorRect.new()
+	modal_background.color=Color(0.03,0.07,0.055,0.68)
+	modal_background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	add_child(modal_background)
+	area("modal",Rect2(58,44,844,612))
+	import_dialog=FileDialog.new()
+	import_dialog.file_mode=FileDialog.FILE_MODE_OPEN_FILE
+	import_dialog.access=FileDialog.ACCESS_FILESYSTEM
+	import_dialog.filters=PackedStringArray(["*.json ; Salvamento do restaurante"])
+	import_dialog.file_selected.connect(func(path):import_save.emit(path))
+	add_child(import_dialog)
+
+func area(key:String,rect:Rect2,scrollable:=true,boxed:=true) -> void:
+	var overlay := key in ["hint","notice"]
+	var root:Control = Control.new() if overlay else PanelContainer.new() if boxed else MarginContainer.new()
+	if overlay:
+		root.clip_contents = true
+		var background := ColorRect.new()
+		background.color = Color(0.04,0.10,0.07,0.92)
+		background.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		root.add_child(background)
+	root.position=rect.position
+	root.size=rect.size
+	root.mouse_filter=Control.MOUSE_FILTER_IGNORE if key in ["hint","notice","hud"] else Control.MOUSE_FILTER_STOP
+	add_child(root)
+	var parent:Control=root
+	if scrollable:
+		var scroll:=ScrollContainer.new()
+		scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED
+		root.add_child(scroll)
+		parent=scroll
+	var content:=VBoxContainer.new()
+	content.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	parent.add_child(content)
+	if overlay:
+		content.position = Vector2(6,3)
+		content.size = rect.size-Vector2(12,6)
+	slots[key]=[root,content,rect]
+	root.hide()
+
+func sync(data: Dictionary) -> void:
+	modal_background.visible = data.modal!=""
+	for key in slots:
+		var entry:Array=slots[key]
+		var root:Control=entry[0]
+		var item=data.ui.get(key)
+		root.visible=item!=null and (item.has("path") or not item.get("children",[]).is_empty())
+		if key=="context" and root.visible: root.visible=not item.children.is_empty()
+		if not root.visible: continue
+		if key=="modal":
+			var welcome_small:bool=data.modal=="welcome" and not JSON.stringify(item).contains("Fechar tutorial")
+			entry[2]=Rect2(178,218,604,234) if welcome_small else Rect2(58,44,844,612)
+			root.position=entry[2].position
+		if key=="openBtn": root.position=Vector2(data.door[0]-50,minf(data.door[1]-19,570.0))
+		var signature:String=JSON.stringify(item)
+		if cache.get(key)==signature: continue
+		cache[key]=signature
+		var content:VBoxContainer=entry[1]
+		var scroll=content.get_parent() as ScrollContainer
+		var scroll_y:int=scroll.scroll_vertical if scroll else 0
+		for c in content.get_children():content.remove_child(c);c.queue_free()
+		builder.compact=key in ["drawer","context","ordersHud","kitchenStatus"]
+		if key=="hud":
+			var bar:=HBoxContainer.new()
+			content.add_child(bar)
+			var title:Label=builder.label("ENTRE ESQUINAS",20)
+			title.autowrap_mode=TextServer.AUTOWRAP_OFF
+			title.custom_minimum_size.x=205
+			title.size_flags_horizontal=Control.SIZE_SHRINK_BEGIN
+			bar.add_child(title)
+			var status:Label=builder.label(item.children[0].text,13)
+			status.horizontal_alignment=HORIZONTAL_ALIGNMENT_RIGHT
+			bar.add_child(status)
+		else:
+			builder.render(item,content)
+			if key=="hint":
+				for text in content.find_children("*","Label",true,false):
+					text.add_theme_font_size_override("font_size",12)
+		if key=="modal" and signature.contains("Salvar restaurante") and signature.contains("Carregar restaurante"):
+			var b:=Button.new();b.text="Importar salvamento (.json)"
+			b.pressed.connect(func():import_dialog.popup_centered_ratio(0.72))
+			content.add_child(b)
+			var archive:=Button.new()
+			archive.text="Abrir protótipo histórico da mercearia"
+			archive.pressed.connect(func():command.emit({"id":"mercearia"}))
+			content.add_child(archive)
+		if scroll and scroll_y: scroll.set_deferred("scroll_vertical",scroll_y)
+		root.size=entry[2].size

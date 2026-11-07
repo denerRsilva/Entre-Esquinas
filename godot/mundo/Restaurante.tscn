@@ -1,0 +1,40 @@
+[gd_scene format=3]
+[ext_resource type="Script" path="res://mundo/Restaurante.gd" id="game"]
+[ext_resource type="Script" path="res://mundo/Palco.gd" id="world"]
+[ext_resource type="Script" path="res://interface/Hud.gd" id="hud"]
+[ext_resource type="PackedScene" path="res://mundo/Salao.tscn" id="sala"]
+[ext_resource type="PackedScene" path="res://mundo/Rua.tscn" id="rua"]
+[ext_resource type="PackedScene" path="res://mundo/Estoque.tscn" id="estoque"]
+[ext_resource type="Theme" path="res://interface/Restaurante.tres" id="theme"]
+[node name="EntreEsquinas" type="Node"]
+script = ExtResource("game")
+[node name="Mapa" type="Control" parent="."]
+offset_top = 60.0
+offset_right = 960.0
+offset_bottom = 700.0
+clip_contents = true
+[node name="Palco" type="Node2D" parent="Mapa"]
+script = ExtResource("world")
+[node name="Salao" parent="Mapa/Palco" instance=ExtResource("sala")]
+z_index = -1
+[node name="Rua" parent="Mapa/Palco" instance=ExtResource("rua")]
+visible = false
+z_index = -1
+[node name="Estoque" parent="Mapa/Palco" instance=ExtResource("estoque")]
+visible = false
+z_index = -1
+[node name="HUD" type="Control" parent="."]
+z_index = 4096
+offset_right = 960.0
+offset_bottom = 700.0
+mouse_filter = 2
+theme = ExtResource("theme")
+script = ExtResource("hud")
+[node name="Sinais" type="AudioStreamPlayer" parent="."]
+[node name="Erro" type="Label" parent="."]
+z_index = 4096
+visible = false
+offset_left = 40
+offset_top = 80
+offset_right = 910
+autowrap_mode = 3

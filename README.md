@@ -13,3 +13,8 @@ Simulação de restaurante e vida na cidade, em HTML/JavaScript/Canvas.
 Versão 0.21.2 importada do pacote Entre_Esquinas_Restaurante_0_21_2.zip fornecido pelo usuário. Inclui modo construção, utensílios com artes próprias, interface com molduras de madeira, tutorial recolhível e cozinheira com 16 poses em quatro direções. Detalhes e histórico em `projeto/README.md`.
 
 Teste adicional da animação: `cd projeto && node cook-art.test.cjs`.
+
+## Projeto Godot
+
+A migração editável está em `godot/project.godot` (Godot 4.6.3 Standard).
+Veja `godot/LEIA-ME.md` para abrir e `godot/REVISAO.md` para correções e testes.
