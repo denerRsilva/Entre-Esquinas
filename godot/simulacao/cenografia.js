@@ -120,6 +120,7 @@ function overlays(c,R,s,o,selected,building){
 }
 function draw(c,R,s,ui){
  c.imageSmoothingEnabled=false;c.floor=s.player.room;
+ if(s.player.room==='street'){label(c,s.closing?'ENCERRANDO':s.open?'ABERTO':'FECHADO',675,200,s.open?'#3b6448':'#77503a');}
  if(s.player.room==='restaurant'){
   if(!ui.constructionMode)label(c,'Computador',680,409);
   if(!ui.constructionMode)label(c,'Recebimento • '+Object.values(s.inv.receiving).reduce((a,b)=>a+b,0)+'/60',860,490);

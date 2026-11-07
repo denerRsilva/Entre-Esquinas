@@ -32,6 +32,21 @@ function setServiceHours(s,hours){
  s.serviceHours=hours.map(h=>({...h}));syncService(s);return {ok:true,message:'Horários atualizados. Abra o serviço pela plaquinha durante o período escolhido.'};
 }
 
+// Test-only jump: change the clock, not elapsed simulation or customer patience.
+function advanceTestClock(s,minute){
+ if(!Number.isInteger(minute)||minute<TIME_CONFIG.startMinute||minute>TIME_CONFIG.endMinute||minute%TIME_CONFIG.blockMinutes!==0)return {ok:false,message:'Escolha um horário entre 06:00 e 02:00, em intervalos de 10 minutos.'};
+ if(s.clock.ending)return {ok:false,message:'Conclua o dia atual antes de avançar o horário.'};
+ if(minute<s.clock.minute)return {ok:false,message:'Escolha um horário igual ou posterior ao atual. Esta ferramenta não volta o relógio.'};
+ if(minute===s.clock.minute)return {ok:true,message:'O relógio já está em '+clockText(s)+'.'};
+ const day=s.day;
+ s.clock.minute=minute;s.clock.remainder=0;s.clock.ending=minute===TIME_CONFIG.endMinute;
+ if(s.clock.ending&&(s.open||servicePending(s)))s.closing=true;
+ syncService(s);
+ if(s.closing&&!servicePending(s))finishPeriod(s);
+ finishCalendarDay(s);
+ return {ok:true,message:s.day!==day?'Horário de teste avançado: novo dia às 06:00.':'Horário de teste avançado para '+clockText(s)+'.'+(s.closing?' Conclua os clientes e preparos pendentes.':'')};
+}
+
 function newClock(){return {minute:TIME_CONFIG.startMinute,remainder:0,ending:false};}
 function calendarDate(day){const index=day-1,seasonIndex=Math.floor(index/TIME_CONFIG.daysPerSeason)%TIME_CONFIG.seasons.length;return {day:index%TIME_CONFIG.daysPerSeason+1,weekday:TIME_CONFIG.weekdays[index%TIME_CONFIG.weekdays.length],season:TIME_CONFIG.seasons[seasonIndex],seasonIndex,year:Math.floor(index/(TIME_CONFIG.daysPerSeason*TIME_CONFIG.seasons.length))+1};}
 function clockText(s){const minute=s.clock.minute%(24*60);return String(Math.floor(minute/60)).padStart(2,'0')+':'+String(minute%60).padStart(2,'0');}
@@ -252,6 +267,13 @@ function moveFreePlayer(s,a,input,dt){
  a.motion=null;a.goal=null;a.wait=0;
  input.moveX=p.x-before.x;input.moveY=p.y-before.y;
  input.moving=Math.hypot(input.moveX,input.moveY)>1e-7;
+ // Walking through the restaurant doorway uses the same links as clicking it.
+ const portal=['restaurant','street'].includes(a.room)&&PORTALS[a.room]?.find(d=>Math.abs(p.x-d.x)<.35&&Math.abs(p.y-d.y)<.35&&(a.room==='restaurant'?input.dy>0&&p.y>=d.y-.2:input.dy<0&&p.y<=d.y+.2));
+ if(portal){const [x,y]=portal.spawn;
+  if(!blocked(s,portal.to,x,y,a)&&!allActors(s).some(b=>b!==a&&b.room===portal.to&&reserved(b).some(q=>q.x===x&&q.y===y))){
+   a.room=portal.to;a.x=x;a.y=y;a.settled=null;
+  }
+ }
 }
 function startMotion(a,to,offsetX=0,offsetY=0){let p=position(a),x=to.x+offsetX,y=to.y+offsetY,d=Math.hypot(x-p.x,y-p.y);if(d<1e-7)return false;a.motion={fromX:p.x,fromY:p.y,toX:x,toY:y,x:to.x,y:to.y,elapsed:0,duration:d*WALK_TIME};return true;}
 function advanceMotion(a,dt){let m=a.motion;if(!m)return dt;let used=Math.min(dt,m.duration-m.elapsed);m.elapsed+=used;if(m.elapsed>=m.duration-1e-8){a.x=m.x;a.y=m.y;a.settled={room:a.room,x:a.x,y:a.y,px:m.toX,py:m.toY};a.motion=null;}return Math.max(0,dt-used);}
@@ -612,5 +634,5 @@ function batchQuality(s,o){const b=o.readyBatch;if(!b)return 0;const t=Math.max(
 function heatState(s,o){const t=Math.max(0,s.time-(o.readyBatch?.doneAt??s.time))+1e-8;if(t>=25||o.burned)return {stage:'burned',label:'✕ Queimado — retirar e descartar',value:1};if(t>=20)return {stage:'danger',label:'⚠ Perto de queimar',value:(t-8)/17};if(t>=8)return {stage:'over',label:'⚠ Passando do ponto',value:(t-8)/17};return {stage:'ready',label:'✓ No ponto — retirar',value:1-t/8};}
 function validQuality(s){const qok=q=>q===undefined||Number.isInteger(q)&&q>=0&&q<=3;for(const loc of allItemLocations(s))for(const p of loc.filter(Boolean))if(!qok(p.quality)||p.burned!==undefined&&(typeof p.burned!=='boolean'||!p.item.startsWith('pot_')))return false;for(const a of allActors(s))if(a.carry&&!qok(a.carry.quality))return false;for(const d of s.deliveries)if(!qok(d.quality))return false;for(const [food,a]of Object.entries(s.receivingQuality||{}))if(!FOODS[food]||!Array.isArray(a)||a.length!==4||a.some(n=>!Number.isInteger(n)||n<0)||a.slice(1).reduce((x,y)=>x+y,0)>s.inv.receiving[food])return false;for(const o of s.objects){for(const [dish,a]of Object.entries(o.dishQuality||{}))if(!ITEMS[dish]||!Array.isArray(a)||a.length!==4||a.some(n=>!Number.isInteger(n)||n<0)||a.slice(1).reduce((x,y)=>x+y,0)>(o.dishes[dish]||0))return false;if(o.readyBatch&&(!Number.isFinite(o.readyBatch.doneAt)||o.readyBatch.doneAt>s.time||!qok(o.readyBatch.quality)||!RECIPES[o.readyBatch.recipe]))return false;}return !s.cooking||qok(s.cooking.quality);}
 
-const api={PLAYER_SPEED,PLAYER_RADIUS,setPlayerInput,playerVelocity,isMoving,takeOrder,serviceHours,serviceTimeText,serviceOpenError,setServiceHours,QUALITY_CONFIG,ingredientPlan,batchQuality,heatState,objectQualityCount,firstDishQuality,receivingCount,ARRIVAL_CONFIG,seatTable,KITCHEN_CONFIG,stationSlots,readyCount,kitchenAction,platingPlan,cancelPlating,recoverItems,TIME_CONFIG,REPUTATION_CONFIG,calendarDate,clockText,reputationLevel,applyVisitReputation,servicePending,CUSTOMER_CONFIG,newExperience,customerIndicator,satisfactionFor,canceledCarry,migrateSave,serve,furnishedTest,clearTestScene,itemLimit,itemName,itemIcon,objectNear,cookError,startCook,plateFood,discardFood,washPlates,collectDirty,equipmentConserved,mealsConserved,objectLocation,accepts,objectCount,objectSpace,syncContainers,putObject,takeObject,transferSlot,ITEMS,inventoryCount,inventorySpace,addInventory,removeInventory,collectReceiving,storageObject,W,H,CELL,VERSION,NAV,WALK_TIME,position,reserved,FOODS,CATALOG,RECIPES,PORTALS,DIRS,key,actor,fresh,rect,cells,hit,wall,fixed,blocked,near,allActors,route,accessPoints,closestAccess,goObject,go,arrived,moveActors,pushAside,place,remove,layoutError,seats,kit,buyTool,capacity,amount,transfer,purchase,deliver,supplyAction,toggleOpen,spawn,interact,pickupDish,atStove,kitchenEnough,step,foodConserved,valid,talk,mealCost};root.Restaurant=api;if(typeof module!=='undefined')module.exports=api;
+const api={advanceTestClock,PLAYER_SPEED,PLAYER_RADIUS,setPlayerInput,playerVelocity,isMoving,takeOrder,serviceHours,serviceTimeText,serviceOpenError,setServiceHours,QUALITY_CONFIG,ingredientPlan,batchQuality,heatState,objectQualityCount,firstDishQuality,receivingCount,ARRIVAL_CONFIG,seatTable,KITCHEN_CONFIG,stationSlots,readyCount,kitchenAction,platingPlan,cancelPlating,recoverItems,TIME_CONFIG,REPUTATION_CONFIG,calendarDate,clockText,reputationLevel,applyVisitReputation,servicePending,CUSTOMER_CONFIG,newExperience,customerIndicator,satisfactionFor,canceledCarry,migrateSave,serve,furnishedTest,clearTestScene,itemLimit,itemName,itemIcon,objectNear,cookError,startCook,plateFood,discardFood,washPlates,collectDirty,equipmentConserved,mealsConserved,objectLocation,accepts,objectCount,objectSpace,syncContainers,putObject,takeObject,transferSlot,ITEMS,inventoryCount,inventorySpace,addInventory,removeInventory,collectReceiving,storageObject,W,H,CELL,VERSION,NAV,WALK_TIME,position,reserved,FOODS,CATALOG,RECIPES,PORTALS,DIRS,key,actor,fresh,rect,cells,hit,wall,fixed,blocked,near,allActors,route,accessPoints,closestAccess,goObject,go,arrived,moveActors,pushAside,place,remove,layoutError,seats,kit,buyTool,capacity,amount,transfer,purchase,deliver,supplyAction,toggleOpen,spawn,interact,pickupDish,atStove,kitchenEnough,step,foodConserved,valid,talk,mealCost};root.Restaurant=api;if(typeof module!=='undefined')module.exports=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

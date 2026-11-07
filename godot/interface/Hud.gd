@@ -80,7 +80,11 @@ func sync(data: Dictionary) -> void:
 			entry[2]=Rect2(178,218,604,234) if welcome_small else Rect2(58,44,844,612)
 			root.position=entry[2].position
 		if key=="notice": root.position=Vector2(10,280) if slots.context[0].visible else Vector2(10,500)
-		if key=="openBtn": root.position=Vector2(data.door[0]-50,minf(data.door[1]-19,570.0))
+		if key=="openBtn":
+			var sign_size:=Vector2(190,54) if data.room=="street" else Vector2(100,38)
+			entry[2]=Rect2(Vector2.ZERO,sign_size)
+			root.position=Vector2(data.door[0]-sign_size.x/2,minf(data.door[1]-19,570.0))
+			root.set_deferred("size",sign_size)
 		var signature:String=JSON.stringify(item)
 		if cache.get(key)==signature: continue
 		cache[key]=signature

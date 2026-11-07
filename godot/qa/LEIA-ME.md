@@ -64,3 +64,16 @@ paredes, cantos, móveis, passagem estreita, quadro lento, reservas dos atores,
 salvamento e retomada da navegação por clique. O teste Godot envia teclas ao
 viewport e verifica também animação, foco e atualização em cada quadro.
 Pode ser executado em sessão gráfica sem `--headless`, como CozinhaUI.
+
+## Rua, serviço externo e seletor de horário
+
+```sh
+node qa/rua-horario.test.cjs
+XDG_DATA_HOME="$(mktemp -d)" godot --headless --script res://qa/RuaHorarioUI.gd
+```
+
+São dez cenários de regras (horários, retrocesso inválido, paciência/preparo
+preservados, clientes na rua, virada de dia e porta livre/ocupada). O teste
+Godot percorre o fluxo pela interface nativa, incluindo o OptionButton,
+11:00, saída com WASD, abertura externa, chegada de clientes e retorno ao salão.
+Em sessão gráfica, `-- --capturas` salva a rua e o painel do relógio em `/tmp/`.

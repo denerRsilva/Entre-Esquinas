@@ -57,3 +57,22 @@ XDG_DATA_HOME="$(mktemp -d)" godot --headless --script res://qa/Verificar.gd
 ```
 
 A validação visual em movimento e o playtest de um turno inteiro no Windows ficam para a abertura deste projeto no PC. O pacote inclui a DLL Windows x86-64, compilada por cross-compilação. A execução local verificada foi em Linux. Web, Android e macOS exigem trabalho específico na extensão antes de exportar.
+
+## Rua e teste de clientes
+
+Atravesse a porta do restaurante com WASD/setas ou clique nela para sair. Na rua,
+a fachada mostra o estado do serviço e o botão **Abrir restaurante** (ou
+**Encerrar restaurante** quando aberto). O serviço respeita os horários dos turnos.
+A porta da fachada permite retornar ao salão.
+
+Para testar clientes sem esperar o relógio chegar ao almoço:
+
+1. Entre em **Opções → Testes**.
+2. Escolha **11:00** no seletor de horário e clique em **Avançar horário**.
+3. Volte ao jogo e abra o restaurante pela placa, dentro ou fora do salão.
+4. Os clientes começam a chegar após alguns segundos de jogo ativo.
+
+O seletor avança em blocos de dez minutos, somente para a frente no dia atual.
+Não simula o intervalo pulado: preserva a paciência, preparos e entregas. Passar
+do fim do turno encerra novas entradas; às 02:00, a virada de dia segue as regras
+normais e aguarda as pendências. O avanço fica na partida ao usar Salvar.

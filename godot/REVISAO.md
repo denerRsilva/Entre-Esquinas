@@ -147,3 +147,28 @@ perda de foco continuam pausando a simulação e liberando as teclas.
 Validação: 13 cenários de física, eventos de teclado na janela Godot, animação,
 colisões, salvamento e perda de foco; suítes de regras, cozinha, construção,
 menus e teste integrado passaram. Arquivos da versão HTML preservados.
+
+## Rua e controle de horário para testes
+
+A saída agora leva a uma rua com fachada, toldo, jardins laterais, bancos,
+calçada e faixa de pedestres. Os jardins ocupam as faixas laterais já bloqueadas
+pela navegação; não foram criados obstáculos invisíveis na calçada central.
+A rua mantém a cena editável `mundo/Rua.tscn`, com os detalhes em `RuaDetalhes.gd`.
+A porta funciona por clique e por movimento livre, sem retorno automático em
+loop. Se o ponto de chegada estiver ocupado, aguarda sua liberação.
+
+O botão externo permite abrir/encerrar o restaurante sem entrar no salão,
+aproximando o jogador da entrada e respeitando os turnos. A placa continua
+funcionando no lado interno. Clientes e trabalhadores continuam simulados no
+restaurante enquanto o jogador está na rua.
+
+Opções → Testes oferece seleção de 06:00 até 02:00 em intervalos de dez minutos.
+`advanceTestClock` permite apenas avanço no mesmo dia jogável. O salto não
+simula `state.time`, preservando timers de paciência, cozinha e entregas. A
+mudança aplica fechamento do turno e virada de dia pelas regras existentes,
+sem apagar clientes ou preparos. A opção de limpar o cenário foi preservada.
+
+Passaram dez cenários específicos, o fluxo nativo com clientes e retorno pela
+fachada, a suíte completa de regras e integração e os testes de menus/saves.
+Rua e painel de horário foram renderizados e inspecionados em Linux/Godot 4.6.3.
+Fontes HTML preservados.
