@@ -1,3 +1,11 @@
+# Regressão: travamento ao mover fogão
+
+Corrigido o erro `TypeError: cannot read property 'recipe' of null` ao desenhar a prévia do fogão no modo construção. Uma prévia sem ID era confundida com cozimento ausente, pois ambos produziam `undefined` na comparação. A exceção desativava a simulação Godot e deixava o painel visível sem processar comandos. Agora somente objetos com ID e cozimento correspondente podem mostrar a receita em preparo.
+
+Reproduzido antes da correção com `FogaoConstrucaoUI.gd`, por seleção e clique de posicionamento. Após a correção: `FALHAS: 0` na Godot 4.7.2 Linux sem janela. Testado mover/girar/cancelar/confirmar, conservação de fogão/panela/caixa, guardar recusado por panela instalada, cancelamento após recusa e retorno ao jogo. `ConstrucaoUI.gd` e `FluxoCozinhaUI.gd` também passaram.
+
+`node qa/fogao-preview.test.cjs` cobre os dez móveis nas quatro rotações e dez ciclos de mover/girar/cancelar fogão. O teste de cache `node qa/preview-cache.test.cjs` continua passando.
+
 # Inventário permanente
 
 `InventarioUI.gd` verifica cinco slots, seleção por clique e teclas, ausência do botão da mochila e simulação ativa. `inventario.test.cjs` verifica capacidade, migração sem perdas e recuperação dos excedentes. Verificados na Godot 4.7.2 Linux, sem janela, junto com FluxoCozinhaUI, MenusUI e Verificar: `FALHAS: 0`.

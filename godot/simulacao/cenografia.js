@@ -102,7 +102,13 @@ function object(c,R,s,o,selected,preview=false){
   box(c,x+8,y,60,12,'#e5c796');for(let i=0;i<3;i++)box(c,x+17+i*10,y+2,5,5,'#70a15d');
   box(c,x+48,y-3,16,3,'#dce3db');box(c,x+64,y-3,7,3,'#725135');
  }
- if(o.type==='stove'&&(o.ingredients?.length||s.cooking?.stove===o.id||o.readyBatch)){let i=0;for(const p of o.ingredients||[]){FoodArt.draw(c,p.item,x+5+i*19,y-15,18,18);i++;}const recipe=R.recognizedRecipe(o)||(s.cooking?.stove===o.id?s.cooking.recipe:o.readyBatch?.recipe);if(recipe)FoodArt.draw(c,recipe,x+w/2-14,y-50,28,24);}
+ // A prévia de construção não possui ID e nunca representa um cozimento ativo.
+ const cooking=o.id!==undefined&&s.cooking?.stove===o.id?s.cooking:null;
+ if(o.type==='stove'&&(o.ingredients?.length||cooking||o.readyBatch)){
+  let i=0;for(const p of o.ingredients||[]){FoodArt.draw(c,p.item,x+5+i*19,y-15,18,18);i++;}
+  const recipe=R.recognizedRecipe(o)||cooking?.recipe||o.readyBatch?.recipe;
+  if(recipe)FoodArt.draw(c,recipe,x+w/2-14,y-50,28,24);
+ }
  if(o.type==='kitchen'){
   box(c,x+34,y,38,17,'#a17e54');if(o.support)pot(c,x+50,y-7,!!R.ITEMS[o.support.item]?.servings,false,s.time);
 
