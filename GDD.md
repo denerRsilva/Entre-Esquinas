@@ -805,3 +805,11 @@ QA: [COZINHA-FISICA.md](godot/COZINHA-FISICA.md).
 Decisão posterior do proprietário: remover o botão da mochila e mostrar o inventário permanentemente, em barra inspirada na organização de Stardew Valley, com **apenas cinco slots reais**. Clique ou teclas 1–5 selecionam o item; a seleção não pausa nem abre janela. Quantidade, ícone, tooltip e destaque identificam o conteúdo e o slot ativo. O atalho I e a janela de mochila deixam de fazer parte do acesso normal. A barra fica oculta no início e na construção; nos demais menus permanece na camada do jogo.
 
 Geladeiras e prateleiras mantêm dez espaços. Na migração para formato 11, os excedentes do inventário antigo são preservados para recolhimento na própria barra, respeitando capacidade e qualidade. Esses registros de migração não ampliam a capacidade de cinco slots no gameplay. Esta decisão prevalece sobre referências históricas a dez espaços de mochila nas seções anteriores.
+
+## 26. Item selecionado visível na mão
+
+O item do slot selecionado é mostrado na mão do jogador e acompanha a direção e o deslocamento do personagem. A troca por clique ou pelas teclas 1–5 atualiza a imagem; slot vazio não mostra item. Ingredientes inteiros/cortados, utensílios, panelas e pratos usam a representação correspondente.
+
+A apresentação do slot não transfere, reserva, consome ou duplica o item e não impede ações por si só. Se o jogador já transporta fisicamente uma panela ou prato, essa carga tem prioridade visual sobre o slot para não mostrar dois itens nas mesmas mãos. NPCs mostram apenas suas próprias cargas. Estrelas continuam restritas aos ingredientes e pratos, sem estrelas em panelas/preparo.
+
+Verificação nativa: `qa/ItemNaMaoUI.gd`, Godot 4.7.2 Linux sem janela, `FALHAS: 0`.

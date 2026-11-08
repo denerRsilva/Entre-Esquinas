@@ -99,6 +99,26 @@ function object(c,R,s,o,selected,preview=false){
  if(selected){c.strokeStyle='#fff0be';c.lineWidth=2;c.strokeRect(x+1,y+1,w-2,h-2);}
  c.restore();
 }
+// A seleção é uma apresentação do slot, não uma transferência nem reserva física.
+function heldItem(R,s,a){
+ if(a.hand)return a.hand;
+ if(a.carry){
+  if(a.carry.kind==='dish'){const order=s.orders.find(o=>o.id===a.carry.order);return order?{item:'dish_'+order.recipe,n:1,quality:a.carry.quality||0}:null;}
+  if(a.carry.kind==='food')return {item:a.carry.food,n:a.carry.n,quality:a.carry.quality||0};
+  return null;
+ }
+ return a===s.player?s.inventory[s.selectedSlot]||null:null;
+}
+function drawHeldItem(c,R,s,p,x,y){
+ if(!p)return;
+ if(p.item==='pot'||p.item==='cookingPot'||R.ITEMS[p.item]?.servings){pot(c,x,y,!!R.ITEMS[p.item]?.servings,false,s.time);return;}
+ if(p.item.startsWith('dish_')){plate(c,x,y,R.ITEMS[p.item]?.recipe,false,p.quality||0);return;}
+ if(['plate','dirtyPlate'].includes(p.item)){plate(c,x,y,null,p.item==='dirtyPlate');return;}
+ if(p.item==='spoon'){
+  box(c,x-1,y-3,3,16,'#527576');box(c,x-4,y-9,9,8,'#d6e5d9');box(c,x-2,y-8,5,5,'#90aaa3');return;
+ }
+ if(typeof FoodArt!=='undefined'){FoodArt.draw(c,p.item,x-12,y-12,24,24);FoodArt.star(c,p.quality||0,x+4,y-13,9);}
+}
 function actor(c,R,s,a,selected,construction=false){
  const pose=R.position(a),x=pose.x*40+20,bottom=pose.y*40+38;
  box(c,x-12,bottom-3,24,5,'#4c3e3540');
@@ -108,8 +128,8 @@ function actor(c,R,s,a,selected,construction=false){
  if(a.id==='player'){
  c.actor(x,bottom,dir,moving);
  }else c.commands.push(['npc',a.id,id,x,bottom,dir,moving]);
- if(a.hand){const p=a.hand;if(p.item==='pot'||R.ITEMS[p.item]?.servings)pot(c,x+12,bottom-22,!!R.ITEMS[p.item]?.servings,false,s.time);else if(p.item.startsWith('dish_'))plate(c,x+11,bottom-20,R.ITEMS[p.item].recipe,false,p.quality||0);else plate(c,x+11,bottom-20,null,true);}
- if(a.carry){if(a.carry.kind==='dish'){const order=s.orders.find(o=>o.id===a.carry.order);plate(c,x+11,bottom-20,order?.recipe,false,a.carry.quality??0);}else{if(typeof FoodArt!=='undefined'){FoodArt.draw(c,a.carry.food,x+2,bottom-30,24,24);FoodArt.star(c,a.carry.quality??0,x+17,bottom-30,9);}}}
+ const held=heldItem(R,s,a),handX=x+(dir==='left'?-12:dir==='right'?12:8),handY=bottom-(dir==='up'?32:22);
+ drawHeldItem(c,R,s,held,handX,handY);
  if(construction)return;
  if(a.id==='player')label(c,'Você',x,bottom+12,'#77603a');
  else if(a.id.startsWith('worker'))label(c,a.id==='worker1'?'Logística':'Garçom',x,bottom+11);
@@ -165,5 +185,5 @@ function toolIcon(type,name){
  else toolAtlas?.addEventListener?.('load',paint,{once:true});
  return icon;
 }
-root.RestaurantArt={base,ready,draw,object,rects,direction,catalogIcon,toolIcon};
+root.RestaurantArt={heldItem,base,ready,draw,object,rects,direction,catalogIcon,toolIcon};
 })(typeof globalThis!=='undefined'?globalThis:this);
