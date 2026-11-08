@@ -191,7 +191,8 @@ function furnishedTest(){
  const s=fresh();s.cash=10000;
  const layout=[];
  for(const [x,y]of [[4,4],[9,4],[7,9]])layout.push(['table',x,y],['chair',x-1,y,1],['chair',x+2,y,3],['chair',x,y-1,2],['chair',x+1,y+1,0]);
- layout.push(['prep',19,4],['stove',16,2],['fridge',21,2],['kitchen',16,5],['sink',20,6],['bin',22,8],['shelf',16,13],['cold',21,13]);
+ // Cozinha mobiliada conforme a referência visual: linha superior e bancadas laterais.
+ layout.push(['stove',15,4],['prep',17,4],['fridge',19,3],['kitchen',15,8],['sink',21,6],['bin',22,8],['shelf',16,13],['cold',21,13]);
  for(const [type,x,y,rot=0]of layout){let r=place(s,type,x,y,rot);if(!r.ok)throw Error('Cenário de teste: '+r.error);}
  const stove=s.objects.find(o=>o.type==='stove'),prep=s.objects.find(o=>o.type==='kitchen');
  for(const food of Object.keys(FOODS)){addInventory(s,food,30);s.purchased[food]=30;}
