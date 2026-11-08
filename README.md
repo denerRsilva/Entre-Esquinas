@@ -1,5 +1,11 @@
 # Entre Esquinas — Restaurante 0.21.2
 
+## APK Android de teste
+
+Baixe [EntreEsquinas.apk](build/Android/EntreEsquinas.apk) pelo botão
+**Download raw file** do GitHub. Instruções, compilação e limites da
+validação em [godot/ANDROID.md](godot/ANDROID.md).
+
 Simulação de restaurante e vida na cidade, em HTML/JavaScript/Canvas.
 
 - Código-fonte, sprites, testes e documentação: `projeto/`.
