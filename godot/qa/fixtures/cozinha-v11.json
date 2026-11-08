@@ -1,0 +1,449 @@
+{
+  "version": 11,
+  "chopping": null,
+  "serviceHours": [
+    {
+      "start": 660,
+      "end": 900
+    },
+    {
+      "start": 1080,
+      "end": 1320
+    }
+  ],
+  "recovery": [],
+  "plating": null,
+  "clock": {
+    "minute": 360,
+    "remainder": 0,
+    "ending": false
+  },
+  "reputation": {
+    "initial": 0,
+    "score": 0,
+    "history": [],
+    "processed": []
+  },
+  "day": 1,
+  "period": 0,
+  "open": false,
+  "closing": false,
+  "cash": 1500,
+  "time": 0,
+  "tick": 0,
+  "arrival": 0,
+  "serial": 24,
+  "objects": [
+    {
+      "id": 1,
+      "type": "table",
+      "x": 4,
+      "y": 4,
+      "rot": 0,
+      "room": "restaurant"
+    },
+    {
+      "id": 2,
+      "type": "chair",
+      "x": 4,
+      "y": 3,
+      "rot": 2,
+      "room": "restaurant"
+    },
+    {
+      "id": 3,
+      "type": "chair",
+      "x": 5,
+      "y": 3,
+      "rot": 2,
+      "room": "restaurant"
+    },
+    {
+      "id": 4,
+      "type": "chair",
+      "x": 4,
+      "y": 5,
+      "rot": 0,
+      "room": "restaurant"
+    },
+    {
+      "id": 5,
+      "type": "chair",
+      "x": 5,
+      "y": 5,
+      "rot": 0,
+      "room": "restaurant"
+    },
+    {
+      "id": 6,
+      "type": "table",
+      "x": 9,
+      "y": 4,
+      "rot": 0,
+      "room": "restaurant"
+    },
+    {
+      "id": 7,
+      "type": "chair",
+      "x": 9,
+      "y": 3,
+      "rot": 2,
+      "room": "restaurant"
+    },
+    {
+      "id": 8,
+      "type": "chair",
+      "x": 10,
+      "y": 3,
+      "rot": 2,
+      "room": "restaurant"
+    },
+    {
+      "id": 9,
+      "type": "chair",
+      "x": 9,
+      "y": 5,
+      "rot": 0,
+      "room": "restaurant"
+    },
+    {
+      "id": 10,
+      "type": "chair",
+      "x": 10,
+      "y": 5,
+      "rot": 0,
+      "room": "restaurant"
+    },
+    {
+      "id": 11,
+      "type": "table",
+      "x": 7,
+      "y": 9,
+      "rot": 0,
+      "room": "restaurant"
+    },
+    {
+      "id": 12,
+      "type": "chair",
+      "x": 7,
+      "y": 8,
+      "rot": 2,
+      "room": "restaurant"
+    },
+    {
+      "id": 13,
+      "type": "chair",
+      "x": 8,
+      "y": 8,
+      "rot": 2,
+      "room": "restaurant"
+    },
+    {
+      "id": 14,
+      "type": "chair",
+      "x": 7,
+      "y": 10,
+      "rot": 0,
+      "room": "restaurant"
+    },
+    {
+      "id": 15,
+      "type": "chair",
+      "x": 8,
+      "y": 10,
+      "rot": 0,
+      "room": "restaurant"
+    },
+    {
+      "id": 16,
+      "type": "stove",
+      "x": 15,
+      "y": 4,
+      "rot": 0,
+      "room": "restaurant",
+      "ingredients": [],
+      "pan": "pot"
+    },
+    {
+      "id": 17,
+      "type": "prep",
+      "x": 17,
+      "y": 4,
+      "rot": 0,
+      "room": "restaurant"
+    },
+    {
+      "id": 18,
+      "type": "fridge",
+      "x": 19,
+      "y": 3,
+      "rot": 0,
+      "room": "restaurant",
+      "inventory": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "id": 19,
+      "type": "kitchen",
+      "x": 15,
+      "y": 8,
+      "rot": 0,
+      "room": "restaurant",
+      "plates": 12,
+      "utensil": false,
+      "dishes": {},
+      "dishQuality": {}
+    },
+    {
+      "id": 20,
+      "type": "sink",
+      "x": 21,
+      "y": 6,
+      "rot": 0,
+      "room": "restaurant"
+    },
+    {
+      "id": 21,
+      "type": "bin",
+      "x": 22,
+      "y": 8,
+      "rot": 0,
+      "room": "restaurant"
+    },
+    {
+      "id": 22,
+      "type": "shelf",
+      "x": 16,
+      "y": 13,
+      "rot": 0,
+      "room": "restaurant",
+      "inventory": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "id": 23,
+      "type": "cold",
+      "x": 21,
+      "y": 13,
+      "rot": 0,
+      "room": "restaurant",
+      "inventory": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    }
+  ],
+  "equipment": {
+    "pot": 3,
+    "plate": 12,
+    "spoon": 0
+  },
+  "meals": {
+    "made": {
+      "arrozLegumes": 0,
+      "sopa": 0,
+      "frangoArroz": 0
+    },
+    "eaten": {
+      "arrozLegumes": 0,
+      "sopa": 0,
+      "frangoArroz": 0
+    },
+    "wasted": {
+      "arrozLegumes": 0,
+      "sopa": 0,
+      "frangoArroz": 0
+    }
+  },
+  "dirtyTables": {},
+  "inventory": [
+    {
+      "item": "arroz",
+      "n": 30
+    },
+    {
+      "item": "legumes",
+      "n": 30
+    },
+    {
+      "item": "frango",
+      "n": 30
+    },
+    {
+      "item": "pot",
+      "n": 2
+    },
+    null
+  ],
+  "selectedSlot": 0,
+  "tools": {
+    "pot": true,
+    "spoon": false
+  },
+  "inv": {
+    "receiving": {
+      "arroz": 0,
+      "legumes": 0,
+      "frango": 0
+    },
+    "storage": {
+      "arroz": 0,
+      "legumes": 0,
+      "frango": 0
+    },
+    "kitchen": {
+      "arroz": 0,
+      "legumes": 0,
+      "frango": 0
+    }
+  },
+  "purchased": {
+    "arroz": 30,
+    "legumes": 30,
+    "frango": 30
+  },
+  "used": {
+    "arroz": 0,
+    "legumes": 0,
+    "frango": 0
+  },
+  "orders": [],
+  "deliveries": [],
+  "customers": [],
+  "experience": {
+    "visits": [],
+    "events": []
+  },
+  "residents": [
+    {
+      "id": "lia",
+      "room": "street",
+      "x": 5,
+      "y": 10,
+      "goal": null,
+      "wait": 0,
+      "hold": 0,
+      "state": "idle",
+      "carry": null
+    },
+    {
+      "id": "beto",
+      "room": "street",
+      "x": 18,
+      "y": 8,
+      "goal": null,
+      "wait": 0,
+      "hold": 0,
+      "state": "idle",
+      "carry": null
+    },
+    {
+      "id": "nina",
+      "room": "street",
+      "x": 17,
+      "y": 12,
+      "goal": null,
+      "wait": 0,
+      "hold": 0,
+      "state": "idle",
+      "carry": null
+    }
+  ],
+  "player": {
+    "id": "player",
+    "room": "restaurant",
+    "x": 7,
+    "y": 13,
+    "goal": null,
+    "wait": 0,
+    "hold": 0,
+    "state": "idle",
+    "carry": null
+  },
+  "workers": [
+    {
+      "id": "worker1",
+      "room": "restaurant",
+      "x": 18,
+      "y": 12,
+      "goal": null,
+      "wait": 0,
+      "hold": 0,
+      "state": "idle",
+      "carry": null,
+      "task": "none"
+    },
+    {
+      "id": "worker2",
+      "room": "restaurant",
+      "x": 20,
+      "y": 12,
+      "goal": null,
+      "wait": 0,
+      "hold": 0,
+      "state": "idle",
+      "carry": null,
+      "task": "none"
+    }
+  ],
+  "prices": {
+    "arrozLegumes": 14,
+    "sopa": 12,
+    "frangoArroz": 20
+  },
+  "menu": {
+    "arrozLegumes": true,
+    "sopa": true,
+    "frangoArroz": true
+  },
+  "cookActive": false,
+  "cooking": null,
+  "ready": [],
+  "ledger": {
+    "revenue": 0,
+    "foodCost": 0,
+    "purchases": 0,
+    "investment": 0,
+    "lost": 0,
+    "sales": 0
+  },
+  "reports": [],
+  "friends": {
+    "lia": 0,
+    "beto": 0,
+    "nina": 0
+  },
+  "talked": {},
+  "message": "Teste pronto: ingredientes na mochila, panela instalada no fogão, pratos e talher na bancada.",
+  "lastReport": null,
+  "priority": null,
+  "flowWaits": 0
+}

@@ -56,7 +56,7 @@ func import_save(path:String) -> void:
 		tick(0)
 		return
 	var next=values.duplicate()
-	next["entre-restaurante-11"]=raw
+	next["entre-restaurante-12"]=raw
 	if persist(next):
 		values=next
 		RestauranteVM.executar("Host.values="+JSON.stringify(values)+";tell('Arquivo importado. Use Carregar restaurante para continuar.')")
@@ -134,7 +134,7 @@ func _input(event:InputEvent) -> void:
 	if not active or not event is InputEventKey or event.echo:return
 	var editing := get_viewport().gui_get_focus_owner() is LineEdit
 	if editing and event.pressed and event.keycode != KEY_ESCAPE:return
-	var names={KEY_UP:"arrowup",KEY_DOWN:"arrowdown",KEY_LEFT:"arrowleft",KEY_RIGHT:"arrowright",KEY_ESCAPE:"escape",KEY_W:"w",KEY_S:"s",KEY_A:"a",KEY_D:"d",KEY_E:"e",KEY_1:"1",KEY_2:"2",KEY_3:"3",KEY_4:"4",KEY_5:"5",KEY_R:"r"}
+	var names={KEY_UP:"arrowup",KEY_DOWN:"arrowdown",KEY_LEFT:"arrowleft",KEY_RIGHT:"arrowright",KEY_ESCAPE:"escape",KEY_W:"w",KEY_S:"s",KEY_A:"a",KEY_D:"d",KEY_E:"e",KEY_R:"r"}
 	if names.has(event.keycode):
 		events.append({"kind":"key","key":names[event.keycode],"down":event.pressed})
 

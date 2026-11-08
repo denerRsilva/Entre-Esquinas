@@ -1,3 +1,9 @@
+# Testes atuais: transporte somente nas mãos
+
+Use `node qa/Regras.cjs` e as suítes nativas `MaosUI.gd`, `MenusUI.gd`, `FogaoConstrucaoUI.gd`, `CadeirasUI.gd`, `MovimentoUI.gd` e `Verificar.gd`. Godot 4.7.2 Linux, sem janela, `FALHAS: 0` nas seis suítes. O percurso completo com cliques inclui frango retirado da geladeira, corte e frango com arroz, sem inventário do jogador. `UIBase.gd` compartilha as funções de entrada nativa.
+
+Os testes de regras atuais incluem `maos.test.cjs` e `maos-migracao.test.cjs`. As antigas entradas de inventário e cozinha apontam para esse novo fluxo; as antigas suítes em `regras/` baseadas em mochila permanecem históricas e não fazem parte do executor. Os registros abaixo são históricos e suas afirmações sobre slots devem ser interpretadas no contexto da versão correspondente.
+
 # Assentos nos lados compridos
 
 `node qa/cadeiras.test.cjs` verifica mesas nas quatro rotações, cadeiras voltadas para a mesa, bloqueio nas pontas, transações sem cobrança em posições recusadas, cenário mobiliado com 12 assentos e recuperação de louça em saves antigos. Também faz parte de `Regras.cjs`.

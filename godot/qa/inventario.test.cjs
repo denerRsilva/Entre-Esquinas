@@ -1,11 +1,3 @@
-const assert=require('node:assert/strict'),R=require('../simulacao/restaurant-core');
-assert.equal(R.fresh().inventory.length,5);
-const old=R.fresh();old.version=10;old.inventory=Array.from({length:10},()=>({item:'arroz',n:99}));old.purchased.arroz=990;old.selectedSlot=9;
-const before=JSON.stringify(old),next=R.migrateSave(old);assert(next);assert.equal(JSON.stringify(old),before);assert.equal(next.inventory.length,5);assert.equal(next.recovery.reduce((n,p)=>n+p.n,0),495);assert(R.foodConserved(next));assert(R.valid(next));
-assert(!R.addInventory(next,'frango',1));assert.equal(next.inventory.length,5);
-R.removeInventory(next,0,99);next.used.arroz+=99;assert(R.recoverItems(next).ok);assert.equal(next.recovery.reduce((n,p)=>n+p.n,0),396);assert(R.valid(next));assert(R.migrateSave(next));
-const invalid=JSON.parse(JSON.stringify(next));invalid.selectedSlot=5;assert.equal(R.migrateSave(invalid),null);
-const fake=JSON.parse(JSON.stringify(next));fake.inventory.push(null);assert.equal(R.migrateSave(fake),null);
-const invalidOld=JSON.parse(before);invalidOld.inventory[9].n=-1;assert.equal(R.migrateSave(invalidOld),null);
-const s=R.furnishedTest(),storage=s.objects.find(o=>o.type==='shelf');assert.equal(storage.inventory.length,10);assert.equal(R.putObject(s,storage,'arroz',1),1);s.purchased.arroz++;assert(R.valid(s));
-console.log('PASSOU: cinco slots, limite real, armazenamento independente, migração sem perdas, recuperação e saves inválidos');
+// O inventário do jogador foi removido; verifique mãos e migração.
+require('./maos.test.cjs');
+require('./maos-migracao.test.cjs');

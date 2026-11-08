@@ -18,7 +18,6 @@ func _ready() -> void:
 	area("context",Rect2(150,360,500,110),false,false)
 	area("hint",Rect2(10,604,610,42),false,true)
 	area("notice",Rect2(10,500,520,70),false,true)
-	area("hotbar",Rect2(286,570,388,124),false,true)
 	area("dock",Rect2(10,651,250,44),false,false)
 	area("actions",Rect2(720,641,234,54),false,false)
 	area("catalog",Rect2(10,649,168,44),false,false)
@@ -49,7 +48,7 @@ func area(key:String,rect:Rect2,scrollable:=true,boxed:=true) -> void:
 	if key=="context": root.clip_contents=true
 	root.position=rect.position
 	root.size=rect.size
-	root.mouse_filter=Control.MOUSE_FILTER_IGNORE if key in ["hint","notice","hud"] else Control.MOUSE_FILTER_STOP
+	root.mouse_filter=Control.MOUSE_FILTER_IGNORE if key in ["hint","notice","hud","context"] else Control.MOUSE_FILTER_STOP
 	add_child(root)
 	var parent:Control=root
 	if scrollable:
@@ -59,7 +58,7 @@ func area(key:String,rect:Rect2,scrollable:=true,boxed:=true) -> void:
 		parent=scroll
 	var content:=VBoxContainer.new()
 	content.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-	if key in ["hud","hint","notice"]: content.mouse_filter=Control.MOUSE_FILTER_IGNORE
+	if key in ["hud","hint","notice","context"]: content.mouse_filter=Control.MOUSE_FILTER_IGNORE
 	parent.add_child(content)
 	if overlay:
 		content.position = Vector2(6,3)
@@ -128,5 +127,8 @@ func sync(data: Dictionary) -> void:
 		if key in ["hud","hint","notice"]:
 			for decoration in content.find_children("*","Control",true,false):
 				decoration.mouse_filter=Control.MOUSE_FILTER_IGNORE
+		if key=="context":
+			for decoration in content.find_children("*","Control",true,false):
+				if not decoration is BaseButton: decoration.mouse_filter=Control.MOUSE_FILTER_IGNORE
 		if scroll and scroll_y: scroll.set_deferred("scroll_vertical",scroll_y)
 		root.set_deferred("size",entry[2].size)

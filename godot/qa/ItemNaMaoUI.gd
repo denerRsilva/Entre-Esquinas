@@ -1,25 +1,2 @@
-extends "res://qa/CozinhaUI.gd"
-func run():
-	root.size=Vector2i(960,700)
-	g=load("res://mundo/Restaurante.tscn").instantiate();root.add_child(g);g.set_process(false)
-	await layout()
-	check(await button("Começar mobiliado (teste)"),"Iniciar jogo")
-	check(js("RestaurantArt.heldItem(R,state,state.player)?.item==='arroz'")=="true","Slot inicial aparece na mão")
-	await layout()
-	check(await button("3 • 30"),"Trocar slot pelo mouse")
-	check(js("RestaurantArt.heldItem(R,state,state.player)?.item==='frango'")=="true","Item na mão acompanha clique")
-	var event:=InputEventKey.new();event.keycode=KEY_2;event.pressed=true;root.push_input(event);g.tick(0)
-	check(js("RestaurantArt.heldItem(R,state,state.player)?.item==='legumes'")=="true","Item acompanha tecla 2")
-	js("selectInventorySlot(4)");g.tick(0)
-	check(js("RestaurantArt.heldItem(R,state,state.player)===null")=="true","Slot vazio deixa mão vazia")
-	var empty_scene=JSON.stringify(g.frame_data.scene)
-	js("selectInventorySlot(0)");g.tick(0)
-	check(JSON.stringify(g.frame_data.scene)!=empty_scene,"Seleção altera desenho do cenário")
-	check(js("(()=>{const before=JSON.stringify(state);snapshot(0,[]);return JSON.stringify(state)===before})()")=="true","Desenho não consome nem transfere itens")
-	check(js("RestaurantArt.heldItem(R,state,state.workers[0])===null")=="true","Seleção não aparece nos NPCs")
-	js("queuePhysical(state.objects.find(o=>o.type==='stove'),'takePan')")
-	for i in 200:g.tick(.05)
-	check(js("state.player.hand?.item==='pot'&&RestaurantArt.heldItem(R,state,state.player)===state.player.hand")=="true","Panela transportada tem prioridade sobre seleção")
-	check(js("R.valid(state)&&Boolean(R.migrateSave(state))")=="true","Itens e save preservados")
-	print("FALHAS: ",failures)
-	g.queue_free();await process_frame;quit(1 if failures else 0)
+extends "res://qa/MaosUI.gd"
+## O acesso por slots foi substituído por transporte somente nas mãos.

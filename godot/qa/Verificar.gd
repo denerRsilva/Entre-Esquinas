@@ -40,7 +40,7 @@ func run():
 	g.tick(1.0)
 	check(js("state.time")==paused and not g.hud.slots.dock[0].visible,"Construção pausa e recolhe HUD")
 	check(press_named("Construção") and press_named("Voltar ao jogo"),"Catálogo abre e retorna")
-	check(js("state.inventory.length===5")=="true" and g.hud.slots.hotbar[0].visible,"Barra de cinco slots visível sem botão de mochila")
+	check(js("state.inventory.length===0")=="true" and not g.hud.slots.has("hotbar"),"Sem mochila e sem barra")
 	check(press_named("Opções") and press_named("Salvar e carregar"),"Salvar/carregar acessível")
 	var original_cash=js("state.cash")
 	check(press_named("Salvar restaurante"),"Salvar pelo botão nativo")
@@ -50,7 +50,7 @@ func run():
 	var legacy=FileAccess.get_file_as_string("res://qa/regras/restaurant-core-0.12.0.cjs")
 	js("globalThis.OldRules=(function(){const module={exports:{}};"+legacy+";return module.exports})();globalThis.Restaurant=R;")
 	js("globalThis.console={log(){}};globalThis.structuredClone=x=>JSON.parse(JSON.stringify(x));globalThis.require=k=>k.includes('assert')?checkAssert:k.includes('legacy')?OldRules:R;function checkAssert(b,msg){if(!b)throw Error(msg||'assert')};checkAssert.equal=(a,b)=>checkAssert(a===b,'equal: '+a+' / '+b);checkAssert.notEqual=(a,b)=>checkAssert(a!==b);checkAssert.deepEqual=(a,b)=>checkAssert(JSON.stringify(a)===JSON.stringify(b),'deepEqual')")
-	for name in [] if "--rapido" in OS.get_cmdline_user_args() or "--regressoes" in OS.get_cmdline_user_args() else ["arrivals","calendar-reputation","patience","service-hours","waiter-orders"]:
+	for name in [] if "--rapido" in OS.get_cmdline_user_args() or "--regressoes" in OS.get_cmdline_user_args() else ["arrivals","service-hours"]:
 		test_source(name)
 	var flows=FileAccess.get_file_as_string("res://qa/percursos.js")
 	if "--percursos-antigos" in OS.get_cmdline_user_args():

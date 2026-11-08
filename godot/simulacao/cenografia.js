@@ -131,7 +131,7 @@ function heldItem(R,s,a){
   if(a.carry.kind==='food')return {item:a.carry.food,n:a.carry.n,quality:a.carry.quality||0};
   return null;
  }
- return a===s.player?s.inventory[s.selectedSlot]||null:null;
+ return null;
 }
 function drawHeldItem(c,R,s,p,x,y){
  if(!p)return;

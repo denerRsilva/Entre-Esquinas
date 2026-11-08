@@ -1,51 +1,48 @@
-# Cozinha física
+# Cozinha: transporte somente nas mãos
 
-Fluxo implementado somente na Godot. HTML preservado.
+Atualização somente na Godot. Não há mochila, slots do jogador, barra de inventário ou atalhos de seleção. O jogador transporta **uma unidade por vez**, em suas mãos. O desenho representa o item realmente carregado.
 
-1. Selecione o ingrediente na barra permanente de cinco slots, clicando ou usando as teclas 1–5.
-2. Clique na **Mesa de preparo • corte**: uma unidade de frango ou legumes vira ingrediente cortado em dois segundos ativos. Arroz não precisa de corte. O resultado volta à mochila; falta de espaço não elimina o ingrediente.
-3. Instale uma panela vazia no fogão. Selecione e adicione uma unidade de ingrediente por clique. Arroz com legumes: 1 arroz + 1 legumes cortados; sopa: 2 legumes cortados; frango com arroz: 1 arroz + 1 frango cortado. As receitas são reconhecidas por correspondência exata. Remova o último ingrediente para corrigir uma combinação.
-4. Use o ícone **Cozinhar**. Cada cozimento novo rende uma porção. O personagem fica livre; pronto, passando do ponto e queimado mantêm as regras anteriores. Estrelas não aparecem no preparo.
-5. Retire a panela: ela ocupa as mãos, deixa o fogão livre e para de perder qualidade pelo calor.
-6. Apoie na **Mesa de cozinha**, reponha pratos limpos e use **Empratar uma porção**. Não é necessário talher. A ação leva dois segundos junto à mesa. Comida queimada não pode ser empratada.
-7. Pegue o prato nas mãos e clique na mesa ou cliente com pedido compatível. O garçom procura pratos prontos na nova mesa de cozinha e mantém as funções anteriores. Uma retirada remove imediatamente o prato da mesa, impedindo disputa pelo mesmo item.
-8. Retire a panela vazia apoiada e instale novamente no fogão, ou guarde a panela vazia na mochila. Pia e lixo permitem descartar comida carregada preservando seu recipiente. A lavagem de pratos continua disponível.
+## Início mobiliado
 
-Um clique agenda a aproximação e a ação. Ações alternativas ficam junto ao objeto. Computador mantém catálogo; geladeiras e prateleiras abrem inventário dividido após aproximação, **sem pausar o tempo**. Outros menus, perda de foco e construção continuam pausando. Ações de corte/empratamento aguardam proximidade e podem ser canceladas sem consumo.
+- Mãos vazias e nenhum inventário do jogador.
+- Geladeira da cozinha com 30 arroz, 30 legumes e 30 frango cru.
+- Uma panela instalada no fogão, sem panelas extras na mochila ou nas mãos.
+- Doze pratos limpos na mesa de cozinha, destinada ao empratamento.
+- Mesas, cadeiras e disposição da cozinha preservados.
 
-## Salvamentos
+## Preparar e servir
 
-Formato 11, chave `entre-restaurante-11`, com leitura das chaves anteriores. Arquivo local Godot continua `user://restaurante.json`, com backup. A migração copia e valida o estado antes de substituir a partida.
+1. Clique na geladeira: o personagem se aproxima e abre seu inventário de dez espaços. Clique num ingrediente para retirar uma unidade; o painel fecha e o item aparece nas mãos. O tempo continua passando enquanto o armazenamento estiver aberto.
+2. Frango cru e legumes inteiros podem ser cortados na mesa de preparo. Um clique aproxima e inicia dois segundos de corte. A versão cortada fica nas mãos, com a qualidade preservada. Arroz dispensa corte.
+3. Clique no fogão para adicionar o ingrediente carregado à panela. Volte à geladeira para o próximo ingrediente. Não há consumo de um inventário oculto nem abastecimento automático.
+4. A combinação exata identifica a receita: arroz + legumes cortados; dois legumes cortados; arroz + frango cortado. Com as mãos vazias, use Cozinhar. Cada preparo novo rende uma porção.
+5. Retire a panela pronta antes de queimar. Ela ocupa as mãos e para de perder qualidade pelo calor. Apoie na mesa de cozinha.
+6. Emprate uma porção usando os pratos limpos instalados, sem talher. Pegue o prato nas mãos e clique na mesa/cliente compatível para servir. O garçom continua buscando pratos prontos na mesa de cozinha.
+7. Retire a panela vazia da mesa para reinstalar no fogão. Recolha um prato sujo por vez nas mãos, lave na pia e reponha na mesa de cozinha.
 
-- Bancadas antigas viram mesas de cozinha na mesma posição, com pratos, talheres e refeições preservados. Compre uma mesa de corte no modo construção; a migração não instala um móvel sobre corredores ou outros objetos.
-- Panelas antigas conservam suas porções: cada empratamento retira somente uma. Panelas cheias antigas da mochila podem ser erguidas pelas ações da mesa de cozinha e apoiadas nela.
-- Preparo no fogão conserva progresso e rendimento antigo. Empratamento antigo é cancelado sem consumo, mantendo panela e pratos na origem.
-- Qualidade, queima, ingredientes adicionados, panela apoiada, mãos e tarefas manuais integram o estado salvo.
-- Talheres antigos continuam preservados e podem ser retirados da mesa; não são exigidos nas partidas novas.
+Mãos ocupadas impedem retirar outro item. Para liberar as mãos, use Guardar item das mãos no painel da geladeira/armazenamento compatível ou apoie panela/prato na mesa de cozinha. Geladeiras aceitam os ingredientes e itens transportáveis; a prateleira mantém o armazenamento seco. Compras de utensílios no computador vão às mãos e exigem que estejam livres. O recebimento também entrega uma unidade por vez às mãos.
 
-## Validação
+Corte pode ser cancelado sem consumo; afastar-se pausa o trabalho manual. Corte e empratamento impedem transferir o item durante a tarefa. Construção, outros menus e perda de foco mantêm suas pausas anteriores. Inventários de armazenamento continuam sem pausar a simulação.
 
-Executar da pasta `godot`:
+## Persistência
+
+Formato 12, chave `entre-restaurante-12`, com leitura das chaves anteriores. O arquivo Godot continua `user://restaurante.json`, com backup.
+
+A migração valida uma cópia do estado e transfere os itens dos antigos slots para os armazenamentos, preservando quantidade, qualidade, utensílios e porções. Se todos os armazenamentos estiverem cheios ou ausentes, os excedentes permanecem em registros de recuperação de migração: são acessíveis pelo painel da geladeira e saem uma unidade por vez para as mãos. Não há inventário de transporte adicional nem uso desses registros pelo gameplay normal. Saves inválidos não substituem a partida atual.
+
+Uma tarefa antiga de corte baseada em slots é cancelada sem consumir os ingredientes preservados. Preparos no fogão, panela apoiada e comida transportada são conservados. Pratos antigos em trânsito são convertidos para as mãos do jogador; cargas dos funcionários mantêm sua lógica.
+
+## Verificação
+
+Na pasta `godot`, usando Godot 4.7.2 e dados de teste:
 
 ```sh
 node qa/Regras.cjs
-node qa/rua-horario.test.cjs
-node qa/movimento.test.cjs
-node qa/layout.test.cjs
-node qa/preview-cache.test.cjs
-XDG_CONFIG_HOME=/tmp/esquinas-config XDG_DATA_HOME=/tmp/esquinas-teste XDG_CACHE_HOME=/tmp/esquinas-cache godot --headless --audio-driver Dummy --script res://qa/FluxoCozinhaUI.gd
+XDG_CONFIG_HOME=/tmp/maos-config XDG_CACHE_HOME=/tmp/maos-cache XDG_DATA_HOME=/tmp/maos-teste godot --headless --audio-driver Dummy --script res://qa/MaosUI.gd
 ```
 
-`fluxo-cozinha.test.cjs` cobre transações, mãos ocupadas, reconhecimento, cancelamento, migração, conservação e porção individual. A fixture v9 foi gerada com o código anterior e é independente da versão atual. `FluxoCozinhaUI.gd` percorre os controles Godot e verifica inventário ativo e construção pausada. `CozinhaUI.gd` aponta para esse novo teste.
+`maos.test.cjs` cobre três receitas, frango/legumes cortados, conservação, cancelamento, mãos ocupadas, serviço manual, garçom, pagamento, abandono, limpeza, compras, entregas e limites de queima. `maos-migracao.test.cjs` cobre estados antigos v9/v11, armazenamento cheio, recuperação, estados inválidos e panelas com porções/qualidade.
 
-As antigas suítes `qa/regras/kitchen.test.cjs` e `quality.test.cjs` descrevem a cozinha anterior; não fazem parte do executor atual. Casos aplicáveis de qualidade e queima são cobertos pela suíte física. Os cenários de paciência, reputação e garçom usam fixtures de refeições para isolar esses sistemas da duração de produção. O percurso antigo `qa/percursos.js` só roda com `Verificar.gd -- --percursos-antigos`.
+`MaosUI.gd` percorre os cliques reais na geladeira, mesa de corte, fogão e empratamento, incluindo o retorno à geladeira após adicionar o primeiro ingrediente. `CozinhaUI.gd`, `FluxoCozinhaUI.gd`, `InventarioUI.gd` e `ItemNaMaoUI.gd` são entradas para esse fluxo atual. A infraestrutura compartilhada está em `UIBase.gd`.
 
-Testado neste ambiente com Godot **4.6.3 Linux**, Node.js e extensão QuickJS incluída. A versão **4.7.2** informada pelo proprietário, Windows e avaliação visual/humana de um dia completo ainda exigem teste no ambiente correspondente.
-
-## Inventário permanente de cinco slots
-
-Botão da mochila e atalho I removidos. A barra fica no centro inferior da tela durante o jogo, com item, quantidade, identificação por tooltip e seleção destacada. Clique ou teclas 1–5 selecionam sem pausar. Gestão e Opções ficam à esquerda e câmera à direita, sem sobrepor a barra. Geladeiras e prateleiras continuam com dez espaços.
-
-A migração de saves mantém os primeiros cinco slots; excedentes ficam na reserva de migração, acessível em **Recolher itens preservados** na própria barra. A recuperação respeita os cinco slots e conserva qualidade e quantidades. Uma tarefa de corte cujo ingrediente ficou na reserva é cancelada sem consumo. Não existe reserva adicional criada pelo gameplay normal. O kit mobiliado novo não distribui colheres, que não são exigidas pela cozinha, deixando espaço para cortar.
-
-Testes: `node qa/inventario.test.cjs` e `godot --headless --audio-driver Dummy --script res://qa/InventarioUI.gd` na Godot 4.7.2. O teste nativo verifica clique real, tecla 2, cinco botões, ausência do botão antigo e tempo contínuo.
+Menus, construção do fogão, cadeiras, movimento e integração geral também foram verificados em modo sem janela na Godot 4.7.2 Linux. Testes antigos que pressupõem cinco slots ou ingredientes na mochila não fazem parte do executor atual; satisfação, atendimento e garçom são cobertos no ciclo novo.

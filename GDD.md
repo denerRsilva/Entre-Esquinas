@@ -53,7 +53,7 @@ completas e estabelecimentos adicionais ainda não estão implementados.
 ## 2. Ciclo principal
 
 1. Preparar o restaurante: organizar móveis, obter utensílios e comprar insumos.
-2. Recolher as entregas e manter na mochila os ingredientes necessários.
+2. Retirar um ingrediente do armazenamento para as mãos e levá-lo à estação correspondente.
 3. Escolher o horário de serviço e abrir o restaurante pela placa da entrada.
 4. Receber os clientes, aproximar-se e anotar os pedidos.
 5. Cozinhar os lotes, retirar a panela e empratar na bancada.
@@ -169,31 +169,15 @@ resultado do serviço. As probabilidades e tempos atuais são parâmetros de tes
 
 ## 7. Cozinha e louça
 
-### Cozinha física — reformulação aprovada
+### Cozinha física — transporte nas mãos
 
-O fluxo atual é **ingredientes → cortar → adicionar à panela → cozinhar →
-transportar nas mãos → apoiar na mesa de cozinha → empratar uma porção → servir**.
-A mesa de preparo corta uma unidade de frango ou legumes em dois segundos; o
-resultado vai à mochila. Arroz dispensa corte. A panela recebe ingredientes
-individualmente e reconhece uma receita exata, sem janela de escolha. Ingredientes
-extras/incompatíveis não são consumidos; a última adição pode ser retirada antes
-de cozinhar.
+O fluxo atual é **retirar da geladeira → cortar quando necessário → adicionar à panela → cozinhar → transportar a panela nas mãos → apoiar na mesa de cozinha → empratar → servir**.
 
-Cada novo cozimento rende **uma porção**, usando as quantidades por porção da
-seção 10. O jogador pode fazer outras tarefas durante o cozimento. Retirar a
-panela libera o fogão, ocupa as mãos e encerra a exposição ao fogo.
+O jogador não tem mochila ou slots e transporta uma unidade por vez. Frango cru e legumes inteiros são cortados na mesa de preparo em dois segundos ativos; o resultado permanece nas mãos. Arroz dispensa corte. Cada adição à panela libera as mãos para buscar o próximo ingrediente. A receita é reconhecida pela combinação exata, sem janela de escolha.
 
-A nova **mesa de cozinha** recebe pratos limpos e a panela apoiada. Empratar
-produz **um prato por ação**, em dois segundos junto à mesa, **sem talher**.
-A panela fica vazia no apoio e pode voltar ao fogão. Panelas antigas conservam
-todas as porções e as entregam individualmente. O prato retirado ocupa as mãos;
-clique em mesa/cliente compatível aproxima e serve. O garçom busca refeições na
-mesa de cozinha. Louça, pagamentos, satisfação, qualidade e descarte permanecem.
+Cada cozimento novo rende uma porção. O jogador pode realizar outras tarefas durante o cozimento. Retirar a panela libera o fogão e interrompe a degradação pelo calor. A mesa de cozinha recebe a panela apoiada e pratos limpos; empratar produz um prato por ação, em dois segundos, sem talher. A panela vazia pode ser reinstalada no fogão. Panelas antigas conservam suas porções, retiradas individualmente.
 
-Corte/empratamento cancelados preservam entradas. Sem espaço, não há perda ou
-duplicação. Mãos ocupadas bloqueiam novas cargas e trabalho manual. Objetos em
-uso não podem ser removidos apagando conteúdo. Consulte o
-[guia da cozinha física](godot/COZINHA-FISICA.md) para controles e migração.
+Pratos prontos e louça suja são transportados um por vez nas mãos. A pia converte o prato sujo carregado em prato limpo, que pode ser reposto na mesa de cozinha. Geladeiras e prateleiras mantêm inventários; nenhum ingrediente é consumido automaticamente a distância. Consulte [o guia atual](godot/COZINHA-FISICA.md).
 
 ### Qualidade
 
@@ -205,7 +189,7 @@ retirá-la interrompe a degradação pelo calor. Comida queimada deve ser descar
 
 ## 8. Compras, inventários e equipe
 
-O inventário do jogador possui cinco espaços, apresentados numa barra permanente no centro inferior da tela. Pilhas compatíveis respeitam os limites do item;
+O jogador não possui inventário ou barra de slots e transporta uma unidade por vez nas mãos. Os armazenamentos mantêm seus inventários e os limites dos itens;
 panelas com comida são unitárias. Geladeiras e prateleiras têm inventários de
 armazenamento e critérios próprios de aceitação. Transferências permitem ajustar
 quantidades e preservam os excedentes na origem quando falta espaço.
@@ -319,7 +303,7 @@ não reembolsa os itens apagados e só afeta o save após salvar a partida.
 
 ## 12. Salvamento e requisitos de qualidade
 
-A Godot usa salvamento local em formato 11, com posição subcélula do jogador,
+A Godot usa salvamento local em formato 12, com posição subcélula do jogador,
 inventários, receitas em andamento, relógio, calendário e reputação. Teclas
 pressionadas não persistem no save. Há validação, cópia de segurança e importação
 de JSON compatível; arquivo inválido não deve substituir uma partida válida.
@@ -831,3 +815,13 @@ As mesas de dois tiles recebem assentos apenas nos lados compridos, com a cadeir
 “Começar mobiliado” mantém três mesas, cada uma com quatro cadeiras nessa configuração, conforme a referência enviada. Uma mesa pode atender com menos cadeiras válidas; não foi acrescentado requisito de completar os quatro lugares. Cadeiras isoladas podem ser reorganizadas como móveis, mas não recebem clientes.
 
 Saves antigos preservam seus móveis. Cadeiras nas pontas ou voltadas para fora deixam de ser assentos; o jogador pode reorganizá-las. Atendimentos em andamento e recolhimento de louça antiga continuam possíveis, sem apagar recursos. Uma reforma não relacionada não exige corrigir todo o layout antigo de uma vez.
+
+## 30. Jogador sem inventário — transporte somente nas mãos
+
+Decisão mais recente: remover o inventário do jogador e a barra de cinco slots, sem deixar painel substituto nessa área. O jogador transporta uma unidade por vez nas mãos. Esta decisão substitui os fluxos de mochila/seleção das seções 2, 7, 8, 25 e 26. A geladeira continua com inventário; retirar um item coloca uma unidade nas mãos e guardar devolve a um armazenamento compatível. Sem transferência automática entre geladeira e fogão.
+
+No cenário mobiliado, arroz, legumes e frango começam na geladeira da cozinha (30 de cada); o jogador começa de mãos vazias, com uma panela no fogão e 12 pratos limpos na mesa de empratamento. Não há panelas extras no jogador. A mesa de preparo permite cortar tanto legumes quanto frango cru; o resultado permanece nas mãos e segue à panela. As receitas atuais com frango exigem frango cortado. O corte leva dois segundos ativos por unidade e preserva qualidade.
+
+Retirada, instalação de utensílios, empratamento, pratos prontos, serviço, recolhimento de louça, lavagem, compras e recebimento seguem o limite de uma unidade nas mãos. Mãos ocupadas não podem receber outro item. A panela pronta continua sendo apoiada na mesa de cozinha; cada empratamento produz uma porção. O garçom mantém suas funções.
+
+O save passa ao formato 12. Itens dos antigos slots são preservados nos armazenamentos; excedentes de migração podem ser recuperados pelo painel da geladeira, sem formar um inventário de transporte do jogador. Preparos e alimentos antigos são conservados. O fluxo e as verificações estão em [COZINHA-FISICA.md](godot/COZINHA-FISICA.md).

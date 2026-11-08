@@ -1,3 +1,7 @@
+# Fluxo atual: somente as mãos
+
+O jogador não tem inventário nem barra de slots. No início mobiliado, ingredientes ficam na geladeira, uma panela no fogão e pratos na mesa de cozinha. Frango e legumes podem ser cortados. Consulte [COZINHA-FISICA.md](COZINHA-FISICA.md) para controles, migração e testes. Os registros abaixo descrevem entregas anteriores.
+
 # Compatibilidade verificada na Godot 4.7.2
 
 Importação e testes nativos em Linux/4.7.2: [relatório](qa/VALIDACAO_4_7_2.md).
