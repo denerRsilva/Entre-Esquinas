@@ -234,7 +234,7 @@ function renderDialog(){let panel=$(constructionMode?'constructionPanel':'panel'
  if(dialogTab==='tools'&&dialogMode==='computer'){
  const balance=document.createElement('p');balance.className='shopBalance';balance.textContent='Disponível: '+money(state.cash)+' • A compra vai diretamente para as mãos.';panel.append(balance);
  let cards=document.createElement('div');cards.className='cards';
- for(const [id,name,price]of [['pot','Panela vazia',25],['spoon','Colher / utensílio',15],['plate','Prato limpo',5]]){
+ for(const [id,name,price]of [['pot','Panela vazia',25],['plate','Prato limpo',5]]){
  const item=card(name,`${money(price)} • nas mãos: ${state.player.hand?.item===id?1:0}`,()=>{let ok=R.buyTool(state,id);renderDialog();tell(ok?'Item nas mãos.':'Confira o saldo e libere as mãos.',!ok)},'Comprar',state.cash<price||!!state.player.hand||!!state.player.carry);
  item.append(RestaurantArt.toolIcon(id,name));cards.append(item);
  }panel.append(cards)}

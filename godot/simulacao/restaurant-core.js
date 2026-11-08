@@ -397,8 +397,8 @@ function inventorySpace(s,item,quality=0){return s.inventory.reduce((n,slot)=>n+
 function addInventory(s,item,n,quality=0,burned=false){if(!ITEMS[item]||!Number.isInteger(n)||n<1||inventorySpace(s,item,quality)<n)return false;let left=n;for(let i=0;i<s.inventory.length&&left;i++){let slot=s.inventory[i];if(slot?.item===item&&(slot.quality??0)===quality&&!slot.burned&&!burned){let q=Math.min(left,itemLimit(item)-slot.n);slot.n+=q;left-=q;}}for(let i=0;i<s.inventory.length&&left;i++)if(!s.inventory[i]){let q=Math.min(left,itemLimit(item));s.inventory[i]={item,n:q,...(quality?{quality}:{}),...(burned?{burned:true}:{})};left-=q;}return true;}
 function removeInventory(s,index,n){let slot=s.inventory[index];if(!slot||!Number.isInteger(n)||n<1||n>slot.n)return false;slot.n-=n;if(!slot.n)s.inventory[index]=null;return true;}
 function buyTool(s,type){
- if(!['pot','spoon','plate'].includes(type)||s.player.hand||s.player.carry||s.chopping||s.plating)return false;
- const price={pot:25,spoon:15,plate:5}[type];if(s.cash<price)return false;
+ if(!['pot','plate'].includes(type)||s.player.hand||s.player.carry||s.chopping||s.plating)return false;
+ const price={pot:25,plate:5}[type];if(s.cash<price)return false;
  s.player.hand={item:type,n:1};s.cash-=price;s.ledger.investment+=price;s.equipment[type]++;if(type!=='plate')s.tools[type]=true;return true;
 }
 
@@ -600,7 +600,6 @@ function kitchenStep(s,dt){
 function platingPlan(s,o,recipe){
  if(o?.type!=='kitchen')return {error:'Use a mesa de cozinha.'};
  if(s.player.hand)return {error:'Libere as mãos.'};
- if(KITCHEN_CONFIG.requiresUtensil&&!o.utensil)return {error:'Instale um talher.'};
  if(!o.plates)return {error:'Instale pratos limpos.'};
  const p=o.support;
  if(!p||!ITEMS[p.item]?.servings||p.burned)return {error:'Apoie uma panela com comida utilizável.'};

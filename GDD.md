@@ -825,3 +825,7 @@ No cenário mobiliado, arroz, legumes e frango começam na geladeira da cozinha 
 Retirada, instalação de utensílios, empratamento, pratos prontos, serviço, recolhimento de louça, lavagem, compras e recebimento seguem o limite de uma unidade nas mãos. Mãos ocupadas não podem receber outro item. A panela pronta continua sendo apoiada na mesa de cozinha; cada empratamento produz uma porção. O garçom mantém suas funções.
 
 O save passa ao formato 12. Itens dos antigos slots são preservados nos armazenamentos; excedentes de migração podem ser recuperados pelo painel da geladeira, sem formar um inventário de transporte do jogador. Preparos e alimentos antigos são conservados. O fluxo e as verificações estão em [COZINHA-FISICA.md](godot/COZINHA-FISICA.md).
+
+## 31. Talheres fora da loja e sem exigência operacional
+
+Computador → Utensílios oferece somente panela vazia e prato limpo. A compra de colher/talher foi removida da interface e bloqueada na regra de compra. Nenhuma ação de cozinha exige talher. Itens antigos permanecem preservados por compatibilidade com salvamentos, sem necessidade operacional.
