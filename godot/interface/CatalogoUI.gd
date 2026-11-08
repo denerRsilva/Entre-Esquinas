@@ -51,6 +51,7 @@ func render(d: Dictionary, parent: Control) -> void:
 		b.disabled = d.disabled
 		b.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		b.custom_minimum_size = Vector2(78,34)
+		if parent.name=="BuildActions": b.autowrap_mode=TextServer.AUTOWRAP_OFF
 		if parent is HFlowContainer:
 			b.custom_minimum_size.x = clampf(24+7.3*b.text.length(),76,225)
 		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -163,7 +164,10 @@ func render(d: Dictionary, parent: Control) -> void:
 			parent.add_child(n)
 			return
 	var group: Container
-	if cls=="hotbarSlots":
+	if cls=="buildActions":
+		group=HBoxContainer.new()
+		group.name="BuildActions"
+	elif cls=="hotbarSlots":
 		var grid:=GridContainer.new()
 		grid.columns=5
 		group=grid

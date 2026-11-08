@@ -14,6 +14,14 @@ func run():
 	var before=js("JSON.stringify([state.cash,state.objects])")
 	await select_stove()
 	check(js("building?.type==='stove'")=="true","Selecionar fogão para mover")
+	var controls=g.hud.slots.build[1].find_children("*","Button",true,false)
+	var horizontal:bool=controls.size()==4
+	var y:float=controls[0].get_global_rect().position.y
+	for b in controls:
+		if absf(b.get_global_rect().position.y-y)>1.0:horizontal=false
+		if not root.get_visible_rect().encloses(b.get_global_rect()):horizontal=false
+	check(horizontal,"Quatro botões em uma linha horizontal, dentro da tela")
+	check(g.hud.slots.build[1].find_children("*","Label",true,false).is_empty(),"Painel mostra somente os textos das opções")
 	# A prévia não tem ID de objeto; o fogão real tem ID e continua no cenário.
 	var point=JSON.parse_string(js("JSON.stringify(screenPoint(18*40+20,3*40+20))"))
 	click_at(Vector2(point.x,point.y));await layout()

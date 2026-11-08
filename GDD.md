@@ -819,3 +819,7 @@ Verificação nativa: `qa/ItemNaMaoUI.gd`, Godot 4.7.2 Linux sem janela, `FALHAS
 Nas diagonais, a animação prioriza cima ou baixo enquanto houver deslocamento vertical efetivo, sem alternar a direção por pequenas diferenças numéricas entre os eixos. Quando o eixo vertical está bloqueado e resta somente movimento horizontal, a animação acompanha o deslizamento lateral. A alteração é visual e preserva velocidade, colisões e controles.
 
 Regressão verificada na Godot 4.7.2 Linux, sem janela: as quatro diagonais foram reproduzidas com falha antes da correção e passaram depois, com variação de duração dos quadros. `MovimentoUI.gd`: `FALHAS: 0`; `movimento.test.cjs`: 13 cenários passaram.
+
+## 28. Painel de posicionamento na construção
+
+O painel exibe apenas quatro opções organizadas em uma linha horizontal: **Girar**, **Confirmar posição**, **Guardar e reembolsar** e **Cancelar**. O nome do móvel e os textos de posição válida, exploração do mapa e orientação da cadeira deixam de aparecer nesse painel. Ao comprar um móvel novo, a opção de guardar continua oculta. A prévia e as regras de validade permanecem ativas.
