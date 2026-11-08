@@ -56,7 +56,7 @@ func import_save(path:String) -> void:
 		tick(0)
 		return
 	var next=values.duplicate()
-	next["entre-restaurante-09"]=raw
+	next["entre-restaurante-10"]=raw
 	if persist(next):
 		values=next
 		RestauranteVM.executar("Host.values="+JSON.stringify(values)+";tell('Arquivo importado. Use Carregar restaurante para continuar.')")
@@ -114,7 +114,7 @@ func play_tone(hz:float) -> void:
 
 func _process(delta:float) -> void:
 	if not active or not focused:return
-	if events.is_empty() and frame_data.get("modal","")!="":return
+	if events.is_empty() and frame_data.get("modal","")!="" and not frame_data.get("liveInventory",false):return
 	# Update on every rendered frame; a timer threshold can skip alternating
 	# frames when the monitor delta is slightly below 1/60 second.
 	tick(delta)

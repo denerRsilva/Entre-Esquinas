@@ -9,7 +9,7 @@ const walkRects=[[86, 22, 151, 282], [401, 22, 127, 281], [682, 16, 133, 289], [
 const facing=new WeakMap();
 function direction(a){let d=facing.get(a)||'down';const input=root.Restaurant.playerVelocity(a);if(input){const dx=input.moving?(input.moveX??input.dx):input.dx,dy=input.moving?(input.moveY??input.dy):input.dy;d=Math.abs(dx)>Math.abs(dy)?(dx<0?'left':'right'):(dy<0?'up':'down');facing.set(a,d);}else if(a.motion){const dx=a.motion.toX-a.motion.fromX,dy=a.motion.toY-a.motion.fromY;if(Math.abs(dx)>Math.abs(dy))d=dx<0?'left':'right';else if(dy)d=dy<0?'up':'down';facing.set(a,d);}return d;}
 const rects=[[68,54,198,241],[339,77,263,216],[683,30,202,265],[1023,20,150,277],[28,393,264,208],[402,357,136,243],[662,334,244,283],[1032,408,131,175],[81,636,158,291],[400,646,141,279],[702,653,160,272],[1014,646,159,281],[90,963,135,274],[335,980,269,242],[659,990,249,225],[997,963,200,262]];
-const sprites={stove:0,prep:1,sink:2,fridge:3,cold:3,table:4,chair:5,shelf:6,bin:7};
+const sprites={stove:0,kitchen:1,prep:1,sink:2,fridge:3,cold:3,table:4,chair:5,shelf:6,bin:7};
 const floors=new Map();
 function ready(){return !!(atlas&&atlas.complete&&atlas.naturalWidth)}
 function box(c,x,y,w,h,color){c.fillStyle=color;c.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h))}
@@ -81,6 +81,13 @@ function object(c,R,s,o,selected,preview=false){
  if(o.type==='stove'&&o.pan)pot(c,x+w*.3,y-9,o.pan.startsWith('pot_'),o.pan==='cookingPot'||!!o.readyBatch,s.time);
  if(o.readyBatch){const stage=R.heatState(s,o).stage;if(['over','danger','burned'].includes(stage)){box(c,x+10,y-15,12,7,'#514d40');for(let i=0;i<3;i++)box(c,x+10+i*4,y-22-((s.time*8+i*6)%18),5,7,stage==='burned'?'#383a36aa':'#71695c99');}}
  if(o.type==='prep'){
+  box(c,x+8,y,60,12,'#e5c796');for(let i=0;i<3;i++)box(c,x+17+i*10,y+2,5,5,'#70a15d');
+  box(c,x+48,y-3,16,3,'#dce3db');box(c,x+64,y-3,7,3,'#725135');
+ }
+ if(o.type==='stove'&&(o.ingredients?.length||s.cooking?.stove===o.id||o.readyBatch)){let i=0;for(const p of o.ingredients||[]){FoodArt.draw(c,p.item,x+5+i*19,y-15,18,18);i++;}const recipe=R.recognizedRecipe(o)||(s.cooking?.stove===o.id?s.cooking.recipe:o.readyBatch?.recipe);if(recipe)FoodArt.draw(c,recipe,x+w/2-14,y-50,28,24);}
+ if(o.type==='kitchen'){
+  box(c,x+34,y,38,17,'#a17e54');if(o.support)pot(c,x+50,y-7,!!R.ITEMS[o.support.item]?.servings,false,s.time);
+
   const count=o.plates||0;if(count)for(let i=0;i<Math.min(4,Math.ceil(count/3));i++)plate(c,x+12,y+2-i*2);
   if(o.utensil){box(c,x+w-15,y+3,7,11,'#7c5b37');box(c,x+w-13,y-3,2,10,'#dec08c');box(c,x+w-9,y-1,2,9,'#cfad79');}
   let i=0;for(const [dish]of Object.entries(o.dishes||{}))for(let q=0;q<4;q++)for(let j=0;j<R.objectQualityCount(o,dish,q);j++,i++){plate(c,x+27+i%4*11,y+4+Math.floor(i/4)*8,R.ITEMS[dish].recipe,false,q);}
@@ -101,6 +108,7 @@ function actor(c,R,s,a,selected,construction=false){
  if(a.id==='player'){
  c.actor(x,bottom,dir,moving);
  }else c.commands.push(['npc',a.id,id,x,bottom,dir,moving]);
+ if(a.hand){const p=a.hand;if(p.item==='pot'||R.ITEMS[p.item]?.servings)pot(c,x+12,bottom-22,!!R.ITEMS[p.item]?.servings,false,s.time);else if(p.item.startsWith('dish_'))plate(c,x+11,bottom-20,R.ITEMS[p.item].recipe,false,p.quality||0);else plate(c,x+11,bottom-20,null,true);}
  if(a.carry){if(a.carry.kind==='dish'){const order=s.orders.find(o=>o.id===a.carry.order);plate(c,x+11,bottom-20,order?.recipe,false,a.carry.quality??0);}else{if(typeof FoodArt!=='undefined'){FoodArt.draw(c,a.carry.food,x+2,bottom-30,24,24);FoodArt.star(c,a.carry.quality??0,x+17,bottom-30,9);}}}
  if(construction)return;
  if(a.id==='player')label(c,'Você',x,bottom+12,'#77603a');
@@ -112,10 +120,10 @@ function actor(c,R,s,a,selected,construction=false){
 function overlays(c,R,s,o,selected,building){
  const r=R.rect(o),x=r.x*40,y=r.y*40,w=r.w*40,h=r.h*40;
  if(selected||building)label(c,R.CATALOG[o.type].name,x+w/2,y+h+11);
- const job=s.cooking?.stove===o.id?s.cooking:s.plating?.prep===o.id?s.plating:null;
- if(job){label(c,(job.stove?'Cozinhando ':'Empratando ')+Math.ceil(job.left)+'s',x+w/2,y-30);box(c,x,y-19,w,4,'#315447');box(c,x,y-19,w*(1-job.left/job.total),4,'#f3c56e');}
+ const job=s.chopping?.table===o.id?s.chopping:s.cooking?.stove===o.id?s.cooking:s.plating?.prep===o.id?s.plating:null;
+ if(job){label(c,(job.table?'Cortando ':job.stove?'Cozinhando ':'Empratando ')+Math.ceil(job.left)+'s',x+w/2,y-30);box(c,x,y-19,w,4,'#315447');box(c,x,y-19,w*(1-job.left/job.total),4,'#f3c56e');}
  else if(o.type==='stove'&&o.readyBatch){const heat=R.heatState(s,o),color={ready:'#74b66b',over:'#e0a044',danger:'#d75b3e',burned:'#57534b'}[heat.stage];label(c,heat.label,x+w/2,y-30);if(heat.stage!=='burned'){box(c,x,y-19,w,5,'#315447');box(c,x,y-19,w*heat.value,5,color);}}
- else if(o.type==='prep'&&R.readyCount(o))label(c,R.readyCount(o)+' pratos prontos',x+w/2,y-20);
+ else if(o.type==='kitchen'&&R.readyCount(o))label(c,R.readyCount(o)+' pratos prontos',x+w/2,y-20);
  if(o.feedback?.until>s.time)label(c,'✓ '+o.feedback.label,x+w/2,y-47,'#3b6448');
 }
 function draw(c,R,s,ui){

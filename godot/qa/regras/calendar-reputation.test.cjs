@@ -24,7 +24,7 @@ test('01:50 → 02:00 conclui serviço pendente, sem novas chegadas ou cancelame
  for(let i=0;i<1000&&s.day===1;i++)ticks(s,.1);assert.equal(s.day,2);assert.equal(R.clockText(s),'06:00');assert(!s.open&&!s.closing&&!s.clock.ending);assert.equal(s.reports.length,1);assert.equal(s.reports[0].sales,0);assert.equal(s.customers.length,0);
 });
 test('Preparo híbrido avança longe do fogão e cruza a virada preservando itens',()=>{
- const s=testRestaurant(),stove=s.objects.find(o=>o.type==='stove');stand(s,stove);assert(R.startCook(s,stove.id,'sopa').ok);s.player.x=7;s.player.y=13;s.player.settled=null;s.clock={minute:1550,remainder:0,ending:false};const objects=s.objects.length;R.step(s,7);assert.equal(s.day,2);assert.equal(R.clockText(s),'06:00');assert.equal(s.objects.length,objects);assert.equal(R.objectCount(stove,'pot_sopa_4'),1);assert.equal(s.used.legumes,8);assert(R.valid(s));
+ const s=testRestaurant(),stove=s.objects.find(o=>o.type==='stove');stand(s,stove);stageRecipe(s,stove,'sopa');assert(R.startCook(s,stove.id,'sopa').ok);s.player.x=7;s.player.y=13;s.player.settled=null;s.clock={minute:1550,remainder:0,ending:false};const objects=s.objects.length;R.step(s,7);assert.equal(s.day,2);assert.equal(R.clockText(s),'06:00');assert.equal(s.objects.length,objects);assert.equal(R.objectCount(stove,'pot_sopa_1'),1);assert.equal(s.used.legumes,2);assert(R.valid(s));
 });
 test('Calendário atravessa quatro estações, dias da semana e ano',()=>{
  for(const [day,season,year]of [[28,'Verão',1],[56,'Outono',1],[84,'Inverno',1],[112,'Primavera',2]]){const s=R.fresh();s.day=day;s.clock.minute=1550;R.step(s,7);const d=R.calendarDate(s.day);assert.equal(s.day,day+1);assert.equal(d.day,1);assert.equal(d.season,season);assert.equal(d.year,year);assert.equal(d.weekday,'Segunda');assert(R.valid(s));}
@@ -34,7 +34,7 @@ test('Almoço/jantar não avançam data; despesa e relatório diário ocorrem um
  const s=R.fresh(),cash=s.cash;s.serviceHours[0].start=360;for(let i=0;i<2;i++){assert(R.toggleOpen(s));assert(R.toggleOpen(s));R.step(s,.1);}assert.equal(s.day,1);assert.equal(s.period,0);assert.equal(s.cash,cash);assert.equal(s.reports.length,0);s.ledger.revenue=20;s.ledger.sales=2;s.clock={minute:1550,remainder:0,ending:false};R.step(s,7);assert.equal(s.day,2);assert.equal(s.cash,cash-12);assert.equal(s.reports.length,1);assert.equal(s.reports[0].sales,2);assert.equal(s.reports[0].result,8);R.step(s,7);assert.equal(s.reports.length,1);assert.equal(s.cash,cash-12);
 });
 test('Elogio de visita real aumenta reputação; abandono + reclamação tem só um impacto',()=>{
- const {s,c}=fixture(),stove=s.objects.find(o=>o.type==='stove'),prep=s.objects.find(o=>o.type==='prep');near(s,c);assert(R.interact(s,c.id));stand(s,stove);assert(R.startCook(s,stove.id,'sopa').ok);ticks(s,6);assert(R.kitchenAction(s,stove.id,'takePan').ok);stand(s,prep);assert(R.plateFood(s,prep.id,'sopa').ok);ticks(s,2);assert(R.kitchenAction(s,prep.id,'takeDish','dish_sopa').ok);near(s,c);assert(R.interact(s,c.id));ticks(s,4.1,()=>0);assert.equal(s.reputation.score,1);assert.equal(s.reputation.history.length,1);assert.equal(s.reputation.history[0].type,'praise');
+ const {s,c}=fixture(),stove=s.objects.find(o=>o.type==='stove'),prep=s.objects.find(o=>o.type==='kitchen');near(s,c);assert(R.interact(s,c.id));fixtureDishes(s);stand(s,prep);assert(R.kitchenAction(s,prep.id,'takeDish','dish_sopa').ok);near(s,c);assert(R.interact(s,c.id));ticks(s,4.1,()=>0);assert.equal(s.reputation.score,1);assert.equal(s.reputation.history.length,1);assert.equal(s.reputation.history[0].type,'praise');
  const visit=reviewFixture(s,'complaint','abandon-test','abandoned');assert(R.applyVisitReputation(s,visit.visit,visit.event));assert.equal(s.reputation.score,0);assert.equal(s.reputation.history.length,2);assert.equal(s.reputation.history[1].type,'abandonment');assert(!R.applyVisitReputation(s,visit.visit,visit.event));assert.equal(s.reputation.history.length,2);assert(R.valid(s));
 });
 test('Abandono sem manifestação verbal ainda registra o resultado uma única vez',()=>{
@@ -47,7 +47,7 @@ test('Limites 0/100, cinco níveis e parâmetros graduais configuráveis',()=>{
 });
 test('Reputação preservada no save, sem duplicações e sem replay de avaliações antigas',()=>{
  const {s,c}=fixture();R.step(s,40,()=>0);const copy=R.migrateSave(s);assert(copy);const {visitId}=copy.reputation.history[0];assert(!R.applyVisitReputation(copy,copy.experience.visits.find(v=>v.id===visitId),copy.experience.events.find(v=>v.visitId===visitId)));assert.equal(copy.reputation.history.length,1);
- const legacy=JSON.parse(JSON.stringify(s));legacy.version=5;delete legacy.clock;delete legacy.reputation;const before=JSON.stringify(legacy),migrated=R.migrateSave(legacy);assert(migrated);assert.equal(JSON.stringify(legacy),before);assert.equal(migrated.clock.minute,360);assert.equal(migrated.reputation.score,0);assert.equal(migrated.reputation.history.length,0);assert.deepEqual(migrated.customers[0].experience,c.experience);assert.deepEqual(migrated.experience,s.experience);assert(!R.applyVisitReputation(migrated,migrated.experience.visits[0],migrated.experience.events[0]));assert.equal(migrated.reputation.history.length,0);
+ const legacy=JSON.parse(JSON.stringify(s));legacy.objects=legacy.objects.filter(o=>o.type!=='prep');legacy.version=5;delete legacy.clock;delete legacy.reputation;const before=JSON.stringify(legacy),migrated=R.migrateSave(legacy);assert(migrated);assert.equal(JSON.stringify(legacy),before);assert.equal(migrated.clock.minute,360);assert.equal(migrated.reputation.score,0);assert.equal(migrated.reputation.history.length,0);assert.deepEqual(migrated.customers[0].experience,c.experience);assert.deepEqual(migrated.experience,s.experience);assert(!R.applyVisitReputation(migrated,migrated.experience.visits[0],migrated.experience.events[0]));assert.equal(migrated.reputation.history.length,0);
  assert.equal(R.migrateSave({version:5}),null);const duplicate=R.migrateSave(s);duplicate.reputation.history.push({...duplicate.reputation.history[0]});assert(!R.valid(duplicate));const bad=R.migrateSave(s);bad.reputation.score=101;assert(!R.valid(bad));bad.reputation.score=-1;assert(!R.valid(bad));
 });
 test('Fluxo de clientes não muda com a reputação',()=>{
@@ -55,3 +55,18 @@ test('Fluxo de clientes não muda com a reputação',()=>{
 });
 test('Visita neutra sem manifestação não pode gerar efeito retroativo',()=>{const s=R.fresh(),{visit}=reviewFixture(s,null,'quiet');assert(!R.applyVisitReputation(s,visit));assert(s.reputation.processed.includes(visit.id));assert(!R.applyVisitReputation(s,visit));assert.equal(s.reputation.history.length,0);assert(R.valid(s));});
 console.log(passed+' cenários de tempo, calendário e reputação passaram.');
+
+
+function stageRecipe(s,stove,recipe){
+ for(const [raw,n]of Object.entries(R.RECIPES[recipe].foods))for(let j=0;j<n;j++){
+  const i=s.inventory.findIndex(p=>p?.item===raw),p=s.inventory[i];assert(p);
+  if(raw!=='arroz'){R.removeInventory(s,i,1);assert(R.addInventory(s,raw+'_cut',1,p.quality||0));}
+  s.selectedSlot=s.inventory.findIndex(p=>p?.item===(raw==='arroz'?raw:raw+'_cut'));
+  assert(R.physicalAction(s,stove.id,'add').ok);
+ }
+}
+function fixtureDishes(s){
+ const o=s.objects.find(o=>o.type==='kitchen');let left=8;
+ for(let i=0;i<10&&left;i++)if(s.inventory[i]?.item==='legumes'){const n=Math.min(left,s.inventory[i].n);R.removeInventory(s,i,n);left-=n;}
+ assert.equal(left,0);s.used.legumes+=8;s.meals.made.sopa+=4;o.plates-=4;assert.equal(R.putObject(s,o,'dish_sopa',4),4);assert(R.valid(s));
+}

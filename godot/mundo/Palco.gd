@@ -2,7 +2,7 @@ extends Node2D
 const Tracos = preload("res://mundo/Tracos.gd")
 @export var cozinheira: PackedScene = preload("res://personagens/Cozinheira.tscn")
 @export var moveis: Dictionary[String,PackedScene] = {
-	"stove":preload("res://moveis/Fogao.tscn"), "prep":preload("res://moveis/Preparo.tscn"),
+	"stove":preload("res://moveis/Fogao.tscn"), "kitchen":preload("res://moveis/Cozinha.tscn"), "prep":preload("res://moveis/Preparo.tscn"),
 	"sink":preload("res://moveis/Pia.tscn"), "fridge":preload("res://moveis/Geladeira.tscn"),
 	"cold":preload("res://moveis/Geladeira.tscn"), "chair":preload("res://moveis/Cadeira.tscn"),
 	"table":preload("res://moveis/Mesa.tscn"), "shelf":preload("res://moveis/Prateleira.tscn"),
@@ -71,7 +71,7 @@ func paint(data: Dictionary) -> void:
 			n.position = Vector2(op[2]+op[4]/2,op[3]+op[5])
 			n.modulate.a = 0.65 if op[7] else 1.0
 			var original := Vector2(40,40)
-			if op[1] in ["stove","prep","sink","table","shelf"]: original.x=80
+			if op[1] in ["stove","prep","kitchen","sink","table","shelf"]: original.x=80
 			if op[1] in ["fridge","cold"]: original.y=80
 			n.scale = Vector2(float(op[4])/original.x,float(op[5])/original.y)
 			if op[1]=="chair" and int(op[6])==3: n.scale.x *= -1

@@ -1,0 +1,11 @@
+[gd_scene format=3]
+[ext_resource type="Texture2D" path="res://arte/esquina-atlas.png" id="atlas"]
+[node name="Cozinha" type="Node2D"]
+[node name="Arte" type="Sprite2D" parent="."]
+texture = ExtResource("atlas")
+region_enabled = true
+region_filter_clip_enabled = true
+region_rect = Rect2(339, 77, 263, 216)
+centered = false
+position = Vector2(-38.0, -52)
+scale = Vector2(0.2889733840304182,0.24074074074074073)

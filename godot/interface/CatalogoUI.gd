@@ -57,6 +57,11 @@ func render(d: Dictionary, parent: Control) -> void:
 		if d.has("art"):
 			b.icon = texture(d.art)
 			b.add_theme_constant_override("icon_max_width",32)
+		if cls.contains("objectAction"):
+			b.text = ""
+			b.tooltip_text = d.label
+			b.custom_minimum_size = Vector2(42,36)
+			b.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 		if cls.contains("inventorySlot"):
 			b.custom_minimum_size=Vector2(56,66)
 			b.icon_alignment=HORIZONTAL_ALIGNMENT_CENTER

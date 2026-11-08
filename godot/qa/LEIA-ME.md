@@ -1,3 +1,9 @@
+# Suítes após a reformulação da cozinha
+
+O roteiro atual está em [COZINHA-FISICA.md](../COZINHA-FISICA.md#validação).
+`Regras.cjs`, `FluxoCozinhaUI.gd` e o alias `CozinhaUI.gd` cobrem a nova cozinha.
+As instruções abaixo registram a base anterior e seus percursos históricos.
+
 # Testes da versão Godot
 
 Execute na pasta `godot/` com Godot 4.6.3. Use um diretório de dados de teste:

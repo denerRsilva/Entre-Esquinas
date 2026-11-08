@@ -15,7 +15,7 @@ func _ready() -> void:
 	area("ordersHud",Rect2(710,74,245,170))
 	area("kitchenStatus",Rect2(8,74,320,120))
 	area("openBtn",Rect2(0,0,100,38),false,false)
-	area("context",Rect2(150,360,660,240))
+	area("context",Rect2(150,360,500,110),false,false)
 	area("hint",Rect2(10,604,610,42),false,true)
 	area("notice",Rect2(10,500,520,70),false,true)
 	area("dock",Rect2(10,651,528,44),false,false)
@@ -75,6 +75,11 @@ func sync(data: Dictionary) -> void:
 		root.visible=item!=null and (item.has("path") or not item.get("children",[]).is_empty())
 		if key=="context" and root.visible: root.visible=not item.children.is_empty()
 		if not root.visible: continue
+		if key=="context" and item.get("children",[]).size()>0:
+			var anchor:Dictionary=item.children[0].get("anchor",{})
+			if not anchor.is_empty():
+				var cam:Array=data.camera
+				root.position=Vector2(clampf((float(anchor.x)+float(anchor.w)/2.0)*40.0*float(cam[2])-float(cam[0])*float(cam[2])-250.0,5.0,455.0),clampf(float(anchor.y)*40.0*float(cam[2])-float(cam[1])*float(cam[2])+60.0-100.0,60.0,520.0))
 		if key=="modal":
 			var welcome_small:bool=data.modal=="welcome" and not JSON.stringify(item).contains("Fechar tutorial")
 			entry[2]=Rect2(178,218,604,234) if welcome_small else Rect2(58,44,844,612)

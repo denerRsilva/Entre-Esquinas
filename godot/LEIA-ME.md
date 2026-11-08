@@ -1,3 +1,11 @@
+# Atualização: cozinha física
+
+Veja [COZINHA-FISICA.md](COZINHA-FISICA.md) para o fluxo atual, migração de saves e testes.
+Uma porção por cozimento, mesa de corte separada da mesa de cozinha, panela nas
+mãos e empratamento sem talher. O proprietário usa Godot 4.7.2; testes locais desta
+alteração foram executados em 4.6.3 Linux. As instruções abaixo sobre abertura e
+arquitetura permanecem como referência histórica.
+
 # Entre Esquinas — Restaurante & Vida na Cidade
 
 **Projeto editável para Godot 4.6.3 Standard • PC x86-64 • 0.21.2-godot.1**

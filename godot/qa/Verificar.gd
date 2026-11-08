@@ -50,10 +50,10 @@ func run():
 	var legacy=FileAccess.get_file_as_string("res://qa/regras/restaurant-core-0.12.0.cjs")
 	js("globalThis.OldRules=(function(){const module={exports:{}};"+legacy+";return module.exports})();globalThis.Restaurant=R;")
 	js("globalThis.console={log(){}};globalThis.structuredClone=x=>JSON.parse(JSON.stringify(x));globalThis.require=k=>k.includes('assert')?checkAssert:k.includes('legacy')?OldRules:R;function checkAssert(b,msg){if(!b)throw Error(msg||'assert')};checkAssert.equal=(a,b)=>checkAssert(a===b,'equal: '+a+' / '+b);checkAssert.notEqual=(a,b)=>checkAssert(a!==b);checkAssert.deepEqual=(a,b)=>checkAssert(JSON.stringify(a)===JSON.stringify(b),'deepEqual')")
-	for name in [] if "--rapido" in OS.get_cmdline_user_args() or "--regressoes" in OS.get_cmdline_user_args() else ["arrivals","calendar-reputation","kitchen","patience","quality","service-hours","waiter-orders"]:
+	for name in [] if "--rapido" in OS.get_cmdline_user_args() or "--regressoes" in OS.get_cmdline_user_args() else ["arrivals","calendar-reputation","patience","service-hours","waiter-orders"]:
 		test_source(name)
 	var flows=FileAccess.get_file_as_string("res://qa/percursos.js")
-	if "--regressoes" not in OS.get_cmdline_user_args():
+	if "--percursos-antigos" in OS.get_cmdline_user_args():
 		check(js("(function(){"+flows+";return 'PASSOU'})()")=="PASSOU","Percursos integrados de jogo")
 	g.tick(0)
 	# A slow frame must advance the same amount of game time, not silently drop it.

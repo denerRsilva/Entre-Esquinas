@@ -7,8 +7,8 @@ function fixture(rng=()=>.5){const s=testRestaurant();s.player.x=10;s.player.y=1
 function near(s,c,actor=s.player){const p=R.DIRS.map(([dx,dy])=>({room:c.room,x:c.x+dx,y:c.y+dy})).find(p=>!R.blocked(s,p.room,p.x,p.y,actor)&&!R.allActors(s).some(a=>a!==actor&&a.room===p.room&&a.x===p.x&&a.y===p.y));assert(p);Object.assign(actor,p,{goal:null,motion:null,settled:null});}
 function stand(s,o,actor=s.player){const p=R.accessPoints(s,o).find(p=>!R.allActors(s).some(a=>a!==actor&&a.room===p.room&&a.x===p.x&&a.y===p.y));assert(p);Object.assign(actor,p,{goal:null,motion:null,settled:null});}
 function request(s,c){near(s,c);assert(R.interact(s,c.id));assert.equal(c.experience.phase,'food');}
-function makeDishes(s){const stove=obj(s,'stove'),prep=obj(s,'prep');stand(s,stove);assert(R.startCook(s,stove.id,'sopa').ok);ticks(s,6);assert(R.kitchenAction(s,stove.id,'takePan').ok);stand(s,prep);assert(R.plateFood(s,prep.id,'sopa').ok);ticks(s,2);assert(R.valid(s));}
-function giveDish(s,c){const prep=obj(s,'prep');stand(s,prep);assert(R.kitchenAction(s,prep.id,'takeDish','dish_sopa').ok);near(s,c);assert(R.interact(s,c.id));}
+function makeDishes(s){fixtureDishes(s);}
+function giveDish(s,c){const prep=obj(s,'kitchen');stand(s,prep);assert(R.kitchenAction(s,prep.id,'takeDish','dish_sopa').ok);near(s,c);assert(R.interact(s,c.id));}
 
 test('Atendimento rápido, duas etapas isoladas e satisfação positiva após refeição',()=>{
  const {s,c}=fixture();assert.equal(c.experience.elapsed.service,0);ticks(s,1);request(s,c);const first=c.experience.elapsed.service;assert.equal(c.experience.results.service,1-first/c.experience.limits.service);assert.equal(c.experience.elapsed.food,0);ticks(s,1);assert.equal(c.experience.elapsed.service,first);assert(Math.abs(c.experience.elapsed.food-1)<1e-8);
@@ -22,7 +22,7 @@ test('Abandono antes do pedido, sem venda e remoção pela saída existente',()=
  const {s,c}=fixture(()=>0);const cash=s.cash;R.step(s,40,()=>0);assert(c.experience.abandoned);assert.equal(c.state,'leave');assert.equal(R.customerIndicator(s,c).emoji,'🤬');assert.equal(s.orders.length,0);assert.equal(s.ledger.sales,0);assert.equal(s.cash,cash);assert.equal(s.experience.events.length,1);assert(!R.interact(s,c.id));ticks(s,30,()=>0);assert(!s.customers.includes(c));assert.equal(s.experience.events.length,1);assert(R.valid(s));
 });
 test('Abandono após pedido sem estorno de ingredientes usados em preparo',()=>{
- const {s,c}=fixture(()=>0);request(s,c);const stove=obj(s,'stove');stand(s,stove);assert(R.startCook(s,stove.id,'sopa').ok);const cash=s.cash,used=s.used.legumes;R.step(s,60,()=>0);assert(c.experience.abandoned);assert.equal(s.orders[0].state,'lost');assert.equal(s.cash,cash);assert.equal(s.used.legumes,used);assert.equal(R.inventoryCount(s,'legumes'),22);assert.equal(s.ledger.sales,0);assert.equal(s.experience.visits[0].outcome,'abandoned');assert(R.valid(s));
+ const {s,c}=fixture(()=>0);request(s,c);const stove=obj(s,'stove');stand(s,stove);stageRecipe(s,stove,'sopa');assert(R.startCook(s,stove.id,'sopa').ok);const cash=s.cash,used=s.used.legumes;R.step(s,60,()=>0);assert(c.experience.abandoned);assert.equal(s.orders[0].state,'lost');assert.equal(s.cash,cash);assert.equal(s.used.legumes,used);assert.equal(R.inventoryCount(s,'legumes'),28);assert.equal(s.ledger.sales,0);assert.equal(s.experience.visits[0].outcome,'abandoned');assert(R.valid(s));
 });
 test('Entrega imediatamente antes do limite encerra o contador e permite pagamento',()=>{
  const {s,c}=fixture(()=>0);makeDishes(s);request(s,c);R.step(s,59.999,()=>.99);giveDish(s,c);const waited=c.experience.elapsed.food;ticks(s,4.1);assert(!c.experience.abandoned);assert.equal(c.experience.elapsed.food,waited);assert.equal(s.ledger.sales,1);assert.equal(s.experience.visits.length,1);
@@ -36,13 +36,13 @@ test('Fechamento aguarda abandono/saída dos pedidos pendentes sem criar cliente
  const {s,c}=fixture(()=>0);request(s,c);assert(R.toggleOpen(s));assert(R.toggleOpen(s));assert(s.closing);R.step(s,60,()=>0);assert(c.experience.abandoned);assert(s.closing);ticks(s,40);assert(!s.open&&!s.closing);assert.equal(s.period,0);assert.equal(s.customers.length,0);assert.equal(s.ledger.sales,0);assert.equal(s.experience.visits.length,1);
 });
 test('Empate lógico: desistência precede entrega do garçom e preserva prato em trânsito',()=>{
- const {s,c}=fixture(()=>0);makeDishes(s);request(s,c);const w=s.workers[1];stand(s,obj(s,'prep'),w);assert(R.pickupDish(s,w));w.task='waiter';near(s,c,w);c.experience.elapsed.food=c.experience.limits.food-.1;R.step(s,.1,()=>0);assert(c.experience.abandoned);assert.equal(s.ledger.sales,0);assert(R.canceledCarry(s,w));assert.equal(s.orders[0].state,'lost');assert.equal(s.experience.events.length,1);assert(R.valid(s));ticks(s,30);assert.equal(w.carry,null);assert.equal(R.objectCount(obj(s,'prep'),'dish_sopa'),4);assert.equal(s.experience.events.length,1);assert.equal(s.ledger.sales,0);
+ const {s,c}=fixture(()=>0);makeDishes(s);request(s,c);const w=s.workers[1];stand(s,obj(s,'kitchen'),w);assert(R.pickupDish(s,w));w.task='waiter';near(s,c,w);c.experience.elapsed.food=c.experience.limits.food-.1;R.step(s,.1,()=>0);assert(c.experience.abandoned);assert.equal(s.ledger.sales,0);assert(R.canceledCarry(s,w));assert.equal(s.orders[0].state,'lost');assert.equal(s.experience.events.length,1);assert(R.valid(s));ticks(s,30);assert.equal(w.carry,null);assert.equal(R.objectCount(obj(s,'kitchen'),'dish_sopa'),4);assert.equal(s.experience.events.length,1);assert.equal(s.ledger.sales,0);
 });
 test('Entrega manual no limite é recusada, sem consumir prato ou concluir venda',()=>{
- const {s,c}=fixture(()=>0);makeDishes(s);request(s,c);stand(s,obj(s,'prep'));assert(R.pickupDish(s));near(s,c);c.experience.elapsed.food=c.experience.limits.food;assert(!R.interact(s,c.id));assert(R.canceledCarry(s,s.player));assert(!R.serve(s,s.player,c));assert.equal(s.ledger.sales,0);stand(s,obj(s,'prep'));assert(R.pickupDish(s));assert.equal(s.player.carry,null);assert.equal(R.objectCount(obj(s,'prep'),'dish_sopa'),4);assert(R.valid(s));
+ const {s,c}=fixture(()=>0);makeDishes(s);request(s,c);stand(s,obj(s,'kitchen'));assert(R.pickupDish(s));near(s,c);c.experience.elapsed.food=c.experience.limits.food;assert(!R.interact(s,c.id));assert(R.canceledCarry(s,s.player));assert(!R.serve(s,s.player,c));assert.equal(s.ledger.sales,0);stand(s,obj(s,'kitchen'));assert(R.pickupDish(s));assert.equal(s.player.carry,null);assert.equal(R.objectCount(obj(s,'kitchen'),'dish_sopa'),4);assert(R.valid(s));
 });
 test('Bancada cheia não destrói prato cancelado nem bloqueia fechamento do serviço',()=>{
- const {s,c}=fixture(()=>0);makeDishes(s);request(s,c);stand(s,obj(s,'prep'));assert(R.pickupDish(s));const prep=obj(s,'prep'); // Teste de capacidade com louça comprada adicional.
+ const {s,c}=fixture(()=>0);makeDishes(s);request(s,c);stand(s,obj(s,'kitchen'));assert(R.pickupDish(s));const prep=obj(s,'kitchen'); // Teste de capacidade com louça comprada adicional.
  const previousPlates=R.objectCount(prep,'plate');R.takeObject(s,prep,'plate',previousPlates);assert(R.addInventory(s,'plate',previousPlates));
  // Ocupa os doze lugares de retirada com pratos de outra receita.
  for(const p of R.stationSlots(prep).filter(Boolean)){const {item,n}=p;assert.equal(R.takeObject(s,prep,item,n),n);assert(R.addInventory(s,item,n));}
@@ -66,16 +66,31 @@ test('Eventos de reputação: cinco probabilidades nos dois lados do limiar, sem
 });
 test('Salvar/carregar preserva contadores e avaliações; migração da 0.10.x sem sobrescrever',()=>{
  const {s,c}=fixture();request(s,c);ticks(s,2);const serialized=JSON.stringify(s),copy=R.migrateSave(JSON.parse(serialized));assert(copy);assert.equal(JSON.stringify(copy),serialized);assert.notEqual(copy.customers[0].experience,c.experience);
- const legacy=JSON.parse(serialized);legacy.version=4;delete legacy.experience;delete legacy.customers[0].experience;const before=JSON.stringify(legacy),migrated=R.migrateSave(legacy,()=>0);assert(migrated);assert.equal(JSON.stringify(legacy),before);assert.equal(migrated.customers[0].experience.elapsed.food,0);assert.equal(migrated.orders.length,1);assert.deepEqual(migrated.inventory,s.inventory);
+ const legacy=JSON.parse(serialized);legacy.objects=legacy.objects.filter(o=>o.type!=='prep');legacy.version=4;delete legacy.experience;delete legacy.customers[0].experience;const before=JSON.stringify(legacy),migrated=R.migrateSave(legacy,()=>0);assert(migrated);assert.equal(JSON.stringify(legacy),before);assert.equal(migrated.customers[0].experience.elapsed.food,0);assert.equal(migrated.orders.length,1);assert.deepEqual(migrated.inventory,s.inventory);
  const bad=JSON.parse(serialized);bad.customers[0].experience.elapsed.food=-1;assert(!R.migrateSave(bad));assert(!R.valid(bad));const duplicate=JSON.parse(serialized);duplicate.customers.push({...duplicate.customers[0]});assert(!R.valid(duplicate));
  R.step(copy,copy.customers[0].experience.limits.food,()=>0);assert(R.valid(copy));const reviewed=R.migrateSave(copy);assert(reviewed);ticks(reviewed,30,()=>0);assert.equal(reviewed.experience.events.length,1);assert.equal(reviewed.experience.visits.length,1);
 });
 test('Prato cancelado na mão pode atender outro pedido compatível, sem duplicação',()=>{
- const {s,c}=fixture(()=>0);makeDishes(s);request(s,c);stand(s,obj(s,'prep'));assert(R.pickupDish(s));R.step(s,60,()=>.99);assert(R.canceledCarry(s,s.player));ticks(s,20);s.player.x=10;s.player.y=12;s.player.settled=null;assert(R.spawn(s,()=>0));const next=s.customers[0];for(let i=0;i<300&&next.state==='walk';i++)ticks(s,.1);request(s,next);near(s,next);assert(R.interact(s,next.id));ticks(s,4.1);assert.equal(s.ledger.sales,1);assert.equal(s.meals.eaten.sopa,1);assert.equal(s.orders.filter(o=>o.state==='lost').length,1);assert(R.valid(s));
+ const {s,c}=fixture(()=>0);makeDishes(s);request(s,c);stand(s,obj(s,'kitchen'));assert(R.pickupDish(s));R.step(s,60,()=>.99);assert(R.canceledCarry(s,s.player));ticks(s,20);s.player.x=10;s.player.y=12;s.player.settled=null;assert(R.spawn(s,()=>0));const next=s.customers[0];for(let i=0;i<300&&next.state==='walk';i++)ticks(s,.1);request(s,next);near(s,next);assert(R.interact(s,next.id));ticks(s,4.1);assert.equal(s.ledger.sales,1);assert.equal(s.meals.eaten.sopa,1);assert.equal(s.orders.filter(o=>o.state==='lost').length,1);assert(R.valid(s));
 });
 test('Migração de clientes comendo não inventa notas nem avaliações retroativas',()=>{
- const {s,c}=fixture(()=>0);makeDishes(s);request(s,c);giveDish(s,c);const legacy=JSON.parse(JSON.stringify(s));legacy.version=4;delete legacy.experience;for(const customer of legacy.customers)delete customer.experience;
+ const {s,c}=fixture(()=>0);makeDishes(s);request(s,c);giveDish(s,c);const legacy=JSON.parse(JSON.stringify(s));legacy.objects=legacy.objects.filter(o=>o.type!=='prep');legacy.version=4;delete legacy.experience;for(const customer of legacy.customers)delete customer.experience;
  const migrated=R.migrateSave(legacy,()=>0);assert(migrated);ticks(migrated,20,()=>0);assert.equal(migrated.ledger.sales,1);assert.equal(migrated.experience.events.length,0);assert.equal(migrated.experience.visits.length,0);
  const {s:other,c:otherCustomer}=fixture(()=>0);R.step(other,40,()=>0);const duplicate=JSON.parse(JSON.stringify(other));duplicate.experience.events.push({...duplicate.experience.events[0]});assert(!R.valid(duplicate));duplicate.experience.events.pop();duplicate.experience.visits.push({...duplicate.experience.visits[0]});assert(!R.valid(duplicate));
 });
 console.log(passed+' cenários do sistema de paciência e satisfação passaram.');
+
+
+function stageRecipe(s,stove,recipe){
+ for(const [raw,n]of Object.entries(R.RECIPES[recipe].foods))for(let j=0;j<n;j++){
+  const i=s.inventory.findIndex(p=>p?.item===raw),p=s.inventory[i];assert(p);
+  if(raw!=='arroz'){R.removeInventory(s,i,1);assert(R.addInventory(s,raw+'_cut',1,p.quality||0));}
+  s.selectedSlot=s.inventory.findIndex(p=>p?.item===(raw==='arroz'?raw:raw+'_cut'));
+  assert(R.physicalAction(s,stove.id,'add').ok);
+ }
+}
+function fixtureDishes(s){
+ const o=s.objects.find(o=>o.type==='kitchen');let left=8;
+ for(let i=0;i<10&&left;i++)if(s.inventory[i]?.item==='legumes'){const n=Math.min(left,s.inventory[i].n);R.removeInventory(s,i,n);left-=n;}
+ assert.equal(left,0);s.used.legumes+=8;s.meals.made.sopa+=4;o.plates-=4;assert.equal(R.putObject(s,o,'dish_sopa',4),4);assert(R.valid(s));
+}

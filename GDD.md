@@ -106,7 +106,7 @@ simuladas enquanto o jogador está na rua.
 - NPCs e posicionamento dos móveis continuam utilizando a grade lógica.
 - Animação e direção acompanham o movimento; pressionar uma parede sem sair do
   lugar não mantém a animação de caminhada.
-- Menus, construção e perda de foco pausam a simulação. Ao perder foco, as teclas
+- Construção, perda de foco e menus de gestão/mochila pausam a simulação. Inventários de geladeiras e prateleiras mantêm o tempo avançando. Ao perder foco, as teclas
   são liberadas para evitar movimento preso ao retornar.
 
 A câmera acompanha o jogador quando o enquadramento exige deslocamento. O zoom
@@ -118,8 +118,8 @@ a alternância entre janela e tela cheia fica em **Opções → Câmera**.
 O acesso é **Gestão → Modo construção**. A simulação pausa e a HUD operacional
 fica oculta. O catálogo lateral pode ser aberto e recolhido para liberar o mapa.
 
-O jogador pode comprar, posicionar, girar e mover os nove tipos de móveis atuais:
-mesa, cadeira, fogão, geladeira de cozinha, bancada, pia, lixeira, prateleira seca
+O jogador pode comprar, posicionar, girar e mover os dez tipos de móveis atuais:
+mesa, cadeira, fogão, geladeira de cozinha, mesa de preparo para corte, mesa de cozinha para empratamento, pia, lixeira, prateleira seca
 e geladeira de estoque. Os setores permitidos e as áreas de circulação devem ser
 respeitados. A prévia mostra se a posição é válida e a compra só é cobrada ao
 confirmar uma posição válida.
@@ -169,31 +169,31 @@ resultado do serviço. As probabilidades e tempos atuais são parâmetros de tes
 
 ## 7. Cozinha e louça
 
-### Preparar um lote
+### Cozinha física — reformulação aprovada
 
-1. Manter os ingredientes na mochila.
-2. Instalar uma panela vazia no fogão.
-3. Escolher a receita e iniciar o lote de quatro porções.
-4. Fazer outras tarefas enquanto a barra de cozimento avança.
-5. Retirar a panela cheia para a mochila antes de perder qualidade ou queimar.
+O fluxo atual é **ingredientes → cortar → adicionar à panela → cozinhar →
+transportar nas mãos → apoiar na mesa de cozinha → empratar uma porção → servir**.
+A mesa de preparo corta uma unidade de frango ou legumes em dois segundos; o
+resultado vai à mochila. Arroz dispensa corte. A panela recebe ingredientes
+individualmente e reconhece uma receita exata, sem janela de escolha. Ingredientes
+extras/incompatíveis não são consumidos; a última adição pode ser retirada antes
+de cozinhar.
 
-O fogão não possui inventário genérico. Geladeiras e prateleiras não abastecem
-receitas automaticamente. Na implementação atual há um preparo no fogão por vez.
+Cada novo cozimento rende **uma porção**, usando as quantidades por porção da
+seção 10. O jogador pode fazer outras tarefas durante o cozimento. Retirar a
+panela libera o fogão, ocupa as mãos e encerra a exposição ao fogo.
 
-### Empratar e servir
+A nova **mesa de cozinha** recebe pratos limpos e a panela apoiada. Empratar
+produz **um prato por ação**, em dois segundos junto à mesa, **sem talher**.
+A panela fica vazia no apoio e pode voltar ao fogão. Panelas antigas conservam
+todas as porções e as entregam individualmente. O prato retirado ocupa as mãos;
+clique em mesa/cliente compatível aproxima e serve. O garçom busca refeições na
+mesa de cozinha. Louça, pagamentos, satisfação, qualidade e descarte permanecem.
 
-A bancada exige pratos limpos e um talher instalado. Com uma panela de comida na
-mochila, o jogador usa **Empratar** e permanece próximo durante a barra de preparo.
-A panela volta vazia ou conserva as porções restantes; pratos prontos ficam na
-bancada para retirada pelo jogador ou garçom.
-
-As ações principais da bancada são **Empratar** e **Retirar prato**. Escolhas
-adicionais aparecem quando há mais de uma receita; manutenção fica em **Mais
-opções**. Ausência de espaço não pode apagar comida, louça ou utensílios.
-
-Depois do consumo, a louça suja é recolhida e lavada na pia. Pia e lixeira usam os
-itens da mochila por ações específicas. Descartar comida respeita o retorno ou
-consumo dos recipientes conforme o item, sem gerar recursos indevidos.
+Corte/empratamento cancelados preservam entradas. Sem espaço, não há perda ou
+duplicação. Mãos ocupadas bloqueiam novas cargas e trabalho manual. Objetos em
+uso não podem ser removidos apagando conteúdo. Consulte o
+[guia da cozinha física](godot/COZINHA-FISICA.md) para controles e migração.
 
 ### Qualidade
 
@@ -255,7 +255,7 @@ Os números abaixo descrevem o protótipo; não representam balanceamento final.
 | Avanço do relógio | 10 minutos a cada 7 segundos ativos |
 | Primeira chegada após abrir | 8 segundos ativos |
 | Intervalo entre chegadas | 25 segundos ativos |
-| Tamanho dos lotes | 4 porções |
+| Tamanho dos lotes novos | 1 porção |
 | Tempo para empratar | 2 segundos |
 | Capacidade de pratos prontos na bancada | 12 |
 | Pratos limpos instalados na bancada | Até 99 |
@@ -273,7 +273,7 @@ Os números abaixo descrevem o protótipo; não representam balanceamento final.
 | Sopa de legumes | 2 legumes | 5 segundos | $12 |
 | Frango com arroz | 1 arroz + 1 frango | 8 segundos | $20 |
 
-O lote consome quatro vezes os ingredientes por porção. Os preços do cardápio
+O lote novo consome os ingredientes de uma porção. Os preços do cardápio
 podem ser alterados no computador. Ingredientes comuns custam arroz $2,
 legumes $2 e frango $4 por unidade; as qualidades superiores usam multiplicadores
 1,25, 1,5 e 2. A entrega atual leva 5 segundos ativos e o recebimento comporta
@@ -319,7 +319,7 @@ não reembolsa os itens apagados e só afeta o save após salvar a partida.
 
 ## 12. Salvamento e requisitos de qualidade
 
-A Godot usa salvamento local em formato 9, com posição subcélula do jogador,
+A Godot usa salvamento local em formato 10, com posição subcélula do jogador,
 inventários, receitas em andamento, relógio, calendário e reputação. Teclas
 pressionadas não persistem no save. Há validação, cópia de segurança e importação
 de JSON compatível; arquivo inválido não deve substituir uma partida válida.
@@ -774,3 +774,28 @@ Fontes técnicas complementares permanecem vinculadas na seção 14.
 Esta revisão altera somente o GDD. Não executa migração de engine, mudanças de
 mecânica ou novos testes; os estados e resultados anteriores permanecem
 atribuídos às suas respectivas bases.
+
+## 24. Reformulação física posterior ao PDF
+
+Decisão expressa do proprietário nesta conversa: implementar somente na Godot o
+plano de reformulação enviado, com aprovação de **uma porção por cozimento**,
+**remoção da exigência de talher** e **catálogo do computador como exceção** às
+ações sem janela. Esta decisão substitui descrições históricas conflitantes de
+lotes de quatro, consumo direto de receita da mochila e transporte automático de
+panela cheia para a mochila presentes nas seções 2, 18, 21 e 22.
+
+A seção 7 descreve o fluxo novo. O objetivo e as demais propostas do PDF seguem
+preservados. A mesa de preparo corta; a nova mesa de cozinha emprata. Armazenamentos
+abrem por um clique após aproximação e não pausam. Ações alternativas usam controles
+junto ao objeto, sem painéis de receita ou empratamento.
+
+O formato de save passa a 10. A migração conserva refeições, utensílios e panelas
+antigas com suas porções, converte bancadas antigas em mesas de cozinha sem alterar
+suas posições e não adiciona móveis em locais potencialmente bloqueados. A mesa
+de corte pode ser comprada em partidas migradas. O cenário mobiliado novo contém
+as duas mesas. Corte, panela apoiada e itens nas mãos são persistidos.
+
+Tempos e preços são parâmetros de teste. A implementação foi verificada em Linux
+com Godot 4.6.3 e QuickJS; a Godot 4.7.2 usada pelo proprietário continua sendo o
+ambiente a validar por ele. HTML não recebe esta alteração. Detalhes e comandos de
+QA: [COZINHA-FISICA.md](godot/COZINHA-FISICA.md).

@@ -14,7 +14,7 @@ function firstArtwork(n) {
 function pack(n,path){
  if(typeof n==='string')return n.trim()?{tag:'text',text:n.trim()}:null;
  if(n.hidden||n.attrs['aria-hidden']==='true')return null;
- const v={tag:n.tag,cls:n.className,id:n.id};
+ const v={tag:n.tag,cls:n.className,id:n.id};if(n.anchor)v.anchor=n.anchor;
  if(n.tag==='button'||n.tag==='input'||n.tag==='select'||n.tag==='a'){
   Host.widgets.set(path,n);Object.assign(v,{path,disabled:!!n.disabled,label:n.attrs['aria-label']||n.title||'',text:n.tag==='button'?summary(n).trim():'',value:n.value,type:n.type||'',checked:!!n.checked,min:n.min,max:n.max,step:n.step});
   if(n.className.includes('inventorySlot'))v.text=n.children.slice(-1)[0]?.textContent||'—';
@@ -55,6 +55,6 @@ function snapshot(dt,events) {
   ui.notice=$('notice').style.opacity==='1'?section('notice'):null;
  }
  const writes=Host.writes;Host.writes={};
- return JSON.stringify({room:state.player.room,camera:[camera.x,camera.y,camera.zoom],scene:painter.commands,ui,modal,construction:constructionMode,door:[parseFloat($('openBtn').style.left)||0,parseFloat($('openBtn').style.top)||0],writes,sounds:Host.sound.splice(0)});
+ return JSON.stringify({room:state.player.room,camera:[camera.x,camera.y,camera.zoom],scene:painter.commands,ui,modal,liveInventory:modal==='management'&&dialogMode==='container',construction:constructionMode,door:[parseFloat($('openBtn').style.left)||0,parseFloat($('openBtn').style.top)||0],writes,sounds:Host.sound.splice(0)});
 }
 kitchenAudio={state:'running',currentTime:0,createOscillator(){const tone={frequency:{value:0},connect(){},start(){Host.sound.push(tone.frequency.value)},stop(){}};return tone},createGain(){return {gain:{setValueAtTime(){},exponentialRampToValueAtTime(){}},connect(){}}}};
