@@ -1,3 +1,7 @@
+# Godot 4.7.2
+
+Veja o [relatório de validação](VALIDACAO_4_7_2.md) e as correções das suítes nativas.
+
 # Suítes após a reformulação da cozinha
 
 O roteiro atual está em [COZINHA-FISICA.md](../COZINHA-FISICA.md#validação).

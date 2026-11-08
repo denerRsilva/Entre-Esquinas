@@ -1,3 +1,8 @@
+# Compatibilidade verificada na Godot 4.7.2
+
+Importação e testes nativos em Linux/4.7.2: [relatório](qa/VALIDACAO_4_7_2.md).
+Os registros abaixo de validação apenas na 4.6.3 são históricos.
+
 # Atualização: cozinha física
 
 Veja [COZINHA-FISICA.md](COZINHA-FISICA.md) para o fluxo atual, migração de saves e testes.
