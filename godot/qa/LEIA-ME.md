@@ -1,3 +1,9 @@
+# Assentos nos lados compridos
+
+`node qa/cadeiras.test.cjs` verifica mesas nas quatro rotações, cadeiras voltadas para a mesa, bloqueio nas pontas, transações sem cobrança em posições recusadas, cenário mobiliado com 12 assentos e recuperação de louça em saves antigos. Também faz parte de `Regras.cjs`.
+
+`godot --headless --audio-driver Dummy --script res://qa/CadeirasUI.gd` verifica os 12 assentos e os estados de confirmação da prévia na Godot 4.7.2. Cadeiras isoladas são móveis sem função de atendimento.
+
 # Regressão: travamento ao mover fogão
 
 Corrigido o erro `TypeError: cannot read property 'recipe' of null` ao desenhar a prévia do fogão no modo construção. Uma prévia sem ID era confundida com cozimento ausente, pois ambos produziam `undefined` na comparação. A exceção desativava a simulação Godot e deixava o painel visível sem processar comandos. Agora somente objetos com ID e cozimento correspondente podem mostrar a receita em preparo.

@@ -117,7 +117,7 @@ function object(c,R,s,o,selected,preview=false){
   let i=0;for(const [dish]of Object.entries(o.dishes||{}))for(let q=0;q<4;q++)for(let j=0;j<R.objectQualityCount(o,dish,q);j++,i++){plate(c,x+27+i%4*11,y+4+Math.floor(i/4)*8,R.ITEMS[dish].recipe,false,q);}
  }
  if(o.type==='table'){
-  const chairs=s.objects.filter(ch=>ch.type==='chair'&&R.seatTable(s,ch)?.id===o.id);
+  const chairs=s.objects.filter(ch=>ch.type==='chair'&&R.chairTable(s,ch)?.id===o.id);
   let dishes=0;for(const ch of chairs){const customer=s.customers.find(a=>a.seat===ch.id&&a.state==='eating');if(customer)plate(c,x+18+dishes++*19,y+6,customer.recipe,false,s.orders.find(o=>o.id===customer.order)?.quality??0);if(s.dirtyTables[ch.id])plate(c,x+18+dishes++*19,y+7,null,true);}
  }
  if(selected){c.strokeStyle='#fff0be';c.lineWidth=2;c.strokeRect(x+1,y+1,w-2,h-2);}

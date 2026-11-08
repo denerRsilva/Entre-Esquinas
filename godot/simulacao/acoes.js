@@ -118,9 +118,9 @@ function primaryObjectAction(o){
  if(['sink','bin'].includes(o.type)&&state.player.hand)return queuePhysical(o,'discardHand');
 
  if(o.type==='sink'&&R.inventoryCount(state,'dirtyPlate')>0)return queueInteraction('wash',o.id);
- const table=o.type==='table'?o:o.type==='chair'?R.seatTable(state,o):null;
+ const table=o.type==='table'?o:o.type==='chair'?R.chairTable(state,o):null;
  if(!table)return false;
- const chairs=state.objects.filter(ch=>ch.type==='chair'&&R.seatTable(state,ch)?.id===table.id);
+ const chairs=state.objects.filter(ch=>ch.type==='chair'&&R.chairTable(state,ch)?.id===table.id);
  const clients=state.customers.filter(c=>chairs.some(ch=>ch.id===c.seat)&&['waiting','ordered'].includes(c.state));
  const matching=clients.find(c=>c.state==='ordered'&&(R.inventoryCount(state,'dish_'+c.recipe)>0||state.player.hand?.item==='dish_'+c.recipe||state.player.carry?.order===c.order));
  const client=matching||clients.find(c=>c.state==='waiting')||clients[0];

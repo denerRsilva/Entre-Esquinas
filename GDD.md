@@ -823,3 +823,11 @@ Regressão verificada na Godot 4.7.2 Linux, sem janela: as quatro diagonais fora
 ## 28. Painel de posicionamento na construção
 
 O painel exibe apenas quatro opções organizadas em uma linha horizontal: **Girar**, **Confirmar posição**, **Guardar e reembolsar** e **Cancelar**. O nome do móvel e os textos de posição válida, exploração do mapa e orientação da cadeira deixam de aparecer nesse painel. Ao comprar um móvel novo, a opção de guardar continua oculta. A prévia e as regras de validade permanecem ativas.
+
+## 29. Cadeiras nas mesas de dois tiles
+
+As mesas de dois tiles recebem assentos apenas nos lados compridos, com a cadeira voltada para a mesa. Nas mesas horizontais, há dois lugares acima e dois abaixo; ao girar a mesa, os lugares acompanham os lados compridos. As pontas não aceitam cadeiras, independentemente da orientação escolhida. A prévia e a confirmação da construção aplicam a mesma regra; posições recusadas não cobram nem alteram o móvel.
+
+“Começar mobiliado” mantém três mesas, cada uma com quatro cadeiras nessa configuração, conforme a referência enviada. Uma mesa pode atender com menos cadeiras válidas; não foi acrescentado requisito de completar os quatro lugares. Cadeiras isoladas podem ser reorganizadas como móveis, mas não recebem clientes.
+
+Saves antigos preservam seus móveis. Cadeiras nas pontas ou voltadas para fora deixam de ser assentos; o jogador pode reorganizá-las. Atendimentos em andamento e recolhimento de louça antiga continuam possíveis, sem apagar recursos. Uma reforma não relacionada não exige corrigir todo o layout antigo de uma vez.

@@ -20,11 +20,15 @@ function reference(s, objects) {
   for (const o of objects.filter(o=>o.room===room)) if (!R.accessPoints(s,o,objects).some(p=>R.route(s,room,start,p,null,new Set(),objects))) return 'Deixe uma passagem até cada móvel.';
   return null;
 }
-let cases=0, valid=0;
+let cases=0, valid=0, chairPolicy=0;
 const outcomes=new Set();
 function compare(s, objects) {
   const expected=reference(s,objects);
-  assert.equal(R.layoutError(s,objects),expected,JSON.stringify(objects));
+  const actual=R.layoutError(s,objects);
+  // A política nova de assentos é coberta em cadeiras.test.cjs; este teste
+  // compara somente a circulação com o validador de referência histórico.
+  if(actual==='Posicione a cadeira no lado comprido da mesa, virada para ela. As pontas não aceitam cadeiras.'){chairPolicy++;return;}
+  assert.equal(actual,expected,JSON.stringify(objects));
   outcomes.add(expected);valid+=expected===null;cases++;
 }
 let seed=918273;
@@ -52,3 +56,5 @@ assert(valid>10,'Reference must cover accepted layouts too');
 assert(outcomes.has('Deixe uma passagem até cada móvel.'),'Must cover disconnected furniture');
 assert(outcomes.has('Há uma pessoa nesta posição.'),'Must cover reserved motion cells');
 console.log(`${cases} layouts equivalentes ao algoritmo anterior; ${valid} aceitos; ${outcomes.size} resultados distintos.`);
+
+console.log(chairPolicy+" layouts rejeitados pela nova política de cadeiras, coberta separadamente.");
