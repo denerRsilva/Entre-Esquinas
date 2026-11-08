@@ -109,17 +109,19 @@ function primaryObjectAction(o){
   if(!R.goObject(state,state.player,o))return false;
   pendingInteraction={state,kind:'storage',target:o.id,until:state.time+30};processInteraction();return true;
  }
- if(o.type==='prep')return queuePhysical(o,'chop');
+ if(o.type==='prep')return ['frango','legumes'].includes(state.player.hand?.item)&&!state.chopping&&!state.plating?queuePhysical(o,'chop'):false;
  if(o.type==='stove'){
   const p=state.player.hand;
-  return queuePhysical(o,!o.pan?'installPan':o.pan.startsWith('pot_')?'takePan':o.pan==='cookingPot'?'cook':p&&['arroz','legumes_cut','frango_cut'].includes(p.item)?'add':R.recognizedRecipe(o)?'cook':'add');
+  const cmd=!o.pan?(p?.item==='pot'?'installPan':null):o.pan.startsWith('pot_')?(!p?'takePan':null):o.pan==='cookingPot'?null:p&&['arroz','legumes_cut','frango_cut'].includes(p.item)?'add':!p&&R.recognizedRecipe(o)?'cook':!p&&!o.ingredients?.length?'takePan':null;
+  return cmd?queuePhysical(o,cmd):false;
  }
  if(o.type==='kitchen'){
   const p=state.player.hand;
-  return queuePhysical(o,p?.item==='plate'?'installPlates':p?.item.startsWith('dish_')?'putDish':p?'support':R.readyCount(o)?'takeDish':o.support?.item.startsWith('pot_')?'plate':o.support?'takePan':o.plates?'takePlates':'installPlates');
+  const cmd=p?.item==='plate'?'installPlates':p?.item.startsWith('dish_')?'putDish':p?(p.item==='pot'||R.ITEMS[p.item]?.servings?'support':null):R.readyCount(o)?'takeDish':o.support?.item.startsWith('pot_')?'plate':o.support?'takePan':o.plates?'takePlates':null;
+  return cmd?queuePhysical(o,cmd):false;
  }
  if(o.type==='sink'&&state.player.hand?.item==='dirtyPlate')return queueInteraction('wash',o.id);
- if(['sink','bin'].includes(o.type)&&state.player.hand)return queuePhysical(o,'discardHand');
+ if(['sink','bin'].includes(o.type)&&R.ITEMS[state.player.hand?.item]?.recipe)return queuePhysical(o,'discardHand');
  const table=o.type==='table'?o:o.type==='chair'?R.chairTable(state,o):null;
  if(!table)return false;
  const chairs=state.objects.filter(ch=>ch.type==='chair'&&R.chairTable(state,ch)?.id===table.id);
@@ -169,20 +171,16 @@ function useContext(){const sig=JSON.stringify([prepOptionsId,prepChoice,selecte
   const add=(kind,label,fn)=>action(row,kind,label,fn);
   const run=(kind,label,cmd)=>add(kind,label,()=>queuePhysical(o,cmd));
   if(o.type==='prep'){
-   run('note','Cortar ingrediente nas mãos','chop');
    if(state.chopping?.table===o.id)run('bin','Cancelar corte','cancelCut');
   }else if(o.type==='stove'){
-   if(!o.pan)run('pot','Instalar panela','installPan');
+   if(!o.pan&&state.player.hand?.item==='pot')run('pot','Instalar panela','installPan');
    else if(o.pan==='pot'){
-    run('box','Adicionar ingrediente das mãos','add');
     if(o.ingredients?.length)run('take','Retirar último ingrediente','removeIngredient');
     if(R.recognizedRecipe(o))run('flame','Cozinhar','cook');
-    if(!o.ingredients?.length)run('take','Retirar panela','takePan');
-   }else if(o.pan!=='cookingPot')run('take','Retirar panela','takePan');
+   }
   }else{
-   run('box','Repor pratos limpos','installPlates');
    if(state.player.hand?.item==='plate')run('box','Instalar prato das mãos','installPlates');
-   else if(state.player.hand)run('pot','Apoiar item carregado',state.player.hand.item.startsWith('dish_')?'putDish':'support');
+   else if(state.player.hand&&(state.player.hand.item==='pot'||R.ITEMS[state.player.hand.item]?.servings||state.player.hand.item.startsWith('dish_')))run('pot','Apoiar item carregado',state.player.hand.item.startsWith('dish_')?'putDish':'support');
    if(o.support)run('take','Retirar panela apoiada','takePan');
    if(o.utensil)run('take','Retirar talher preservado','takeUtensil');
    if(o.plates)run('take','Retirar pratos limpos','takePlates');
@@ -192,8 +190,8 @@ function useContext(){const sig=JSON.stringify([prepOptionsId,prepChoice,selecte
   }
   continue;
  }
- if(o.type==='sink')action(row,'wash','Lavar pratos',()=>{let r=R.washPlates(state,o.id);tell(r.message,!r.ok)});
- if(['sink','bin'].includes(o.type))action(row,'bin','Descartar comida das mãos',()=>queuePhysical(o,'discardHand'));
+ if(o.type==='sink'&&state.player.hand?.item==='dirtyPlate')action(row,'wash','Lavar pratos',()=>{let r=R.washPlates(state,o.id);tell(r.message,!r.ok)});
+ if(['sink','bin'].includes(o.type)&&R.ITEMS[state.player.hand?.item]?.recipe)action(row,'bin','Descartar comida das mãos',()=>queuePhysical(o,'discardHand'));
  if(o.type==='table')action(row,'wash','Recolher pratos sujos da mesa',()=>{let r=R.collectDirty(state,o.id);tell(r.message,!r.ok)});
  }
  for(const c of state.customers.filter(c=>R.near(a,c,1))){const chair=state.objects.find(o=>o.id===c.seat),selected=state.objects.find(o=>o.id===selectedObject);let table=null;if(chair){let [dx,dy]=R.DIRS[chair.rot];table=state.objects.find(o=>o.type==='table'&&R.hit(o,chair.x+dx,chair.y+dy));}if(selectedObject!==c.id&&selectedObject!==c.seat&&selectedObject!==table?.id)continue;const row=rowFor(selected||chair||c);if(c.state==='waiting')action(row,'note','Anotar pedido',()=>{R.interact(state,c.id);tell(state.message)});if(c.state==='ordered')action(row,'serve','Servir '+RECIPENAME(c.recipe),()=>{R.interact(state,c.id);tell(state.message)});}
