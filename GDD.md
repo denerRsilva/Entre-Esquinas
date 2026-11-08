@@ -813,3 +813,9 @@ O item do slot selecionado é mostrado na mão do jogador e acompanha a direçã
 A apresentação do slot não transfere, reserva, consome ou duplica o item e não impede ações por si só. Se o jogador já transporta fisicamente uma panela ou prato, essa carga tem prioridade visual sobre o slot para não mostrar dois itens nas mesmas mãos. NPCs mostram apenas suas próprias cargas. Estrelas continuam restritas aos ingredientes e pratos, sem estrelas em panelas/preparo.
 
 Verificação nativa: `qa/ItemNaMaoUI.gd`, Godot 4.7.2 Linux sem janela, `FALHAS: 0`.
+
+## 27. Animação nas diagonais
+
+Nas diagonais, a animação prioriza cima ou baixo enquanto houver deslocamento vertical efetivo, sem alternar a direção por pequenas diferenças numéricas entre os eixos. Quando o eixo vertical está bloqueado e resta somente movimento horizontal, a animação acompanha o deslizamento lateral. A alteração é visual e preserva velocidade, colisões e controles.
+
+Regressão verificada na Godot 4.7.2 Linux, sem janela: as quatro diagonais foram reproduzidas com falha antes da correção e passaram depois, com variação de duração dos quadros. `MovimentoUI.gd`: `FALHAS: 0`; `movimento.test.cjs`: 13 cenários passaram.

@@ -7,7 +7,25 @@ const walkAtlas=typeof Image!=='undefined'?new Image():null;
 if(walkAtlas)walkAtlas.src='assets/esquina-walk.png';
 const walkRects=[[86, 22, 151, 282], [401, 22, 127, 281], [682, 16, 133, 289], [984, 16, 134, 290], [81, 343, 159, 278], [398, 343, 130, 278], [682, 340, 130, 281], [984, 340, 134, 283], [78, 659, 158, 279], [398, 659, 129, 279], [678, 656, 142, 282], [984, 659, 142, 279], [78, 976, 162, 285], [390, 976, 137, 285], [682, 975, 131, 286], [985, 975, 133, 286]];
 const facing=new WeakMap();
-function direction(a){let d=facing.get(a)||'down';const input=root.Restaurant.playerVelocity(a);if(input){const dx=input.moving?(input.moveX??input.dx):input.dx,dy=input.moving?(input.moveY??input.dy):input.dy;d=Math.abs(dx)>Math.abs(dy)?(dx<0?'left':'right'):(dy<0?'up':'down');facing.set(a,d);}else if(a.motion){const dx=a.motion.toX-a.motion.fromX,dy=a.motion.toY-a.motion.fromY;if(Math.abs(dx)>Math.abs(dy))d=dx<0?'left':'right';else if(dy)d=dy<0?'up':'down';facing.set(a,d);}return d;}
+// Diagonais priorizam o eixo vertical. O deslocamento efetivo preserva a
+// animação lateral quando uma parede bloqueia completamente o eixo vertical.
+function direction(a){
+ let d=facing.get(a)||'down';
+ const input=root.Restaurant.playerVelocity(a);
+ if(input){
+  const dx=input.moving?(input.moveX??input.dx):input.dx,dy=input.moving?(input.moveY??input.dy):input.dy;
+  if(Math.abs(dy)>1e-7)d=dy<0?'up':'down';
+  else if(Math.abs(dx)>1e-7)d=dx<0?'left':'right';
+  facing.set(a,d);
+ }else if(a.motion){
+  const dx=a.motion.toX-a.motion.fromX,dy=a.motion.toY-a.motion.fromY;
+  if(Math.abs(dy)>1e-7)d=dy<0?'up':'down';
+  else if(Math.abs(dx)>1e-7)d=dx<0?'left':'right';
+  facing.set(a,d);
+ }
+ return d;
+}
+
 const rects=[[68,54,198,241],[339,77,263,216],[683,30,202,265],[1023,20,150,277],[28,393,264,208],[402,357,136,243],[662,334,244,283],[1032,408,131,175],[81,636,158,291],[400,646,141,279],[702,653,160,272],[1014,646,159,281],[90,963,135,274],[335,980,269,242],[659,990,249,225],[997,963,200,262]];
 const sprites={stove:0,kitchen:1,prep:1,sink:2,fridge:3,cold:3,table:4,chair:5,shelf:6,bin:7};
 const floors=new Map();

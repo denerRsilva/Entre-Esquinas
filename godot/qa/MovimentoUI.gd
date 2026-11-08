@@ -59,5 +59,17 @@ func run():
 	for i in 15:g.tick(1.0/60.0)
 	check(sprite.animation==&"direita","Animação segue o eixo livre ao deslizar na parede inferior")
 	key(KEY_S,false);key(KEY_D,false)
+	for diagonal in [[KEY_W,KEY_A,"cima"],[KEY_W,KEY_D,"cima"],[KEY_S,KEY_A,"baixo"],[KEY_S,KEY_D,"baixo"]]:
+		js("releaseKeyboard();state=R.fresh();Object.assign(state.player,{x:9,y:7})")
+		g.tick(0)
+		key(diagonal[0],true);key(diagonal[1],true)
+		var stable:=true
+		for i in 60:
+			g.tick([1.0/144.0,1.0/61.0,1.0/30.0,1.0/60.0][i%4])
+			if sprite.animation!=StringName(diagonal[2]):stable=false
+		check(stable,"Diagonal mantém "+diagonal[2]+" durante todos os quadros: "+str(diagonal[1]))
+		key(diagonal[0],false);key(diagonal[1],false)
+		g.tick(.1)
+		check(not sprite.is_playing(),"Parada interrompe caminhada diagonal")
 	print("FALHAS: ",failures)
 	g.queue_free();await process_frame;quit(1 if failures else 0)
