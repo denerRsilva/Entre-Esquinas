@@ -14,7 +14,7 @@ func run():
 	g=load("res://mundo/Restaurante.tscn").instantiate();root.add_child(g);g.set_process(false)
 	await layout();check(await button("Começar mobiliado (teste)"),"Começar mobiliado")
 	check(not g.hud.slots.has("hotbar") and not g.frame_data.ui.has("hotbar"),"Barra e espaço de inventário removidos")
-	check(js("state.inventory.length===0&&!state.player.hand&&state.equipment.pot===1")=="true","Sem mochila nem carga inicial; uma panela")
+	check(js("state.inventory.length===0&&!state.player.hand&&state.equipment.pot===4")=="true","Mãos vazias; uma panela no fogão e três na estante")
 	check(js("['arroz','legumes','frango'].every(f=>R.objectCount(state.objects.find(o=>o.type==='fridge'),f)===30)")=="true","Ingredientes começam na geladeira")
 	await click_object("fridge")
 	check(g.frame_data.modal=="management","Um clique aproxima e abre geladeira")

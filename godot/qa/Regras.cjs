@@ -16,3 +16,5 @@ require('./maos.test.cjs');
 require('./cadeiras.test.cjs');
 
 require('./maos-migracao.test.cjs');
+
+require('./estante-panelas.test.cjs');

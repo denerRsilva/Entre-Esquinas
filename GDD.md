@@ -829,3 +829,9 @@ O save passa ao formato 12. Itens dos antigos slots são preservados nos armazen
 ## 31. Talheres fora da loja e sem exigência operacional
 
 Computador → Utensílios oferece somente panela vazia e prato limpo. A compra de colher/talher foi removida da interface e bloqueada na regra de compra. Nenhuma ação de cozinha exige talher. Itens antigos permanecem preservados por compatibilidade com salvamentos, sem necessidade operacional.
+
+## 32. Estante de panelas
+
+Novo móvel separado da prateleira de alimentos secos: **Estante de panelas**, com três espaços de uma panela vazia cada. Não aceita alimentos, pratos ou panelas com comida. Permite retirar/devolver uma unidade pelas mãos; a quantidade desenhada acompanha o conteúdo real, sem gerar itens ao mover, carregar um save ou comprar outra estante. Valor provisório do móvel: $65.
+
+No cenário mobiliado, a estante começa no canto superior direito da cozinha (células 21–22, linha 2), com exatamente **três panelas vazias**. A panela já instalada no fogão permanece, totalizando quatro panelas no cenário. A estante de alimentos secos e os demais móveis são preservados. Uma estante comprada no catálogo vem vazia; saves existentes não recebem móveis automaticamente sobre um layout personalizado.

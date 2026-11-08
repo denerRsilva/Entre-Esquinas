@@ -6,7 +6,8 @@ Atualização somente na Godot. Não há mochila, slots do jogador, barra de inv
 
 - Mãos vazias e nenhum inventário do jogador.
 - Geladeira da cozinha com 30 arroz, 30 legumes e 30 frango cru.
-- Uma panela instalada no fogão, sem panelas extras na mochila ou nas mãos.
+- Uma panela instalada no fogão.
+- Uma estante própria na cozinha com exatamente três panelas vazias, uma por espaço. O jogador continua de mãos vazias.
 - Doze pratos limpos na mesa de cozinha, destinada ao empratamento.
 - Mesas, cadeiras e disposição da cozinha preservados.
 
@@ -46,3 +47,9 @@ XDG_CONFIG_HOME=/tmp/maos-config XDG_CACHE_HOME=/tmp/maos-cache XDG_DATA_HOME=/t
 `MaosUI.gd` percorre os cliques reais na geladeira, mesa de corte, fogão e empratamento, incluindo o retorno à geladeira após adicionar o primeiro ingrediente. `CozinhaUI.gd`, `FluxoCozinhaUI.gd`, `InventarioUI.gd` e `ItemNaMaoUI.gd` são entradas para esse fluxo atual. A infraestrutura compartilhada está em `UIBase.gd`.
 
 Menus, construção do fogão, cadeiras, movimento e integração geral também foram verificados em modo sem janela na Godot 4.7.2 Linux. Testes antigos que pressupõem cinco slots ou ingredientes na mochila não fazem parte do executor atual; satisfação, atendimento e garçom são cobertos no ciclo novo.
+
+## Estante de panelas
+
+A estante fica no canto superior direito da cozinha do início mobiliado e tem capacidade para três panelas vazias. Clique para abrir, retire uma panela para as mãos e devolva pelo botão Guardar item das mãos. Não aceita comida ou louça. A arte mostra somente as panelas realmente guardadas. Também está disponível no catálogo da construção por $65, vazia, sem panelas gratuitas a cada compra. Não é possível reembolsar enquanto houver conteúdo.
+
+Testes: `node qa/estante-panelas.test.cjs` e `godot --headless --audio-driver Dummy --script res://qa/EstantePanelasUI.gd`, Godot 4.7.2 Linux, `FALHAS: 0`. Estantes existentes mantêm posições e conteúdo no save; a mudança do cenário inicial não reorganiza partidas salvas.

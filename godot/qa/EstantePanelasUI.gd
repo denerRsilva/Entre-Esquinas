@@ -1,0 +1,17 @@
+extends "res://qa/MaosUI.gd"
+func run():
+	root.size=Vector2i(960,700)
+	g=load("res://mundo/Restaurante.tscn").instantiate();root.add_child(g);g.set_process(false)
+	await layout();check(await button("Começar mobiliado (teste)"),"Início mobiliado")
+	check(js("R.objectCount(state.objects.find(o=>o.type==='potRack'),'pot')===3")=="true","Estante começa com exatamente três panelas")
+	check(g.palco.pool.has("potRack"),"Cena editável da estante aparece na cozinha")
+	await click_object("potRack")
+	check(g.frame_data.modal=="management","Um clique aproxima e abre a estante")
+	check(await take_storage("Retirar Panela • espaço 1"),"Retirar panela pelo mouse")
+	check(js("state.player.hand?.item==='pot'&&R.objectCount(state.objects.find(o=>o.type==='potRack'),'pot')===2")=="true","Panela sai da estante para as mãos")
+	await click_object("potRack")
+	check(await button("Guardar item das mãos"),"Devolver panela pelo mouse")
+	check(js("!state.player.hand&&R.objectCount(state.objects.find(o=>o.type==='potRack'),'pot')===3")=="true","Estante volta a ter três panelas")
+	check(js("R.valid(state)&&Boolean(R.migrateSave(state))")=="true","Conteúdo e save válidos")
+	print("FALHAS: ",failures)
+	g.queue_free();await process_frame;quit(1 if failures else 0)

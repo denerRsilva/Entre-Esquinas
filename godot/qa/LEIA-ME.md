@@ -1,3 +1,7 @@
+# Estante de panelas
+
+`estante-panelas.test.cjs` faz parte de `Regras.cjs`: verifica as três panelas iniciais, capacidade de três posições, tipos aceitos, mãos ocupadas, devolução, bloqueio de reembolso com conteúdo, movimento, saves e compra de estante vazia. `EstantePanelasUI.gd` percorre a retirada e devolução por cliques nativos. As suítes EstantePanelasUI, MaosUI, FogaoConstrucaoUI e ConstrucaoUI passaram na Godot 4.7.2 Linux sem janela, com `FALHAS: 0`.
+
 # Testes atuais: transporte somente nas mãos
 
 Use `node qa/Regras.cjs` e as suítes nativas `MaosUI.gd`, `MenusUI.gd`, `FogaoConstrucaoUI.gd`, `CadeirasUI.gd`, `MovimentoUI.gd` e `Verificar.gd`. Godot 4.7.2 Linux, sem janela, `FALHAS: 0` nas seis suítes. O percurso completo com cliques inclui frango retirado da geladeira, corte e frango com arroz, sem inventário do jogador. `UIBase.gd` compartilha as funções de entrada nativa.

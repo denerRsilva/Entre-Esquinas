@@ -27,7 +27,7 @@ function direction(a){
 }
 
 const rects=[[68,54,198,241],[339,77,263,216],[683,30,202,265],[1023,20,150,277],[28,393,264,208],[402,357,136,243],[662,334,244,283],[1032,408,131,175],[81,636,158,291],[400,646,141,279],[702,653,160,272],[1014,646,159,281],[90,963,135,274],[335,980,269,242],[659,990,249,225],[997,963,200,262]];
-const sprites={stove:0,kitchen:1,prep:1,sink:2,fridge:3,cold:3,table:4,chair:5,shelf:6,bin:7};
+const sprites={stove:0,kitchen:1,prep:1,sink:2,fridge:3,cold:3,table:4,chair:5,shelf:6,potRack:6,bin:7};
 const floors=new Map();
 function ready(){return !!(atlas&&atlas.complete&&atlas.naturalWidth)}
 function box(c,x,y,w,h,color){c.fillStyle=color;c.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h))}
@@ -98,6 +98,7 @@ function object(c,R,s,o,selected,preview=false){
  }
  if(o.type==='stove'&&o.pan)pot(c,x+w*.3,y-9,o.pan.startsWith('pot_'),o.pan==='cookingPot'||!!o.readyBatch,s.time);
  if(o.readyBatch){const stage=R.heatState(s,o).stage;if(['over','danger','burned'].includes(stage)){box(c,x+10,y-15,12,7,'#514d40');for(let i=0;i<3;i++)box(c,x+10+i*4,y-22-((s.time*8+i*6)%18),5,7,stage==='burned'?'#383a36aa':'#71695c99');}}
+ if(o.type==='potRack'){for(let i=0;i<3;i++)if(o.inventory?.[i]?.item==='pot')pot(c,o.rot%2?x+w/2:x+w*(i+.5)/3,o.rot%2?y+13+i*25:y+22,false,false,s.time);}
  if(o.type==='prep'){
   box(c,x+8,y,60,12,'#e5c796');for(let i=0;i<3;i++)box(c,x+17+i*10,y+2,5,5,'#70a15d');
   box(c,x+48,y-3,16,3,'#dce3db');box(c,x+64,y-3,7,3,'#725135');
@@ -189,6 +190,12 @@ function draw(c,R,s,ui){
   if(ui.hover){const o={type:ui.building.type,room:R.CATALOG[ui.building.type].room,x:ui.hover.x,y:ui.hover.y,rot:ui.building.rot},r=R.rect(o),error=ui.previewError(o);object(c,R,s,o,true,true);box(c,r.x*40,r.y*40,r.w*40,r.h*40,error?'#bb433b55':'#55aa7055');}}
 }
 function catalogIcon(type,name){
+ if(type==='potRack'){
+  const icon=document.createElement('span');icon.className='furnitureSprite';icon.setAttribute('role','img');icon.setAttribute('aria-label',name);
+  const pans=[14,40,66].map(x=>'<g transform="translate('+x+' 40)"><path d="M-11-4h22v3h-22z" fill="#34504c"/><path d="M-8-6h16v12h-16z" fill="#506e69"/><path d="M-6-5h12v9h-12z" fill="#a4b8a3"/><path d="M-7-7h14v4h-14z" fill="#354a43"/><path d="M-6-7h12v1h-12z" fill="#dfdfc3"/></g>').join('');
+  icon.innerHTML='<svg viewBox="0 0 80 64" shape-rendering="crispEdges"><path d="M2 0h76v58H2z" fill="#503e2d"/><path d="M6 4h68v46H6z" fill="#826143"/><path d="M4 0h72v5H4z" fill="#d0ab76"/><path d="M2 2h5v56H2z M73 2h5v56h-5z" fill="#b88b58"/><path d="M5 26h70v4H5z" fill="#c29861"/><path d="M5 46h70v5H5z" fill="#d0ab76"/>'+pans+'</svg>';return icon;
+ }
+
  const icon=document.createElement('canvas');icon.width=160;icon.height=112;icon.className='furnitureSprite';icon.setAttribute('role','img');icon.setAttribute('aria-label',name);
  function paint(){if(!ready())return;const c=icon.getContext('2d'),r=rects[sprites[type]],scale=Math.min(140/r[2],92/r[3]);c.clearRect(0,0,160,112);sprite(c,sprites[type],(160-r[2]*scale)/2,(112-r[3]*scale)/2,r[2]*scale,r[3]*scale);}
  if(ready())paint();else atlas?.addEventListener?.('load',paint,{once:true});return icon;

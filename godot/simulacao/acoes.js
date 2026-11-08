@@ -105,7 +105,7 @@ function queuePhysical(o,action){
  pendingInteraction={state,kind:'physical',target:o.id,action,index:state.selectedSlot,until:state.time+30};processInteraction();return true;
 }
 function primaryObjectAction(o){
- if(['fridge','cold','shelf'].includes(o.type)){
+ if(['fridge','cold','shelf','potRack'].includes(o.type)){
   if(!R.goObject(state,state.player,o))return false;
   pendingInteraction={state,kind:'storage',target:o.id,until:state.time+30};processInteraction();return true;
  }
