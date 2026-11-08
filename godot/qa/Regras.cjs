@@ -10,3 +10,5 @@ for (const name of ['arrivals', 'calendar-reputation', 'patience', 'service-hour
 }
 
 require('./fluxo-cozinha.test.cjs');
+
+require('./inventario.test.cjs');

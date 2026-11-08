@@ -19,7 +19,7 @@ action(s,k,'takeDish');assert.equal(s.player.hand.item,'dish_arrozLegumes');asse
 // Manual tasks cancel atomically; a save can resume cutting.
 s.selectedSlot=s.inventory.findIndex(p=>p?.item==='frango');action(s,p,'chop');step(s,.5);assert(R.migrateSave(s));action(s,p,'cancelCut');assert.equal(R.inventoryCount(s,'frango_cut'),0);
 // Full pack must not destroy the input or create output.
-const full=R.furnishedTest(),fp=full.objects.find(o=>o.type==='prep');for(let i=0;i<10;i++)full.inventory[i]={item:'legumes',n:99};near(full,fp);full.selectedSlot=0;assert(!R.physicalAction(full,fp.id,'chop').ok);assert.equal(full.inventory[0].n,99);
+const full=R.furnishedTest(),fp=full.objects.find(o=>o.type==='prep');for(let i=0;i<5;i++)full.inventory[i]={item:'legumes',n:99};near(full,fp);full.selectedSlot=0;assert(!R.physicalAction(full,fp.id,'chop').ok);assert.equal(full.inventory[0].n,99);
 // Heating stops once carried. Preserve remaining legacy portions, plate one at a time.
 let t=R.furnishedTest(),tf=t.objects.find(o=>o.type==='stove'),tk=t.objects.find(o=>o.type==='kitchen');tf.pan='pot_sopa_4';tf.readyBatch={recipe:'sopa',quality:3,doneAt:0};t.meals.made.sopa=4;
 action(t,tf,'takePan');step(t,30);assert.equal(t.player.hand.quality,3);action(t,tk,'support');action(t,tk,'plate');step(t,2.1);assert.equal(tk.support.item,'pot_sopa_3');assert.equal(R.readyCount(tk),1);

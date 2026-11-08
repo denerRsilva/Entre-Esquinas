@@ -2,7 +2,7 @@
 
 Fluxo implementado somente na Godot. HTML preservado.
 
-1. Selecione o ingrediente na mochila e feche o menu.
+1. Selecione o ingrediente na barra permanente de cinco slots, clicando ou usando as teclas 1–5.
 2. Clique na **Mesa de preparo • corte**: uma unidade de frango ou legumes vira ingrediente cortado em dois segundos ativos. Arroz não precisa de corte. O resultado volta à mochila; falta de espaço não elimina o ingrediente.
 3. Instale uma panela vazia no fogão. Selecione e adicione uma unidade de ingrediente por clique. Arroz com legumes: 1 arroz + 1 legumes cortados; sopa: 2 legumes cortados; frango com arroz: 1 arroz + 1 frango cortado. As receitas são reconhecidas por correspondência exata. Remova o último ingrediente para corrigir uma combinação.
 4. Use o ícone **Cozinhar**. Cada cozimento novo rende uma porção. O personagem fica livre; pronto, passando do ponto e queimado mantêm as regras anteriores. Estrelas não aparecem no preparo.
@@ -15,7 +15,7 @@ Um clique agenda a aproximação e a ação. Ações alternativas ficam junto ao
 
 ## Salvamentos
 
-Formato 10, chave `entre-restaurante-10`, com leitura das chaves anteriores. Arquivo local Godot continua `user://restaurante.json`, com backup. A migração copia e valida o estado antes de substituir a partida.
+Formato 11, chave `entre-restaurante-11`, com leitura das chaves anteriores. Arquivo local Godot continua `user://restaurante.json`, com backup. A migração copia e valida o estado antes de substituir a partida.
 
 - Bancadas antigas viram mesas de cozinha na mesma posição, com pratos, talheres e refeições preservados. Compre uma mesa de corte no modo construção; a migração não instala um móvel sobre corredores ou outros objetos.
 - Panelas antigas conservam suas porções: cada empratamento retira somente uma. Panelas cheias antigas da mochila podem ser erguidas pelas ações da mesa de cozinha e apoiadas nela.
@@ -41,3 +41,11 @@ XDG_CONFIG_HOME=/tmp/esquinas-config XDG_DATA_HOME=/tmp/esquinas-teste XDG_CACHE
 As antigas suítes `qa/regras/kitchen.test.cjs` e `quality.test.cjs` descrevem a cozinha anterior; não fazem parte do executor atual. Casos aplicáveis de qualidade e queima são cobertos pela suíte física. Os cenários de paciência, reputação e garçom usam fixtures de refeições para isolar esses sistemas da duração de produção. O percurso antigo `qa/percursos.js` só roda com `Verificar.gd -- --percursos-antigos`.
 
 Testado neste ambiente com Godot **4.6.3 Linux**, Node.js e extensão QuickJS incluída. A versão **4.7.2** informada pelo proprietário, Windows e avaliação visual/humana de um dia completo ainda exigem teste no ambiente correspondente.
+
+## Inventário permanente de cinco slots
+
+Botão da mochila e atalho I removidos. A barra fica no centro inferior da tela durante o jogo, com item, quantidade, identificação por tooltip e seleção destacada. Clique ou teclas 1–5 selecionam sem pausar. Gestão e Opções ficam à esquerda e câmera à direita, sem sobrepor a barra. Geladeiras e prateleiras continuam com dez espaços.
+
+A migração de saves mantém os primeiros cinco slots; excedentes ficam na reserva de migração, acessível em **Recolher itens preservados** na própria barra. A recuperação respeita os cinco slots e conserva qualidade e quantidades. Uma tarefa de corte cujo ingrediente ficou na reserva é cancelada sem consumo. Não existe reserva adicional criada pelo gameplay normal. O kit mobiliado novo não distribui colheres, que não são exigidas pela cozinha, deixando espaço para cortar.
+
+Testes: `node qa/inventario.test.cjs` e `godot --headless --audio-driver Dummy --script res://qa/InventarioUI.gd` na Godot 4.7.2. O teste nativo verifica clique real, tecla 2, cinco botões, ausência do botão antigo e tempo contínuo.

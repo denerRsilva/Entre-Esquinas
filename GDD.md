@@ -205,7 +205,7 @@ retirá-la interrompe a degradação pelo calor. Comida queimada deve ser descar
 
 ## 8. Compras, inventários e equipe
 
-A mochila possui dez espaços. Pilhas compatíveis respeitam os limites do item;
+O inventário do jogador possui cinco espaços, apresentados numa barra permanente no centro inferior da tela. Pilhas compatíveis respeitam os limites do item;
 panelas com comida são unitárias. Geladeiras e prateleiras têm inventários de
 armazenamento e critérios próprios de aceitação. Transferências permitem ajustar
 quantidades e preservam os excedentes na origem quando falta espaço.
@@ -319,7 +319,7 @@ não reembolsa os itens apagados e só afeta o save após salvar a partida.
 
 ## 12. Salvamento e requisitos de qualidade
 
-A Godot usa salvamento local em formato 10, com posição subcélula do jogador,
+A Godot usa salvamento local em formato 11, com posição subcélula do jogador,
 inventários, receitas em andamento, relógio, calendário e reputação. Teclas
 pressionadas não persistem no save. Há validação, cópia de segurança e importação
 de JSON compatível; arquivo inválido não deve substituir uma partida válida.
@@ -799,3 +799,9 @@ Tempos e preços são parâmetros de teste. A implementação foi verificada em 
 com Godot 4.6.3 e QuickJS; a Godot 4.7.2 usada pelo proprietário continua sendo o
 ambiente a validar por ele. HTML não recebe esta alteração. Detalhes e comandos de
 QA: [COZINHA-FISICA.md](godot/COZINHA-FISICA.md).
+
+## 25. Inventário permanente — cinco slots
+
+Decisão posterior do proprietário: remover o botão da mochila e mostrar o inventário permanentemente, em barra inspirada na organização de Stardew Valley, com **apenas cinco slots reais**. Clique ou teclas 1–5 selecionam o item; a seleção não pausa nem abre janela. Quantidade, ícone, tooltip e destaque identificam o conteúdo e o slot ativo. O atalho I e a janela de mochila deixam de fazer parte do acesso normal. A barra fica oculta no início e na construção; nos demais menus permanece na camada do jogo.
+
+Geladeiras e prateleiras mantêm dez espaços. Na migração para formato 11, os excedentes do inventário antigo são preservados para recolhimento na própria barra, respeitando capacidade e qualidade. Esses registros de migração não ampliam a capacidade de cinco slots no gameplay. Esta decisão prevalece sobre referências históricas a dez espaços de mochila nas seções anteriores.

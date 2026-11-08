@@ -43,6 +43,7 @@ test('Entrega manual no limite é recusada, sem consumir prato ou concluir venda
 });
 test('Bancada cheia não destrói prato cancelado nem bloqueia fechamento do serviço',()=>{
  const {s,c}=fixture(()=>0);makeDishes(s);request(s,c);stand(s,obj(s,'kitchen'));assert(R.pickupDish(s));const prep=obj(s,'kitchen'); // Teste de capacidade com louça comprada adicional.
+ const ri=s.inventory.findIndex(p=>p?.item==='arroz'),rice=s.inventory[ri];assert.equal(R.putObject(s,s.objects.find(o=>o.type==='shelf'),rice.item,rice.n),rice.n);R.removeInventory(s,ri,rice.n);
  const previousPlates=R.objectCount(prep,'plate');R.takeObject(s,prep,'plate',previousPlates);assert(R.addInventory(s,'plate',previousPlates));
  // Ocupa os doze lugares de retirada com pratos de outra receita.
  for(const p of R.stationSlots(prep).filter(Boolean)){const {item,n}=p;assert.equal(R.takeObject(s,prep,item,n),n);assert(R.addInventory(s,item,n));}

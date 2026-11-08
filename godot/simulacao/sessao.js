@@ -13,6 +13,7 @@ function firstArtwork(n) {
 }
 function pack(n,path){
  if(typeof n==='string')return n.trim()?{tag:'text',text:n.trim()}:null;
+ if(n.id==='hotbar'&&path!=='hotbar')return null;
  if(n.hidden||n.attrs['aria-hidden']==='true')return null;
  const v={tag:n.tag,cls:n.className,id:n.id};if(n.anchor)v.anchor=n.anchor;
  if(n.tag==='button'||n.tag==='input'||n.tag==='select'||n.tag==='a'){
@@ -47,11 +48,11 @@ function snapshot(dt,events) {
  const modal=$('welcome').open?'welcome':$('management').open?'management':'';
  Host.widgets.clear();
  const ui={};
- if(modal){ui.modal=section(modal)}
+ if(modal){ui.modal=section(modal);if(modal==='management')ui.hotbar=section('hotbar')}
  else if(constructionMode){
   ui.catalog=section('constructionControls');ui.drawer=section('constructionDrawer');ui.build=section('buildBar');
  }else{
-  for(const id of ['hud','dock','actions','context','ordersHud','kitchenStatus','openBtn'])ui[id]=section(id);
+  for(const id of ['hotbar','hud','dock','actions','context','ordersHud','kitchenStatus','openBtn'])ui[id]=section(id);
   ui.notice=$('notice').style.opacity==='1'?section('notice'):null;
  }
  const writes=Host.writes;Host.writes={};

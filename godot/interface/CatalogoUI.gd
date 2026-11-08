@@ -163,7 +163,11 @@ func render(d: Dictionary, parent: Control) -> void:
 			parent.add_child(n)
 			return
 	var group: Container
-	if cls in ["cards","recipeGrid","inventoryGrid","splitInventories","prepSlots","prepPrimary"]:
+	if cls=="hotbarSlots":
+		var grid:=GridContainer.new()
+		grid.columns=5
+		group=grid
+	elif cls in ["cards","recipeGrid","inventoryGrid","splitInventories","prepSlots","prepPrimary"]:
 		var grid := GridContainer.new()
 		grid.columns = 1 if compact else (5 if cls=="inventoryGrid" else 3 if cls in ["cards","recipeGrid"] else 2)
 		if cls=="inventoryGrid" and compact: grid.columns=2

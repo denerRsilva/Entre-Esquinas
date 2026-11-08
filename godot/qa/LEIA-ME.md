@@ -1,3 +1,7 @@
+# Inventário permanente
+
+`InventarioUI.gd` verifica cinco slots, seleção por clique e teclas, ausência do botão da mochila e simulação ativa. `inventario.test.cjs` verifica capacidade, migração sem perdas e recuperação dos excedentes. Verificados na Godot 4.7.2 Linux, sem janela, junto com FluxoCozinhaUI, MenusUI e Verificar: `FALHAS: 0`.
+
 # Godot 4.7.2
 
 Veja o [relatório de validação](VALIDACAO_4_7_2.md) e as correções das suítes nativas.

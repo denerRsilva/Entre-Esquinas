@@ -40,7 +40,7 @@ func run():
 	g.tick(1.0)
 	check(js("state.time")==paused and not g.hud.slots.dock[0].visible,"Construção pausa e recolhe HUD")
 	check(press_named("Construção") and press_named("Voltar ao jogo"),"Catálogo abre e retorna")
-	check(press_named("Inventário") and press_named("Voltar ao jogo"),"Mochila pelo controle nativo")
+	check(js("state.inventory.length===5")=="true" and g.hud.slots.hotbar[0].visible,"Barra de cinco slots visível sem botão de mochila")
 	check(press_named("Opções") and press_named("Salvar e carregar"),"Salvar/carregar acessível")
 	var original_cash=js("state.cash")
 	check(press_named("Salvar restaurante"),"Salvar pelo botão nativo")
