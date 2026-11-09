@@ -3,7 +3,7 @@
 O APK de teste fica em `../build/Android/EntreEsquinas.apk`. Baixe o arquivo
 completo pelo botão **Download raw file** no GitHub e permita a instalação
 de aplicativos dessa origem no Android. O pacote é
-`com.entreesquinas.restaurante`, versão `0.21.2-godot.3` (21203).
+`com.entreesquinas.restaurante`, versão `0.21.2-godot.4` (21204).
 Requer Android 7.0 ou superior. Tamanho aproximado: 89 MiB.
 O SHA-256 está em `../build/Android/SHA256SUMS`.
 
@@ -54,3 +54,9 @@ atalhos de adicionar ingrediente e retirar panela do fogão e de cortar na
 mesa de preparo. As ações continuam pelo clique direto: geladeira → mãos →
 mesa de preparo → ingrediente cortado nas mãos → panela. Clique no fogão
 para retirar a panela pronta ou a panela vazia sem ingredientes.
+
+## Livro de receitas
+
+O botão **Livro de receitas** fica ao lado de **Opções**. Mostra as três
+receitas atuais com quantidades por panela, necessidade de corte, tempo
+de cozimento e sequência de empratamento. A consulta pausa o jogo.

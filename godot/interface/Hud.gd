@@ -18,7 +18,7 @@ func _ready() -> void:
 	area("context",Rect2(150,360,500,110),false,false)
 	area("hint",Rect2(10,604,610,42),false,true)
 	area("notice",Rect2(10,500,520,70),false,true)
-	area("dock",Rect2(10,651,250,44),false,false)
+	area("dock",Rect2(10,651,550,44),false,false)
 	area("actions",Rect2(720,641,234,54),false,false)
 	area("catalog",Rect2(10,649,168,44),false,false)
 	area("drawer",Rect2(7,7,352,628))
