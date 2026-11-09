@@ -1,837 +1,489 @@
-# Entre Esquinas — Game Design Document
+# Entre Esquinas
 
-**Revisão:** consolidação do GDD v1.4 com a versão Godot — 7 de novembro de 2026
+## GDD 2.0 consolidado
 
-**Editor usado pelo proprietário:** Godot **4.7.2**, informado por Dener nesta revisão.
+**Revisão documental:** 09 de novembro de 2026. **Responsável pelas decisões:** Dener Silva.
 
-**Fonte de design:** `GDD_Entre_Esquinas_Restaurante_v1_4.pdf`, revisão de 03/11/2026 e adendos de 04/11/2026, fornecido pelo proprietário.
+Este GDD reúne a direção aprovada da taverna e o funcionamento implementado na Godot em uma referência única. Substitui a organização do GDD 1.4 do repositório e do adendo 1.5, preservando a distinção entre o jogo existente e o desenvolvimento futuro. Não é necessário consultar os documentos antigos para entender as regras atuais aqui descritas.
 
-**Base do jogo:** 0.21.2 e revisões posteriores da versão Godot
+**Base de implementação inspecionada:** branch `main`, commit `89f1bfe8ee49aec52c2ecf2765208fbf28563bd1`. A aprovação desta revisão autoriza a reformulação documental. Não transforma propostas em requisitos aprovados nem executa mudanças de gameplay.
 
-**Última implementação considerada:** [f0fd4e9](https://github.com/denerRsilva/Entre-Esquinas/commit/f0fd4e9)
+### Estados usados no documento
 
-Este documento integra a visão e as decisões do PDF v1.4 às evoluções já
-registradas no repositório. O PDF descreve historicamente a base 0.10.3; suas
-menções a funcionalidades ausentes e ao save formato 4 não descrevem
-automaticamente a versão Godot atual. As seções 1–14 preservam o registro técnico
-anterior, com os ajustes desta revisão; as seções 15–23 integram o design do PDF,
-as divergências e as pendências.
-
-### Como interpretar o documento
-
-| Marcador | Significado |
+| Estado | Como interpretar |
 | --- | --- |
-| CONFIRMADO / APROVADO | Decisão de design registrada; pode ainda depender de implementação. |
-| ATUAL DOCUMENTADO | Comportamento descrito no GDD e nos registros anteriores do repositório; esta revisão documental não o revalidou executando o jogo. |
-| PROPOSTO | Sugestão para discussão ou parâmetro provisório, sem aprovação final de balanceamento. |
-| EM ABERTO / PENDENTE | Exige especificação, decisão ou validação. |
-| EXEMPLO | Situação ilustrativa; não fixa conteúdo, números ou compromisso de produção. |
-| NÃO APROVADO | Ideia preservada para consulta, fora do escopo autorizado de implementação. |
+| Implementado | Comportamento encontrado no código da base inspecionada. Não significa aprovação definitiva de balanceamento nem ausência de bugs. |
+| Direção aprovada | Escolha expressa do proprietário para o projeto, ainda que sua implementação não exista. |
+| Parâmetro de teste | Valor atual que pode ser ajustado após avaliação. |
+| Proposta não aprovada | Ideia ou solução que depende de aprovação antes da implementação. |
+| Em aberto | Questão sem regra final definida. |
+| Arquivado ou substituído | Conteúdo histórico isolado na seção 13; não orienta o gameplay atual. |
 
-Decisões expressas mais recentes do proprietário prevalecem sobre decisões
-anteriores. Código e documentação técnica registram o comportamento existente;
-não convertem automaticamente uma diferença em aprovação de design. Onde PDF e
-registro atual diferem sem decisão rastreada, a diferença é explicitada na seção
-21, sem alterar o jogo nesta revisão. O HTML preservado não recebe
-automaticamente as mudanças da Godot.
+### Organização
 
-## 1. Visão do jogo
+- Seções 1 e 2: visão, universo e princípios aprovados.
+- Seções 3 a 11: regras atuais da Godot, interface, parâmetros e estado técnico.
+- Seção 12: direções futuras aprovadas e propostas não aprovadas, identificadas separadamente.
+- Seção 13: ideias substituídas e histórico fora do escopo vigente.
+- Seção 14: pendências, critérios de qualidade e rastreabilidade.
 
-Entre Esquinas é uma simulação de restaurante e vida de bairro com apresentação
-em pixel art e ambientação brasileira acolhedora. O jogador atua diretamente no
-salão e na cozinha, organiza o espaço, compra ingredientes, atende clientes e
-acompanha o resultado do negócio ao longo dos dias.
+O termo **taverna** descreve o destino de design. O código e a interface atuais ainda usam **restaurante**; hospedagem, ambientação nuclear e comércio presencial não são funcionalidades já entregues.
 
-A referência para o **controle do personagem** é a liberdade de deslocamento de
-Stardew Valley: movimento contínuo e responsivo, sem obrigar o jogador a terminar
-um passo na grade. Isso não implica reproduzir os demais sistemas desse jogo.
+<!-- page -->
 
-A experiência atual concentra-se na operação do restaurante. A cidade e os
-moradores oferecem um espaço de demonstração; narrativa extensa, relações sociais
-completas e estabelecimentos adicionais ainda não estão implementados.
+## 1 Visão e pilares
 
-## 2. Ciclo principal
+### Descrição do jogo
 
-1. Preparar o restaurante: organizar móveis, obter utensílios e comprar insumos.
-2. Retirar um ingrediente do armazenamento para as mãos e levá-lo à estação correspondente.
-3. Escolher o horário de serviço e abrir o restaurante pela placa da entrada.
-4. Receber os clientes, aproximar-se e anotar os pedidos.
-5. Cozinhar os lotes, retirar a panela e empratar na bancada.
-6. Retirar e servir os pratos; o garçom pode auxiliar no atendimento.
-7. Recolher a louça, lavar e preparar o próximo atendimento.
-8. Encerrar as novas entradas, concluir as pendências e acompanhar o fechamento diário.
+Administre uma taverna em uma pequena vila que se reconstrói após uma catástrofe nuclear. Prepare refeições, desenvolva seu estabelecimento e conheça moradores e viajantes. A direção de desenvolvimento conecta a cozinha à obtenção de ingredientes, às rotas comerciais e à recuperação da vila, em um mundo fictício sombrio e melancólico com elementos de fantasia.
 
-O jogador pode abrir o restaurante sem estrutura mínima, insumos ou cardápio
-preenchido. Essa liberdade não elimina os requisitos de cada tarefa: receber
-clientes exige assentos e opções de cardápio; cozinhar e servir exigem os recursos
-correspondentes. Não há montagem gratuita obrigatória para iniciar uma partida.
+**Direção aprovada.** A taverna será um ponto de encontro e poderá oferecer descanso a viajantes. Comida, convivência e relações com o entorno sustentam a experiência. A hospedagem ainda não possui regras finais e não faz parte do funcionamento atual.
 
-## 3. Espaços e circulação
+| Pilar | Papel na experiência | Estado |
+| --- | --- | --- |
+| Operação | Preparar, cozinhar, servir e coordenar prioridades no espaço físico. | Ciclo básico implementado. |
+| Gestão | Escolher cardápio, preços, compras e disposição dos equipamentos. | Sistemas básicos implementados; economia final em aberto. |
+| Vila e exploração | Conhecer pessoas, obter ingredientes e aproveitar oportunidades externas. | Direção aprovada; rua e conversas atuais são demonstrações. |
+| Progressão | Melhorar o espaço e ampliar possibilidades por relações e equipamentos. | Construção implementada; artesãos e projetos locais ainda futuros. |
 
-### Restaurante
+### Princípios de design
 
-- Salão com mesas e cadeiras orientadas para as mesas.
-- Cozinha com fogão, bancada de preparo, pia, lixeira e geladeira.
-- Área de estoque e armazenamento no cenário atual.
-- Computador para fornecedor, utensílios, cardápio, preços e entregas.
-- Ponto de recebimento para recolher os pedidos de ingredientes.
+- Priorizar diversão, decisões compreensíveis e retorno claro das ações.
+- Fazer a organização da cozinha e do salão influenciar o trabalho.
+- Reduzir cliques sem decisão; avaliar o custo do transporte de uma unidade por vez em playtests.
+- Permitir que automação libere o jogador para novas escolhas.
+- Informar acontecimentos antes de aplicar consequências que exijam planejamento.
+- Desenvolver a vila de forma conectada à taverna, sem transformar a rua em decoração sem função.
 
-### Rua e fachada
+### Referências por função
 
-Ao atravessar a porta, o jogador encontra a Rua das Esquinas, com fachada do
-restaurante, toldo, calçada, jardins laterais, árvores, bancos e faixa de pedestres.
-As fachadas vizinhas são decorativas; não representam lojas já acessíveis.
+Stardew Valley orienta movimento, cotidiano, fantasia e variedade de pratos conhecidos. Travellers Rest inspira operação de taverna e melhorias. Chef RPG permanece referência de gastronomia e conexão com o entorno. PlateUp! foi acrescentado como referência para ações diretas, cozinha física e organização. Essas referências não aprovam automaticamente todos os sistemas desses jogos.
 
-A entrada funciona por clique ou movimento livre. O ponto de chegada deve estar
-livre; uma transição não pode colocar dois personagens no mesmo lugar. Sair e
-entrar não deve provocar um retorno automático em loop.
+O foco imediato de produção continua sendo um serviço completo compreensível e interessante. O projeto não possui diversão, retenção ou viabilidade comercial comprovadas por testes automatizados.
 
-Na rua, a fachada informa se o restaurante está aberto e oferece **Abrir
-restaurante** ou **Encerrar restaurante**. A ação aproxima o jogador da entrada
-e respeita os horários e as pendências do serviço. A placa interna continua
-funcionando. A operação do salão e a chegada de clientes continuam sendo
-simuladas enquanto o jogador está na rua.
+<!-- page -->
 
-## 4. Movimento, câmera e interação
+## 2 Universo e direção artística
 
-- WASD/setas controlam o jogador continuamente, permitindo parar entre células.
-- Soltar as teclas interrompe o movimento imediatamente, sem concluir um passo.
-- Inverter a direção responde imediatamente; diagonais não aumentam a velocidade.
-- Paredes e móveis bloqueiam o corpo. Numa diagonal contra um obstáculo, o eixo
-  livre continua avançando, permitindo deslizar sem ficar preso.
-- Quadros lentos não podem permitir atravessar obstáculos.
-- Clique no chão continua disponível para navegar até um destino. Clicar em
-  móveis ou clientes permite aproximar-se para a interação correspondente.
-- A troca entre teclado e clique preserva a posição visual, sem teletransporte.
-- NPCs e posicionamento dos móveis continuam utilizando a grade lógica.
-- Animação e direção acompanham o movimento; pressionar uma parede sem sair do
-  lugar não mantém a animação de caminhada.
-- Construção, perda de foco e menus de gestão/mochila pausam a simulação. Inventários de geladeiras e prateleiras mantêm o tempo avançando. Ao perder foco, as teclas
-  são liberadas para evitar movimento preso ao retornar.
+**Direção aprovada.** O jogo se passa em um mundo fictício após um desastre nuclear. A vila é pequena e está em reconstrução, cercada por ruínas, pequenos produtores e rotas comerciais. Tecnologia funcional é rara. A ambientação não representa o Brasil nem outro país real.
 
-A câmera acompanha o jogador quando o enquadramento exige deslocamento. O zoom
-vai de **70% a 200%**, em passos de 10%. Os controles −/+ continuam disponíveis;
-a alternância entre janela e tela cheia fica em **Opções → Câmera**.
+O tom principal é sombrio e melancólico. A fantasia pode coexistir com objetos e atividades reconhecíveis. Seu alcance permanece em aberto: a escolha de desastre nuclear não aprova automaticamente magia, monstros, mutações ou radiação como sistema jogável.
 
-## 5. Construção e organização
+### Pessoas e alimentação
 
-O acesso é **Gestão → Modo construção**. A simulação pausa e a HUD operacional
-fica oculta. O catálogo lateral pode ser aberto e recolhido para liberar o mapa.
+Exploradores de ruínas, agricultores, mecânicos, comerciantes de passagem e moradores antigos são tipos de habitantes aprovados para o universo. Suas regras comerciais, rotinas e diferenças de atendimento ainda precisam de especificação. Os perfis atuais de paciência não equivalem a essas ocupações.
 
-O jogador pode comprar, posicionar, girar e mover os dez tipos de móveis atuais:
-mesa, cadeira, fogão, geladeira de cozinha, mesa de preparo para corte, mesa de cozinha para empratamento, pia, lixeira, prateleira seca
-e geladeira de estoque. Os setores permitidos e as áreas de circulação devem ser
-respeitados. A prévia mostra se a posição é válida e a compra só é cobrada ao
-confirmar uma posição válida.
+O cardápio futuro deve reunir pratos conhecidos de diferentes partes do mundo, adaptados ao universo. A culinária exclusivamente brasileira deixa de orientar o projeto. As três receitas atualmente implementadas permanecem até uma tarefa específica de mudança.
 
-Mover preserva a identidade, os itens e o conteúdo do móvel, sem nova cobrança.
-Guardar exige retirar os itens instalados e respeitar os bloqueios de preparo e
-louça; a implementação atual devolve o valor integral do móvel. Alterações de
-layout exigem serviço concluído, sem clientes ou pedidos ativos. Corredores,
-portas, personagens e acesso aos equipamentos não podem ser bloqueados.
+### Materiais e leitura visual
 
-A prévia deve responder ao cursor sem travar o jogo. Otimizações e cache não
-podem dispensar a validação definitiva ao confirmar.
+Pixel art continua sendo a linguagem aprovada. Fachadas reparadas, móveis restaurados, equipamentos antigos, roupas adaptadas e vegetação retomando partes da vila compõem a direção aceita. Madeira e terracota permanecem materiais possíveis dentro do tom novo.
 
-## 6. Clientes, descoberta do pedido e atendimento
+A aparência atual do jogo ainda deriva da direção brasileira acolhedora. Ela não comprova implementação da nova ambientação. O concept anterior pode orientar materiais, mas não fixa o tom final.
 
-### Informação revelada ao jogador
+**Proposta não aprovada.** Exteriores frios e pouco saturados, reboco gasto, metal oxidado e luz localizada podem reforçar melancolia e contraste. A paleta exata, a iluminação e a intensidade do desgaste ainda aguardam avaliação. Tornar a taverna progressivamente cozy por escolhas de decoração permanece em aberto.
 
-**O prato desejado só aparece depois que o pedido é anotado**, pelo jogador ou
-por um garçom. Antes disso:
+### Regras de legibilidade
 
-- O cliente pode sinalizar que aguarda atendimento e mostrar sua paciência.
-- Não aparece o ícone nem o nome do prato sobre o cliente.
-- A ação mostra apenas **Anotar pedido**, sem revelar a receita.
-- O painel de pedidos informa que há uma mesa aguardando atendimento, sem antecipar o prato.
+Ingredientes, pratos, recipientes, mãos e estações precisam ser reconhecíveis no tamanho de jogo. Estados de corte, cozimento e queima devem ter leitura distinta. Estrelas de qualidade pertencem aos ingredientes e refeições; não devem decorar fogões, personagens ou utensílios.
 
-Depois de anotar, o prato fica visível e o pedido aparece na fila de atendimento.
-A regra vale mesmo quando a escolha da receita já existe internamente na simulação.
+Resolução-base dos novos assets, escala de exibição e padrão final de animação exigem validação em sprites reais. A grade lógica atual de 40 pixels não define, por si só, a resolução artística definitiva. Uma imagem conceitual não equivale a um atlas pronto para produção.
 
-### Fluxo do atendimento
+<!-- page -->
 
-Os clientes chegam individualmente e reservam uma mesa inteira até a saída e a
-retirada da louça. Grupos ainda não estão implementados. O pedido exige presença
-física e não pode ser duplicado pelo jogador ou por dois garçons.
+## 3 Ciclo diário, espaços e movimento
 
-O atendimento e a espera pela comida têm contadores de paciência separados.
-Anotar encerra a primeira etapa e inicia a segunda. Ao esgotar a paciência, o
-cliente desiste, o pedido é cancelado e não há pagamento. No instante exato do
-limite, a desistência tem prioridade sobre a entrega.
+**Implementado.** O ciclo atual combina organização, compra, serviço, limpeza e fechamento. Existem almoço e jantar. A abertura é voluntária e depende do horário; não há montagem mínima obrigatória para clicar em abrir. Receber clientes exige assentos acessíveis e cardápio utilizável; produzir exige recursos e estações compatíveis.
 
-Depois de receber o prato, o cliente come, paga e sai. A louça permanece para
-recolhimento. Ingredientes consumidos não são estornados após um abandono; pratos
-em trânsito e recipientes continuam sujeitos às regras de conservação.
+### Sequência atual
 
-A satisfação considera atendimento, espera da comida e qualidade do prato.
-Indicadores de estado, elogios, reclamações e histórico ajudam a acompanhar o
-resultado do serviço. As probabilidades e tempos atuais são parâmetros de teste.
+1. Organizar móveis e obter ingredientes e utensílios.
+2. Preparar a cozinha e abrir pela placa da entrada.
+3. Anotar pedidos e administrar a paciência dos clientes.
+4. Buscar ingredientes nas mãos, cortar quando necessário e abastecer a panela.
+5. Cozinhar, retirar a panela, apoiar, empratar e servir.
+6. Recolher a louça, lavar e repor os pratos.
+7. Suspender novas entradas, concluir pendências e acompanhar o fechamento diário.
 
-## 7. Cozinha e louça
+### Ambientes
 
-### Cozinha física — transporte nas mãos
+O restaurante reúne salão, cozinha e estoque no mesmo cenário. O estoque tem acesso pela cozinha; equipá-lo é opcional para abrir. Geladeiras e prateleiras ampliam armazenamento. O computador e o recebimento ainda estão presentes na área administrativa. Estabelecimentos vizinhos não são lojas jogáveis.
 
-O fluxo atual é **retirar da geladeira → cortar quando necessário → adicionar à panela → cozinhar → transportar a panela nas mãos → apoiar na mesa de cozinha → empratar → servir**.
+A rua possui fachada, toldo, calçada, jardins, bancos e faixa de pedestres. A porta permite entrar e sair por clique ou teclado. A transição aguarda um destino livre e não deve colocar personagens sobrepostos ou provocar retorno em loop. A fachada permite abrir e encerrar o serviço; clientes e funcionários continuam simulados no interior enquanto o jogador está fora.
 
-O jogador não tem mochila ou slots e transporta uma unidade por vez. Frango cru e legumes inteiros são cortados na mesa de preparo em dois segundos ativos; o resultado permanece nas mãos. Arroz dispensa corte. Cada adição à panela libera as mãos para buscar o próximo ingrediente. A receita é reconhecida pela combinação exata, sem janela de escolha.
+### Movimento e câmera
 
-Cada cozimento novo rende uma porção. O jogador pode realizar outras tarefas durante o cozimento. Retirar a panela libera o fogão e interrompe a degradação pelo calor. A mesa de cozinha recebe a panela apoiada e pratos limpos; empratar produz um prato por ação, em dois segundos, sem talher. A panela vazia pode ser reinstalada no fogão. Panelas antigas conservam suas porções, retiradas individualmente.
+WASD ou setas controlam deslocamento contínuo, com parada e inversão imediatas. O jogador pode parar entre células. Diagonais são normalizadas; contato com uma parede permite deslizar pelo eixo livre. Quadros lentos não devem atravessar colisões. O corpo tem raio atual de 0,20 célula e velocidade de 4,5 células por segundo, ambos parâmetros de teste.
 
-Pratos prontos e louça suja são transportados um por vez nas mãos. A pia converte o prato sujo carregado em prato limpo, que pode ser reposto na mesa de cozinha. Geladeiras e prateleiras mantêm inventários; nenhum ingrediente é consumido automaticamente a distância. Consulte [o guia atual](godot/COZINHA-FISICA.md).
+O clique no chão mantém navegação por destino. Clicar em objetos aproxima o personagem e inicia a ação válida; trocar entre teclado e clique não deve teletransportar o jogador. NPCs e colocação de móveis continuam apoiados na grade lógica.
 
-### Qualidade
+Animações acompanham o deslocamento real. Nas diagonais, a direção visual prioriza cima ou baixo enquanto existe movimento vertical; se esse eixo estiver bloqueado, acompanha o deslizamento lateral. Pressionar uma parede sem deslocamento não mantém a caminhada.
 
-Ingredientes e pratos usam quatro qualidades: Comum, Prata, Ouro e Roxa. A
-qualidade do lote deriva dos ingredientes efetivamente consumidos. Transferências,
-transporte e salvamento preservam a qualidade dos itens.
-Deixar a panela pronta no fogão reduz a qualidade e pode queimar a comida;
-retirá-la interrompe a degradação pelo calor. Comida queimada deve ser descartada.
+O zoom atual vai de 70% a 200%, em passos de 10%. Tela cheia fica em Opções e Câmera. Alertas de cozimento não deslocam a câmera.
 
-## 8. Compras, inventários e equipe
+<!-- page -->
 
-O jogador não possui inventário ou barra de slots e transporta uma unidade por vez nas mãos. Os armazenamentos mantêm seus inventários e os limites dos itens;
-panelas com comida são unitárias. Geladeiras e prateleiras têm inventários de
-armazenamento e critérios próprios de aceitação. Transferências permitem ajustar
-quantidades e preservam os excedentes na origem quando falta espaço.
+## 4 Construção e organização do espaço
 
-Compras no computador geram entregas, que chegam ao recebimento e precisam ser
-recolhidas. Panelas, colheres e pratos limpos são comprados na seção Utensílios.
+**Implementado.** Gestão e Modo construção dão acesso à edição dos móveis. A simulação congela, a HUD operacional desaparece e o catálogo lateral pode ser recolhido. Alterações exigem serviço concluído, sem clientes ou pedidos ativos. Não há reposicionamento pelo menu operacional normal dos objetos.
 
-Há dois funcionários gratuitos para testes, com funções configuráveis:
+Selecionar um móvel instalado permite mover, girar ou guardar. O painel de posicionamento usa Girar, Confirmar posição, Guardar e reembolsar e Cancelar. Guardar fica oculto ao comprar um móvel novo. Foram retirados desse painel nome do móvel e textos auxiliares de posição e exploração.
 
-- **Parado:** não assume novas tarefas.
-- **Logística:** transporte entre recebimento e armazenamento/equipamentos compatíveis.
-- **Garçom:** anota pedidos nas mesas e transporta/serve pratos prontos, sem cozinhar.
+### Catálogo atual
 
-Trocar de função interrompe novas tarefas; cargas em trânsito mantêm as regras
-existentes. Contratação, salários e progressão de equipe ainda não estão definidos
-como sistemas completos de jogo.
+Todos os preços abaixo são parâmetros de teste em dinheiro genérico. Dimensões são células na orientação inicial.
 
-## 9. Relógio, turnos, calendário e reputação
-
-O dia jogável começa às **06:00** e termina às **02:00 da madrugada seguinte**.
-Meia-noite não avança a data jogável. O relógio só avança com a simulação ativa.
-
-Os horários padrão são almoço **11:00–15:00** e jantar **18:00–22:00**. Em
-**Gestão → Turnos**, podem ser alterados em blocos de dez minutos, sem
-sobreposição e com serviço concluído.
-
-Abrir depende de estar no horário permitido. Encerrar manualmente ou chegar ao
-fim do turno suspende novas entradas, mantendo os clientes e preparos pendentes.
-Fechar almoço ou jantar não adianta a data. Às 02:00, o relógio aguarda a conclusão
-das pendências antes da virada; não há cancelamento automático para forçar o fim.
-
-O calendário possui quatro estações, com 28 dias cada e sete dias da semana.
-O fechamento financeiro e a despesa diária ocorrem uma vez por virada de dia.
-
-A reputação vai de 0 a 100. Elogio, reclamação e abandono geram registros;
-uma visita não pode aplicar o mesmo efeito duas vezes. Na versão atual,
-reputação não multiplica demanda nem altera os preços automaticamente.
-
-## 10. Parâmetros atuais — provisórios para balanceamento
-
-Os números abaixo descrevem o protótipo; não representam balanceamento final.
-
-| Parâmetro | Valor atual |
-| --- | --- |
-| Caixa inicial | $1.500 |
-| Despesa diária | $12 |
-| Avanço do relógio | 10 minutos a cada 7 segundos ativos |
-| Primeira chegada após abrir | 8 segundos ativos |
-| Intervalo entre chegadas | 25 segundos ativos |
-| Tamanho dos lotes novos | 1 porção |
-| Tempo para empratar | 2 segundos |
-| Capacidade de pratos prontos na bancada | 12 |
-| Pratos limpos instalados na bancada | Até 99 |
-| Janela da panela pronta no ponto | 8 segundos |
-| Alerta de perigo de queima | A partir de 20 segundos |
-| Queima da panela pronta no fogão | 25 segundos |
-| Peso na satisfação: atendimento/comida/qualidade | 35% / 35% / 30% |
-| Reputação inicial | 0 |
-| Elogio | +1 de reputação |
-| Reclamação ou abandono | −1 de reputação por visita, sem acumular os dois |
-
-| Receita | Ingredientes por porção | Preparo do lote | Preço inicial do prato |
+| Móvel | Dimensão | Área permitida | Preço |
 | --- | --- | --- | --- |
-| Arroz com legumes | 1 arroz + 1 legumes | 6 segundos | $14 |
-| Sopa de legumes | 2 legumes | 5 segundos | $12 |
-| Frango com arroz | 1 arroz + 1 frango | 8 segundos | $20 |
+| Mesa | 2 por 1 | Salão | $45 |
+| Cadeira | 1 por 1 | Salão | $15 |
+| Fogão | 2 por 1 | Cozinha | $150 |
+| Mesa de preparo para corte | 2 por 1 | Cozinha | $90 |
+| Mesa de cozinha para empratar | 2 por 1 | Cozinha | $90 |
+| Pia | 2 por 1 | Cozinha | $70 |
+| Geladeira da cozinha | 1 por 2 | Cozinha | $120 |
+| Geladeira do estoque | 1 por 2 | Estoque | $140 |
+| Prateleira seca | 2 por 1 | Cozinha ou estoque | $65 |
+| Estante de panelas | 2 por 1 | Cozinha | $65 |
+| Lixeira | 1 por 1 | Cozinha ou estoque | $25 |
 
-O lote novo consome os ingredientes de uma porção. Os preços do cardápio
-podem ser alterados no computador. Ingredientes comuns custam arroz $2,
-legumes $2 e frango $4 por unidade; as qualidades superiores usam multiplicadores
-1,25, 1,5 e 2. A entrega atual leva 5 segundos ativos e o recebimento comporta
-60 unidades.
+### Validação e conservação
 
-| Móvel ou utensílio | Preço atual |
-| --- | ---: |
-| Mesa / cadeira | $45 / $15 |
-| Fogão / bancada de preparo | $150 / $90 |
-| Pia / lixeira | $70 / $25 |
-| Geladeira de cozinha / geladeira de estoque | $120 / $140 |
-| Prateleira seca | $65 |
-| Panela vazia / colher / prato limpo | $25 / $15 / $5 |
+A prévia e a confirmação verificam área permitida, ocupação, personagens, portas e acesso aos móveis. Compra inválida não cobra. Mover preserva identidade e conteúdo, sem nova compra. Guardar exige retirar conteúdo e respeitar tarefas e louça pendentes; o comportamento atual reembolsa integralmente o móvel.
 
-## 11. Interface e ferramentas de teste
+O validador de conectividade e o cache de prévia foram otimizados. A confirmação continua verificando o estado real; um resultado de cache não autoriza uma compra inválida.
 
-- **Gestão:** turnos, construção, equipe, fechamento, clientes, calendário e reputação.
-- **Opções:** câmera/tela cheia, salvar e carregar, testes e primeiros passos.
-- **Inventário:** mochila e seleção dos itens.
-- Tutorial inicial recolhível, sem obrigar a leitura antes de começar.
-- O início não exibe o aviso “Teste pronto…” nem a faixa permanente de informações
-  do personagem. Avisos de ações e erros continuam disponíveis.
+### Assentos
 
-### Cenários iniciais
+Mesas de dois tiles aceitam cadeiras apenas nos lados compridos e voltadas para a mesa. Na horizontal, cabem duas acima e duas abaixo; a regra acompanha a rotação. As pontas são recusadas na construção. Não é necessário completar quatro lugares para atender.
 
-**Começar vazio** inicia a montagem do zero. **Começar mobiliado (teste)** oferece
-estrutura e recursos gratuitos para validar os sistemas; não define as condições
-de uma futura campanha. A geração e a prévia de móveis devem permanecer responsivas.
+Cadeiras isoladas podem ser móveis, mas não recebem clientes. Saves antigos preservam cadeiras incompatíveis; elas deixam de contar como assentos válidos sem eliminar louça ou atendimento em andamento. Uma reforma não relacionada não exige corrigir todo o layout antigo.
 
-### Manipular horário
+<!-- page -->
 
-Em **Opções → Testes**, o jogador escolhe um horário e usa **Avançar horário**.
-O intervalo é 06:00–02:00, em blocos de dez minutos, somente para a frente no dia
-jogável atual. Escolher 11:00 permite abrir o almoço sem aguardar o relógio normal.
+## 5 Transporte, armazenamento e cenário de teste
 
-O salto altera o relógio sem simular o intervalo: não consome paciência nem
-avança cozinha ou entregas. Ainda aplica encerramento dos turnos e virada de dia
-pelas regras normais. Não abre o restaurante automaticamente. É preciso voltar
-ao jogo e abrir o serviço para começar a receber clientes.
+**Implementado.** O jogador não tem mochila, barra de inventário ou seleção por slots. Transporta uma unidade de ingrediente, panela, prato ou louça por vez nas mãos. O desenho acompanha a carga real. Não pode receber outro item enquanto as mãos estiverem ocupadas.
 
-A opção de limpar móveis e inventários é uma ferramenta separada de teste;
-não reembolsa os itens apagados e só afeta o save após salvar a partida.
+### Armazenamentos
 
-## 12. Salvamento e requisitos de qualidade
+Geladeira da cozinha, geladeira do estoque e prateleira seca têm dez espaços cada. As pilhas comuns podem alcançar 99 unidades quando o tipo e a qualidade forem compatíveis. A prateleira mantém restrição a armazenamento seco; geladeiras aceitam ingredientes e itens transportáveis conforme as regras atuais. Essas permissões de protótipo não definem validade ou refrigeração realista.
 
-A Godot usa salvamento local em formato 12, com posição subcélula do jogador,
-inventários, receitas em andamento, relógio, calendário e reputação. Teclas
-pressionadas não persistem no save. Há validação, cópia de segurança e importação
-de JSON compatível; arquivo inválido não deve substituir uma partida válida.
+Um clique aproxima o jogador e abre o inventário do objeto. Selecionar um item retira uma unidade para as mãos e fecha o painel. Guardar item das mãos devolve a unidade a um armazenamento compatível. Espaço insuficiente preserva o item. O tempo continua avançando com o inventário do objeto aberto; não existe transferência automática ao fogão.
 
-O progresso do HTML e o da Godot são independentes. Migrar uma partida usa a
-importação do JSON compatível, não a leitura direta do armazenamento do navegador.
+A estante de panelas tem três espaços unitários e aceita somente panelas vazias. Não aceita alimentos, pratos ou panelas com comida. Sua imagem acompanha a quantidade real; comprar, mover ou carregar o móvel não gera panelas gratuitas. Guardar e reembolsar exige esvaziá-la.
 
-Critérios essenciais de aceitação:
+### Formas de liberar as mãos
 
-- Movimento sem passos obrigatórios, travamento em paredes ou velocidade diagonal extra.
-- Portas transitáveis e destinos livres, sem retorno em loop.
-- Prato oculto antes da anotação em todos os elementos da interface.
-- Nenhuma duplicação de pedido, prato, panela, utensílio ou pagamento.
-- Construção conserva conteúdo e caixa, mantendo acesso a portas e móveis.
-- Menus e perda de foco pausam corretamente; não há teclas presas ao retornar.
-- Salvar/carregar conserva os dados e mantém um backup válido após recuperação.
-- Pular horário para testes não simula abandono, queima ou entrega durante o salto.
+- Guardar o item em armazenamento compatível.
+- Colocar ingrediente na panela antes de cozinhar, quando a combinação permitir.
+- Instalar panela vazia no fogão ou apoiar uma panela na mesa de cozinha.
+- Instalar prato limpo ou apoiar refeição pronta na mesa de cozinha.
+- Servir o pedido compatível, lavar louça ou descartar comida conforme a ação disponível.
 
-As verificações e os limites de validação estão em [qa/LEIA-ME.md](godot/qa/LEIA-ME.md)
-e no [registro de revisão](godot/REVISAO.md). Testes automatizados não substituem
-avaliação humana de diversão, ritmo e clareza; Windows, exportação e áudio físico
-não devem ser considerados validados apenas pelos testes em Linux.
+Não existe inventário oculto de transporte. Os registros internos de recuperação de migração servem somente a itens antigos que não couberam nos armazenamentos.
 
-## 13. Base técnica e limites de escopo
+### Começar mobiliado
 
-O proprietário usa **Godot 4.7.2** como editor de trabalho, conforme informação
-expressa de 07/11/2026. A migração e as validações históricas foram documentadas
-em **Godot 4.6.3 Standard**. A compatibilidade da extensão nativa, a importação,
-a execução e a exportação em 4.7.2 ainda precisam de validação específica; esta
-atualização não declara esses testes realizados nem altera configurações do projeto.
-
-A apresentação e os controles são nativos Godot, com simulação JavaScript
-embarcada via QuickJS/GDExtension. A migração é híbrida; não está integralmente
-convertida para GDScript.
-
-O pacote tem bibliotecas e perfis para Windows e Linux x86-64. A validação
-registrada foi feita em Linux. Web, Android e macOS exigem trabalho adicional na
-extensão e não são plataformas de exportação prontas da versão Godot.
-
-Permanecem fora do escopo implementado: grupos de clientes, contratação e salários
-completos, progressão social/narrativa ampla, estabelecimentos vizinhos jogáveis,
-sistema de tráfego e influência da reputação sobre demanda. O protótipo histórico
-da mercearia está arquivado e não equivale a uma loja integrada à rua atual. Isso não cancela
-possíveis diretrizes do GDD original; significa apenas que não há base para
-documentá-las aqui como recursos já entregues.
-
-## 14. Rastreabilidade das revisões recentes
-
-| Decisão / entrega | Referência |
+| Recurso inicial de teste | Quantidade ou condição |
 | --- | --- |
-| Projeto Godot preservando a versão HTML | [fdf90c1](https://github.com/denerRsilva/Entre-Esquinas/commit/fdf90c1) |
-| Interação com cozinha, recuperação de saves e tela cheia nas opções | [348b77f](https://github.com/denerRsilva/Entre-Esquinas/commit/348b77f) |
-| Otimização do início mobiliado e da prévia de construção | [7f346c1](https://github.com/denerRsilva/Entre-Esquinas/commit/7f346c1) |
-| Movimento livre e deslizamento nas paredes | [8d6ab48](https://github.com/denerRsilva/Entre-Esquinas/commit/8d6ab48) |
-| Remoção das mensagens de início | [592924f](https://github.com/denerRsilva/Entre-Esquinas/commit/592924f) |
-| Rua, serviço externo e controle de horário para testes | [62787fe](https://github.com/denerRsilva/Entre-Esquinas/commit/62787fe) |
-| Revelação do prato somente após anotar o pedido | [f0fd4e9](https://github.com/denerRsilva/Entre-Esquinas/commit/f0fd4e9) |
+| Jogador | Mãos vazias e nenhum inventário pessoal. |
+| Ingredientes | 30 arroz, 30 legumes e 30 frango cru na geladeira da cozinha. |
+| Panelas | Uma instalada no fogão e três vazias na estante; quatro no total. |
+| Pratos | 12 limpos instalados na mesa de cozinha; nenhum talher exigido. |
+| Salão | Três mesas com quatro cadeiras cada nos lados compridos. |
+| Caixa | $1.500; montagem de teste não é cobrada como campanha. |
 
-Fontes complementares: [guia Godot](godot/LEIA-ME.md),
-[histórico do projeto HTML](projeto/README.md) e
-[registro de migração histórico](projeto/MIGRACAO_RESTAURANTE.md).
+Começar vazio permite montar do zero. O cenário mobiliado e a ferramenta de limpar tudo são recursos de teste, não condições finais de campanha. Saves existentes não recebem automaticamente móveis sobre um layout personalizado.
 
-## 15. Visão completa, referências e pilares
+<!-- page -->
 
-**CONFIRMADO —** Restaurante e vida na cidade em equilíbrio. A promessa é cuidar
-de um pequeno restaurante, conhecer moradores e transformar a gastronomia e a
-vida da cidade, equilibrando trabalho, relacionamentos e crescimento. A prioridade
-de produção é consolidar a diversão dentro do restaurante e desenvolver cidade
-e narrativa progressivamente. Essa ordem não elimina a dimensão social da visão.
+## 6 Cozinha física e receitas atuais
 
-| Referência confirmada | Inspiração desejada | Cuidado |
-| --- | --- | --- |
-| Stardew Valley | Cidade, rotinas, vínculos, passagem dos dias e liberdade de movimento | Não reproduzir agricultura ou sistemas sem relação com a proposta. |
-| Travellers Rest | Operação prática, produção e melhorias do estabelecimento | Evitar serviço repetitivo sem escolhas. |
-| Chef RPG | Receitas, estética gastronômica e conexão com o entorno | Preservar identidade própria e escopo viável. |
+**Implementado.** A mesa de preparo corta; a mesa de cozinha recebe a panela e emprata. Fogão, bancadas, pia e lixo não abrem janelas genéricas de trabalho. Um clique inicia a ação principal válida após a aproximação; ações alternativas ainda podem aparecer junto ao objeto.
 
-Big Ambitions não integra as referências deste conceito.
+### Fluxo de uma refeição
 
-| Pilar | Atividade | Relação com os demais |
-| --- | --- | --- |
-| Operação | Preparar, organizar estações, atender e priorizar pedidos | Capacidade e qualidade afetam satisfação e resultado. |
-| Cidade | Explorar, conhecer moradores e participar de eventos | Relações podem revelar fornecedores, receitas e oportunidades. |
-| Gestão | Comprar, definir cardápio e preços, calcular margens e coordenar equipe | Recursos e escolhas sustentam operação e crescimento. |
-| Progressão | Reformar, melhorar equipamentos, desenvolver receitas e reputação | Novas possibilidades mudam decisões e liberam tempo para a cidade. |
+1. Retirar uma unidade de ingrediente do armazenamento para as mãos.
+2. Levar frango cru ou legumes inteiros à mesa de preparo e cortar por dois segundos ativos. O resultado permanece nas mãos e conserva a qualidade. Arroz não é cortado.
+3. Clicar no fogão para adicionar o ingrediente à panela vazia instalada. Buscar os demais ingredientes, uma unidade por vez.
+4. A combinação exata identifica a receita e exibe seu ícone sobre a panela. Ingredientes incompatíveis ou excedentes são recusados sem consumo. Antes do cozimento, é possível retirar o último ingrediente com as mãos livres.
+5. Com receita completa e mãos livres, iniciar Cozinhar. O preparo continua enquanto o jogador executa outras tarefas.
+6. Retirar a panela pronta antes da queima. Ela sai do fogão e ocupa as mãos; não pode ser retirada enquanto ainda cozinha. A retirada encerra sua exposição ao calor.
+7. Apoiar a panela na mesa de cozinha e liberar as mãos. Com prato limpo disponível, empratar por dois segundos junto à mesa.
+8. Pegar o prato pronto e servir. Retirar a panela vazia da mesa para reinstalar no fogão.
 
-Cada pilar deve afetar ao menos outro. A fantasia é começar pequeno, dominar a
-operação, delegar tarefas e construir identidade gastronômica e vínculos locais.
-**EM ABERTO —** Origem do protagonista e acesso ao restaurante: herança, compra
-ou outra forma. Quase falência e quatro mesas são premissas ilustrativas.
-O tópico 7 de um brainstorm anterior consta como excluído no PDF; seu conteúdo
-não foi fornecido e não é reconstituído aqui.
+Cada novo cozimento rende uma porção. Cada empratamento produz um prato. O sistema aceita panelas antigas com mais porções apenas para conservar partidas migradas.
 
-## 16. Operação significativa, economia e autonomia
-
-### Cozinha e receitas
-
-A cozinha deve oferecer escolhas de sequência, lotes, recursos e tempo, evitando
-microcliques repetidos sem decisão. Pedidos que disputam uma estação, ingredientes
-insuficientes e garçom ocupado devem gerar consequências compreensíveis.
-Sugerir outra receita ao cliente permanece **PROPOSTO**.
-
-**PROPOSTO —** Cada receita deve declarar nome, ingredientes e quantidades,
-estações, ordem das etapas, tempos, capacidade, custo por porção, preço, margem,
-critérios de qualidade, desperdício e requisitos de desbloqueio. O exemplo de
-hambúrguer e batatas com chapa e fritadeira paralelas é ilustrativo; não acrescenta
-receita, equipamento nem produção paralela ao protótipo.
-
-### Compras e perdas
-
-**PROPOSTO —** Fornecedores diferenciados por preço, prazo, qualidade,
-disponibilidade e relacionamento. Quantidade inicial de fornecedores, validade,
-temperatura, congelamento e intensidade das perdas seguem **EM ABERTO**.
-Queima aprovada no adendo não significa aprovação de deterioração dos ingredientes.
-
-Recebimento físico e armazenamento por categoria são o funcionamento documentado.
-Pallets, carrinhos e fila de entregas da mercearia histórica não são automaticamente
-regras aprovadas para o restaurante.
-
-### Economia compreensível
-
-O fechamento deve explicar as causas do ganho ou perda de dinheiro. A visão de
-economia completa é uma **PROPOSTA**, não uma declaração de implementação de
-salários, aluguel e todos os indicadores abaixo.
-
-| Indicador | Interpretação |
-| --- | --- |
-| Receita de vendas | Total recebido pelos pratos vendidos. |
-| Custos variáveis | Ingredientes consumidos e demais despesas por prato. |
-| Margem de contribuição | Receita menos custos variáveis. |
-| Resultado operacional | Margem menos salários, aluguel e outras despesas fixas. |
-| Caixa disponível | Dinheiro para despesas e investimentos. |
-
-**EXEMPLO —** Venda de 30 e ingredientes de 12 deixam 18 antes das demais
-despesas; esses valores não substituem preços ou custos atuais.
-
-### Equipe e autonomia
-
-**CONFIRMADO —** Funcionários mantêm tarefas atribuídas, com intervenção do
-jogador nas prioridades. A evolução desejada vai de executar tarefas a coordenar
-gargalos e decidir capacidade, cardápio e investimentos. Deve continuar havendo
-escolhas relevantes mesmo com uma equipe desenvolvida.
-
-**PROPOSTO —** Mostrar falta de ingredientes, estação ocupada ou caminho
-bloqueado. Funcionário sem demanda aguarda na função. Cozinha e lavagem
-automáticas, contratação comercial, salários e progressão de equipe não são
-acrescentados por esta revisão.
-
-## 17. Cidade, relações, ecossistema e progressão
-
-A cidade é parte da visão de jogo: moradores com rotinas e preferências
-observáveis, vínculos que abrem oportunidades e acontecimentos com efeitos
-compreensíveis no restaurante. Esses sistemas amplos ainda são **PROPOSTOS**,
-além do espaço de demonstração atual.
-
-| Exemplo de relação ou acontecimento | Efeito possível, ainda proposto |
-| --- | --- |
-| Amizade com agricultor | Ingrediente sazonal e receita exclusiva. |
-| Moradora vegetariana | Preferências refletidas na procura e nos comentários. |
-| Evento em praça próxima | Mais visitantes em horários e pratos específicos. |
-| Escassez de fornecedor | Mudança de preço, oferta ou prazo. |
-
-Começar com poucos NPCs de função clara. Romances, diálogos extensos e histórias
-longas aguardam a validação do ciclo principal.
-
-O **Ecossistema Vivo da Cidade** é uma hipótese de diferencial: notícia de
-festival dá tempo para planejar; demanda e oferta mudam; o jogador decide comprar
-antes, adaptar o cardápio ou manter operação enxuta; vendas, perdas e relações
-expressam o resultado. As causas devem ser visíveis, sem variações arbitrárias e
-ocultas. A reputação atual não altera demanda automaticamente.
-
-| Fase proposta | Conteúdo | Experiência desejada |
-| --- | --- | --- |
-| Início | Poucos pratos e mesas, trabalho direto, primeiros vínculos | Conseguir fazer o restaurante funcionar. |
-| Intermediária | Equipe, especialização, novas estações e eventos | Perceber o efeito da organização. |
-| Avançada | Reputação, novas clientelas, reformas e eventos complexos | Construir um negócio com identidade. |
-
-Concorrência e um segundo estabelecimento são hipóteses de maior escopo. Uma
-segunda unidade fica fora do primeiro planejamento de produção até validar o
-jogo principal.
-
-## 18. Espaço, inventários, circulação e upgrades
-
-### Diretrizes do PDF
-
-**APROVADO —** A partida regular começa vazia; o cenário mobiliado é ferramenta
-de teste. Abrir não exige estrutura mínima. Salão, cozinha e estoque têm funções
-distintas, e o estoque equipado é opcional para abrir.
-
-Cozinha e estoque integram a mesma cena; parede separa o estoque e o acesso se dá
-pela cozinha, sem porta externa própria. Computador e recebimento integram esse
-espaço. A prateleira pode ficar na cozinha ou no estoque. Esses requisitos de
-layout devem ser confrontados com o cenário atual antes de qualquer alteração.
-
-A mochila tem dez espaços e pilhas de até 99 conforme compatibilidade do item;
-panelas com conteúdo são exceções unitárias. Armazenamentos têm inventários
-próprios por categoria. A direção aprovada é tela dividida, mochila à esquerda
-e objeto à direita; compras de utensílios e panelas entram na mochila.
-
-Ações contextuais pertencem ao alvo selecionado, exigem proximidade e ficam
-agrupadas acima dele. Clicar no chão cancela e outro alvo substitui a seleção.
-Aproximar-se sem selecionar não deve abrir ações ou a lista de recebimento.
-O PDF posicionava Inventário entre Gestão e Montar; o acesso atual à construção
-por Gestão é registrado na seção 5 e essa posição antiga não é restaurada aqui.
-
-**CONFIRMADO —** Grade para organização, colocação livre nas áreas autorizadas,
-ocupação e colisão física; movimento visual livre e fluido. O controle contínuo
-posterior da Godot permanece documentado na seção 4. Grade 24 × 16 e células de
-40 px pertencem ao registro histórico da 0.10.3, sem fixar dimensões comerciais.
-
-Corredores de largura de uma pessoa devem produzir espera ou desvio e tornar
-perceptível a diferença entre lotação e eficiência. Prioridade entre personagens,
-cruzamento diagonal, tempo máximo de espera e resolução de impasses continuam
-**PENDENTES** onde não houver especificação ou teste atual. Não se declara
-comprovada a ausência de deadlocks nesta revisão documental.
-
-### Melhorias por setor
-
-**APROVADO COMO DIREÇÃO —** Cada setor terá upgrades com efeitos perceptíveis.
-Catálogo final, preços e disponibilidade por fase permanecem pendentes.
-
-| Proposta de melhoria | Benefício a avaliar |
-| --- | --- |
-| Panela adicional ou fogão com mais bocas | Alternância ou paralelismo, conforme capacidade a definir. |
-| Frigideira, chapa e utensílios especializados | Técnicas e receitas novas. |
-| Geladeira maior ou freezer | Capacidade e conservação, quando esses sistemas forem definidos. |
-| Câmara fria | Expansão futura com investimento, espaço e custo; sem armazenamento infinito. |
-
-Antes da compra, mostrar preço, espaço, instalação e consequência prática.
-Melhoria cosmética deve ser identificada como personalização. Recepção, retirada
-para viagem, decoração com efeito de reputação, plantas e divisórias são propostas,
-sem constituir requisitos de abertura.
-
-Os detalhes de freezer, validade, compartilhamento entre geladeiras, custo
-definitivo de reorganização/revenda e upgrades do MVP seguem **EM ABERTO**.
-Reembolso integral e restrições atuais de setores descrevem o protótipo, não
-balanceamento comercial definitivo.
-
-## 19. Qualidade e ponto de cozimento — adendo de 04/11
-
-Esta seção incorpora o adendo aprovado do PDF, que substitui a antiga exclusão
-de queima. É requisito de design; detalhes visuais e sonoros abaixo não são
-declarados testados ou integralmente implementados nesta atualização.
-
-### Escala e apresentação
-
-**APROVADO —** Ingredientes e pratos usam a mesma escala: Comum sem estrela,
-Prata com estrela cinza/prateada, Ouro com estrela amarela e Roxa com estrela
-roxa. O nome do nível roxo não depende de “Irídio”.
-
-A qualidade do lote deve derivar da média ponderada pelas quantidades de
-ingredientes efetivamente consumidas, sem sorteio oculto, e ser preservada no
-empratamento. Fórmula, limiares e seleção das pilhas precisam de especificação
-rastreável; o simples fato de existirem no protótipo não aprova seu balanceamento.
-
-**Regra obrigatória:** estrelas somente nos itens de ingredientes e pratos
-prontos, inclusive em inventários, armazenamento, compras e serviço.
-Não mostrar estrelas no preparo da receita, barra, fogão/panela ou alertas de
-cozimento, nem antecipar qualidade atual, prevista ou potencial durante o preparo.
-A degradação continua internamente e é comunicada pelos estados de cozimento.
-
-### Estados e feedback aprovado
-
-Tempos contados após concluir a receita, em segundos ativos; são parâmetros
-provisórios para teste.
-
-| Estado | Intervalo de referência | Barra e sinais | Panela e som |
+| Receita | Ingredientes preparados por cozimento | Cozinhar | Preço inicial |
 | --- | --- | --- | --- |
-| Cozinhando | Até concluir a receita | Barra preenche com símbolo de chama | Fogo e vapor leve. |
-| No ponto | 0 até 8 s | Verde cheia com confirmação; esvazia na janela segura | Breve brilho e som curto de conclusão. |
-| Passando do ponto | 8 até 20 s | Laranja preenchendo com alerta | Vapor intenso, início de fumaça e novo aviso sonoro. |
-| Perto de queimar | 20 até 25 s | Vermelha quase cheia e alerta evidente | Fumaça escura e conteúdo escurecendo. |
-| Queimado | A partir de 25 s | Símbolo próprio substitui a barra | Conteúdo escuro e orientação para retirar e descartar. |
+| Arroz com legumes | 1 arroz e 1 legumes cortados | 6 s | $14 |
+| Sopa de legumes | 2 legumes cortados | 5 s | $12 |
+| Frango com arroz | 1 arroz e 1 frango cortado | 8 s | $20 |
 
-Uma única barra muda de função. Usar símbolos além das cores, evitar piscadas e
-alarmes constantes e reservar a maior urgência para perto da queima. Nenhuma
-etapa mostra estrelas. Os instantes exatos das transições exigem teste de limite.
+### Limites e cancelamento
 
-Retirar a panela cheia encerra cozimento e perda por calor. Empratar conserva o
-resultado. Menus que pausam a simulação também pausam esses contadores.
-Queimado é estado de perda separado das quatro qualidades; não pode ser servido
-e deve ser descartado. Incêndio não integra esta primeira versão.
+O código atual controla um cozimento ativo por vez, mesmo com mais fogões instalados. A mesa tem apoio de uma panela, capacidade de 12 refeições prontas e até 99 pratos limpos. Esses limites e tempos são parâmetros de teste; não há frigideira, caldeirão ou óleo implementados.
 
-O aviso compacto fora da câmera pode mostrar arte da receita e símbolos de
-pronto/alerta, sem estrela e sem mover a câmera. A qualidade participa da
-satisfação juntamente com as esperas. O cliente paga o preço combinado ao
-registrar o pedido; não há preço automático por qualidade aprovado neste adendo.
+Corte pode ser cancelado sem consumir o ingrediente. Afastar-se pausa corte e empratamento. Durante trabalho manual, transferências conflitantes são bloqueadas. Cancelar empratamento conserva o recipiente e o prato. Receita flexível por família de ingredientes ainda é direção futura, não o reconhecimento atual.
 
-### Aceitação e conservação
+<!-- page -->
 
-- Preservar qualidade em compras, entregas, transporte, armazenamento, retirada,
-  sobras, pratos e salvamento; especificar separação de pilhas diferentes.
-- Testar pausa, limites de tempo, retirada no instante da queima, mochila cheia,
-  empratamento parcial, descarte e serviço por funcionário.
-- Confirmar ausência de estrelas em todo preparo e em alertas fora da câmera,
-  e apresentação correta nos ingredientes e pratos finais.
-- Preservar receitas, rendimento, rotas e funções de equipe, salvo necessidade
-  explicitamente especificada para esse sistema.
-- Tratar migrações sem apagar ou substituir indevidamente a partida original.
+## 7 Qualidade, calor e limpeza
 
-## 20. Vertical slice, experiência e validação
+**Implementado.** Ingredientes e refeições usam quatro níveis de qualidade. O preparo calcula a média dos níveis dos ingredientes efetivamente consumidos, ponderada pelas quantidades e arredondada para baixo. Cortar, transportar e salvar preservam a qualidade; deixar comida pronta no fogo pode reduzi-la.
 
-O vertical slice deve demonstrar preparação, almoço, intervalo, jantar e
-fechamento. A validação operacional vem primeiro; metas sociais e de eventos
-são posteriores e não bloqueiam o teste do restaurante.
-
-| Elemento | Escopo sugerido pelo PDF, ainda proposto |
-| --- | --- |
-| Restaurante | 3–4 mesas, duas estações e 3–5 receitas. |
-| Cidade | Uma rua ou praça, três NPCs significativos e um fornecedor. |
-| Trabalho | Dois serviços com pedidos, preparo, serviço e pagamento. |
-| Gestão | Compras, estoque simplificado, relatório e uma melhoria. |
-| Relações | Uma amizade que altera oferta ou oportunidade. |
-| Equipe | Uma tarefa contínua com feedback de impedimentos. |
-| Evento | Uma situação local com efeito visível na demanda. |
-
-### Critérios de Game Design
-
-- Completar um dia sem instruções externas extensas.
-- Entender por que pedidos disputam um recurso e perceber ao menos duas escolhas
-  com consequências diferentes e observáveis.
-- Cozinhar sem microcliques repetidos que não acrescentam decisão.
-- Reconhecer no relatório as principais causas do resultado.
-- Na etapa social, perceber o efeito concreto de um morador ou evento no negócio.
-- Registrar interesse real em jogar outro dia, clareza, erros, espera e tempo em
-  transferências. Testes automatizados não comprovam diversão.
-
-### Cobertura funcional herdada do PDF
-
-Os critérios COZ-01 a COZ-10 pedem: encaixes compatíveis; ingredientes completos
-antes do consumo; confirmação sem duplicar lote; retirada sem espaço conservando
-comida; empratamento sem perda; bloqueios explícitos ao mover/guardar; save e
-migração preservando progresso; regressão de serviços, garçom e limpeza; estados
-operacionais claros; playtest do fluxo. A ausência de espaço conserva itens,
-mas não interrompe automaticamente a degradação de comida que continua no fogo.
-
-GRID-01 a GRID-09 pedem: dimensões e encaixe corretos; ausência de sobreposição
-indevida; passagem unitária; resolução de impasses; rotas alternativas; atualização
-dos caminhos após reformas; colocação inválida sem cobrança/perda; acessibilidade
-das áreas essenciais; diferença perceptível entre layouts.
-
-CA-01 a CA-08 incluem abertura vazia sem clientes inválidos, requisitos por tarefa,
-estoque opcional, compatibilidade de receitas, distinção dos serviços, conservação
-ao comprar/remover, melhorias mensuráveis e proteção de pontos indispensáveis.
-
-Esses são critérios a verificar na versão atual, não resultados novos de QA.
-O PDF relata testes da 0.10.3; os registros Godot relatam verificações posteriores
-em Linux/4.6.3. Nenhum deles comprova execução na 4.7.2 informada pelo proprietário.
-
-## 21. Conciliação entre PDF e repositório
-
-| Assunto | PDF v1.4 e adendos | Registro atual / tratamento nesta revisão |
+| Nível | Apresentação | Multiplicador de compra |
 | --- | --- | --- |
-| Base | 0.10.3, save 4 | Godot derivada da 0.21.2, save 9. Preservar registro atual; não retroceder formato. |
-| Editor | Não estabelece a versão atual do proprietário | Godot 4.7.2 informada nesta conversa; histórico de testes em 4.6.3 preservado. |
-| Referências | Stardew Valley, Travellers Rest e Chef RPG | Restaurada a visão completa, além da referência de movimento. |
-| Fogão | Retirar inventário genérico; slot de panela e consumo da mochila | Simplificação já documentada; manter conservação e ações contextuais. |
-| Modelo híbrido C | Intervenções e presença ainda pendentes | Cozimento autônomo documentado. Não considerar que isso resolve ou aprova todas as intervenções do híbrido. |
-| Comida transportável | Mochila como destino; panela instalada entre receitas; representação ainda pendente | Panela cheia móvel documentada. Diferença de design a confirmar antes de eventual mudança; não criar recipiente novo nem apagar o atual. |
-| Bancada | Slot de pratos; utensílio e fonte do garçom pendentes | Pratos, talher instalado e pratos prontos documentados. Registrar solução atual sem eliminar a rastreabilidade da diferença. |
-| Empratamento | Ação imediata na base antiga | Dois segundos junto à bancada no registro atual; parâmetro provisório. |
-| Horários e calendário | Propostos ou pendentes na base antiga | Horários configuráveis, calendário e reputação já documentados; não retornar ao avanço de dia pelo jantar. |
-| Satisfação | Pesos da qualidade por definir | 35%/35%/30% documentados como teste, sem aprovação de balanceamento final. |
-| Qualidade/queima | Aprovadas em adendo; estrelas apenas nos itens | Requisitos detalhados incorporados; verificar conformidade visual e sonora na versão atual. |
-| Construção e navegação | Prévia, rotação e regras de circulação parcialmente propostas | Preservar evoluções registradas e manter QA de gargalos/impasses. |
-| Cidade e relações | Parte central da visão; desenvolvimento progressivo | Rua demonstrativa atual não equivale ao ecossistema completo. |
-| Plataforma | PC principal | Windows/Linux previstos; não assumir Android, web ou macOS prontos na migração. |
+| Comum | Sem estrela | 1 |
+| Prata | Estrela cinza ou prateada | 1,25 |
+| Ouro | Estrela amarela | 1,5 |
+| Roxa | Estrela roxa | 2 |
 
-Pendências antigas não devem ser repetidas como ausência técnica quando o
-repositório já registra uma solução. Tampouco uma solução existente deve apagar
-uma divergência de design sem decisão identificada.
+Estrelas aparecem somente nos ingredientes e pratos correspondentes. Não usar estrelas em personagem, fogão, mesa ou panela vazia. O feedback de preparo inclui progresso, ícone da receita, estados de calor e sinais sonoros; a câmera não salta para o fogão.
 
-## 22. Decisões, prioridades e riscos
+### Comida pronta no fogão
 
-### Registro consolidado
-
-- D01: almoço e jantar, abertura voluntária sem estrutura mínima; a versão atual
-  acrescenta janelas de horário documentadas.
-- D02: estoque opcional para abrir, integrado e acessível pela cozinha.
-- D03: mochila de dez espaços, pilhas compatíveis até 99 e armazenamento dividido.
-- D04: organização por grade com movimento livre e fluido.
-- D05: simplificação do fogão/bancada e modelo híbrido C aprovados no PDF;
-  diferenças e intervenções ainda por conciliar na seção 21.
-- D06: comida recolhida vai à mochila, sem desaparecimento por falta de espaço;
-  representação transportável permanece diferença rastreada.
-- D07: 0.10.3 era a base histórica selecionada no PDF; a base desta consolidação
-  é o repositório Godot derivado da 0.21.2.
-- D08: diversão do restaurante primeiro; cidade e narrativa avançam progressivamente.
-- D09: adendo de 04/11 aprova qualidade e queima, com estrelas somente nos itens.
-- D10: em 07/11, Dener informa uso de Godot 4.7.2 e solicita esta atualização
-  documental diretamente no repositório.
-
-### Backlog recomendado, sem implementação nesta revisão
-
-1. Validar importação, extensão nativa, execução, saves e exportação na Godot
-   4.7.2 utilizada pelo proprietário.
-2. Conciliar as diferenças de cozinha da seção 21 e especificar o que ainda
-   exigir decisão, sem refazer sistemas já documentados.
-3. Verificar cozinha, qualidade, conservação, circulação e interface; fazer
-   playtest de um dia com almoço, intervalo, jantar e fechamento.
-4. Ajustar ritmo, capacidade e economia com evidência; definir upgrades do MVP.
-5. Desenvolver poucos vínculos e um evento com efeitos comerciais verificáveis,
-   antes de ampliar narrativa e cidade.
-
-### Riscos e mitigação
-
-| Risco | Mitigação recomendada |
+| Tempo ativo após terminar | Estado atual |
 | --- | --- |
-| Escopo excessivo | Marcos pequenos por dependência e um dia jogável antes de ampliar sistemas. |
-| Cozinha cansativa | Lotes, sequência e ações com decisão, medindo transferências e repetição. |
-| Cidade decorativa | Relações e acontecimentos com efeitos concretos e causas legíveis. |
-| Automação sem escolhas | Trocar esforço manual por decisões gerenciais relevantes. |
-| Economia opaca | Relatório com receitas, custos e causas do resultado. |
-| IA cara ou impasses | Simulação proporcional ao valor percebido e testes de fluxo em corredores. |
-| Alteração de inventários e recipientes | Rastrear identidade, conteúdo, garçom e migração sem perda/duplicação. |
-| Mudança de versão da Godot | Validar extensão e exportações na versão efetivamente utilizada. |
+| Antes de 8 segundos | No ponto; janela segura. |
+| A partir de 8 segundos | Passando do ponto; qualidade começa a cair. |
+| A partir de 20 segundos | Perigo próximo de queima. |
+| A partir de 25 segundos | Queimado; não pode ser empratado como comida utilizável. |
 
-Relatos antigos, como travamento ao posicionar prateleira, exigem reprodução na
-base atual antes de serem classificados como bugs confirmados. Otimizações
-posteriores registradas não substituem esse teste específico.
+São parâmetros de teste. De 8 a 20 segundos, a qualidade inicial decai até o nível comum; o estado de queima é separado. Retirar a panela conserva a qualidade no instante da retirada e encerra a degradação pelo fogo. Falta de espaço ou mãos ocupadas não pausa automaticamente o calor.
 
-## 23. Ideias potenciais e histórico documental
+### Louça e descarte
 
-### IP-001 — Levar a câmera ao fogão pelo aviso
+Depois do consumo, a louça fica na mesa e interfere em sua liberação. Recolher entrega um prato sujo por vez às mãos. A pia converte a unidade carregada em prato limpo; o jogador a leva à mesa de cozinha. Não há lavagem obrigatória de panelas acrescentada a este fluxo.
 
-**NÃO APROVADA para implementação.** Origem: 04/11/2026, adendo do PDF.
+Pia e lixeira permitem descartar comida transportada. Descartar uma panela com refeição conserva a panela vazia; descartar uma refeição empratada conserva o prato sujo. Quantidades desperdiçadas entram na conservação de refeições. Uma panela queimada precisa ser descartada antes de reutilizada.
 
-Ideia: tocar no aviso de comida pronta ou passando do ponto levaria a câmera ao
-fogão correspondente, sem retirar automaticamente a panela. Benefício possível:
-localizar equipamento fora da tela. Risco: interromper o controle e a leitura do
-cenário.
+Validade de ingredientes, contaminação, refrigeração por temperatura e desgaste de óleo não estão implementados nem são requisitos finais desta revisão.
 
-**Regra de design vigente no PDF:** avisos não deslocam a câmera, nem por toque
-nem automaticamente. Retomada depende de nova aprovação explícita do proprietário,
-com retorno da câmera e teste de usabilidade definidos. Guardar a ideia não a
-transforma em requisito aprovado.
+<!-- page -->
 
-### Histórico e fontes
+## 8 Clientes, atendimento e equipe
 
-| Data | Registro |
+**Implementado.** Clientes chegam individualmente. Reservam uma mesa inteira até terminar a visita e retirar a louça; grupos e compartilhamento entre desconhecidos não estão implementados. A primeira chegada ocorre após oito segundos ativos e as seguintes são espaçadas por 25 segundos, quando houver condições, como parâmetros de teste.
+
+O prato desejado permanece oculto até o pedido ser anotado pelo jogador ou garçom. Antes disso, personagem, ação e fila de pedidos indicam espera sem antecipar o prato. Depois da anotação, a receita aparece e pode ser priorizada no painel de pedidos.
+
+### Paciência e resultado da visita
+
+A espera por atendimento e pela comida tem contadores separados. Anotar encerra a primeira fase e inicia a segunda. No limite exato, abandono tem prioridade sobre entrega. Não há pagamento por pedido perdido; os ingredientes já consumidos não retornam. Pratos e recipientes não podem desaparecer em trânsito.
+
+| Perfil técnico atual | Espera para anotar | Espera pela comida |
+| --- | --- | --- |
+| Impaciente | 40 a 60 s | 60 a 90 s |
+| Normal | 60 a 90 s | 90 a 150 s |
+| Paciente | 90 a 120 s | 150 a 210 s |
+
+Os perfis têm pesos iguais de sorteio no protótipo. Acima de 50% do tempo restante, o indicador é paciente; entre 50% e 20%, perde paciência; no trecho final, fica estressado; ao abandonar, sinaliza saída. Feliz aparece após serviço satisfatório. Estes perfis não definem as futuras profissões dos clientes.
+
+A satisfação combina atendimento, espera pela comida e qualidade com pesos atuais de 35%, 35% e 30%. Classes: muito satisfeito a partir de 85, satisfeito a partir de 65, neutro a partir de 40 e insatisfeito abaixo de 40. Probabilidades de avaliação são parâmetros: elogio de 60% e 20% nas duas classes superiores; reclamação de 5%, 35% e 75% para neutro, insatisfeito e abandono. Não confundir chance de avaliação com pagamento garantido.
+
+### Funcionários de teste
+
+Existem dois funcionários gratuitos com atribuição contínua de Parado, Logística ou Garçom. Logística transporta entre recebimento e armazenamentos compatíveis. Garçom anota pedidos e busca refeições prontas na mesa de cozinha para servir; não corta nem cozinha.
+
+Mudanças de tarefa respeitam cargas em trânsito. Salários, contratação comercial, níveis de funcionários e cozinha ou lavagem automáticas não estão implementados. A autonomia futura deve preservar decisões do jogador, sem tratar o estabelecimento totalmente automático como meta aprovada.
+
+<!-- page -->
+
+## 9 Relógio, calendário e reputação
+
+**Implementado.** O dia começa às 06:00 e termina às 02:00 da madrugada seguinte. Meia-noite não avança a data jogável. Cada dez minutos do relógio correspondem atualmente a sete segundos de simulação ativa.
+
+| Serviço padrão | Início | Fim |
+| --- | --- | --- |
+| Almoço | 11:00 | 15:00 |
+| Jantar | 18:00 | 22:00 |
+
+Horários são configuráveis em Gestão e Turnos, em blocos de dez minutos, sem sobreposição. Alterar exige serviço concluído. Abrir antes do início ou depois do fim é recusado. Fechar cedo mantém o mesmo período; não adianta o calendário.
+
+Ao fim do horário, novas entradas param. Clientes presentes e preparos continuam. Às 02:00, a virada aguarda pendências do serviço; não apaga clientes, pedidos ou comida para forçar um novo dia. Fechamento financeiro e despesa diária ocorrem uma vez na transição para o dia seguinte.
+
+O calendário possui sete dias da semana e quatro estações de 28 dias cada. Seus nomes atuais são Primavera, Verão, Outono e Inverno. Essa estrutura não comprova safra sazonal, clima ou eventos associados já implementados.
+
+### Reputação
+
+A reputação começa em zero, fica entre 0 e 100 e registra avaliações por visita. Elogio acrescenta um ponto; reclamação ou abandono retiram um ponto por visita, sem duplicar os dois efeitos. A mesma visita não pode ser processada duas vezes.
+
+| Pontuação mínima | Faixa atual |
 | --- | --- |
-| 30/10/2026 | Direção de grade e circulação referenciada no PDF. |
-| 31/10/2026 | Decisões de layout e inventário referenciadas no PDF. |
-| 03/11/2026 | GDD v1.4 consolidado sobre a base 0.10.3. |
-| 04/11/2026 | Adendo de qualidade, ponto e queima; IP-001 preservada sem aprovação. |
-| 07/11/2026 | Integração do PDF ao GDD do repositório, preservando evoluções Godot e registrando uso da versão 4.7.2. |
+| 0 | Desconhecido |
+| 20 | Pouco conhecido |
+| 40 | Reconhecido |
+| 60 | Bem avaliado |
+| 80 | Referência local |
 
-Fonte primária desta integração: PDF enviado pelo proprietário,
-`GDD_Entre_Esquinas_Restaurante_v1_4.pdf`. O arquivo PDF não foi adicionado ao
-repositório nesta revisão; seu conteúdo de design foi consolidado neste Markdown.
-Fontes técnicas complementares permanecem vinculadas na seção 14.
+No código atual, reputação não multiplica demanda nem modifica preços automaticamente. O histórico de visitas e avaliações aparece na Gestão. Faixas, pesos e variações são parâmetros de teste.
 
-Esta revisão altera somente o GDD. Não executa migração de engine, mudanças de
-mecânica ou novos testes; os estados e resultados anteriores permanecem
-atribuídos às suas respectivas bases.
+### Pausas e continuidade
 
-## 24. Reformulação física posterior ao PDF
+Construção, livro de receitas, menus administrativos e perda de foco suspendem a simulação. Inventários de geladeiras, prateleiras e estante de panelas mantêm o tempo ativo. Abrir armazenamento interrompe o controle de movimento, mas não congela os clientes ou o fogo. Retomar não deve somar o tempo passado em segundo plano.
 
-Decisão expressa do proprietário nesta conversa: implementar somente na Godot o
-plano de reformulação enviado, com aprovação de **uma porção por cozimento**,
-**remoção da exigência de talher** e **catálogo do computador como exceção** às
-ações sem janela. Esta decisão substitui descrições históricas conflitantes de
-lotes de quatro, consumo direto de receita da mochila e transporte automático de
-panela cheia para a mochila presentes nas seções 2, 18, 21 e 22.
+<!-- page -->
 
-A seção 7 descreve o fluxo novo. O objetivo e as demais propostas do PDF seguem
-preservados. A mesa de preparo corta; a nova mesa de cozinha emprata. Armazenamentos
-abrem por um clique após aproximação e não pausam. Ações alternativas usam controles
-junto ao objeto, sem painéis de receita ou empratamento.
+## 10 Economia, compras e interface
 
-O formato de save passa a 10. A migração conserva refeições, utensílios e panelas
-antigas com suas porções, converte bancadas antigas em mesas de cozinha sem alterar
-suas posições e não adiciona móveis em locais potencialmente bloqueados. A mesa
-de corte pode ser comprada em partidas migradas. O cenário mobiliado novo contém
-as duas mesas. Corte, panela apoiada e itens nas mãos são persistidos.
+**Implementado.** A economia atual usa dinheiro genérico representado por $. Caixa inicial de $1.500 e despesa diária de $12 são parâmetros do protótipo. Elos e escambo não substituíram esse dinheiro no código.
 
-Tempos e preços são parâmetros de teste. A implementação foi verificada em Linux
-com Godot 4.6.3 e QuickJS; a Godot 4.7.2 usada pelo proprietário continua sendo o
-ambiente a validar por ele. HTML não recebe esta alteração. Detalhes e comandos de
-QA: [COZINHA-FISICA.md](godot/COZINHA-FISICA.md).
+### Compras atuais no computador
 
-## 25. Inventário permanente — cinco slots
+O computador oferece Fornecedor, Utensílios, Cardápio e preços e Entregas. Ingredientes podem ser encomendados em quantidades de 1 a 100, com qualidade selecionável. A compra debita o caixa e gera uma entrega; não põe todo o lote nas mãos. A entrega leva cinco segundos ativos e o recebimento tem capacidade atual de 60 unidades.
 
-Decisão posterior do proprietário: remover o botão da mochila e mostrar o inventário permanentemente, em barra inspirada na organização de Stardew Valley, com **apenas cinco slots reais**. Clique ou teclas 1–5 selecionam o item; a seleção não pausa nem abre janela. Quantidade, ícone, tooltip e destaque identificam o conteúdo e o slot ativo. O atalho I e a janela de mochila deixam de fazer parte do acesso normal. A barra fica oculta no início e na construção; nos demais menus permanece na camada do jogo.
+| Item comum | Preço por unidade | Destino da compra |
+| --- | --- | --- |
+| Arroz | $2 | Entrega ao recebimento. |
+| Legumes | $2 | Entrega ao recebimento. |
+| Frango cru | $4 | Entrega ao recebimento. |
+| Panela vazia | $25 | Uma unidade nas mãos livres. |
+| Prato limpo | $5 | Uma unidade nas mãos livres. |
 
-Geladeiras e prateleiras mantêm dez espaços. Na migração para formato 11, os excedentes do inventário antigo são preservados para recolhimento na própria barra, respeitando capacidade e qualidade. Esses registros de migração não ampliam a capacidade de cinco slots no gameplay. Esta decisão prevalece sobre referências históricas a dez espaços de mochila nas seções anteriores.
+Talher não é vendido nem exigido. O jogador recolhe ingredientes do recebimento um por vez; logística pode auxiliar. Cardápio permite ativar receitas e ajustar preço de $1 a $100. Pedidos anotados mantêm o preço combinado.
 
-## 26. Item selecionado visível na mão
+Compras diminuem o caixa; ingredientes entram no custo quando efetivamente usados no preparo. O relatório mostra receita, ingredientes consumidos, compras, investimentos, clientes pagos e perdidos, além de resultado e caixa no fechamento. Aluguel, salários completos e financiamento não fazem parte da economia implementada.
 
-O item do slot selecionado é mostrado na mão do jogador e acompanha a direção e o deslocamento do personagem. A troca por clique ou pelas teclas 1–5 atualiza a imagem; slot vazio não mostra item. Ingredientes inteiros/cortados, utensílios, panelas e pratos usam a representação correspondente.
+### Organização da interface
 
-A apresentação do slot não transfere, reserva, consome ou duplica o item e não impede ações por si só. Se o jogador já transporta fisicamente uma panela ou prato, essa carga tem prioridade visual sobre o slot para não mostrar dois itens nas mesmas mãos. NPCs mostram apenas suas próprias cargas. Estrelas continuam restritas aos ingredientes e pratos, sem estrelas em panelas/preparo.
+| Acesso | Conteúdo atual |
+| --- | --- |
+| Gestão | Turnos, Modo construção, Equipe, Fechamento, Clientes, Calendário e Reputação. |
+| Opções | Câmera e tela cheia, Salvar e carregar, Testes e Primeiros passos. |
+| Livro de receitas | Botão ao lado de Opções; três receitas com quantidades, corte, tempo e sequência de preparo. A consulta pausa. |
+| Tela inicial | Começar vazio, Começar mobiliado e Tutorial recolhível. Sem leitura longa obrigatória. |
 
-Verificação nativa: `qa/ItemNaMaoUI.gd`, Godot 4.7.2 Linux sem janela, `FALHAS: 0`.
+A interface usa o tema visual anterior com molduras, ícones e artes de itens. O livro já existe; não deve ser tratado como sugestão futura. Não há botão de mochila ou barra de cinco slots. Avisos de ações e erros continuam, mas instruções repetitivas de trazer ingrediente e atalhos redundantes de corte e retirada foram removidos.
 
-## 27. Animação nas diagonais
+<!-- page -->
 
-Nas diagonais, a animação prioriza cima ou baixo enquanto houver deslocamento vertical efetivo, sem alternar a direção por pequenas diferenças numéricas entre os eixos. Quando o eixo vertical está bloqueado e resta somente movimento horizontal, a animação acompanha o deslizamento lateral. A alteração é visual e preserva velocidade, colisões e controles.
+## 11 Salvamentos, ferramentas de teste e plataformas
 
-Regressão verificada na Godot 4.7.2 Linux, sem janela: as quatro diagonais foram reproduzidas com falha antes da correção e passaram depois, com variação de duração dos quadros. `MovimentoUI.gd`: `FALHAS: 0`; `movimento.test.cjs`: 13 cenários passaram.
+**Implementado.** O formato atual de salvamento é 12, com chave `entre-restaurante-12` e arquivo Godot `user://restaurante.json`. Inclui mãos, conteúdo dos móveis, corte, cozimento, panela apoiada, refeições, compras, posição fracionária, relógio, calendário, reputação e horários. Teclas pressionadas não persistem.
 
-## 28. Painel de posicionamento na construção
+### Migração e segurança
 
-O painel exibe apenas quatro opções organizadas em uma linha horizontal: **Girar**, **Confirmar posição**, **Guardar e reembolsar** e **Cancelar**. O nome do móvel e os textos de posição válida, exploração do mapa e orientação da cadeira deixam de aparecer nesse painel. Ao comprar um móvel novo, a opção de guardar continua oculta. A prévia e as regras de validade permanecem ativas.
+O carregamento valida uma cópia antes de substituir a partida. Há backup e importação de JSON compatível. Itens das mochilas antigas são transferidos para armazenamentos, preservando quantidade e qualidade. Excedentes ficam em recuperação acessível pelo painel do armazenamento, uma unidade por vez; não formam uma mochila de gameplay.
 
-## 29. Cadeiras nas mesas de dois tiles
+Panelas antigas preservam suas porções. Bancadas anteriores são convertidas para mesa de cozinha sem reorganizar a planta; a mesa de corte pode ser comprada depois. Cadeiras incompatíveis e talheres antigos são conservados por compatibilidade. Nenhum recurso deve ser apagado para adequar uma partida ao novo fluxo. Saves do HTML e da Godot são independentes; importar JSON não é sincronização automática.
 
-As mesas de dois tiles recebem assentos apenas nos lados compridos, com a cadeira voltada para a mesa. Nas mesas horizontais, há dois lugares acima e dois abaixo; ao girar a mesa, os lugares acompanham os lados compridos. As pontas não aceitam cadeiras, independentemente da orientação escolhida. A prévia e a confirmação da construção aplicam a mesma regra; posições recusadas não cobram nem alteram o móvel.
+### Ferramentas de teste
 
-“Começar mobiliado” mantém três mesas, cada uma com quatro cadeiras nessa configuração, conforme a referência enviada. Uma mesa pode atender com menos cadeiras válidas; não foi acrescentado requisito de completar os quatro lugares. Cadeiras isoladas podem ser reorganizadas como móveis, mas não recebem clientes.
+Opções e Testes permitem avançar o relógio, em blocos de dez minutos, somente para a frente entre 06:00 e 02:00 do dia atual. O salto não simula o intervalo de paciência, preparo ou entrega; aplica as regras de encerramento e virada sem abrir o serviço automaticamente. Limpar tudo apaga móveis e itens de teste, não reembolsa e só afeta o arquivo salvo após gravar.
 
-Saves antigos preservam seus móveis. Cadeiras nas pontas ou voltadas para fora deixam de ser assentos; o jogador pode reorganizá-las. Atendimentos em andamento e recolhimento de louça antiga continuam possíveis, sem apagar recursos. Uma reforma não relacionada não exige corrigir todo o layout antigo de uma vez.
+### Estado técnico
 
-## 30. Jogador sem inventário — transporte somente nas mãos
+A Godot controla janela, entrada, interface, apresentação, áudio e disco. Regras JavaScript executam dentro do processo pela GDExtension RestauranteVM com QuickJS. Não é uma conversão integral para GDScript e não exige Node.js para jogar.
 
-Decisão mais recente: remover o inventário do jogador e a barra de cinco slots, sem deixar painel substituto nessa área. O jogador transporta uma unidade por vez nas mãos. Esta decisão substitui os fluxos de mochila/seleção das seções 2, 7, 8, 25 e 26. A geladeira continua com inventário; retirar um item coloca uma unidade nas mãos e guardar devolve a um armazenamento compatível. Sem transferência automática entre geladeira e fogão.
+| Base ou plataforma | Estado registrado |
+| --- | --- |
+| Editor | Proprietário usa Godot 4.7.2; há validação Linux sem janela documentada nessa versão. Histórico de migração em 4.6.3 preservado. |
+| Windows e Linux PC | Bibliotecas x86-64 e perfis de exportação. Validação documentada predominantemente em Linux. |
+| Android | APK de teste 0.21.2-godot.4, código 21204, Android 7 ou superior, assinatura de depuração. Instalação e desempenho físico ainda precisam de teste. |
+| HTML | Versão anterior preservada em dist e projeto; não recebeu automaticamente a cozinha recente da Godot. |
+| macOS e web Godot | Sem exportação pronta comprovada por esta revisão. |
 
-No cenário mobiliado, arroz, legumes e frango começam na geladeira da cozinha (30 de cada); o jogador começa de mãos vazias, com uma panela no fogão e 12 pratos limpos na mesa de empratamento. Não há panelas extras no jogador. A mesa de preparo permite cortar tanto legumes quanto frango cru; o resultado permanece nas mãos e segue à panela. As receitas atuais com frango exigem frango cortado. O corte leva dois segundos ativos por unidade e preserva qualidade.
+O projeto ainda declara 0.21.2-godot.1 em sua configuração, enquanto o APK declara .4; são metadados distintos existentes. Esta revisão não altera versões de executável. A grade lógica continua em 40 pixels e o viewport Godot em 960 por 700.
 
-Retirada, instalação de utensílios, empratamento, pratos prontos, serviço, recolhimento de louça, lavagem, compras e recebimento seguem o limite de uma unidade nas mãos. Mãos ocupadas não podem receber outro item. A panela pronta continua sendo apoiada na mesa de cozinha; cada empratamento produz uma porção. O garçom mantém suas funções.
+<!-- page -->
 
-O save passa ao formato 12. Itens dos antigos slots são preservados nos armazenamentos; excedentes de migração podem ser recuperados pelo painel da geladeira, sem formar um inventário de transporte do jogador. Preparos e alimentos antigos são conservados. O fluxo e as verificações estão em [COZINHA-FISICA.md](godot/COZINHA-FISICA.md).
+## 12 Desenvolvimento futuro e propostas
 
-## 31. Talheres fora da loja e sem exigência operacional
+### Direções aprovadas ainda não implementadas
 
-Computador → Utensílios oferece somente panela vazia e prato limpo. A compra de colher/talher foi removida da interface e bloqueada na regra de compra. Nenhuma ação de cozinha exige talher. Itens antigos permanecem preservados por compatibilidade com salvamentos, sem necessidade operacional.
+A direção da taverna nuclear fictícia substitui a ambientação brasileira acolhedora como objetivo. A operação existente deve ser preservada enquanto o universo é incorporado. A aprovação abaixo é de conceito; regras detalhadas e tarefas de código precisam de escopo explícito.
 
-## 32. Estante de panelas
+- Retirar o computador e oferecer frango, legumes e arroz em comerciante próximo à taverna, com deslocamento do jogador até ele.
+- Ampliar obtenção por produtores locais, feiras de caravanas, trocas com clientes, coleta em áreas recuperadas e expedições encomendadas.
+- Usar tipos de clientes ligados às ocupações do mundo, além dos perfis técnicos de paciência.
+- Exigir frigideira e óleo para frituras e caldeirão para sopas.
+- Permitir substituições controladas de ingredientes em receitas como sopas.
+- Encomendar móveis de madeira ao marceneiro e equipamentos a especialistas; filtro de água habilita bebidas e recuperação de ruas abre oportunidades.
+- Incorporar indisponibilidade temporária de ingredientes, mais movimento previsto no jantar, abundância de um vegetal e encomendas de refeições, com informação antes da consequência.
+- Testar fornecedor local, comerciante itinerante, dois perfis de cliente e um acontecimento anunciado que afete o cardápio.
+- Desenvolver dinheiro com identidade própria e escambo com determinados comerciantes. O objeto e nome não foram escolhidos.
 
-Novo móvel separado da prateleira de alimentos secos: **Estante de panelas**, com três espaços de uma panela vazia cada. Não aceita alimentos, pratos ou panelas com comida. Permite retirar/devolver uma unidade pelas mãos; a quantidade desenhada acompanha o conteúdo real, sem gerar itens ao mover, carregar um save ou comprar outra estante. Valor provisório do móvel: $65.
+### Propostas não aprovadas para detalhamento
 
-No cenário mobiliado, a estante começa no canto superior direito da cozinha (células 21–22, linha 2), com exatamente **três panelas vazias**. A panela já instalada no fogão permanece, totalizando quatro panelas no cenário. A estante de alimentos secos e os demais móveis são preservados. Uma estante comprada no catálogo vem vazia; saves existentes não recebem móveis automaticamente sobre um layout personalizado.
+| Código | Proposta preservada para avaliação |
+| --- | --- |
+| P01 | Elos metálicos marcados como dinheiro local, distintos de sucata e de materiais de fabricação. |
+| P02 | Escambo opcional por ofertas fixas, com quantidades claras, confirmação única e limites contra ciclos infinitos de lucro. |
+| P03 | Catálogo de comércio presencial como exceção às janelas operacionais, mantendo o tempo ativo. |
+| P04 | Morador local e explorador como os dois perfis do primeiro teste. |
+| P05 | Colheita abundante de legumes como primeiro evento, com aviso, preço temporário e fim anunciado. |
+| P06 | Encomendas a artesãos com custo e prazo conhecidos, seguida de instalação pelo modo construção. |
+| P07 | Óleo consumido uma vez por preparo e água potável como base de determinadas receitas; sem tarefas repetitivas de despejo. |
+| P08 | Vendedor provisório de utensílios e funções administrativas migradas para Gestão ou livro físico após retirar o computador. |
+| P09 | Famílias de ingredientes e prioridade de receitas específicas sobre genéricas, evitando resultados ambíguos. |
+
+Essas propostas continuam não aprovadas após a autorização de reformular o GDD. Progresso de receitas, hospedagem, energia, água e fornecedores não pode ser presumido a partir de exemplos.
+
+<!-- page -->
+
+## 13 Ideias substituídas e histórico isolado
+
+Esta seção guarda decisões antigas para rastreabilidade. Não define o jogo atual. Ela não deve ser usada para reintroduzir automaticamente mecânicas antigas ou eliminar itens de saves compatíveis.
+
+| Ideia ou regra anterior | Estado e substituição |
+| --- | --- |
+| Mercearia como atividade principal | Projeto anterior arquivado. A existência de um HTML histórico não cria uma loja integrada à vila. |
+| Ambientação brasileira e culinária exclusivamente brasileira | Substituídas por mundo fictício nuclear e variedade de pratos de diferentes tradições. |
+| Tom predominantemente cozy obrigatório | Substituído por tom sombrio e melancólico. Acolhimento por escolha de progressão segue em aberto. |
+| Estabelecimento definido apenas como restaurante | Substituído pela direção de taverna. Hospedagem ainda requer desenho e implementação. |
+| Mochila com dez espaços | Substituída pelo transporte de uma unidade nas mãos. |
+| Barra permanente de cinco slots e teclas de seleção | Etapa intermediária removida; não deixar interface substituta nessa área. |
+| Ingrediente cortado retorna ao inventário pessoal | Substituído por ingrediente cortado nas mãos. |
+| Receita escolhida em janela e ingredientes consumidos à distância | Substituídos por adição física e reconhecimento da combinação na panela. |
+| Fogão e bancada como inventários genéricos | Substituídos por estados e encaixes específicos, sem janelas operacionais. |
+| Mesa de preparo como estação de empratamento | Separada em mesa de corte e mesa de cozinha. |
+| Quatro porções por novo cozimento ou empratamento em lote | Substituídas por uma porção por cozimento e um prato por ação. Porções antigas só são compatibilidade de save. |
+| Colher ou talher obrigatório e compra de talher | Removidos da operação e da loja; itens antigos são preservados. |
+| Panela cheia enviada automaticamente à mochila | Substituída por retirada nas mãos e apoio na mesa de cozinha. |
+| Movimento do jogador preso a passos de uma célula | Substituído por deslocamento contínuo; a grade continua na construção e navegação. |
+| Cadeiras aceitas nas pontas das mesas de dois tiles | Substituídas pela política dos lados compridos. |
+
+### Ideias antigas que nunca receberam aprovação
+
+IP01: tocar em alerta para deslocar a câmera ao fogão permanece não aprovado. A regra vigente é avisar sem mover a câmera. Big Ambitions foi retirado das referências. Carrinhos, pallets e logística da antiga mercearia não são automaticamente requisitos da taverna. Uma segunda unidade e sistemas amplos de romance ou concorrência não integram o escopo atual de implementação.
+
+O computador ainda funciona no código, embora sua retirada seja direção aprovada. Por isso, sua descrição operacional permanece na seção 10 até a migração ser efetivamente executada. Frigideira, caldeirão e comércio presencial são futuros; não são ideias descartadas.
+
+<!-- page -->
+
+## 14 Pendências, validação e rastreabilidade
+
+### Questões em aberto
+
+Nome da vila, origem do protagonista, tempo desde o desastre e intensidade da fantasia. Funcionamento de hospedagem, energia e refrigeração. Água como ingrediente e limites do filtro. Catálogo de novas receitas, preços finais e renda dos artesãos. Forma de transportar compras maiores mantendo uma unidade nas mãos. Não introduzir mochila, caixas ou carrinhos como resposta automática a essa última questão.
+
+### Proposta de próximas etapas não aprovada
+
+1. Especificar comércio presencial e destino das funções do computador, conservando compras pagas e acesso a utensílios.
+2. Escolher os detalhes P01 a P09 e resolver transporte de compras sem contrariar o sistema de mãos.
+3. Delimitar o primeiro teste aprovado como direção e implementar somente após escopo confirmado.
+4. Jogar um dia completo, observar repetição, espera, clareza e decisões; ajustar com evidência.
+
+### Critérios de qualidade
+
+- Conservar ingredientes, panelas, pratos, refeições e dinheiro nas ações, falhas e migrações.
+- Impedir pagamento duplicado e revelar pedido somente após anotação.
+- Preservar diferença entre cozimento autônomo e corte ou empratamento dependentes de presença.
+- Manter construção pausada, armazenamento ativo e retomada sem salto de tempo.
+- Validar posições, acesso e assentos sem cobrar por colocação recusada.
+- Recusar save inválido e manter backup utilizável após recuperação.
+- Conferir interface e exportação nas plataformas reais; teste Linux não comprova funcionamento físico Android ou Windows.
+
+### Evidência da inspeção e limites
+
+Na inspeção que antecedeu esta revisão, passaram o executor atual `godot/qa/Regras.cjs` e verificações adicionais de movimento, prévia de fogão, cache e layouts em Node.js. Uma consulta simulada confirmou livro com três receitas, pausa na consulta e tempo ativo no armazenamento. Não houve novo playtest gráfico nem execução do APK nessa inspeção.
+
+O teste avulso `qa/rua-horario.test.cjs` falhou ao preparar ingredientes buscando a mochila removida. A falha foi identificada no arranjo antigo do teste e não comprova defeito no fluxo novo. Registros antigos de sete suítes não equivalem ao conjunto atual; testes históricos devem ser interpretados por versão. Testes automáticos não comprovam diversão.
+
+### Fontes de manutenção
+
+Base: [commit 89f1bfe](https://github.com/denerRsilva/Entre-Esquinas/commit/89f1bfe8ee49aec52c2ecf2765208fbf28563bd1). Regras e ações: [restaurant-core.js](godot/simulacao/restaurant-core.js) e [acoes.js](godot/simulacao/acoes.js). Guias: [cozinha física](godot/COZINHA-FISICA.md), [Android](godot/ANDROID.md), [QA atual](godot/qa/LEIA-ME.md) e [validação 4.7.2](godot/qa/VALIDACAO_4_7_2.md).
+
+O histórico Git preserva o GDD anterior e suas revisões. As decisões desta conversa, o GDD 1.4 e o adendo 1.5 foram reconciliados nesta versão. A atualização altera documentação; nenhum comportamento de jogo foi modificado. Futuras revisões devem atualizar a seção correspondente e seu estado, evitando anexar regras conflitantes ao fim do arquivo.
