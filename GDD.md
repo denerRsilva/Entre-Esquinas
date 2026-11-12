@@ -400,7 +400,7 @@ A Godot controla janela, entrada, interface, apresentação, áudio e disco. Reg
 | Editor | Proprietário usa Godot 4.7.2; há validação Linux sem janela documentada nessa versão. Histórico de migração em 4.6.3 preservado. |
 | Windows e Linux PC | Bibliotecas x86-64 e perfis de exportação. Validação documentada predominantemente em Linux. |
 | Android | APK de teste 0.21.2-godot.4, código 21204, Android 7 ou superior, assinatura de depuração. Instalação e desempenho físico ainda precisam de teste. |
-| HTML | Versão anterior preservada em dist e projeto; não recebeu automaticamente a cozinha recente da Godot. |
+| HTML | Removido da árvore ativa, incluindo o atalho e o HTML histórico embutido. Recuperável pelo histórico Git. Desenvolvimento exclusivo na Godot; sua simulação JavaScript/QuickJS permanece necessária. |
 | macOS e web Godot | Sem exportação pronta comprovada por esta revisão. |
 
 O projeto ainda declara 0.21.2-godot.1 em sua configuração, enquanto o APK declara .4; são metadados distintos existentes. Esta revisão não altera versões de executável. A grade lógica continua em 40 pixels e o viewport Godot em 960 por 700.

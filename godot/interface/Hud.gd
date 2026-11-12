@@ -127,10 +127,6 @@ func sync(data: Dictionary) -> void:
 			var b:=Button.new();b.text="Importar salvamento (.json)"
 			b.pressed.connect(func():import_dialog.popup_centered_ratio(0.72))
 			content.add_child(b)
-			var archive:=Button.new()
-			archive.text="Abrir protótipo histórico da mercearia"
-			archive.pressed.connect(func():command.emit({"id":"mercearia"}))
-			content.add_child(archive)
 		if key in ["hud","hint","notice"]:
 			for decoration in content.find_children("*","Control",true,false):
 				decoration.mouse_filter=Control.MOUSE_FILTER_IGNORE

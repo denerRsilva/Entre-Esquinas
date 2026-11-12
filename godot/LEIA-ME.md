@@ -56,7 +56,7 @@ Ao mudar a planta, atualize também as regras de circulação e a disposição d
 
 A Godot cuida da janela, dos eventos, do mapa, dos sprites animados, dos controles, do áudio e da gravação local. A simulação da versão publicada 0.21.2 executa dentro do próprio processo da Godot, por meio da extensão **RestauranteVM**, com QuickJS compilado para Windows e Linux x86-64. O projeto abre no editor padrão, sem instalar Node.js ou iniciar servidor. As fontes para recompilar a extensão estão em `nativo/fonte/`.
 
-A origem usada na migração foi o commit `f8781d25ee5747ad57b39db8f947ee1328892f53` do projeto publicado. A rua e as conversas mantêm o alcance da demonstração 0.21.2. O protótipo histórico da mercearia está arquivado em `historico/` e pode ser aberto pelo menu de salvamento.
+A origem usada na migração foi o commit `f8781d25ee5747ad57b39db8f947ee1328892f53` do projeto publicado. A rua e as conversas mantêm o alcance da demonstração 0.21.2. O protótipo HTML foi removido; o desenvolvimento ativo é exclusivamente Godot.
 
 ## Progresso e exportação
 

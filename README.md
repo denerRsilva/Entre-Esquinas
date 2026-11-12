@@ -1,30 +1,10 @@
-# Entre Esquinas — Restaurante 0.21.2
+# Entre Esquinas — Godot
 
-## APK Android de teste
+O projeto ativo está em [godot/project.godot](godot/project.godot). Abra com Godot 4.6.3 Standard e siga [as instruções](godot/LEIA-ME.md).
 
-Baixe [EntreEsquinas.apk](build/Android/EntreEsquinas.apk) pelo botão
-**Download raw file** do GitHub. Instruções, compilação e limites da
-validação em [godot/ANDROID.md](godot/ANDROID.md).
+- [APK Android](build/Android/EntreEsquinas.apk): no GitHub, use **Download raw file**.
+- [Compilação e validação Android](godot/ANDROID.md).
+- [GDD](GDD.md) e [direção de arte](docs/arte/RESTAURANTE.md).
+- Testes: `cd godot` e `node qa/Regras.cjs`; testes nativos descritos em [QA](godot/qa/LEIA-ME.md).
 
-Simulação de restaurante e vida na cidade, em HTML/JavaScript/Canvas.
-
-- Código-fonte, sprites, testes e documentação: `projeto/`.
-- Jogo completo para abrir no navegador: `dist/index.html`.
-- Gerar o HTML: `cd projeto` e `python3 build.py ../dist/index.html`.
-- Testes principais (dentro de `projeto/`): `node waiter-orders.test.cjs`, `node ui.test.cjs`, `node kitchen.test.cjs`, `node quality.test.cjs`, `node patience.test.cjs`, `node service-hours.test.cjs`, `node arrivals.test.cjs`, `node calendar-reputation.test.cjs`.
-- Relatório da versão: `projeto/RELATORIO_TESTES_0_19_0.md`.
-
-## Novidades
-
-Versão 0.21.2 importada do pacote Entre_Esquinas_Restaurante_0_21_2.zip fornecido pelo usuário. Inclui modo construção, utensílios com artes próprias, interface com molduras de madeira, tutorial recolhível e cozinheira com 16 poses em quatro direções. Detalhes e histórico em `projeto/README.md`.
-
-Teste adicional da animação: `cd projeto && node cook-art.test.cjs`.
-
-## Documento de design
-
-O [GDD consolidado](GDD.md) registra as regras atuais da Godot, as decisões recentes e os parâmetros ainda provisórios.
-
-## Projeto Godot
-
-A migração editável está em `godot/project.godot` (Godot 4.6.3 Standard).
-Veja `godot/LEIA-ME.md` para abrir e `godot/REVISAO.md` para correções e testes.
+O jogo de navegador e o HTML histórico foram removidos. O JavaScript em `godot/simulacao` permanece necessário: a extensão RestauranteVM executa essas regras com QuickJS dentro da Godot, sem navegador ou servidor. Os arquivos antigos continuam recuperáveis no histórico Git.

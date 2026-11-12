@@ -64,14 +64,6 @@ func import_save(path:String) -> void:
 	tick(0)
 
 func queue_command(e:Dictionary) -> void:
-	if e.get("id","")=="mercearia":
-		var path:="user://mercearia-0.8.8.html"
-		var file:=FileAccess.open(path,FileAccess.WRITE)
-		if file:
-			file.store_string(FileAccess.get_file_as_string("res://historico/mercearia-0.8.8.html"))
-			file.close()
-			OS.shell_open(ProjectSettings.globalize_path(path))
-		return
 	if e.get("id","")=="fullscreenBtn":
 		var full=DisplayServer.window_get_mode()==DisplayServer.WINDOW_MODE_FULLSCREEN
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED if full else DisplayServer.WINDOW_MODE_FULLSCREEN)
