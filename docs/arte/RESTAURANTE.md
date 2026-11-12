@@ -12,3 +12,5 @@ A arte usa as pranchas aprovadas, ainda ampliadas e não finalizadas como atlas 
 Validação: Regras.cjs (incluindo taverna-unica.test.cjs), MaosUI, TavernaUnicaUI, MovimentoUI e Verificar, Godot 4.6.3 Linux. Verificados cozinha completa, colisão e acesso, catálogo, computador instalado, compra/entrega/retirada, conservação e saves. Captura em restaurante-jogavel.png. APK .10 com assinatura e alinhamento conferidos; ainda não testado em aparelho Android físico.
 
 Polimento .10: removido o retângulo marrom sobre a mesa de empratamento; preparo aproximado uma célula; fogão perto da geladeira e estante de panelas em sua antiga posição; segundo vaso transferido ao canto superior esquerdo. A mesa de empratamento e o vaso inferior esquerdo permanecem no lugar.
+
+Interações .11: botões contextuais sem legendas visíveis; prato, panela e ingredientes com símbolos de inserir, retirar, preparar ou descartar. Armazenamento mostra arte, quantidade e seta de retirada. Descrições permanecem nos tooltips. Fluxo MaosUI validado e captura em interacoes-visuais.png.

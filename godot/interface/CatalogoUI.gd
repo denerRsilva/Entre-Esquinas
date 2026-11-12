@@ -62,12 +62,22 @@ func render(d: Dictionary, parent: Control) -> void:
 			b.icon = texture(d.art)
 			b.add_theme_constant_override("icon_max_width",32)
 		if cls.contains("objectAction"):
-			b.text = d.label
+			b.text = ""
 			b.tooltip_text = d.label
-			b.custom_minimum_size = Vector2(144,48)
+			b.icon = preload("res://interface/IconesAcao.gd").icon(d.label,b.icon)
+			b.add_theme_constant_override("icon_max_width",56)
+			b.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			b.custom_minimum_size = Vector2(76,64)
 			b.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 		if cls.contains("inventorySlot"):
-			b.custom_minimum_size=Vector2(56,66)
+			b.custom_minimum_size=Vector2(72,80)
+			var arrow:=TextureRect.new()
+			arrow.texture=Paint.vector('<svg viewBox="0 0 16 16" shape-rendering="crispEdges"><path fill="#243c32" d="M0 0h16v16H0z"/><path fill="#f4cb65" d="M6 2h4v7h4l-6 6-6-6h4z"/></svg>')
+			arrow.mouse_filter=Control.MOUSE_FILTER_IGNORE
+			arrow.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
+			arrow.position=Vector2(48,26)
+			arrow.size=Vector2(20,20)
+			b.add_child(arrow)
 			b.icon_alignment=HORIZONTAL_ALIGNMENT_CENTER
 			b.vertical_icon_alignment=VERTICAL_ALIGNMENT_TOP
 			b.add_theme_font_size_override("font_size",12)

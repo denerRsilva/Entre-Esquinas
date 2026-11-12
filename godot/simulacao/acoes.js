@@ -269,13 +269,13 @@ function renderDialog(){let panel=$(constructionMode?'constructionPanel':'panel'
  if(dialogTab==='container'){
  const o=state.objects.find(o=>o.id===dialogObjectId);if(!o?.inventory){$('management').close();return;}
  const held=state.player.hand,info=document.createElement('p');info.textContent=(held?'Nas mãos: '+R.itemName(held.item):'Mãos vazias')+' • Retire uma unidade por vez. O tempo continua passando.';panel.append(info);
- button('Guardar item das mãos',()=>{const res=R.handStorage(state,o.id,'put');renderDialog();tell(res.message,!res.ok)},panel,!held);
+ action(panel,'box','Guardar '+(held?R.itemName(held.item):'item das mãos'),()=>{const res=R.handStorage(state,o.id,'put');renderDialog();tell(res.message,!res.ok)},panel,!held);
  const grid=document.createElement('div');grid.className='inventoryGrid';
  o.inventory.forEach((slot,i)=>{
   const b=button('',()=>{const res=R.handStorage(state,o.id,'take',i);if(res.ok)$('management').close();else renderDialog();tell(res.message,!res.ok)},grid,!slot||!!held);
   b.className='inventorySlot';b.setAttribute('aria-label','Retirar '+(slot?R.itemName(slot.item):'vazio')+' • espaço '+(i+1));
   if(slot){if(FoodArt.key(slot.item))b.append(FoodArt.icon(slot.item,slot.quality||0));else if(['pot','spoon','plate'].includes(slot.item))b.append(RestaurantArt.toolIcon(slot.item,R.itemName(slot.item)));else b.append(controlIcon('wash'));}
-  const text=document.createElement('small');text.textContent=slot?R.itemName(slot.item)+' × '+slot.n:'Vazio';b.append(text);
+  const text=document.createElement('small');text.textContent=slot?'× '+slot.n:'';b.append(text);
  });panel.append(grid);
  if(state.recovery.length){const help=document.createElement('p');help.textContent='Itens preservados de saves antigos (não cabiam nos móveis):';panel.append(help);state.recovery.forEach((p,i)=>button('Recuperar '+R.itemName(p.item)+' × '+p.n,()=>{const res=R.recoverHand(state,i);if(res.ok)$('management').close();tell(res.message,!res.ok)},panel,!!held));}
  }
