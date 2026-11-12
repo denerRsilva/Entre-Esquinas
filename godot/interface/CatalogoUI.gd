@@ -50,7 +50,7 @@ func render(d: Dictionary, parent: Control) -> void:
 		b.tooltip_text = d.label
 		b.disabled = d.disabled
 		b.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		b.custom_minimum_size = Vector2(78,34)
+		b.custom_minimum_size = Vector2(78,44)
 		if parent.name=="BuildActions": b.autowrap_mode=TextServer.AUTOWRAP_OFF
 		if parent is HFlowContainer:
 			b.custom_minimum_size.x = clampf(24+7.3*b.text.length(),76,225)
@@ -59,9 +59,9 @@ func render(d: Dictionary, parent: Control) -> void:
 			b.icon = texture(d.art)
 			b.add_theme_constant_override("icon_max_width",32)
 		if cls.contains("objectAction"):
-			b.text = ""
+			b.text = d.label
 			b.tooltip_text = d.label
-			b.custom_minimum_size = Vector2(42,36)
+			b.custom_minimum_size = Vector2(144,48)
 			b.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 		if cls.contains("inventorySlot"):
 			b.custom_minimum_size=Vector2(56,66)
@@ -155,7 +155,7 @@ func render(d: Dictionary, parent: Control) -> void:
 			if k.tag=="text": texts.append(k.text)
 			else: plain=false
 		if plain:
-			var n := label(" ".join(texts),30 if tag=="h1" else 21 if tag=="h2" else 17 if tag in ["strong","b"] else 14)
+			var n := label(" ".join(texts),30 if tag=="h1" else 21 if tag=="h2" else 17 if tag in ["strong","b"] else 16)
 			if tag in ["h1","h2"]:
 				var serif:=SystemFont.new()
 				serif.font_names=PackedStringArray(["Georgia","Liberation Serif","DejaVu Serif"])
@@ -164,7 +164,10 @@ func render(d: Dictionary, parent: Control) -> void:
 			parent.add_child(n)
 			return
 	var group: Container
-	if cls=="buildActions":
+	if cls=="recipeBook":
+		group=VBoxContainer.new()
+		group.add_theme_constant_override("separation",18)
+	elif cls=="buildActions":
 		group=HBoxContainer.new()
 		group.name="BuildActions"
 	elif cls=="hotbarSlots":
@@ -187,5 +190,6 @@ func render(d: Dictionary, parent: Control) -> void:
 		panel.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 		parent.add_child(panel)
 		panel.add_child(group)
+		group.add_theme_constant_override("separation",8)
 	else: parent.add_child(group)
 	for k in kids: render(k,group)

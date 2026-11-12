@@ -14,6 +14,7 @@ const lookup=Object.fromEntries(names.map((n,i)=>[n.toLowerCase(),keys[i]]));
 const pattern=/(?<![\p{L}])(?:arroz com legumes|sopa de legumes|frango com arroz|arroz|legumes|frango)(?![\p{L}])/giu;
 function parts(text){const out=[];let at=0;for(const m of text.matchAll(pattern)){if(m.index>at)out.push(text.slice(at,m.index));out.push({food:lookup[m[0].toLowerCase()]});at=m.index+m[0].length;}if(at<text.length)out.push(text.slice(at));return out;}
 function decorate(element){
+ if(element.className==='recipeBook')return;
  if(!element||element.tag==='canvas'||element.tag==='option'||element.svg)return;
  for(const node of element.children)decorate(node);
  element.nodes=element.nodes.flatMap(node=>{

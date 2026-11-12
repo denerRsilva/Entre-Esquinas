@@ -218,14 +218,14 @@ function renderDialog(){let panel=$(constructionMode?'constructionPanel':'panel'
 
  if(dialogTab==='recipes'){
   const intro=document.createElement('p');intro.textContent='Consulte os ingredientes e o preparo de cada prato. Quantidades para '+R.KITCHEN_CONFIG.batchPortions+' porção por panela.';panel.append(intro);
-  const recipes=document.createElement('div');recipes.className='recipeGrid';
+  const recipes=document.createElement('div');recipes.className='recipeBook';
   for(const [id,recipe] of Object.entries(R.RECIPES)){
    const page=card(recipe.name,'');
    const ingredients=document.createElement('p');ingredients.textContent='Ingredientes: '+Object.entries(recipe.foods).map(([food,n])=>(n*R.KITCHEN_CONFIG.batchPortions)+' × '+R.FOODS[food].name).join(' + ')+'.';page.append(ingredients);
    const cutting=Object.keys(recipe.foods).filter(food=>food!=='arroz').map(food=>R.FOODS[food].name.toLowerCase());
-   const prep=document.createElement('p');prep.textContent='Retire um ingrediente por vez da geladeira.'+(cutting.length?' Corte '+cutting.join(' e ')+' na mesa de preparo; cada ingrediente cortado volta para as mãos.':'')+(recipe.foods.arroz?' O arroz vai direto à panela, sem corte.':'');page.append(prep);
-   const cooking=document.createElement('p');cooking.textContent='Coloque os ingredientes na panela do fogão e escolha Cozinhar. Tempo: '+recipe.time+' s.';page.append(cooking);
-   const serving=document.createElement('p');serving.textContent='Retire a panela pronta clicando no fogão, apoie na mesa de cozinha e emprate com um prato limpo. Pegue o prato para servir.';page.append(serving);
+   const prep=document.createElement('p');prep.textContent='1. Retire um ingrediente por vez da geladeira.'+(cutting.length?' Corte '+cutting.join(' e ')+' na mesa de preparo; cada ingrediente cortado volta para as mãos.':'')+(recipe.foods.arroz?' O arroz vai direto à panela, sem corte.':'');page.append(prep);
+   const cooking=document.createElement('p');cooking.textContent='2. Coloque os ingredientes na panela do fogão e escolha Cozinhar. Tempo: '+recipe.time+' s.';page.append(cooking);
+   const serving=document.createElement('p');serving.textContent='3. Retire a panela pronta clicando no fogão, apoie na mesa de cozinha e emprate com um prato limpo. Pegue o prato para servir.';page.append(serving);
    recipes.append(page);
   }
   panel.append(recipes);
@@ -315,9 +315,9 @@ $('startFurnishedBtn').onclick=()=>{state=R.furnishedTest();building=null;hover=
 $('startBtn').onclick=()=>{resetFrameClock();$('welcome').close();refresh()};$('welcome').showModal();
 function drawKitchenStatus(){
  const box=$('kitchenStatus');box.replaceChildren();
- const jobs=[state.chopping&&{...state.chopping,label:'Cortando ingrediente'},state.cooking&&{...state.cooking,label:'Cozinhando '+RECIPENAME(state.cooking.recipe)},state.plating&&{...state.plating,label:'Empratando'+(R.objectNear(state,state.objects.find(o=>o.id===state.plating.prep))?'':' • pausado: aproxime-se')}].filter(Boolean);
+ const jobs=[state.chopping&&{...state.chopping,label:'Cortando ingrediente'+(R.objectNear(state,state.objects.find(o=>o.id===state.chopping.table))?'':' • pausado: aproxime-se')},state.cooking&&{...state.cooking,label:'Cozinhando '+RECIPENAME(state.cooking.recipe)},state.plating&&{...state.plating,label:'Empratando'+(R.objectNear(state,state.objects.find(o=>o.id===state.plating.prep))?'':' • pausado: aproxime-se')}].filter(Boolean);
  for(const o of state.objects)if(o.readyBatch&&o.pan?.startsWith('pot_')){const h=R.heatState(state,o);jobs.push({label:h.label+' • '+RECIPENAME(o.readyBatch.recipe),total:1,left:1-h.value,heat:h.stage});}
- for(const j of jobs){const line=document.createElement('label');line.textContent=j.label+' • '+Math.ceil(j.left)+'s';const bar=document.createElement('progress');bar.max=j.total;bar.value=j.total-j.left;bar.setAttribute('aria-label',j.label);if(j.heat){line.className='heat-'+j.heat;line.setAttribute('data-heat',j.heat);if(j.heat==='burned')bar.hidden=true;}line.append(bar);box.append(line);}
+ for(const j of jobs){const line=document.createElement('label');line.textContent=j.label+(j.heat?'':' • '+Math.ceil(j.left)+'s');const bar=document.createElement('progress');bar.max=j.total;bar.value=j.total-j.left;bar.setAttribute('aria-label',j.label);if(j.heat){line.className='heat-'+j.heat;line.setAttribute('data-heat',j.heat);if(j.heat==='burned')bar.hidden=true;}line.append(bar);box.append(line);}
 }
 let kitchenAudio=null;const playedHeat=new WeakMap();
 document.addEventListener('pointerdown',()=>{try{if(!kitchenAudio&&typeof window.AudioContext==='function')kitchenAudio=new window.AudioContext();if(kitchenAudio?.state==='suspended')kitchenAudio.resume();}catch{}},{once:true});

@@ -18,7 +18,7 @@ func _ready() -> void:
 	area("context",Rect2(150,360,500,110),false,false)
 	area("hint",Rect2(10,604,610,42),false,true)
 	area("notice",Rect2(10,500,520,70),false,true)
-	area("dock",Rect2(10,651,550,44),false,false)
+	area("dock",Rect2(10,647,550,48),false,false)
 	area("actions",Rect2(720,641,234,54),false,false)
 	area("catalog",Rect2(10,649,168,44),false,false)
 	area("drawer",Rect2(7,7,352,628))
@@ -84,7 +84,12 @@ func sync(data: Dictionary) -> void:
 			var welcome_small:bool=data.modal=="welcome" and not JSON.stringify(item).contains("Fechar tutorial")
 			entry[2]=Rect2(178,218,604,234) if welcome_small else Rect2(58,44,844,612)
 			root.position=entry[2].position
-		if key=="notice": root.position=Vector2(10,280) if slots.context[0].visible else Vector2(10,500)
+		if key=="notice":
+			var notice_y:=500.0
+			if slots.context[0].visible:
+				var actions_y:float=slots.context[0].position.y
+				notice_y=actions_y-80.0 if actions_y>=140.0 else actions_y+120.0
+			root.position=Vector2(10,notice_y)
 		if key=="openBtn":
 			var sign_size:=Vector2(190,54) if data.room=="street" else Vector2(100,38)
 			entry[2]=Rect2(Vector2.ZERO,sign_size)

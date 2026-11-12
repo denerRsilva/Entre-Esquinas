@@ -3,7 +3,7 @@
 O APK de teste fica em `../build/Android/EntreEsquinas.apk`. Baixe o arquivo
 completo pelo botão **Download raw file** no GitHub e permita a instalação
 de aplicativos dessa origem no Android. O pacote é
-`com.entreesquinas.restaurante`, versão `0.21.2-godot.4` (21204).
+`com.entreesquinas.restaurante`, versão `0.21.2-godot.5` (21205).
 Requer Android 7.0 ou superior. Tamanho aproximado: 89 MiB.
 O SHA-256 está em `../build/Android/SHA256SUMS`.
 
@@ -60,3 +60,16 @@ para retirar a panela pronta ou a panela vazia sem ingredientes.
 O botão **Livro de receitas** fica ao lado de **Opções**. Mostra as três
 receitas atuais com quantidades por panela, necessidade de corte, tempo
 de cozimento e sequência de empratamento. A consulta pausa o jogo.
+
+## Polimento 0.21.2-godot.5
+
+- Botões com altura mínima de 44 px lógicos e ações dos móveis com legenda visível e alvo mínimo de 144 × 48.
+- Livro em coluna única, com nomes e ingredientes por escrito, etapas numeradas e mais espaço entre receitas.
+- Avisos posicionados fora da faixa das ações do móvel selecionado.
+- Indicadores de calor sem contagem fictícia de 0/1 segundo; corte informa quando está pausado por distância.
+- Versão declarada no projeto sincronizada com o APK.
+
+Validação: Regras.cjs, MaosUI, MovimentoUI e Verificar passaram em Linux.
+Inspeção de capturas renderizadas em 960 × 700: salão, livro e ações da mesa.
+As suítes cobrem cozinha, atendimento, pagamento, lavagem e regras de fechamento;
+isso não substitui um playtest contínuo de um dia inteiro nem teste físico Android.
