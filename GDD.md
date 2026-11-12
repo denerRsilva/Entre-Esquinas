@@ -1,12 +1,14 @@
 # Entre Esquinas
 
-## GDD 2.0 consolidado
+## GDD 2.1 consolidado
 
-**Revisão documental:** 09 de novembro de 2026. **Responsável pelas decisões:** Dener Silva.
+**Revisão documental:** 12 de novembro de 2026. **Responsável pelas decisões:** Dener Silva.
 
 Este GDD reúne a direção aprovada da taverna e o funcionamento implementado na Godot em uma referência única. Substitui a organização do GDD 1.4 do repositório e do adendo 1.5, preservando a distinção entre o jogo existente e o desenvolvimento futuro. Não é necessário consultar os documentos antigos para entender as regras atuais aqui descritas.
 
 **Base de implementação inspecionada:** branch `main`, commit `89f1bfe8ee49aec52c2ecf2765208fbf28563bd1`. A aprovação desta revisão autoriza a reformulação documental. Não transforma propostas em requisitos aprovados nem executa mudanças de gameplay.
+
+A revisão 2.1 incorpora as decisões de Dener de 12/11/2026 sobre comércio, computador administrativo, ferro-velho, fabricação por artesão e entrega de equipamentos. A base técnica inspecionada continua a mesma; essas decisões são direção aprovada ainda não implementada.
 
 ### Estados usados no documento
 
@@ -346,6 +348,12 @@ Talher não é vendido nem exigido. O jogador recolhe ingredientes do recebiment
 
 Compras diminuem o caixa; ingredientes entram no custo quando efetivamente usados no preparo. O relatório mostra receita, ingredientes consumidos, compras, investimentos, clientes pagos e perdidos, além de resultado e caixa no fechamento. Aluguel, salários completos e financiamento não fazem parte da economia implementada.
 
+### Destino aprovado das compras e da administração
+
+**Direção aprovada, ainda não implementada.** O computador permanece na taverna exclusivamente para funções administrativas, sem compras de ingredientes, peças ou equipamentos. Cardápio e preços são funções administrativas existentes; a composição final dos demais acessos e sua relação com Gestão ainda será detalhada.
+
+A compra de ingredientes passa para um NPC comerciante na cidade, próximo da taverna. Peças para equipamentos como geladeiras são compradas no ferro-velho. Um artesão fabrica os equipamentos, que são entregues após a conclusão da fabricação. Essa entrega refere-se aos equipamentos; não define entrega automática de ingredientes nem de peças. A seção 12 descreve a direção futura e a seção 14 registra os detalhes pendentes. As compras no computador descritas acima continuam sendo o comportamento do código até a implementação da migração.
+
 ### Organização da interface
 
 | Acesso | Conteúdo atual |
@@ -395,7 +403,9 @@ O projeto ainda declara 0.21.2-godot.1 em sua configuração, enquanto o APK dec
 
 A direção da taverna nuclear fictícia substitui a ambientação brasileira acolhedora como objetivo. A operação existente deve ser preservada enquanto o universo é incorporado. A aprovação abaixo é de conceito; regras detalhadas e tarefas de código precisam de escopo explícito.
 
-- Retirar o computador e oferecer frango, legumes e arroz em comerciante próximo à taverna, com deslocamento do jogador até ele.
+- Manter o computador exclusivamente para funções administrativas da taverna; retirar dele as funções de compra.
+- Oferecer frango, legumes e arroz por meio de um NPC comerciante na cidade, próximo à taverna, com deslocamento do jogador até ele.
+- Comprar peças no ferro-velho para fabricar equipamentos como geladeiras. A fabricação é realizada por um artesão; o equipamento é entregue após ele concluir o trabalho. Não há fabricação desses equipamentos pelo jogador nesta direção aprovada.
 - Ampliar obtenção por produtores locais, feiras de caravanas, trocas com clientes, coleta em áreas recuperadas e expedições encomendadas.
 - Usar tipos de clientes ligados às ocupações do mundo, além dos perfis técnicos de paciência.
 - Exigir frigideira e óleo para frituras e caldeirão para sopas.
@@ -414,12 +424,12 @@ A direção da taverna nuclear fictícia substitui a ambientação brasileira ac
 | P03 | Catálogo de comércio presencial como exceção às janelas operacionais, mantendo o tempo ativo. |
 | P04 | Morador local e explorador como os dois perfis do primeiro teste. |
 | P05 | Colheita abundante de legumes como primeiro evento, com aviso, preço temporário e fim anunciado. |
-| P06 | Encomendas a artesãos com custo e prazo conhecidos, seguida de instalação pelo modo construção. |
+| P06 | Detalhes ainda não aprovados: apresentar custo e prazo conhecidos na encomenda e instalar o equipamento entregue pelo modo construção. Fabricação pelo artesão e entrega após conclusão já são direção aprovada; não fazem parte da pendência. |
 | P07 | Óleo consumido uma vez por preparo e água potável como base de determinadas receitas; sem tarefas repetitivas de despejo. |
-| P08 | Vendedor provisório de utensílios e funções administrativas migradas para Gestão ou livro físico após retirar o computador. |
+| P08 | Vendedor provisório de utensílios (panelas e pratos). A parte antiga sobre retirar o computador e migrar a administração para Gestão ou livro físico foi substituída pela manutenção do computador administrativo. |
 | P09 | Famílias de ingredientes e prioridade de receitas específicas sobre genéricas, evitando resultados ambíguos. |
 
-Essas propostas continuam não aprovadas após a autorização de reformular o GDD. Progresso de receitas, hospedagem, energia, água e fornecedores não pode ser presumido a partir de exemplos.
+Os detalhes remanescentes dessas propostas continuam não aprovados; os conceitos já aprovados estão identificados separadamente acima. Progresso de receitas, hospedagem, energia, água e fornecedores não pode ser presumido a partir de exemplos.
 
 <!-- page -->
 
@@ -429,6 +439,7 @@ Esta seção guarda decisões antigas para rastreabilidade. Não define o jogo a
 
 | Ideia ou regra anterior | Estado e substituição |
 | --- | --- |
+| Retirar o computador e migrar suas funções administrativas para Gestão ou livro físico | Substituído em 12/11/2026: manter o computador exclusivamente administrativo, com compras fora dele. |
 | Mercearia como atividade principal | Projeto anterior arquivado. A existência de um HTML histórico não cria uma loja integrada à vila. |
 | Ambientação brasileira e culinária exclusivamente brasileira | Substituídas por mundo fictício nuclear e variedade de pratos de diferentes tradições. |
 | Tom predominantemente cozy obrigatório | Substituído por tom sombrio e melancólico. Acolhimento por escolha de progressão segue em aberto. |
@@ -449,7 +460,7 @@ Esta seção guarda decisões antigas para rastreabilidade. Não define o jogo a
 
 IP01: tocar em alerta para deslocar a câmera ao fogão permanece não aprovado. A regra vigente é avisar sem mover a câmera. Big Ambitions foi retirado das referências. Carrinhos, pallets e logística da antiga mercearia não são automaticamente requisitos da taverna. Uma segunda unidade e sistemas amplos de romance ou concorrência não integram o escopo atual de implementação.
 
-O computador ainda funciona no código, embora sua retirada seja direção aprovada. Por isso, sua descrição operacional permanece na seção 10 até a migração ser efetivamente executada. Frigideira, caldeirão e comércio presencial são futuros; não são ideias descartadas.
+O computador permanece como direção aprovada, agora exclusivamente administrativa. O código ainda inclui compras; a seção 10 preserva esse registro até a migração das compras para os serviços presenciais. A retirada do computador deixou de orientar o projeto. Frigideira, caldeirão e comércio presencial são futuros; não são ideias descartadas.
 
 <!-- page -->
 
@@ -459,10 +470,12 @@ O computador ainda funciona no código, embora sua retirada seja direção aprov
 
 Nome da vila, origem do protagonista, tempo desde o desastre e intensidade da fantasia. Funcionamento de hospedagem, energia e refrigeração. Água como ingrediente e limites do filtro. Catálogo de novas receitas, preços finais e renda dos artesãos. Forma de transportar compras maiores mantendo uma unidade nas mãos. Não introduzir mochila, caixas ou carrinhos como resposta automática a essa última questão.
 
+Também permanecem em aberto: lista e quantidade de peças por equipamento, preços do ferro-velho, remuneração e tempo de fabricação do artesão, transporte e repasse das peças, forma e local de recebimento do equipamento, instalação, encomendas simultâneas e cancelamentos. A entrega após conclusão está aprovada; não há aprovação de prazo instantâneo, frete gratuito ou instalação automática. O ponto de compra de panelas e pratos e a organização final das funções administrativas no computador ainda precisam ser definidos.
+
 ### Proposta de próximas etapas não aprovada
 
-1. Especificar comércio presencial e destino das funções do computador, conservando compras pagas e acesso a utensílios.
-2. Escolher os detalhes P01 a P09 e resolver transporte de compras sem contrariar o sistema de mãos.
+1. Especificar o NPC de ingredientes, o ferro-velho e a encomenda ao artesão com entrega após conclusão; delimitar os acessos administrativos do computador, conservando compras pagas e acesso a utensílios.
+2. Resolver os detalhes ainda pendentes de P01 a P09, respeitando as decisões já aprovadas, e definir transporte de ingredientes e peças sem contrariar o sistema de mãos.
 3. Delimitar o primeiro teste aprovado como direção e implementar somente após escopo confirmado.
 4. Jogar um dia completo, observar repetição, espera, clareza e decisões; ajustar com evidência.
 
@@ -485,5 +498,7 @@ O teste avulso `qa/rua-horario.test.cjs` falhou ao preparar ingredientes buscand
 ### Fontes de manutenção
 
 Base: [commit 89f1bfe](https://github.com/denerRsilva/Entre-Esquinas/commit/89f1bfe8ee49aec52c2ecf2765208fbf28563bd1). Regras e ações: [restaurant-core.js](godot/simulacao/restaurant-core.js) e [acoes.js](godot/simulacao/acoes.js). Guias: [cozinha física](godot/COZINHA-FISICA.md), [Android](godot/ANDROID.md), [QA atual](godot/qa/LEIA-ME.md) e [validação 4.7.2](godot/qa/VALIDACAO_4_7_2.md).
+
+A revisão 2.1 registra as decisões expressas de Dener em 12/11/2026: NPC próximo à taverna para ingredientes; ferro-velho para peças; artesão para fabricar equipamentos; entrega após conclusão; computador mantido exclusivamente administrativo. Não houve nova execução de testes de gameplay nesta revisão documental.
 
 O histórico Git preserva o GDD anterior e suas revisões. As decisões desta conversa, o GDD 1.4 e o adendo 1.5 foram reconciliados nesta versão. A atualização altera documentação; nenhum comportamento de jogo foi modificado. Futuras revisões devem atualizar a seção correspondente e seu estado, evitando anexar regras conflitantes ao fim do arquivo.
