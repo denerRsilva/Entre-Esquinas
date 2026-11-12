@@ -1,7 +1,7 @@
 'use strict';
 const R=Restaurant,$=id=>document.getElementById(id),canvas=$('world'),ctx=canvas.getContext('2d');
 let prepOptionsId=null,prepChoice=null,constructionMode=false;
-let state=R.fresh(),building=null,hover=null,selectedObject=null,transferQuantity=99,dialogObjectId=null,dialogMode='general',dialogTab='guide',last=performance.now(),renderedKey='',noticeTime=0;
+let state=R.fresh(true),building=null,hover=null,selectedObject=null,transferQuantity=99,dialogObjectId=null,dialogMode='general',dialogTab='guide',last=performance.now(),renderedKey='',noticeTime=0;
 const NAME={street:'Rua da Praça',restaurant:'Restaurante • salão, cozinha e estoque',stock:'Estoque • recebimento e administração'};
 const PERSON={lia:'Lia',beto:'Beto',nina:'Nina',worker1:'Logística',worker2:'Garçom'};
 function tell(message,bad=false){state.message=message;$('notice').textContent=message;$('notice').classList.toggle('bad',bad);$('notice').style.opacity='1';noticeTime=performance.now()+6000;if($('management').open)$('menuNotice').textContent=message;refresh();}
@@ -15,10 +15,12 @@ const viewport={width:960,height:640};
 let buildPointer=null;
 function updateCamera(){
  const p=R.position(state.player),mode=constructionMode?'build':'play';
- camera.zoom=Math.max(1,viewport.height/640)*cameraLevel;
- const maxX=Math.max(0,960-viewport.width/camera.zoom),maxY=Math.max(0,640-viewport.height/camera.zoom);
+ const compact=state.compact===true&&state.player.room==='restaurant';
+ const left=compact?160:0,top=compact?80:0,width=compact?800:960,height=compact?560:640;
+ camera.zoom=Math.max(1,viewport.height/height)*cameraLevel;
+ const maxX=Math.max(0,left+width-viewport.width/camera.zoom),maxY=Math.max(0,top+height-viewport.height/camera.zoom);
  if(!constructionMode||camera.mode!==mode){camera.x=p.x*40+20-viewport.width/2/camera.zoom;camera.y=p.y*40+20-viewport.height/2/camera.zoom;}
- camera.x=viewport.width/camera.zoom>960?(960-viewport.width/camera.zoom)/2:Math.max(0,Math.min(maxX,camera.x));camera.y=viewport.height/camera.zoom>640?(640-viewport.height/camera.zoom)/2:Math.max(0,Math.min(maxY,camera.y));camera.mode=mode;
+ camera.x=viewport.width/camera.zoom>width?left+(width-viewport.width/camera.zoom)/2:Math.max(left,Math.min(maxX,camera.x));camera.y=viewport.height/camera.zoom>height?top+(height-viewport.height/camera.zoom)/2:Math.max(top,Math.min(maxY,camera.y));camera.mode=mode;
 }
 function worldPointer(e){const r=canvas.getBoundingClientRect();return {x:((e.clientX-r.left)*viewport.width/r.width/camera.zoom+camera.x)/40,y:((e.clientY-r.top)*viewport.height/r.height/camera.zoom+camera.y)/40};}
 function screenPoint(x,y){const r=canvas.getBoundingClientRect();return {x:r.left+(x-camera.x)*camera.zoom*r.width/viewport.width,y:r.top+(y-camera.y)*camera.zoom*r.height/viewport.height};}
@@ -323,7 +325,7 @@ $('tutorialBtn').onclick=()=>{
  $('tutorialBtn').setAttribute('aria-expanded',String(!tutorial.hidden));
  $('tutorialBtn').textContent=tutorial.hidden?'Tutorial':'Fechar tutorial';
 };
-$('startFurnishedBtn').onclick=()=>{state=R.furnishedTest();building=null;hover=null;selectedObject=null;renderedKey='';resetFrameClock();$('welcome').close();setCameraLevel(cameraLevel);refresh()};
+$('startFurnishedBtn').onclick=()=>{state=R.furnishedTest(true);building=null;hover=null;selectedObject=null;renderedKey='';resetFrameClock();$('welcome').close();setCameraLevel(cameraLevel);refresh()};
 $('startBtn').onclick=()=>{resetFrameClock();$('welcome').close();refresh()};$('welcome').showModal();
 function drawKitchenStatus(){
  const box=$('kitchenStatus');box.replaceChildren();

@@ -79,7 +79,9 @@ func sync(data: Dictionary) -> void:
 			var anchor:Dictionary=item.children[0].get("anchor",{})
 			if not anchor.is_empty():
 				var cam:Array=data.camera
-				root.position=Vector2(clampf((float(anchor.x)+float(anchor.w)/2.0)*40.0*float(cam[2])-float(cam[0])*float(cam[2])-250.0,5.0,455.0),clampf(float(anchor.y)*40.0*float(cam[2])-float(cam[1])*float(cam[2])+60.0-100.0,60.0,520.0))
+				var anchor_y := (float(anchor.y)*40.0-float(cam[1]))*float(cam[2])+60.0
+				var panel_y := anchor_y-100.0 if anchor_y>=160.0 else anchor_y+80.0
+				root.position=Vector2(clampf((float(anchor.x)+float(anchor.w)/2.0)*40.0*float(cam[2])-float(cam[0])*float(cam[2])-250.0,5.0,455.0),clampf(panel_y,60.0,520.0))
 		if key=="modal":
 			var welcome_small:bool=data.modal=="welcome" and not JSON.stringify(item).contains("Fechar tutorial")
 			entry[2]=Rect2(178,218,604,234) if welcome_small else Rect2(58,44,844,612)

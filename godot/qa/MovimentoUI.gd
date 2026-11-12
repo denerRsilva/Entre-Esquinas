@@ -12,12 +12,12 @@ func run():
 	await layout()
 	check(await button("Começar na taverna"),"Iniciar partida")
 	check(Engine.max_fps==60,"Limite de renderização em 60 FPS")
-	js("Object.assign(state.player,{x:1,y:5,settled:null,motion:null,goal:null})")
+	js("Object.assign(state.player,{x:5,y:5,settled:null,motion:null,goal:null})")
 	g.tick(0);await layout()
 	key(KEY_A,true)
 	for i in 45:g.tick(1.0/60.0)
 	var wall:=position_player()
-	check(absf(wall.x-0.7)<0.001,"Parar no limite físico da parede")
+	check(absf(wall.x-4.7)<0.001,"Parar no limite físico da parede")
 	var sprite: AnimatedSprite2D=g.palco.pool.cozinheira[0]
 	check(not sprite.is_playing(),"Não caminhar parado contra a parede")
 	key(KEY_S,true)
@@ -60,7 +60,7 @@ func run():
 	check(sprite.animation==&"direita","Animação segue o eixo livre ao deslizar na parede inferior")
 	key(KEY_S,false);key(KEY_D,false)
 	for diagonal in [[KEY_W,KEY_A,"cima"],[KEY_W,KEY_D,"cima"],[KEY_S,KEY_A,"baixo"],[KEY_S,KEY_D,"baixo"]]:
-		js("releaseKeyboard();state=R.fresh();Object.assign(state.player,{x:9,y:7})")
+		js("releaseKeyboard();state=R.fresh(true);Object.assign(state.player,{x:9,y:7})")
 		g.tick(0)
 		key(diagonal[0],true);key(diagonal[1],true)
 		var stable:=true

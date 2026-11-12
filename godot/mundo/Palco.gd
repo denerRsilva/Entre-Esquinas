@@ -33,6 +33,7 @@ func piece(key: String, scene: PackedScene = null) -> Node2D:
 
 func paint(data: Dictionary) -> void:
 	used.clear()
+	$Salao.set_compact(data.get("compact",false))
 	order = 0
 	$Salao.visible = data.room=="restaurant"
 	$Rua.visible = data.room=="street"
