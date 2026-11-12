@@ -172,7 +172,7 @@ function overlays(c,R,s,o,selected,building){
 function draw(c,R,s,ui){
  c.imageSmoothingEnabled=false;c.floor=s.player.room;
  if(s.player.room==='street'){label(c,s.closing?'ENCERRANDO':s.open?'ABERTO':'FECHADO',675,200,s.open?'#3b6448':'#77503a');}
- if(s.player.room==='restaurant'){
+ if(s.player.room==='restaurant'&&!s.singleRoom){
   if(!ui.constructionMode)label(c,'Computador',680,409);
   if(!ui.constructionMode)label(c,'Recebimento • '+Object.values(s.inv.receiving).reduce((a,b)=>a+b,0)+'/60',860,490);
   const boxes=Math.min(5,Math.ceil(Object.values(s.inv.receiving).reduce((a,b)=>a+b,0)/12));for(let i=0;i<boxes;i++){box(c,804+i*21,444,18,22,'#d0a56d');box(c,810+i*21,444,4,22,'#e3c58c');}
@@ -184,10 +184,12 @@ function draw(c,R,s,ui){
  items.sort((a,b)=>a.depth-b.depth||(a.actor?1:-1));
  for(const item of items){if(item.object)object(c,R,s,item.object,ui.selectedObject===item.object.id);else actor(c,R,s,item.actor,ui.selectedObject,ui.constructionMode);}
  if(!ui.constructionMode)for(const o of s.objects.filter(o=>o.room===s.player.room))overlays(c,R,s,o,ui.selectedObject===o.id,!!ui.building);
- if(ui.building){for(let y=0;y<R.H;y++)for(let x=0;x<R.W;x++)if(!R.wall(s.player.room,x,y)){c.strokeStyle='#33584766';c.lineWidth=1;c.strokeRect(x*40,y*40,40,40);}
+ if(ui.building){for(let y=0;y<R.H;y++)for(let x=0;x<R.W;x++)if(!R.wall(s.player.room,x,y,s)){c.strokeStyle='#33584766';c.lineWidth=1;c.strokeRect(x*40,y*40,40,40);}
   if(ui.hover){const o={type:ui.building.type,room:R.CATALOG[ui.building.type].room,x:ui.hover.x,y:ui.hover.y,rot:ui.building.rot},r=R.rect(o),error=ui.previewError(o);object(c,R,s,o,true,true);box(c,r.x*40,r.y*40,r.w*40,r.h*40,error?'#bb433b55':'#55aa7055');}}
 }
 function catalogIcon(type,name){
+ if(['computer','receiving'].includes(type)){const icon=document.createElement('span');icon.setAttribute('aria-label',name);icon.innerHTML=type==='computer'?'<svg viewBox="0 0 80 64"><path fill="#725037" d="M4 34h72v28H4z"/><path fill="#334443" d="M18 2h44v34H18z M35 34h10v6H35z"/><path fill="#a0ac87" d="M22 6h36v24H22z"/></svg>':'<svg viewBox="0 0 80 64"><path fill="#b4824e" stroke="#50382a" stroke-width="5" d="M5 10h70v48H5z M5 24h70 M5 44h70 M18 10v48 M62 10v48"/></svg>';return icon;}
+
  if(type==='potRack'){
   const icon=document.createElement('span');icon.className='furnitureSprite';icon.setAttribute('role','img');icon.setAttribute('aria-label',name);
   const pans=[14,40,66].map(x=>'<g transform="translate('+x+' 40)"><path d="M-11-4h22v3h-22z" fill="#34504c"/><path d="M-8-6h16v12h-16z" fill="#506e69"/><path d="M-6-5h12v9h-12z" fill="#a4b8a3"/><path d="M-7-7h14v4h-14z" fill="#354a43"/><path d="M-6-7h12v1h-12z" fill="#dfdfc3"/></g>').join('');

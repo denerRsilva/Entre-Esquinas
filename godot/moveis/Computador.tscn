@@ -1,0 +1,21 @@
+[gd_scene format=3]
+[ext_resource type="Texture2D" path="res://arte/taverna/moveis.png" id="atlas"]
+[ext_resource type="Shader" path="res://arte/taverna/recorte.gdshader" id="shader"]
+[ext_resource type="Script" path="res://moveis/Computador.gd" id="script"]
+[sub_resource type="ShaderMaterial" id="material"]
+shader = ExtResource("shader")
+[node name="Computador" type="Node2D"]
+script = ExtResource("script")
+[node name="Arte" type="Sprite2D" parent="."]
+material = SubResource("material")
+texture = ExtResource("atlas")
+texture_filter = 1
+region_enabled = true
+region_filter_clip_enabled = true
+region_rect = Rect2(473,995,200,132)
+centered = false
+position = Vector2(-38.0,-58)
+scale = Vector2(0.38,0.4393939393939394)
+[node name="Tela" type="Node2D" parent="."]
+z_index = 1
+script = ExtResource("script")

@@ -55,6 +55,6 @@ function snapshot(dt,events) {
   ui.notice=$('notice').style.opacity==='1'?section('notice'):null;
  }
  const writes=Host.writes;Host.writes={};
- return JSON.stringify({compact:state.compact===true,room:state.player.room,camera:[camera.x,camera.y,camera.zoom],scene:painter.commands,ui,modal,liveInventory:modal==='management'&&dialogMode==='container',construction:constructionMode,door:[parseFloat($('openBtn').style.left)||0,parseFloat($('openBtn').style.top)||0],writes,sounds:Host.sound.splice(0)});
+ return JSON.stringify({singleRoom:state.singleRoom===true,compact:state.compact===true,room:state.player.room,camera:[camera.x,camera.y,camera.zoom],scene:painter.commands,ui,modal,liveInventory:modal==='management'&&dialogMode==='container',construction:constructionMode,door:[parseFloat($('openBtn').style.left)||0,parseFloat($('openBtn').style.top)||0],writes,sounds:Host.sound.splice(0)});
 }
 kitchenAudio={state:'running',currentTime:0,createOscillator(){const tone={frequency:{value:0},connect(){},start(){Host.sound.push(tone.frequency.value)},stop(){}};return tone},createGain(){return {gain:{setValueAtTime(){},exponentialRampToValueAtTime(){}},connect(){}}}};

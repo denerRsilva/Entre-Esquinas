@@ -2,6 +2,7 @@ extends Node2D
 const Tracos = preload("res://mundo/Tracos.gd")
 @export var cozinheira: PackedScene = preload("res://personagens/Cozinheira.tscn")
 @export var moveis: Dictionary[String,PackedScene] = {
+	"computer":preload("res://moveis/Computador.tscn"),"receiving":preload("res://moveis/Recebimento.tscn"),
 	"stove":preload("res://moveis/Fogao.tscn"), "kitchen":preload("res://moveis/Cozinha.tscn"), "prep":preload("res://moveis/Preparo.tscn"),
 	"sink":preload("res://moveis/Pia.tscn"), "fridge":preload("res://moveis/Geladeira.tscn"),
 	"cold":preload("res://moveis/Geladeira.tscn"), "chair":preload("res://moveis/Cadeira.tscn"),
@@ -33,7 +34,7 @@ func piece(key: String, scene: PackedScene = null) -> Node2D:
 
 func paint(data: Dictionary) -> void:
 	used.clear()
-	$Salao.set_compact(data.get("compact",false))
+	$Salao.set_layout(data.get("compact",false),data.get("singleRoom",false))
 	order = 0
 	$Salao.visible = data.room=="restaurant"
 	$Rua.visible = data.room=="street"
@@ -73,7 +74,7 @@ func paint(data: Dictionary) -> void:
 			n.position = Vector2(op[2]+op[4]/2,op[3]+op[5])
 			n.modulate.a = 0.65 if op[7] else 1.0
 			var original := Vector2(40,40)
-			if op[1] in ["stove","prep","kitchen","sink","table","shelf","potRack"]: original.x=80
+			if op[1] in ["computer","receiving","stove","prep","kitchen","sink","table","shelf","potRack"]: original.x=80
 			if op[1] in ["fridge","cold"]: original.y=80
 			n.scale = Vector2(float(op[4])/original.x,float(op[5])/original.y)
 			if op[1]=="chair":

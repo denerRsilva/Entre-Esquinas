@@ -12,7 +12,7 @@ func run():
 	await layout()
 	check(await button("Começar na taverna"),"Iniciar partida")
 	check(Engine.max_fps==60,"Limite de renderização em 60 FPS")
-	js("Object.assign(state.player,{x:5,y:5,settled:null,motion:null,goal:null})")
+	js("Object.assign(state.player,{x:5,y:10,settled:null,motion:null,goal:null})")
 	g.tick(0);await layout()
 	key(KEY_A,true)
 	for i in 45:g.tick(1.0/60.0)

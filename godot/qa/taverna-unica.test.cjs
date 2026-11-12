@@ -1,0 +1,24 @@
+const assert=require('node:assert/strict'),R=require('../simulacao/restaurant-core');
+const s=R.furnishedTest(true,true);
+assert(R.valid(s));assert.equal(R.layoutError(s,s.objects),null);
+assert.equal(s.workers.length,1);assert.equal(s.workers[0].id,'worker2');assert(s.workers[0].x<14);
+assert(!s.objects.some(o=>['computer','receiving','shelf','cold'].includes(o.type)));
+assert(R.wall('restaurant',10,6,s));assert(!R.wall('restaurant',18,10,s));assert(!R.fixed('restaurant',16,11,s));
+for(const o of s.objects.filter(o=>o.type!=='chair'))assert(R.closestAccess(s,s.player,o),o.type);
+const before=s.cash;assert(!R.purchase(s,'arroz',2));assert.equal(s.cash,before);
+for(const [type,x,y]of [['computer',10,7],['receiving',18,13],['shelf',15,10]])assert(R.place(s,type,x,y).ok,type);
+assert(!R.place(s,'computer',10,8).ok);assert(!R.place(s,'cold',18,10).ok);
+assert(R.purchase(s,'arroz',2));const receiver=s.objects.find(o=>o.type==='receiving');
+assert(!R.remove(s,receiver.id).ok);s.time=6;R.deliver(s);assert.equal(s.inv.receiving.arroz,2);
+function near(o){Object.assign(s.player,R.closestAccess(s,s.player,o),{motion:null,goal:null,settled:null});}
+near(receiver);assert(R.utilityNear(s,'receiving'));R.collectReceiving(s);assert.equal(s.player.hand.item,'arroz');
+const shelf=s.objects.find(o=>o.type==='shelf');near(shelf);assert(R.handStorage(s,shelf.id,'put').ok);
+assert(R.place(s,'receiving',18,12,0,receiver.id).ok);near(s.objects.find(o=>o.id===receiver.id));R.collectReceiving(s);
+near(shelf);assert(R.handStorage(s,shelf.id,'put').ok);assert(R.remove(s,receiver.id).ok);
+near(s.objects.find(o=>o.type==='computer'));assert(R.utilityNear(s,'computer'));
+assert(R.valid(s));const copy=R.migrateSave(s);assert(copy?.singleRoom);assert.deepEqual(copy.objects,s.objects);
+for(const legacy of [R.furnishedTest(),R.furnishedTest(true)]){const copy=R.migrateSave(legacy);assert(copy&&!copy.singleRoom);assert.equal(copy.workers.length,2);assert.deepEqual(copy.objects,legacy.objects);}
+const service=R.furnishedTest(true,true);service.workers[0].task='waiter';service.serviceHours[0].start=360;R.toggleOpen(service);
+for(let i=0;i<400;i++)R.step(service,.05,()=>.5);
+assert(service.orders.length>0,'Garçom alcança cliente e anota pedido');assert(R.valid(service));
+console.log('PASSOU: taverna sem estoque, garçom no salão, catálogo, recebimento móvel, entregas conservadas e saves anteriores.');

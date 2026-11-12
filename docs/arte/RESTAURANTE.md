@@ -1,14 +1,12 @@
-# Restaurante jogável — Godot .8
+# Restaurante jogável — Godot .9
 
-Primeira integração das pranchas aprovadas. Abra **Começar na taverna** para ver a composição inicial; carregar um save preserva sua disposição anterior.
+Escolha **Começar na taverna** para usar a nova planta de **20 × 10 células**, incluindo paredes: 200 células, cerca de 29% menos que a versão .8 e 48% menos que a planta original.
 
-- Piso de madeira no salão e azulejo na cozinha em TileMapLayer; paredes, janelas, luminárias, plantas e tapetes.
-- Três mesas com velas e 12 cadeiras orientadas para as mesas. Fogão, geladeira, preparo, apoio de pratos, pia, estante e lixeira com os novos recortes.
-- Cozinheira animada em quatro direções, iniciando na cozinha. Alimentos crus, cortados e receitas usam a nova prancha.
-- Computador administrativo e recebimento mantêm suas posições de interação. Esta montagem não implementa comércio com NPCs ou fabricação por artesão.
+- Salão com três mesas, 12 cadeiras e um garçom; cozinha equipada. Sem cômodo de estoque e sem NPC de logística.
+- Computador, caixas de recebimento e prateleira são comprados e posicionados pelo catálogo de construção. Não vêm instalados. Geladeira do estoque removida do catálogo da nova planta.
+- Computador e recebimento funcionam nas posições instaladas. Compras exigem caixas; guardar caixas é bloqueado quando ainda há ingredientes ou entregas pendentes. Mover as caixas conserva o conteúdo.
+- Saves anteriores continuam usando sua planta e funcionários, sem conversão destrutiva. A nova partida recebe a planta menor.
 
-Os PNGs originais ficam em `godot/arte/taverna`. `recortes.json` mede as regiões não uniformes das pranchas; as imagens originais não foram reamostradas. A arte é uma integração dos estudos ampliados com filtro nearest, ainda não um atlas final desenhado em pixels nativos 32×32. A grade lógica permanece 40 px e novas partidas usam 20 × 14 células em vez de 24 × 16, aproximadamente 27% menos área, com três mesas e 12 cadeiras; saves antigos preservam a planta ampla. Rua e NPCs ainda usam arte anterior.
+A arte usa as pranchas aprovadas, ainda ampliadas e não finalizadas como atlas nativo 32 × 32. A grade lógica permanece em 40 pixels. Rua e NPCs ainda usam arte anterior. A remoção do estoque não implementa comércio com NPCs nem fabricação por artesãos.
 
-Validação: Regras.cjs; MaosUI (retirada, corte, panela, receita, empratamento e save); MovimentoUI (colisão, direções, pausa e animação); Verificar (cena, TileMap, UI e regras). Todos passaram na Godot 4.6.3 Linux. Captura gráfica em restaurante-jogavel.png. APK .8 exportado e validado quanto à assinatura e alinhamento; não testado em aparelho Android físico.
-
-Na planta compacta, o painel de ações aparece abaixo de móveis próximos ao topo da tela para não cobrir a geladeira. `taverna-compacta.test.cjs` verifica acesso aos móveis e à saída, limites de construção, conservação e compatibilidade dos saves.
+Validação: Regras.cjs (incluindo taverna-unica.test.cjs), MaosUI, TavernaUnicaUI, MovimentoUI e Verificar, Godot 4.6.3 Linux. Verificados cozinha completa, colisão e acesso, catálogo, computador instalado, compra/entrega/retirada, conservação e saves. Captura em restaurante-jogavel.png. APK .9 com assinatura e alinhamento conferidos; ainda não testado em aparelho Android físico.

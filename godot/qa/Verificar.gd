@@ -30,7 +30,7 @@ func run():
 	await process_frame
 	check(g.active,"Cena principal iniciou")
 	check(g.hud.z_index==4096,"Interface acima de todos os móveis")
-	check(g.palco.get_node("Salao/Piso").get_used_cells().size()==280,"280 células na planta compacta")
+	check(g.palco.get_node("Salao/Piso").get_used_cells().size()==200,"200 células na taverna sem estoque")
 	check(press_named("Tutorial") and press_named("Fechar tutorial"),"Tutorial abre e recolhe")
 	check(press_named("Começar na taverna"),"Entrada mobiliada pelo botão nativo")
 	check(js("R.valid(state)")=="true","Estado inicial válido")
