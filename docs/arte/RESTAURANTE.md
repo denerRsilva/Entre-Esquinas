@@ -14,3 +14,5 @@ Validação: Regras.cjs (incluindo taverna-unica.test.cjs), MaosUI, TavernaUnica
 Polimento .10: removido o retângulo marrom sobre a mesa de empratamento; preparo aproximado uma célula; fogão perto da geladeira e estante de panelas em sua antiga posição; segundo vaso transferido ao canto superior esquerdo. A mesa de empratamento e o vaso inferior esquerdo permanecem no lugar.
 
 Interações .11: botões contextuais sem legendas visíveis; prato, panela e ingredientes com símbolos de inserir, retirar, preparar ou descartar. Armazenamento mostra arte, quantidade e seta de retirada. Descrições permanecem nos tooltips. Fluxo MaosUI validado e captura em interacoes-visuais.png.
+
+Versão .13: clientes caminham a 2,5 células/s (0,4 s por célula; antes 0,18 s). Velocidade da cozinheira preservada. Início mobiliado segue a imagem enviada: três mesas com quatro cadeiras, equipamentos alinhados na parede superior e garçom fora dos assentos. Testados movimento em curso/salvamento, assentos, circulação e cozinha completa.

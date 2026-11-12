@@ -6,7 +6,7 @@ assert(!s.objects.some(o=>['computer','receiving','shelf','cold'].includes(o.typ
 assert(R.wall('restaurant',10,6,s));assert(!R.wall('restaurant',18,10,s));assert(!R.fixed('restaurant',16,11,s));
 for(const o of s.objects.filter(o=>o.type!=='chair'))assert(R.closestAccess(s,s.player,o),o.type);
 const before=s.cash;assert(!R.purchase(s,'arroz',2));assert.equal(s.cash,before);
-for(const [type,x,y]of [['computer',10,7],['receiving',17,13],['shelf',15,10]])assert(R.place(s,type,x,y).ok,type);
+for(const [type,x,y]of [['computer',8,10],['receiving',20,12],['shelf',15,10]])assert(R.place(s,type,x,y).ok,type);
 assert(!R.place(s,'computer',10,8).ok);assert(!R.place(s,'cold',18,10).ok);
 assert(R.purchase(s,'arroz',2));const receiver=s.objects.find(o=>o.type==='receiving');
 assert(!R.remove(s,receiver.id).ok);s.time=6;R.deliver(s);assert.equal(s.inv.receiving.arroz,2);
@@ -22,3 +22,9 @@ const service=R.furnishedTest(true,true);service.workers[0].task='waiter';servic
 for(let i=0;i<400;i++)R.step(service,.05,()=>.5);
 assert(service.orders.length>0,'Garçom alcança cliente e anota pedido');assert(R.valid(service));
 console.log('PASSOU: taverna sem estoque, garçom no salão, catálogo, recebimento móvel, entregas conservadas e saves anteriores.');
+const walking=R.furnishedTest(true,true);R.spawn(walking,()=>.5);const client=walking.customers[0];
+Object.assign(client,{x:8,y:10,goal:{room:'restaurant',x:9,y:10}});R.moveActors(walking,.01);
+assert.equal(client.motion.duration,.4);assert(R.valid(walking));assert(R.migrateSave(walking));
+const upper=walking.objects.find(o=>o.type==='table'&&o.y===8);
+assert.equal(walking.objects.filter(o=>o.type==='chair'&&R.chairTable(walking,o)?.id===upper.id).length,4);
+assert(!walking.objects.some(o=>R.hit(o,walking.workers[0].x,walking.workers[0].y)));
