@@ -1,4 +1,4 @@
-# Restaurante jogável — Godot .9
+# Restaurante jogável — Godot .10
 
 Escolha **Começar na taverna** para usar a nova planta de **20 × 10 células**, incluindo paredes: 200 células, cerca de 29% menos que a versão .8 e 48% menos que a planta original.
 
@@ -9,4 +9,6 @@ Escolha **Começar na taverna** para usar a nova planta de **20 × 10 células**
 
 A arte usa as pranchas aprovadas, ainda ampliadas e não finalizadas como atlas nativo 32 × 32. A grade lógica permanece em 40 pixels. Rua e NPCs ainda usam arte anterior. A remoção do estoque não implementa comércio com NPCs nem fabricação por artesãos.
 
-Validação: Regras.cjs (incluindo taverna-unica.test.cjs), MaosUI, TavernaUnicaUI, MovimentoUI e Verificar, Godot 4.6.3 Linux. Verificados cozinha completa, colisão e acesso, catálogo, computador instalado, compra/entrega/retirada, conservação e saves. Captura em restaurante-jogavel.png. APK .9 com assinatura e alinhamento conferidos; ainda não testado em aparelho Android físico.
+Validação: Regras.cjs (incluindo taverna-unica.test.cjs), MaosUI, TavernaUnicaUI, MovimentoUI e Verificar, Godot 4.6.3 Linux. Verificados cozinha completa, colisão e acesso, catálogo, computador instalado, compra/entrega/retirada, conservação e saves. Captura em restaurante-jogavel.png. APK .10 com assinatura e alinhamento conferidos; ainda não testado em aparelho Android físico.
+
+Polimento .10: removido o retângulo marrom sobre a mesa de empratamento; preparo aproximado uma célula; fogão perto da geladeira e estante de panelas em sua antiga posição; segundo vaso transferido ao canto superior esquerdo. A mesa de empratamento e o vaso inferior esquerdo permanecem no lugar.

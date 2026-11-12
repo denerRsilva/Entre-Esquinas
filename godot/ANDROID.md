@@ -3,7 +3,7 @@
 O APK de teste fica em `../build/Android/EntreEsquinas.apk`. Baixe o arquivo
 completo pelo botão **Download raw file** no GitHub e permita a instalação
 de aplicativos dessa origem no Android. O pacote é
-`com.entreesquinas.restaurante`, versão `0.21.2-godot.9` (21209).
+`com.entreesquinas.restaurante`, versão `0.21.2-godot.10` (21210).
 Requer Android 7.0 ou superior. Tamanho aproximado: 95 MiB.
 O SHA-256 está em `../build/Android/SHA256SUMS`.
 

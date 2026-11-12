@@ -68,7 +68,7 @@ func _draw():
 	decor(7,Rect2(280,560,80,40))
 	decor(4,Rect2(480,top+10,54,85))
 	decor(3,Rect2(left+45,520,35,44))
-	decor(3,Rect2(525,520,35,44))
+	decor(3,Rect2(left+45,top+65,35,44) if single_room else Rect2(525,520,35,44))
 	asset(FURN,cuts.moveis[24],Rect2(390,top+8,105,44))
 	if not single_room:
 		# Existing administrative computer remains accessible at its actual coordinates.

@@ -109,7 +109,7 @@ function object(c,R,s,o,selected,preview=false){
   if(recipe)FoodArt.draw(c,recipe,x+w/2-14,y-50,28,24);
  }
  if(o.type==='kitchen'){
-  box(c,x+34,y,38,17,'#a17e54');if(o.support)pot(c,x+50,y-7,!!R.ITEMS[o.support.item]?.servings,false,s.time);
+  if(o.support)pot(c,x+50,y-7,!!R.ITEMS[o.support.item]?.servings,false,s.time);
 
   const count=o.plates||0;if(count)for(let i=0;i<Math.min(4,Math.ceil(count/3));i++)plate(c,x+12,y+2-i*2);
   if(o.utensil){box(c,x+w-15,y+3,7,11,'#7c5b37');box(c,x+w-13,y-3,2,10,'#dec08c');box(c,x+w-9,y-1,2,9,'#cfad79');}

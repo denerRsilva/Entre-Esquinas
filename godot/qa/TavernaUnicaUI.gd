@@ -7,7 +7,7 @@ func run():
  js("enterConstruction();renderDialog()");g.tick(0);await layout()
  var catalog=js("$('constructionPanel').textContent")
  check(catalog.contains("Computador") and catalog.contains("Caixas de recebimento") and catalog.contains("Prateleira seca") and not catalog.contains("Geladeira do estoque"),"Equipamentos opcionais no catálogo")
- js("exitConstruction();R.place(state,'computer',10,7);R.place(state,'receiving',18,13);refresh()")
+ js("exitConstruction();R.place(state,'computer',10,7);R.place(state,'receiving',17,13);refresh()")
  g.tick(0);await layout()
  await click_object("computer")
  check(g.frame_data.modal=="management" and js("dialogMode")=="computer","Computador abre na posição instalada")

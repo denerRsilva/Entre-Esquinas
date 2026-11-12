@@ -203,7 +203,7 @@ function furnishedTest(compact=false,singleRoom=false){
  const layout=[];
  for(const [x,y]of (singleRoom?[[6,8],[6,11],[11,11]]:compact?[[6,5],[6,10],[11,10]]:[[4,5],[4,10],[10,10]]))layout.push(['table',x,y],['chair',x,y-1,2],['chair',x+1,y-1,2],['chair',x,y+1,0],['chair',x+1,y+1,0]);
  // Cozinha mobiliada conforme a referência visual: linha superior e bancadas laterais.
- if(singleRoom)layout.push(['stove',20,8],['prep',20,13],['fridge',15,7],['kitchen',15,13],['sink',21,11],['potRack',17,7],['bin',22,13]);
+ if(singleRoom)layout.push(['stove',17,8],['prep',19,13],['fridge',15,7],['kitchen',15,13],['sink',21,11],['potRack',20,8],['bin',22,13]);
  else layout.push(['stove',20,compact?4:3],['prep',20,8],['fridge',15,compact?3:2],['kitchen',15,8],['sink',21,6],['potRack',17,compact?3:2],['bin',22,8],['shelf',16,13],['cold',21,13]);
  for(const [type,x,y,rot=0]of layout){let r=place(s,type,x,y,rot);if(!r.ok)throw Error('Cenário de teste: '+r.error);}
  const stove=s.objects.find(o=>o.type==='stove'),prep=s.objects.find(o=>o.type==='kitchen');

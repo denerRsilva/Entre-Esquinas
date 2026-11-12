@@ -6,7 +6,7 @@ assert(!s.objects.some(o=>['computer','receiving','shelf','cold'].includes(o.typ
 assert(R.wall('restaurant',10,6,s));assert(!R.wall('restaurant',18,10,s));assert(!R.fixed('restaurant',16,11,s));
 for(const o of s.objects.filter(o=>o.type!=='chair'))assert(R.closestAccess(s,s.player,o),o.type);
 const before=s.cash;assert(!R.purchase(s,'arroz',2));assert.equal(s.cash,before);
-for(const [type,x,y]of [['computer',10,7],['receiving',18,13],['shelf',15,10]])assert(R.place(s,type,x,y).ok,type);
+for(const [type,x,y]of [['computer',10,7],['receiving',17,13],['shelf',15,10]])assert(R.place(s,type,x,y).ok,type);
 assert(!R.place(s,'computer',10,8).ok);assert(!R.place(s,'cold',18,10).ok);
 assert(R.purchase(s,'arroz',2));const receiver=s.objects.find(o=>o.type==='receiving');
 assert(!R.remove(s,receiver.id).ok);s.time=6;R.deliver(s);assert.equal(s.inv.receiving.arroz,2);
