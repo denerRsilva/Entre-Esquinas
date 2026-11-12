@@ -9,7 +9,7 @@ func run():
 	await layout()
 	check(await button("Fechar tutorial"),"Recolher tutorial")
 	await layout()
-	check(await button("Começar mobiliado (teste)") and g.frame_data.modal=="","Início mobiliado após tutorial")
+	check(await button("Começar na taverna") and g.frame_data.modal=="","Início mobiliado após tutorial")
 	await layout()
 	check(await button("Gestão"),"Menu Gestão pelo mouse")
 	for entry in [["Turnos","shifts"],["Equipe","team"],["Fechamento","finance"],["Clientes","customers"],["Calendário","calendar"],["Reputação","reputation"]]:

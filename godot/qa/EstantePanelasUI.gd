@@ -2,7 +2,7 @@ extends "res://qa/MaosUI.gd"
 func run():
 	root.size=Vector2i(960,700)
 	g=load("res://mundo/Restaurante.tscn").instantiate();root.add_child(g);g.set_process(false)
-	await layout();check(await button("Começar mobiliado (teste)"),"Início mobiliado")
+	await layout();check(await button("Começar na taverna"),"Início mobiliado")
 	check(js("R.objectCount(state.objects.find(o=>o.type==='potRack'),'pot')===3")=="true","Estante começa com exatamente três panelas")
 	check(g.palco.pool.has("potRack"),"Cena editável da estante aparece na cozinha")
 	await click_object("potRack")

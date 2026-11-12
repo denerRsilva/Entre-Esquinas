@@ -25,7 +25,7 @@ Regras e decisões de design: [GDD consolidado](../GDD.md).
 
 1. Extraia o ZIP por completo. Mantenha a pasta `nativo` junto ao projeto.
 2. No gerenciador da Godot, escolha **Importar**, selecione `project.godot` e abra o projeto. Aguarde a primeira importação das texturas.
-3. Pressione **F5**. **Começar mobiliado (teste)** abre o restaurante equipado. **Começar vazio** inicia a montagem do zero. O botão **Tutorial** exibe os primeiros passos.
+3. Pressione **F5**. **Começar na taverna** abre o restaurante equipado. **Começar vazio** inicia a montagem do zero. O botão **Tutorial** exibe os primeiros passos.
 
 Use WASD/setas para movimento livre e contínuo, com parada imediata ao soltar e deslizamento nas paredes. O clique no chão também continua disponível para caminhar até um destino. Clique em móveis e clientes para se aproximar. Use **Gestão → Modo construção** para reposicionar, girar ou guardar móveis. **Opções → Salvar e carregar** controla o progresso.
 

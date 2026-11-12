@@ -16,7 +16,7 @@ func run():
 	root.add_child(game)
 	game.set_process(false)
 	await capture("welcome")
-	press("Começar mobiliado (teste)")
+	press("Começar na taverna")
 	await capture("restaurant")
 	press("Gestão")
 	press("Modo construção")

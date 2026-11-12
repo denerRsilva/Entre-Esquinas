@@ -200,15 +200,16 @@ function fresh(){return {version:VERSION,chopping:null,serviceHours:newServiceHo
 function furnishedTest(){
  const s=fresh();s.cash=10000;
  const layout=[];
- for(const [x,y]of [[4,4],[9,4],[7,9]])layout.push(['table',x,y],['chair',x,y-1,2],['chair',x+1,y-1,2],['chair',x,y+1,0],['chair',x+1,y+1,0]);
+ for(const [x,y]of [[4,5],[4,10],[10,10]])layout.push(['table',x,y],['chair',x,y-1,2],['chair',x+1,y-1,2],['chair',x,y+1,0],['chair',x+1,y+1,0]);
  // Cozinha mobiliada conforme a referência visual: linha superior e bancadas laterais.
- layout.push(['stove',15,4],['prep',17,4],['fridge',19,3],['kitchen',15,8],['sink',21,6],['potRack',21,2],['bin',22,8],['shelf',16,13],['cold',21,13]);
+ layout.push(['stove',20,3],['prep',20,8],['fridge',15,2],['kitchen',15,8],['sink',21,6],['potRack',17,2],['bin',22,8],['shelf',16,13],['cold',21,13]);
  for(const [type,x,y,rot=0]of layout){let r=place(s,type,x,y,rot);if(!r.ok)throw Error('Cenário de teste: '+r.error);}
  const stove=s.objects.find(o=>o.type==='stove'),prep=s.objects.find(o=>o.type==='kitchen');
  for(const food of Object.keys(FOODS)){putObject(s,s.objects.find(o=>o.type==='fridge'),food,30);s.purchased[food]=30;}
  stove.pan='pot';putObject(s,s.objects.find(o=>o.type==='potRack'),'pot',3);prep.plates=12;prep.utensil=false;
  s.equipment={pot:4,plate:12,spoon:0};s.tools={pot:true,spoon:false};s.cash=1500;s.ledger.investment=0;
- s.message='Teste pronto: ingredientes na geladeira, panela no fogão e pratos na mesa de cozinha.';
+ Object.assign(s.player,{x:18,y:6});
+ s.message='Taverna pronta: ingredientes na geladeira, panela no fogão e pratos na mesa de cozinha.';
  if(!valid(s))throw Error('Cenário de teste inválido.');return s;
 }
 function clearTestScene(s){delete s.receivingQuality;

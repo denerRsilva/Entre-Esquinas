@@ -14,6 +14,7 @@ const DIRECOES = {"up":"cima","down":"baixo","left":"esquerda","right":"direita"
 var pool: Dictionary = {}
 var used: Dictionary = {}
 var order := 0
+var art_cuts: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://arte/taverna/recortes.json"))
 
 func piece(key: String, scene: PackedScene = null) -> Node2D:
 	var i: int = used.get(key,0)
@@ -74,7 +75,13 @@ func paint(data: Dictionary) -> void:
 			if op[1] in ["stove","prep","kitchen","sink","table","shelf","potRack"]: original.x=80
 			if op[1] in ["fridge","cold"]: original.y=80
 			n.scale = Vector2(float(op[4])/original.x,float(op[5])/original.y)
-			if op[1]=="chair" and int(op[6])==3: n.scale.x *= -1
+			if op[1]=="chair":
+				var facing := int(op[6])
+				var crop: Array = art_cuts.moveis[[9,10,8,10][facing]]
+				var sprite: Sprite2D = n.get_node("Arte")
+				sprite.region_rect = Rect2(crop[0],crop[1],crop[2],crop[3])
+				sprite.scale = Vector2(30.0/crop[2],40.0/crop[3])
+				if facing==1: n.scale.x *= -1
 	if not segment.is_empty(): piece("detalhes").set_commands(segment)
 	for key in pool:
 		for i in range(used.get(key,0),pool[key].size()):

@@ -12,7 +12,7 @@ func take_storage(label:String) -> bool:
 func run():
 	root.size=Vector2i(960,700)
 	g=load("res://mundo/Restaurante.tscn").instantiate();root.add_child(g);g.set_process(false)
-	await layout();check(await button("Começar mobiliado (teste)"),"Começar mobiliado")
+	await layout();check(await button("Começar na taverna"),"Começar mobiliado")
 	check(await button("Livro de receitas"),"Livro acessível pelo botão ao lado de Opções")
 	var book=JSON.stringify(g.frame_data.ui.modal)
 	check(book.contains("Livro de receitas") and book.contains("Arroz com legumes") and book.contains("Sopa de legumes") and book.contains("Frango com arroz"),"Livro mostra as três receitas")

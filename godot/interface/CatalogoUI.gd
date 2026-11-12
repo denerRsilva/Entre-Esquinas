@@ -29,6 +29,9 @@ func art_control(d: Dictionary) -> Control:
 	var n := TextureRect.new()
 	n.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	n.texture = texture(d.art)
+	var mat:=ShaderMaterial.new()
+	mat.shader=load("res://arte/taverna/recorte.gdshader")
+	n.material=mat
 	n.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	n.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	n.custom_minimum_size = Vector2(180,130) if d.get("cls","")=="recipeHero" else Vector2(52,42)

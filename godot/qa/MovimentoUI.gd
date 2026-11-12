@@ -10,7 +10,7 @@ func run():
 	g=load("res://mundo/Restaurante.tscn").instantiate()
 	root.add_child(g);g.set_process(false)
 	await layout()
-	check(await button("Começar mobiliado (teste)"),"Iniciar partida")
+	check(await button("Começar na taverna"),"Iniciar partida")
 	check(Engine.max_fps==60,"Limite de renderização em 60 FPS")
 	js("Object.assign(state.player,{x:1,y:5,settled:null,motion:null,goal:null})")
 	g.tick(0);await layout()

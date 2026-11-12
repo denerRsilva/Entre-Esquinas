@@ -6,7 +6,7 @@ func run():
 	g=load("res://mundo/Restaurante.tscn").instantiate()
 	root.add_child(g);g.set_process(false)
 	await layout()
-	check(await button("Começar mobiliado (teste)"),"Iniciar cenário para testar clientes")
+	check(await button("Começar na taverna"),"Iniciar cenário para testar clientes")
 	await layout()
 	check(await button("Opções"),"Abrir Opções")
 	await layout()

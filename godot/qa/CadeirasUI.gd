@@ -6,7 +6,7 @@ func disabled(label:String) -> bool:
 func run():
 	root.size=Vector2i(960,700)
 	g=load("res://mundo/Restaurante.tscn").instantiate();root.add_child(g);g.set_process(false)
-	await layout();check(await button("Começar mobiliado (teste)"),"Cenário mobiliado")
+	await layout();check(await button("Começar na taverna"),"Cenário mobiliado")
 	check(js("R.seats(state).length===12&&state.objects.filter(o=>o.type==='table').every(t=>state.objects.filter(c=>c.type==='chair'&&R.seatTable(state,c)?.id===t.id).length===4)")=="true","Três mesas com quatro cadeiras válidas")
 	await layout();check(await button("Gestão"),"Gestão")
 	await layout();check(await button("Modo construção"),"Construção")

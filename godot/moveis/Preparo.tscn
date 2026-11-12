@@ -1,11 +1,16 @@
 [gd_scene format=3]
-[ext_resource type="Texture2D" path="res://arte/esquina-atlas.png" id="atlas"]
+[ext_resource type="Texture2D" path="res://arte/taverna/moveis.png" id="atlas"]
+[ext_resource type="Shader" path="res://arte/taverna/recorte.gdshader" id="shader"]
+[sub_resource type="ShaderMaterial" id="material"]
+shader = ExtResource("shader")
 [node name="Preparo" type="Node2D"]
 [node name="Arte" type="Sprite2D" parent="."]
+material = SubResource("material")
 texture = ExtResource("atlas")
+texture_filter = 1
 region_enabled = true
 region_filter_clip_enabled = true
-region_rect = Rect2(339, 77, 263, 216)
+region_rect = Rect2(929, 108, 199, 151)
 centered = false
-position = Vector2(-38.0, -52)
-scale = Vector2(0.2889733840304182,0.24074074074074073)
+position = Vector2(-38.0, -58)
+scale = Vector2(0.38190954773869346, 0.3841059602649007)

@@ -11,7 +11,7 @@ const getComputedStyle=()=>({getPropertyValue:()=>String(Host.top)});
 const requestAnimationFrame=()=>{};
 class Bitmap {
  constructor(){this.complete=true;this.naturalWidth=1254;this.naturalHeight=1254}
- set src(v){this.file=v.split('/').pop();if(this.onload)this.onload()}
+ set src(v){this.file=v.replace(/^assets\//,'');if(this.onload)this.onload()}
 }
 const Image=Bitmap;
 class Painter {

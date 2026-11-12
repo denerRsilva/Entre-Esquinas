@@ -3,6 +3,8 @@
 'use strict';
 const atlas=typeof Image!=='undefined'?new Image():null;
 if(atlas)atlas.src='assets/esquina-atlas.png';
+const kitchenAtlas=typeof Image!=='undefined'?new Image():null;
+if(kitchenAtlas)kitchenAtlas.src='assets/taverna/moveis.png';
 const walkAtlas=typeof Image!=='undefined'?new Image():null;
 if(walkAtlas)walkAtlas.src='assets/esquina-walk.png';
 const walkRects=[[86, 22, 151, 282], [401, 22, 127, 281], [682, 16, 133, 289], [984, 16, 134, 290], [81, 343, 159, 278], [398, 343, 130, 278], [682, 340, 130, 281], [984, 340, 134, 283], [78, 659, 158, 279], [398, 659, 129, 279], [678, 656, 142, 282], [984, 659, 142, 279], [78, 976, 162, 285], [390, 976, 137, 285], [682, 975, 131, 286], [985, 975, 133, 286]];
@@ -43,7 +45,7 @@ function plate(c,x,y,recipe,dirty=false,quality=0){
 }
 function pot(c,x,y,filled,active,time){
  if(active){box(c,x-8,y+3,16,4,'#f5a331');box(c,x-5,y+5,10,2,'#cb5428');}
- box(c,x-11,y-4,22,3,'#34504c');box(c,x-8,y-6,16,12,'#506e69');box(c,x-6,y-5,12,9,'#a4b8a3');box(c,x-7,y-7,14,4,filled?'#d1963d':'#354a43');box(c,x-6,y-7,12,1,'#dfdfc3');
+ c.drawImage(kitchenAtlas,710,802,180,140,x-13,y-12,26,20);if(filled)box(c,x-5,y-7,10,3,'#d1963d');
  if(active)for(let i=0;i<3;i++){let rise=(time*7+i*6)%18;box(c,x-5+i*5,y-9-rise,2,4,'#f6ecd5aa');}
 }
 function base(c,R,room){
@@ -91,18 +93,14 @@ function object(c,R,s,o,selected,preview=false){
  box(c,x+5,y+h-7,w-7,8,'#624a343f');
  let sw=w-4,sh=h+12;if(o.type==='stove')sh=h+22;if(o.type==='fridge'||o.type==='cold')sh=h+5;if(o.type==='chair'){sw=29;sh=38;}if(o.type==='bin'){sw=27;sh=34;}
  c.furniture(o,x,y,w,h,preview);
- if(o.type==='chair'){
+ if(o.type==='chair'&&preview){
   // Orientation marker belongs to the seat, never changes its collision footprint.
   const [dx,dy]=R.DIRS[o.rot];box(c,x+19+dx*10,y+20+dy*10,3,3,'#f8deb0');
   {c.fillStyle='#fff2ce';c.textAlign='center';c.font='bold 16px system-ui';c.fillText(['↑','→','↓','←'][o.rot],x+20,y+24);}
  }
  if(o.type==='stove'&&o.pan)pot(c,x+w*.3,y-9,o.pan.startsWith('pot_'),o.pan==='cookingPot'||!!o.readyBatch,s.time);
  if(o.readyBatch){const stage=R.heatState(s,o).stage;if(['over','danger','burned'].includes(stage)){box(c,x+10,y-15,12,7,'#514d40');for(let i=0;i<3;i++)box(c,x+10+i*4,y-22-((s.time*8+i*6)%18),5,7,stage==='burned'?'#383a36aa':'#71695c99');}}
- if(o.type==='potRack'){for(let i=0;i<3;i++)if(o.inventory?.[i]?.item==='pot')pot(c,o.rot%2?x+w/2:x+w*(i+.5)/3,o.rot%2?y+13+i*25:y+22,false,false,s.time);}
- if(o.type==='prep'){
-  box(c,x+8,y,60,12,'#e5c796');for(let i=0;i<3;i++)box(c,x+17+i*10,y+2,5,5,'#70a15d');
-  box(c,x+48,y-3,16,3,'#dce3db');box(c,x+64,y-3,7,3,'#725135');
- }
+ if(o.type==='potRack'){for(let i=0;i<3;i++)if(o.inventory?.[i]?.item==='pot')pot(c,x+w/2,y-20+i*23,false,false,s.time);}
  // A prévia de construção não possui ID e nunca representa um cozimento ativo.
  const cooking=o.id!==undefined&&s.cooking?.stove===o.id?s.cooking:null;
  if(o.type==='stove'&&(o.ingredients?.length||cooking||o.readyBatch)){

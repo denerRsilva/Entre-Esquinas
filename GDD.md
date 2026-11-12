@@ -83,7 +83,7 @@ O cardápio futuro deve reunir pratos conhecidos de diferentes partes do mundo, 
 
 Pixel art continua sendo a linguagem aprovada. Fachadas reparadas, móveis restaurados, equipamentos antigos, roupas adaptadas e vegetação retomando partes da vila compõem a direção aceita. Madeira e terracota permanecem materiais possíveis dentro do tom novo.
 
-A aparência atual do jogo ainda deriva da direção brasileira acolhedora. Ela não comprova implementação da nova ambientação. O concept anterior pode orientar materiais, mas não fixa o tom final.
+A versão 0.21.2-godot.7 integra uma primeira montagem jogável do interior baseada na direção aprovada abaixo. Rua, moradores e algumas interfaces ainda usam a arte anterior; a nova ambientação não está concluída.
 
 **Proposta não aprovada.** Exteriores frios e pouco saturados, reboco gasto, metal oxidado e luz localizada podem reforçar melancolia e contraste. A paleta exata, a iluminação e a intensidade do desgaste ainda aguardam avaliação. Tornar a taverna progressivamente cozy por escolhas de decoração permanece em aberto.
 
@@ -91,9 +91,9 @@ A aparência atual do jogo ainda deriva da direção brasileira acolhedora. Ela 
 
 A prancha [direção aprovada](docs/arte/direcao-aprovada.png) é a referência visual aceita por Dener. A vila combina ruínas e reparos com exteriores frios e pouco saturados; a taverna usa madeira, terracota e luz âmbar. Ingredientes e itens carregados precisam se distinguir do cenário. Personagens usam silhuetas simples e roupas adaptadas; a cozinheira de referência tem coque castanho, blusa clara, avental verde-petróleo e botas.
 
-A unidade artística aprovada é **32 × 32 pixels**, com móveis maiores em múltiplos dessa unidade. A perspectiva é superior com frente dos objetos visível. A produção deve preservar pixels nítidos e validar animações, escala, colisões e leitura no celular. A grade lógica atual de 40 pixels não foi alterada nesta etapa documental.
+A unidade artística aprovada é **32 × 32 pixels**, com móveis maiores em múltiplos dessa unidade. A perspectiva é superior com frente dos objetos visível. A produção deve preservar pixels nítidos e validar animações, escala, colisões e leitura no celular. A montagem jogável mantém a grade lógica de 40 pixels e escala os recortes dos estudos ampliados; ainda não entrega um atlas nativo final de 32 × 32.
 
-O cenário inicial deve buscar a composição e as proporções da taverna da prancha aprovada. A prancha não fornece uma planta medida nem peças prontas: dimensões em tiles, circulação e encaixes devem ser conferidos durante a montagem. A produção foi dividida pelo proprietário nesta ordem: **cozinheira → alimentos → tilesets do cenário e objetos**. A sprite sheet inicial da cozinheira é um estudo gerado em resolução ampliada; ainda não é um atlas nativo validado de quadros 32 × 32 e não substitui a personagem jogável nesta etapa.
+O cenário inicial deve buscar a composição e as proporções da taverna da prancha aprovada. A prancha não fornece uma planta medida nem peças prontas: dimensões em tiles, circulação e encaixes devem ser conferidos durante a montagem. A produção foi dividida pelo proprietário nesta ordem: **cozinheira → alimentos → tilesets do cenário e objetos**. A sprite sheet inicial da cozinheira é um estudo gerado em resolução ampliada; foi integrada à personagem jogável com quatro direções e quatro poses por direção, mas ainda não é um atlas nativo final de 32 × 32. A opção principal “Começar na taverna” abre três mesas, 12 cadeiras e cozinha equipada. Piso em TileMapLayer, paredes, móveis, alimentos e decoração usam as pranchas aprovadas. A composição conserva as áreas funcionais existentes e não reproduz exatamente as dimensões da ilustração. Saves existentes mantêm sua disposição de móveis.
 
 ### Regras de legibilidade
 

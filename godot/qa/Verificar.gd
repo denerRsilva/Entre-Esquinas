@@ -30,9 +30,9 @@ func run():
 	await process_frame
 	check(g.active,"Cena principal iniciou")
 	check(g.hud.z_index==4096,"Interface acima de todos os móveis")
-	check(g.palco.get_node("Salao").get_used_cells().size()==384,"384 células no salão")
+	check(g.palco.get_node("Salao/Piso").get_used_cells().size()==384,"384 células no salão")
 	check(press_named("Tutorial") and press_named("Fechar tutorial"),"Tutorial abre e recolhe")
-	check(press_named("Começar mobiliado (teste)"),"Entrada mobiliada pelo botão nativo")
+	check(press_named("Começar na taverna"),"Entrada mobiliada pelo botão nativo")
 	check(js("R.valid(state)")=="true","Estado inicial válido")
 	check(g.palco.pool["cozinheira"][0] is AnimatedSprite2D,"Cozinheira em AnimatedSprite2D")
 	check(press_named("Gestão") and press_named("Modo construção"),"Gestão abre construção")

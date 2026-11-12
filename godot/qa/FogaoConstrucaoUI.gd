@@ -8,7 +8,7 @@ func finish():
 func run():
 	root.size=Vector2i(960,700)
 	g=load("res://mundo/Restaurante.tscn").instantiate();root.add_child(g);g.set_process(false)
-	await layout();check(await button("Começar mobiliado (teste)"),"Iniciar mobiliado")
+	await layout();check(await button("Começar na taverna"),"Iniciar mobiliado")
 	await layout();check(await button("Gestão"),"Abrir gestão")
 	await layout();check(await button("Modo construção"),"Entrar na construção")
 	var before=js("JSON.stringify([state.cash,state.objects])")
