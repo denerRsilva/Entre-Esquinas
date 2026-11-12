@@ -50,6 +50,8 @@ Administre uma taverna em uma pequena vila que se reconstrói após uma catástr
 
 ### Princípios de design
 
+**Direção aprovada em 12/11/2026:** priorizar contexto visual e leitura imediata. Usar arte, ícones, quantidades e sequências visuais para ensinar ações; texto deve ser curto e complementar. No livro de receitas, destacar a arte da comida pronta e explicar o preparo da forma mais simples possível, sem blocos de instruções.
+
 - Priorizar diversão, decisões compreensíveis e retorno claro das ações.
 - Fazer a organização da cozinha e do salão influenciar o trabalho.
 - Reduzir cliques sem decisão; avaliar o custo do transporte de uma unidade por vez em playtests.

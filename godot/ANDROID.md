@@ -3,7 +3,7 @@
 O APK de teste fica em `../build/Android/EntreEsquinas.apk`. Baixe o arquivo
 completo pelo botão **Download raw file** no GitHub e permita a instalação
 de aplicativos dessa origem no Android. O pacote é
-`com.entreesquinas.restaurante`, versão `0.21.2-godot.5` (21205).
+`com.entreesquinas.restaurante`, versão `0.21.2-godot.6` (21206).
 Requer Android 7.0 ou superior. Tamanho aproximado: 89 MiB.
 O SHA-256 está em `../build/Android/SHA256SUMS`.
 
@@ -73,3 +73,11 @@ Validação: Regras.cjs, MaosUI, MovimentoUI e Verificar passaram em Linux.
 Inspeção de capturas renderizadas em 960 × 700: salão, livro e ações da mesa.
 As suítes cobrem cozinha, atendimento, pagamento, lavagem e regras de fechamento;
 isso não substitui um playtest contínuo de um dia inteiro nem teste físico Android.
+
+## Livro visual 0.21.2-godot.6
+
+Substitui o livro textual da versão .5: três cartões com arte ampliada do prato,
+ícones e quantidades de ingredientes, indicação curta de corte ou uso direto
+e ícones de panela, fogo com tempo e prato. Sem parágrafos de instrução.
+Conferido em captura renderizada na Godot; fluxo MaosUI passou sem falhas.
+A diretriz de priorizar contexto visual está registrada no GDD.

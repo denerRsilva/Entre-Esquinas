@@ -16,7 +16,7 @@ func run():
 	check(await button("Livro de receitas"),"Livro acessível pelo botão ao lado de Opções")
 	var book=JSON.stringify(g.frame_data.ui.modal)
 	check(book.contains("Livro de receitas") and book.contains("Arroz com legumes") and book.contains("Sopa de legumes") and book.contains("Frango com arroz"),"Livro mostra as três receitas")
-	check(js("$('panel').textContent.includes('2 ×') && $('panel').textContent.includes('sem corte') && $('panel').textContent.includes('8 s')")=="true","Livro mostra quantidades, corte e tempo das receitas")
+	check(js("$('panel').textContent.includes('2 ×') && $('panel').textContent.includes('Cortar') && $('panel').textContent.includes('8 s')")=="true","Livro mostra quantidades, corte e tempo das receitas")
 	check(await button("Voltar ao jogo"),"Fechar livro e retornar ao jogo")
 	check(not g.hud.slots.has("hotbar") and not g.frame_data.ui.has("hotbar"),"Barra e espaço de inventário removidos")
 	check(js("state.inventory.length===0&&!state.player.hand&&state.equipment.pot===4")=="true","Mãos vazias; uma panela no fogão e três na estante")

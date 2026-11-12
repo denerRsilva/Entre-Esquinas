@@ -31,7 +31,7 @@ func art_control(d: Dictionary) -> Control:
 	n.texture = texture(d.art)
 	n.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	n.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	n.custom_minimum_size = Vector2(52,42)
+	n.custom_minimum_size = Vector2(180,130) if d.get("cls","")=="recipeHero" else Vector2(52,42)
 	n.tooltip_text = d.get("label","")
 	return n
 
@@ -165,8 +165,13 @@ func render(d: Dictionary, parent: Control) -> void:
 			return
 	var group: Container
 	if cls=="recipeBook":
-		group=VBoxContainer.new()
-		group.add_theme_constant_override("separation",18)
+		var grid:=GridContainer.new()
+		grid.columns=3
+		grid.add_theme_constant_override("h_separation",12)
+		group=grid
+	elif cls in ["recipeIngredients","recipeFlow"]:
+		group=HBoxContainer.new()
+		group.add_theme_constant_override("separation",12)
 	elif cls=="buildActions":
 		group=HBoxContainer.new()
 		group.name="BuildActions"

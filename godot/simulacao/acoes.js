@@ -136,6 +136,7 @@ canvas.onpointerdown=e=>{prepOptionsId=null;prepChoice=null;pendingInteraction=n
 function nearbyObjects(){return state.objects.filter(o=>o.room===state.player.room&&R.accessPoints(state,o).some(p=>R.near(state.player,p,0)))}
 function actionRow(o){let row=document.createElement('div');row.className='objectActions';row.anchor={x:o.x,y:o.y,w:R.CATALOG[o.type]?R.rect(o).w:1,lift:state.customers.some(c=>c.id===o.id||c.seat===o.id||o.type==='table'&&state.objects.some(ch=>ch.id===c.seat&&R.hit(o,ch.x+R.DIRS[ch.rot][0],ch.y+R.DIRS[ch.rot][1])))?40:0};$('context').append(row);return row;}
 const CONTROL_PATHS={
+ "cut": "M2 13l4-4 M5 8l6-6 3 3-6 6z M2 15h12",
  "door": "M4 2h9v12H4z M10 8h1",
  "computer": "M2 3h12v8H2z M1 14h14 M7 12h2",
  "box": "M2 5l6-3 6 3v7l-6 3-6-3z M2 5l6 3 6-3 M8 8v7",
@@ -217,16 +218,27 @@ function table(headers,rows){let wrap=document.createElement('div');wrap.classNa
 function renderDialog(){let panel=$(constructionMode?'constructionPanel':'panel'),tabs=$(constructionMode?'constructionTabs':'tabs');panel.replaceChildren();tabs.replaceChildren();tabs.hidden=dialogMode==='cooking';$('menuNotice').textContent='';$('dialogTitle').textContent=dialogMode==='cooking'?'Fogão • preparar lote':dialogMode==='plating'?'Mesa • empratar':dialogMode==='container'?'Inventários • '+R.CATALOG[state.objects.find(o=>o.id===dialogObjectId).type].name:dialogMode==='computer'?'Computador • restaurante':dialogMode==='build'?'Modo construção':dialogMode==='options'?'Opções':dialogMode==='recipes'?'Livro de receitas':'Gestão do restaurante';let ts=dialogMode==='recipes'?{}:dialogMode==='cooking'?{}:dialogMode==='plating'?{plating:'Empratamento'}:dialogMode==='container'?{container:'Transferir itens'}:dialogMode==='computer'?{supplier:'Fornecedor',tools:'Utensílios',menu:'Cardápio e preços',deliveries:'Entregas'}:dialogMode==='build'?{catalog:'Móveis'}:dialogMode==='options'?{camera:'Câmera',save:'Salvar e carregar',test:'Testes',guide:'Primeiros passos'}:{shifts:'Turnos',build:'Modo construção',team:'Equipe',finance:'Fechamento',customers:'Clientes',calendar:'Calendário',reputation:'Reputação'};for(const [id,name]of Object.entries(ts)){let b=button(name,()=>{if(id==='build')return openDialog('build');if(id==='management')return openDialog('general');dialogTab=id;renderDialog()},tabs);if(dialogTab===id){b.classList.add('active');b.setAttribute('aria-current','page')}}
 
  if(dialogTab==='recipes'){
-  const intro=document.createElement('p');intro.textContent='Consulte os ingredientes e o preparo de cada prato. Quantidades para '+R.KITCHEN_CONFIG.batchPortions+' porção por panela.';panel.append(intro);
   const recipes=document.createElement('div');recipes.className='recipeBook';
+  const recipeIcon=kind=>{const icon=controlIcon(kind);icon.setAttribute('aria-hidden','false');return icon;};
+  const caption=(parent,text)=>{const n=document.createElement('small');n.textContent=text;parent.append(n);};
   for(const [id,recipe] of Object.entries(R.RECIPES)){
-   const page=card(recipe.name,'');
-   const ingredients=document.createElement('p');ingredients.textContent='Ingredientes: '+Object.entries(recipe.foods).map(([food,n])=>(n*R.KITCHEN_CONFIG.batchPortions)+' × '+R.FOODS[food].name).join(' + ')+'.';page.append(ingredients);
-   const cutting=Object.keys(recipe.foods).filter(food=>food!=='arroz').map(food=>R.FOODS[food].name.toLowerCase());
-   const prep=document.createElement('p');prep.textContent='1. Retire um ingrediente por vez da geladeira.'+(cutting.length?' Corte '+cutting.join(' e ')+' na mesa de preparo; cada ingrediente cortado volta para as mãos.':'')+(recipe.foods.arroz?' O arroz vai direto à panela, sem corte.':'');page.append(prep);
-   const cooking=document.createElement('p');cooking.textContent='2. Coloque os ingredientes na panela do fogão e escolha Cozinhar. Tempo: '+recipe.time+' s.';page.append(cooking);
-   const serving=document.createElement('p');serving.textContent='3. Retire a panela pronta clicando no fogão, apoie na mesa de cozinha e emprate com um prato limpo. Pegue o prato para servir.';page.append(serving);
-   recipes.append(page);
+   const page=document.createElement('div');page.className='card';
+   const hero=FoodArt.icon(id);hero.className='recipeHero';page.append(hero);
+   const name=document.createElement('b');name.textContent=recipe.name;page.append(name);
+   caption(page,R.KITCHEN_CONFIG.batchPortions+' porção');
+   const ingredients=document.createElement('div');ingredients.className='recipeIngredients';
+   for(const [food,n] of Object.entries(recipe.foods)){
+    const item=document.createElement('div');item.className='recipeIngredient';
+    item.append(FoodArt.icon(food));caption(item,(n*R.KITCHEN_CONFIG.batchPortions)+' ×');
+    if(food!=='arroz'){item.append(recipeIcon('cut'));caption(item,'Cortar');}else caption(item,'Direto');
+    ingredients.append(item);
+   }
+   page.append(ingredients);
+   const flow=document.createElement('div');flow.className='recipeFlow';
+   for(const [icon,text] of [['pot','Panela'],['flame',recipe.time+' s'],['serve','Prato']]){
+    const step=document.createElement('div');step.append(recipeIcon(icon));caption(step,text);flow.append(step);
+   }
+   page.append(flow);recipes.append(page);
   }
   panel.append(recipes);
  }
