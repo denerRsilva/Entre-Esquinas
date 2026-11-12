@@ -87,11 +87,19 @@ A aparência atual do jogo ainda deriva da direção brasileira acolhedora. Ela 
 
 **Proposta não aprovada.** Exteriores frios e pouco saturados, reboco gasto, metal oxidado e luz localizada podem reforçar melancolia e contraste. A paleta exata, a iluminação e a intensidade do desgaste ainda aguardam avaliação. Tornar a taverna progressivamente cozy por escolhas de decoração permanece em aberto.
 
+### Direção visual aprovada — vida entre ruínas
+
+A prancha [direção aprovada](docs/arte/direcao-aprovada.png) é a referência visual aceita por Dener. A vila combina ruínas e reparos com exteriores frios e pouco saturados; a taverna usa madeira, terracota e luz âmbar. Ingredientes e itens carregados precisam se distinguir do cenário. Personagens usam silhuetas simples e roupas adaptadas; a cozinheira de referência tem coque castanho, blusa clara, avental verde-petróleo e botas.
+
+A unidade artística aprovada é **32 × 32 pixels**, com móveis maiores em múltiplos dessa unidade. A perspectiva é superior com frente dos objetos visível. A produção deve preservar pixels nítidos e validar animações, escala, colisões e leitura no celular. A grade lógica atual de 40 pixels não foi alterada nesta etapa documental.
+
+O cenário inicial deve buscar a composição e as proporções da taverna da prancha aprovada. A prancha não fornece uma planta medida nem peças prontas: dimensões em tiles, circulação e encaixes devem ser conferidos durante a montagem. A produção foi dividida pelo proprietário nesta ordem: **cozinheira → alimentos → tilesets do cenário e objetos**. A sprite sheet inicial da cozinheira é um estudo gerado em resolução ampliada; ainda não é um atlas nativo validado de quadros 32 × 32 e não substitui a personagem jogável nesta etapa.
+
 ### Regras de legibilidade
 
 Ingredientes, pratos, recipientes, mãos e estações precisam ser reconhecíveis no tamanho de jogo. Estados de corte, cozimento e queima devem ter leitura distinta. Estrelas de qualidade pertencem aos ingredientes e refeições; não devem decorar fogões, personagens ou utensílios.
 
-Resolução-base dos novos assets, escala de exibição e padrão final de animação exigem validação em sprites reais. A grade lógica atual de 40 pixels não define, por si só, a resolução artística definitiva. Uma imagem conceitual não equivale a um atlas pronto para produção.
+A resolução-base artística foi aprovada em 32 × 32; escala de exibição e padrão final de animação exigem validação em sprites reais. A grade lógica atual de 40 pixels não define, por si só, a resolução artística definitiva. Uma imagem conceitual não equivale a um atlas pronto para produção.
 
 <!-- page -->
 
