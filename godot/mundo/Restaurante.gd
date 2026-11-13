@@ -44,7 +44,7 @@ func read_values() -> Dictionary:
 func persist(next: Dictionary) -> bool:
 	var file:=FileAccess.open(STORE+".tmp",FileAccess.WRITE)
 	if not file:return false
-	file.store_string(JSON.stringify(next));file.flush()
+	file.store_string(JSON.stringify(next,"",true,true));file.flush()
 	var err:=file.get_error()
 	file.close()
 	if err!=OK:return false
@@ -54,8 +54,10 @@ func persist(next: Dictionary) -> bool:
 
 func import_save(path:String) -> void:
 	var raw:=FileAccess.get_file_as_string(path)
-	var valid:String=RestauranteVM.executar("(()=>{try{return Boolean(R.migrateSave(JSON.parse("+JSON.stringify(raw)+")))}catch{return false}})()")
-	if valid!="true":
+	var parser := JSON.new()
+	var loaded: Variant = null
+	if parser.parse(raw)==OK:loaded=preload("res://simulacao/nativa/Salvamentos.gd").new().load_value(parser.data)
+	if loaded==null:
 		RestauranteVM.executar("tell('Arquivo de salvamento inválido.',true)")
 		tick(0)
 		return

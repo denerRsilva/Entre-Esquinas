@@ -12,7 +12,9 @@ func run():
 	for test in tests:
 		js("globalThis.migrationInput="+JSON.stringify(test.input))
 		var before := js("JSON.stringify(migrationInput)")
-		var actual = JSON.parse_string(js("JSON.stringify(R.migrateSave(migrationInput))"))
+		js("globalThis.migrationDraws=0")
+		var actual = JSON.parse_string(js("JSON.stringify(R.migrateSave(migrationInput,()=>{migrationDraws++;return .5}))"))
+		if test.has("draws"):check(int(js("migrationDraws"))==test.draws,"Sorteios preservados")
 		check(actual==test.expected,test.label)
 		check(js("JSON.stringify(migrationInput)")==before,"Entrada preservada")
 	print("CASOS: ",tests.size()+phases.size()," FALHAS: ",failures)

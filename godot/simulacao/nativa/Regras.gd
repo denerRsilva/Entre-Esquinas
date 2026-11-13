@@ -1,4 +1,5 @@
 extends RefCounted
+const SAVES = preload("res://simulacao/nativa/Salvamentos.gd")
 const ADMIN = preload("res://simulacao/nativa/Administracao.gd")
 const SERVICE = preload("res://simulacao/nativa/Atendimento.gd")
 const BUILD = preload("res://simulacao/nativa/Construcao.gd")
@@ -19,6 +20,11 @@ func execute(json: String) -> String:
 	var args: Array = request.get("args",[])
 	var value: Variant = null
 	match request.get("name",""):
+		"valid":value=SAVES.VALIDATOR.valid(args[0],args[1])
+		"validExperience":value=SAVES.VALIDATOR.experience(args[0])
+		"serializeSave":value=SAVES.serialize(args[0])
+		"parseSave":return JSON.stringify(SAVES.new().parse_text(args[0],args[1]),"",true,true)
+		"migrateSave":return JSON.stringify(SAVES.new().convert(args[0],args[1]),"",true,true)
 		"administracao":
 			var operation: String = args[0]
 			var state: Dictionary = args[1]
