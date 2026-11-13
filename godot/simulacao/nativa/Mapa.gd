@@ -54,3 +54,20 @@ static func route(state: Dictionary, room: String, start: Vector2i, target: Vect
 			previous[next]=point
 			queue.append({"point":next,"cost":cost})
 	return null
+
+## Temporary read-only transport for rules still hosted in QuickJS.
+## All geometry is computed here; JavaScript only reads the resulting grid.
+static func obstacle_tables() -> Dictionary:
+	var result := {}
+	for compact in [false,true]:
+		for single_room in [false,true]:
+			var state := {"compact":compact,"singleRoom":single_room}
+			var rooms := {}
+			for room in ["restaurant","street","stock"]:
+				var grid: Array = []
+				for y in 16:
+					for x in 24:
+						grid.append((1 if wall(room,x,y,state) else 0)|(2 if fixed(room,x,y,state) else 0))
+				rooms[room]=grid
+			result[str(int(compact))+str(int(single_room))]=rooms
+	return result

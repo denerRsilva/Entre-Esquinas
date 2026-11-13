@@ -217,8 +217,15 @@ function clearTestScene(s){delete s.receivingQuality;
 function rect(o){let d=CATALOG[o.type];return {x:o.x,y:o.y,w:o.rot%2?d.h:d.w,h:o.rot%2?d.w:d.h};}
 function cells(o){let r=rect(o),a=[];for(let y=r.y;y<r.y+r.h;y++)for(let x=r.x;x<r.x+r.w;x++)a.push({x,y});return a;}
 function hit(o,x,y){return cells(o).some(p=>p.x===x&&p.y===y);}
-function wall(room,x,y,s=null){if(room==='restaurant'&&s?.singleRoom===true)return x<=4||x>=23||y<=6||y>=15||(x===14&&y<10);if(room==='restaurant'&&s?.compact===true&&(x<=4||y<=2))return true;if(x<1||y<1||x>=W-1||y>=H-1)return true;if(room==='restaurant')return x===14&&y!==7||x>=15&&y===10&&x!==18;if(room==='street')return y<5||x<4&&y<11||x>19&&y<11;return false;}
-function fixed(room,x,y,s=null){if(s?.singleRoom===true)return false;return room==='restaurant'&&((x===16||x===17)&&y===11||x>=20&&x<=22&&y===11);}
+// Obstacle rules are computed by Mapa.gd. Node uses frozen parity references.
+const OBSTACLES=typeof NativeObstacles!=='undefined'?NativeObstacles:require('../qa/referencia-migracao/obstaculos.json');
+function obstacle(room,x,y,s){
+ if(x<0||y<0||x>=W||y>=H)return 1;
+ const map=OBSTACLES[String(+(s?.compact===true))+String(+(s?.singleRoom===true))];
+ return map[room] ? map[room][y*W+x] : map.stock[y*W+x];
+}
+function wall(room,x,y,s=null){return !!(obstacle(room,x,y,s)&1);}
+function fixed(room,x,y,s=null){return !!(obstacle(room,x,y,s)&2);}
 function blocked(s,room,x,y,a=null,objects=s.objects){if(wall(room,x,y,s)||fixed(room,x,y,s))return true;return objects.some(o=>o.room===room&&hit(o,x,y)&&!(o.type==='chair'&&a&&a.seat===o.id));}
 function near(a,p,r=1){return a.room===p.room&&Math.abs(a.x-p.x)+Math.abs(a.y-p.y)<=r;}
 function allActors(s){return [s.player,...s.workers,...s.residents,...s.customers.filter(c=>!c.done)];}

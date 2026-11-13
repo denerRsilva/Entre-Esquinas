@@ -16,6 +16,7 @@ func _ready() -> void:
 	var layout=FileAccess.get_file_as_string("res://simulacao/interface-base.json")
 	RestauranteVM.executar("const InterfaceBase="+layout)
 	RestauranteVM.executar("const NativePartidas="+JSON.stringify(preload("res://simulacao/nativa/Partida.gd").templates()))
+	RestauranteVM.executar("const NativeObstacles="+JSON.stringify(preload("res://simulacao/nativa/Mapa.gd").obstacle_tables()))
 	values=read_values()
 	for source in SCRIPTS:
 		var code=FileAccess.get_file_as_string("res://simulacao/"+source+".js")

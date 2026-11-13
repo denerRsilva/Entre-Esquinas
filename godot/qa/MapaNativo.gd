@@ -3,6 +3,7 @@ const MAP = preload("res://simulacao/nativa/Mapa.gd")
 const PARTIDA = preload("res://simulacao/nativa/Partida.gd")
 func _initialize():
 	var failures := 0
+	if JSON.parse_string(JSON.stringify(MAP.obstacle_tables()))!=load("res://qa/referencia-migracao/obstaculos.json").data:failures+=1
 	var count := 0
 	for fixture in load("res://qa/referencia-migracao/mapas.json").data:
 		var state = PARTIDA.furnished(fixture.compact,fixture.single)
