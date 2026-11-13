@@ -1,0 +1,146 @@
+{
+  "table": {
+    "name": "Mesa",
+    "price": 45,
+    "w": 2,
+    "h": 1,
+    "room": "restaurant",
+    "area": "hall",
+    "color": "#ba8654"
+  },
+  "chair": {
+    "name": "Cadeira",
+    "price": 15,
+    "w": 1,
+    "h": 1,
+    "room": "restaurant",
+    "area": "hall",
+    "color": "#d5ad70"
+  },
+  "stove": {
+    "name": "Fogão",
+    "price": 150,
+    "w": 2,
+    "h": 1,
+    "room": "restaurant",
+    "area": "kitchen",
+    "color": "#718d91"
+  },
+  "fridge": {
+    "name": "Geladeira da cozinha",
+    "price": 120,
+    "w": 1,
+    "h": 2,
+    "room": "restaurant",
+    "area": "kitchen",
+    "color": "#8dbdb5"
+  },
+  "shelf": {
+    "name": "Prateleira seca",
+    "price": 65,
+    "w": 2,
+    "h": 1,
+    "room": "restaurant",
+    "area": "dryStorage",
+    "color": "#b69969"
+  },
+  "cold": {
+    "name": "Geladeira do estoque",
+    "price": 140,
+    "w": 1,
+    "h": 2,
+    "room": "restaurant",
+    "area": "storage",
+    "color": "#91b6cb"
+  },
+  "potRack": {
+    "name": "Estante de panelas",
+    "price": 65,
+    "w": 2,
+    "h": 1,
+    "room": "restaurant",
+    "area": "kitchen",
+    "color": "#a57b4c"
+  },
+  "prep": {
+    "name": "Mesa de preparo • corte",
+    "price": 90,
+    "w": 2,
+    "h": 1,
+    "room": "restaurant",
+    "area": "kitchen",
+    "color": "#bc955e"
+  },
+  "kitchen": {
+    "name": "Mesa de cozinha",
+    "price": 90,
+    "w": 2,
+    "h": 1,
+    "room": "restaurant",
+    "area": "kitchen",
+    "color": "#d1af79"
+  },
+  "sink": {
+    "name": "Pia",
+    "price": 70,
+    "w": 2,
+    "h": 1,
+    "room": "restaurant",
+    "area": "kitchen",
+    "color": "#82b8bb"
+  },
+  "bin": {
+    "name": "Lixo",
+    "price": 25,
+    "w": 1,
+    "h": 1,
+    "room": "restaurant",
+    "area": "dryStorage",
+    "color": "#71877a"
+  },
+  "computer": {
+    "name": "Computador",
+    "price": 100,
+    "w": 2,
+    "h": 1,
+    "room": "restaurant",
+    "area": "utility",
+    "color": "#735b45"
+  },
+  "receiving": {
+    "name": "Caixas de recebimento",
+    "price": 40,
+    "w": 2,
+    "h": 1,
+    "room": "restaurant",
+    "area": "utility",
+    "color": "#a27a4b"
+  },
+  "counterH": {
+    "name": "Bancada horizontal",
+    "price": 35,
+    "w": 1,
+    "h": 1,
+    "room": "restaurant",
+    "area": "utility",
+    "color": "#bd9360"
+  },
+  "counterV": {
+    "name": "Bancada vertical",
+    "price": 35,
+    "w": 1,
+    "h": 1,
+    "room": "restaurant",
+    "area": "utility",
+    "color": "#bd9360"
+  },
+  "counterCorner": {
+    "name": "Bancada de canto",
+    "price": 35,
+    "w": 1,
+    "h": 1,
+    "room": "restaurant",
+    "area": "utility",
+    "color": "#bd9360"
+  }
+}

@@ -197,24 +197,16 @@ function migrateSave(value,rng=Math.random){try{
  return valid(s)?s:null;
 }catch{return null}}
 
-function fresh(compact=false,singleRoom=false){return {singleRoom,compact,version:VERSION,chopping:null,serviceHours:newServiceHours(),recovery:[],plating:null,clock:newClock(),reputation:newReputation(),day:1,period:0,open:false,closing:false,cash:1500,time:0,tick:0,arrival:0,serial:1,objects:[],equipment:{pot:0,spoon:0,plate:0},meals:{made:{arrozLegumes:0,sopa:0,frangoArroz:0},eaten:{arrozLegumes:0,sopa:0,frangoArroz:0},wasted:{arrozLegumes:0,sopa:0,frangoArroz:0}},dirtyTables:{},inventory:[],selectedSlot:0,tools:{pot:false,spoon:false},inv:{receiving:{arroz:0,legumes:0,frango:0},storage:{arroz:0,legumes:0,frango:0},kitchen:{arroz:0,legumes:0,frango:0}},purchased:{arroz:0,legumes:0,frango:0},used:{arroz:0,legumes:0,frango:0},orders:[],deliveries:[],customers:[],experience:{visits:[],events:[]},residents:[actor('lia','street',5,10),actor('beto','street',18,8),actor('nina','street',17,12)],player:actor('player','restaurant',7,13),workers:singleRoom?[{...actor('worker2','restaurant',12,10),task:'none'}]:[{...actor('worker1','restaurant',18,12),task:'none'},{...actor('worker2','restaurant',20,12),task:'none'}],prices:Object.fromEntries(Object.entries(RECIPES).map(([k,v])=>[k,v.price])),menu:Object.fromEntries(Object.keys(RECIPES).map(k=>[k,true])),cookActive:false,cooking:null,ready:[],ledger:{revenue:0,foodCost:0,purchases:0,investment:0,lost:0,sales:0},reports:[],friends:{lia:0,beto:0,nina:0},talked:{},message:'Seu restaurante está vazio. Use Gestão → Montagem para comprar e posicionar os móveis.',lastReport:null,priority:null,flowWaits:0};}
-// Cenário opcional de teste; os recursos são gratuitos e não alteram a partida vazia.
-function furnishedTest(compact=false,singleRoom=false){
- const s=fresh(compact,singleRoom);s.cash=10000;
- const layout=[];
- for(const [x,y]of (singleRoom?[[9,8],[6,11],[11,12]]:compact?[[6,5],[6,10],[11,10]]:[[4,5],[4,10],[10,10]]))layout.push(['table',x,y],['chair',x,y-1,2],['chair',x+1,y-1,2],['chair',x,y+1,0],['chair',x+1,y+1,0]);
- // Cozinha mobiliada conforme a referência visual: linha superior e bancadas laterais.
- if(singleRoom)layout.push(['stove',16,8],['prep',18,13],['fridge',15,7],['kitchen',15,13],['sink',18,8],['potRack',20,8],['bin',22,8]);
- else layout.push(['stove',20,compact?4:3],['prep',20,8],['fridge',15,compact?3:2],['kitchen',15,8],['sink',21,6],['potRack',17,compact?3:2],['bin',22,8],['shelf',16,13],['cold',21,13]);
- for(const [type,x,y,rot=0]of layout){let r=place(s,type,x,y,rot);if(!r.ok)throw Error('Cenário de teste: '+r.error);}
- const stove=s.objects.find(o=>o.type==='stove'),prep=s.objects.find(o=>o.type==='kitchen');
- for(const food of Object.keys(FOODS)){putObject(s,s.objects.find(o=>o.type==='fridge'),food,30);s.purchased[food]=30;}
- stove.pan='pot';putObject(s,s.objects.find(o=>o.type==='potRack'),'pot',3);prep.plates=12;prep.utensil=false;
- s.equipment={pot:4,plate:12,spoon:0};s.tools={pot:true,spoon:false};s.cash=1500;s.ledger.investment=0;
- Object.assign(s.player,{x:18,y:singleRoom?11:6});
- s.message='Taverna pronta: ingredientes na geladeira, panela no fogão e pratos na mesa de cozinha.';
- if(!valid(s))throw Error('Cenário de teste inválido.');return s;
+// Transitional adapter: Godot creates these states in Partida.gd.
+// Node regression tests use frozen reference data, not a second implementation.
+function nativeInitial(compact,singleRoom,mode){
+ const templates=typeof NativePartidas!=='undefined'?NativePartidas:require('../qa/referencia-migracao/partidas.json');
+ const template=templates[String(+compact)+String(+singleRoom)];
+ if(!template||mode==='furnished'&&singleRoom&&!compact)throw Error('Cenário de teste inválido.');
+ return JSON.parse(JSON.stringify(template[mode]));
 }
+function fresh(compact=false,singleRoom=false){return nativeInitial(compact,singleRoom,'empty');}
+function furnishedTest(compact=false,singleRoom=false){return nativeInitial(compact,singleRoom,'furnished');}
 function clearTestScene(s){delete s.receivingQuality;
  // Cancelar o serviço elimina referências a móveis, itens e pratos removidos.
  const clean=fresh(s.compact===true,s.singleRoom===true);

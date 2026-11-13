@@ -1,0 +1,206 @@
+{
+  "singleRoom": false,
+  "compact": false,
+  "version": 12,
+  "chopping": null,
+  "serviceHours": [
+    {
+      "start": 660,
+      "end": 900
+    },
+    {
+      "start": 1080,
+      "end": 1320
+    }
+  ],
+  "recovery": [],
+  "plating": null,
+  "clock": {
+    "minute": 360,
+    "remainder": 0,
+    "ending": false
+  },
+  "reputation": {
+    "initial": 0,
+    "score": 0,
+    "history": [],
+    "processed": []
+  },
+  "day": 1,
+  "period": 0,
+  "open": false,
+  "closing": false,
+  "cash": 1500,
+  "time": 0,
+  "tick": 0,
+  "arrival": 0,
+  "serial": 1,
+  "objects": [],
+  "equipment": {
+    "pot": 0,
+    "spoon": 0,
+    "plate": 0
+  },
+  "meals": {
+    "made": {
+      "arrozLegumes": 0,
+      "sopa": 0,
+      "frangoArroz": 0
+    },
+    "eaten": {
+      "arrozLegumes": 0,
+      "sopa": 0,
+      "frangoArroz": 0
+    },
+    "wasted": {
+      "arrozLegumes": 0,
+      "sopa": 0,
+      "frangoArroz": 0
+    }
+  },
+  "dirtyTables": {},
+  "inventory": [],
+  "selectedSlot": 0,
+  "tools": {
+    "pot": false,
+    "spoon": false
+  },
+  "inv": {
+    "receiving": {
+      "arroz": 0,
+      "legumes": 0,
+      "frango": 0
+    },
+    "storage": {
+      "arroz": 0,
+      "legumes": 0,
+      "frango": 0
+    },
+    "kitchen": {
+      "arroz": 0,
+      "legumes": 0,
+      "frango": 0
+    }
+  },
+  "purchased": {
+    "arroz": 0,
+    "legumes": 0,
+    "frango": 0
+  },
+  "used": {
+    "arroz": 0,
+    "legumes": 0,
+    "frango": 0
+  },
+  "orders": [],
+  "deliveries": [],
+  "customers": [],
+  "experience": {
+    "visits": [],
+    "events": []
+  },
+  "residents": [
+    {
+      "id": "lia",
+      "room": "street",
+      "x": 5,
+      "y": 10,
+      "goal": null,
+      "wait": 0,
+      "hold": 0,
+      "state": "idle",
+      "carry": null
+    },
+    {
+      "id": "beto",
+      "room": "street",
+      "x": 18,
+      "y": 8,
+      "goal": null,
+      "wait": 0,
+      "hold": 0,
+      "state": "idle",
+      "carry": null
+    },
+    {
+      "id": "nina",
+      "room": "street",
+      "x": 17,
+      "y": 12,
+      "goal": null,
+      "wait": 0,
+      "hold": 0,
+      "state": "idle",
+      "carry": null
+    }
+  ],
+  "player": {
+    "id": "player",
+    "room": "restaurant",
+    "x": 7,
+    "y": 13,
+    "goal": null,
+    "wait": 0,
+    "hold": 0,
+    "state": "idle",
+    "carry": null
+  },
+  "workers": [
+    {
+      "id": "worker1",
+      "room": "restaurant",
+      "x": 18,
+      "y": 12,
+      "goal": null,
+      "wait": 0,
+      "hold": 0,
+      "state": "idle",
+      "carry": null,
+      "task": "none"
+    },
+    {
+      "id": "worker2",
+      "room": "restaurant",
+      "x": 20,
+      "y": 12,
+      "goal": null,
+      "wait": 0,
+      "hold": 0,
+      "state": "idle",
+      "carry": null,
+      "task": "none"
+    }
+  ],
+  "prices": {
+    "arrozLegumes": 14,
+    "sopa": 12,
+    "frangoArroz": 20
+  },
+  "menu": {
+    "arrozLegumes": true,
+    "sopa": true,
+    "frangoArroz": true
+  },
+  "cookActive": false,
+  "cooking": null,
+  "ready": [],
+  "ledger": {
+    "revenue": 0,
+    "foodCost": 0,
+    "purchases": 0,
+    "investment": 0,
+    "lost": 0,
+    "sales": 0
+  },
+  "reports": [],
+  "friends": {
+    "lia": 0,
+    "beto": 0,
+    "nina": 0
+  },
+  "talked": {},
+  "message": "Seu restaurante está vazio. Use Gestão → Montagem para comprar e posicionar os móveis.",
+  "lastReport": null,
+  "priority": null,
+  "flowWaits": 0
+}
