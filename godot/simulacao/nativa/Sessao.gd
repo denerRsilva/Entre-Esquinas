@@ -2,15 +2,19 @@ extends RefCounted
 ## Native frame coordinator. The legacy bridge remains only until its rules,
 ## menu callbacks and painter have been migrated independently.
 var evaluate: Callable
+var input_router: RefCounted
 
 func _init(executor: Callable):
 	evaluate = executor
+	input_router = preload("res://simulacao/nativa/Entrada.gd").new(executor)
 
 func read(expression: String) -> Variant:
 	return JSON.parse_string(evaluate.call("JSON.stringify("+expression+")"))
 
 func step(dt: float, events: Array) -> Dictionary:
-	evaluate.call("for(const e of "+JSON.stringify(events)+")input(e);Host.clock+="+str(dt*1000.0)+";frame(Host.clock);")
+	for event in events:
+		if event is Dictionary:input_router.dispatch(event)
+	evaluate.call("Host.clock+="+str(dt*1000.0)+";frame(Host.clock);")
 	var state = read("({singleRoom:state.singleRoom===true,compact:state.compact===true,room:state.player.room,camera:[camera.x,camera.y,camera.zoom],modal:$('welcome').open?'welcome':$('management').open?'management':'',construction:constructionMode,container:dialogMode==='container',door:[parseFloat($('openBtn').style.left)||0,parseFloat($('openBtn').style.top)||0],notice:$('notice').style.opacity==='1'})")
 	if not state is Dictionary:
 		return {}

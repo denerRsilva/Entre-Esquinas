@@ -27,16 +27,4 @@ function pack(n,path){
  return v;
 }
 function section(id){return pack($(id),id)}
-function input(e){
- if(e.kind==='widget'){
-  const w=Host.widgets.get(e.path);if(!w||w.disabled)return;
-  if(w.tag==='button')w.click();
-  else{w.value=e.value;w.checked=e.value;w.onchange?.()}
- }else if(e.kind==='pointer'&&!$('welcome').open&&!$('management').open){
-  canvas['onpointer'+e.phase]?.({clientX:e.x,clientY:e.y,buttons:e.drag?1:0,pointerId:1,pointerType:'mouse'});
- }else if(e.kind==='key'){
-  if(e.key==='escape'&&e.down&&$('management').open){$('management').close();return}
-  document.emit(e.down?'keydown':'keyup',{key:e.key,repeat:false,preventDefault(){}});
- }else if(e.kind==='blur')releaseKeyboard();
-}
 kitchenAudio={state:'running',currentTime:0,createOscillator(){const tone={frequency:{value:0},connect(){},start(){Host.sound.push(tone.frequency.value)},stop(){}};return tone},createGain(){return {gain:{setValueAtTime(){},exponentialRampToValueAtTime(){}},connect(){}}}};
