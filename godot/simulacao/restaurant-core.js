@@ -9,7 +9,18 @@ function nativeRule(name,args){
  nodeReference??=require('../qa/referencia-migracao/regras-legado.cjs');
  if(name==='route')args[5]=new Set(args[5]);
  const value=nodeReference[name](...args);
+ if(["putObject","takeObject"].includes(name))return {value,object:args[1],inv:args[0].inv};
+ if(name==="syncContainers")return {value:null,inv:args[0].inv};
  return ['addInventory','removeInventory'].includes(name)?{value,inventory:args[0].inventory}:value;
+}
+// Preserve existing references while applying native mutable results.
+function syncNative(target,source){
+ if(Array.isArray(target))target.length=source.length;
+ else for(const key of Object.keys(target))if(!Object.hasOwn(source,key))delete target[key];
+ for(const [key,value]of Object.entries(source)){
+  if(value&&typeof value==='object'&&target[key]&&typeof target[key]==='object'&&Array.isArray(value)===Array.isArray(target[key]))syncNative(target[key],value);
+  else target[key]=value;
+ }
 }
 const W=24,H=16,CELL=40,VERSION=12;
 const FOODS={arroz:{name:'Arroz',cost:2,kind:'dry'},legumes:{name:'Legumes',cost:2,kind:'cold'},frango:{name:'Frango',cost:4,kind:'cold'}};
@@ -408,35 +419,16 @@ function collectReceiving(s){
  return 'Não há entregas para recolher.';
 }
 
-function objectLocation(o){if(o.type==='shelf')return o.y>10?'storage':'kitchen';return o.type==='cold'?'storage':'kitchen';}
-function accepts(o,item){if(!ITEMS[item])return false;if(o.type==='potRack')return item==='pot';if(o.type==='stove')return ['pot','cookingPot'].includes(item)||item.startsWith('pot_');if(o.type==='kitchen')return ['plate','spoon'].includes(item)||item.startsWith('dish_');if(['sink','bin'].includes(o.type))return false;if(['fridge','cold'].includes(o.type))return item!=='cookingPot';const food=FOODS[ITEMS[item].raw||item];return !!food&&(o.type==='shelf'?food.kind==='dry':['cold','fridge'].includes(o.type)&&food.kind==='cold');}
-function objectCount(o,item){return stationSlots(o).reduce((n,p)=>n+(p?.item===item?p.n:0),0);}
-function objectSpace(o,item,quality=0){
- if(o.type==='potRack')return item==='pot'?Math.max(0,3-objectCount(o,'pot')):0;
- if(o.type==='stove')return (!o.pan&&(item==='pot'||item==='cookingPot'||item.startsWith('pot_')))?1:0;
- if(o.type==='kitchen')return item==='plate'?99-o.plates:item==='spoon'?Number(!o.utensil):item.startsWith('dish_')&&ITEMS[item]?Math.max(0,KITCHEN_CONFIG.readyCapacity-readyCount(o)):0;
- return accepts(o,item)?inventorySpace({inventory:o.inventory},item,quality):0;
-}
-function syncContainers(s){for(const loc of ['storage','kitchen'])for(const food of Object.keys(FOODS))s.inv[loc][food]=s.objects.filter(o=>o.inventory&&objectLocation(o)===loc).reduce((n,o)=>n+objectCount(o,food),0);}
-function putObject(s,o,item,n,quality=0){
- if(!Number.isInteger(n)||n<1||!ITEMS[item])return 0;
- const q=Math.min(n,objectSpace(o,item,quality));if(!q)return 0;
- if(o.type==='potRack'){let left=q;for(let i=0;i<o.inventory.length&&left;i++)if(!o.inventory[i]){o.inventory[i]={item:'pot',n:1,...(quality?{quality}:{})};left--;}}
- else if(o.type==='stove')o.pan=item;
- else if(o.type==='kitchen'){if(item==='plate')o.plates+=q;else if(item==='spoon')o.utensil=true;else {o.dishes[item]=(o.dishes[item]||0)+q;if(quality){o.dishQuality??={};o.dishQuality[item]??=[0,0,0,0];o.dishQuality[item][quality]+=q;}}}
- else addInventory({inventory:o.inventory},item,q,quality);
- syncContainers(s);return q;
-}
-function takeObject(s,o,item,n,quality=null){
- const total=Math.min(n,quality===null?objectCount(o,item):objectQualityCount(o,item,quality));if(!total)return 0;
- if(o.type==='stove')o.pan=null;
- else if(o.type==='kitchen'){if(item==='plate')o.plates-=total;else if(item==='spoon')o.utensil=false;else {const common=objectQualityCount(o,item,0);o.dishes[item]-=total;let left=total;for(let q=0;q<4&&left;q++){if(quality!==null&&q!==quality)continue;const count=q?o.dishQuality?.[item]?.[q]||0:common;const taken=Math.min(left,count);if(q)o.dishQuality[item][q]-=taken;left-=taken;}}}
- else {let left=total;for(let i=0;i<10&&left;i++){const p=o.inventory[i];if(p?.item===item&&(quality===null||(p.quality??0)===quality)){const q=Math.min(left,p.n);removeInventory({inventory:o.inventory},i,q);left-=q;}}}
- syncContainers(s);return total;
-}
+function objectLocation(o){return nativeRule("objectLocation",[o]);}
+function accepts(o,item){return nativeRule("accepts",[o,item]);}
+function objectCount(o,item){return nativeRule("objectCount",[o,item]);}
+function objectSpace(o,item,quality=0){return nativeRule("objectSpace",[o,item,quality]);}
+function syncContainers(s){const out=nativeRule("syncContainers",[{objects:s.objects,inv:s.inv}]);syncNative(s.inv,out.inv);}
+function putObject(s,o,item,n,quality=0){const out=nativeRule("putObject",[{objects:s.objects,inv:s.inv},o,item,n,quality]);syncNative(o,out.object);syncNative(s.inv,out.inv);return out.value;}
+function takeObject(s,o,item,n,quality=null){const out=nativeRule("takeObject",[{objects:s.objects,inv:s.inv},o,item,n,quality]);syncNative(o,out.object);syncNative(s.inv,out.inv);return out.value;}
 function changeLocation(s,loc,food,n){if(loc==='receiving'){s.inv.receiving[food]+=n;return Math.abs(n);}let left=Math.abs(n);for(const o of s.objects.filter(o=>o.inventory&&objectLocation(o)===loc)){let q=n>0?putObject(s,o,food,left):takeObject(s,o,food,left);left-=q;if(!left)break;}return Math.abs(n)-left;}
-function capacity(s,loc,food){if(loc==='receiving')return 60;return s.objects.filter(o=>o.inventory&&objectLocation(o)===loc&&accepts(o,food)).length*990;}
-function amount(s,loc,food){if(loc==='receiving')return Object.values(s.inv.receiving).reduce((a,b)=>a+b,0);return s.objects.filter(o=>o.inventory&&objectLocation(o)===loc&&accepts(o,food)).reduce((n,o)=>n+o.inventory.reduce((a,p)=>a+(p?.n||0),0),0);}
+function capacity(s,loc,food){return nativeRule("capacity",[{objects:s.objects,inv:s.inv},loc,food]);}
+function amount(s,loc,food){return nativeRule("amount",[{objects:s.objects,inv:s.inv},loc,food]);}
 function transfer(s,from,to,food,n){let moved=0;while(moved<n){const chunk=locationChunk(s,from,food);if(!chunk)break;const target=to==='receiving'?null:storageObject(s,to,food,'put',chunk.quality);const space=to==='receiving'?60-amount(s,to,food):target?objectSpace(target,food,chunk.quality):0;const q=Math.min(n-moved,chunk.n,space);if(q<=0)break;takeChunk(s,from,food,chunk,q);if(target)putObject(s,target,food,q,chunk.quality);else receiveQuality(s,food,q,chunk.quality);moved+=q;}return moved;}
 function transferSlot(s,id,side,index){return handStorage(s,id,side==='object'?'take':'put',index);}
 
@@ -520,13 +512,9 @@ function mealsConserved(s){for(const r of Object.keys(RECIPES)){let n=0;for(cons
 // Cozinha 0.13.0: equipamentos possuem encaixes e uma área de retirada,
 // nunca um inventário genérico. Todas as transferências são atômicas.
 const KITCHEN_CONFIG={batchPortions:1,requiresUtensil:false,cutSeconds:2,platingSeconds:2,readyCapacity:12,plateCapacity:99};
-function stationSlots(o){
- if(o.type==='stove')return [...(o.pan?[{item:o.pan,n:1}]:[]),...(o.ingredients||[])];
- if(o.type==='kitchen')return [o.support||null,o.plates?{item:'plate',n:o.plates}:null,o.utensil?{item:'spoon',n:1}:null,...Object.entries(o.dishes||{}).map(([item,n])=>n?{item,n}:null)];
- return o.inventory||[];
-}
+function stationSlots(o){return nativeRule("stationSlots",[o]);}
 function allItemLocations(s){return [s.inventory,s.player.hand?[s.player.hand]:[],s.recovery||[],...s.objects.map(stationSlots)];}
-function readyCount(o){return Object.values(o.dishes||{}).reduce((a,b)=>a+b,0);}
+function readyCount(o){return nativeRule("readyCount",[o]);}
 function consumeItem(s,item,n){
  if(inventoryCount(s,item)<n)return false;
  for(let i=0;i<s.inventory.length&&n;i++){const p=s.inventory[i];if(p?.item===item){const q=Math.min(n,p.n);removeInventory(s,i,q);n-=q;}}
@@ -679,21 +667,17 @@ function validKitchen(s){
 const QUALITY_CONFIG={names:['Comum','Prata','Ouro','Roxa'],costMultipliers:[1,1.25,1.5,2],satisfaction:[.7,.8,.9,1],safeSeconds:8,decayEnd:20,burnSeconds:25};
 function receiveQuality(s,food,n,q=0){s.inv.receiving[food]+=n;if(q){s.receivingQuality??={};s.receivingQuality[food]??=[0,0,0,0];s.receivingQuality[food][q]+=n;}}
 function receivingCount(s,food,q){const a=s.receivingQuality?.[food]||[0,0,0,0];return q?a[q]:s.inv.receiving[food]-a.slice(1).reduce((x,y)=>x+y,0);}
-function objectQualityCount(o,item,q){if(o.type==='kitchen'){const a=o.dishQuality?.[item]||[0,0,0,0];return q?a[q]:objectCount(o,item)-a.slice(1).reduce((x,y)=>x+y,0);}return (o.inventory||[]).reduce((n,p)=>n+(p?.item===item&&(p.quality??0)===q?p.n:0),0);}
-function firstDishQuality(o,item){for(let q=0;q<4;q++)if(objectQualityCount(o,item,q)>0)return q;return 0;}
+function objectQualityCount(o,item,q){return nativeRule("objectQualityCount",[o,item,q]);}
+function firstDishQuality(o,item){return nativeRule("firstDishQuality",[o,item]);}
 function locationChunk(s,loc,food){if(loc==='receiving'){for(let q=0;q<4;q++){const n=receivingCount(s,food,q);if(n)return {n,quality:q};}return null;}for(const source of s.objects.filter(o=>o.inventory&&objectLocation(o)===loc)){const p=source.inventory.find(p=>p?.item===food);if(p)return {n:p.n,quality:p.quality??0,source};}return null;}
 function takeChunk(s,loc,food,chunk,n){if(loc==='receiving')receiveQuality(s,food,-n,chunk.quality);else takeObject(s,chunk.source,food,n,chunk.quality);}
-function ingredientPlan(s,recipe){let weighted=0,total=0,cost=0;for(const [food,count]of Object.entries(RECIPES[recipe].foods)){let left=count*4;for(const p of s.inventory){if(p?.item!==food)continue;const n=Math.min(left,p.n),q=p.quality??0;weighted+=n*q;total+=n;cost+=n*FOODS[food].cost*QUALITY_CONFIG.costMultipliers[q];left-=n;if(!left)break;}}return {quality:Math.floor(weighted/Math.max(total,1)+1e-8),cost};}
-function batchQuality(s,o){const b=o.readyBatch;if(!b)return 0;const t=Math.max(0,s.time-b.doneAt);return Math.max(0,Math.ceil((b.quality??0)*(1-Math.max(0,t-8)/12)-1e-8));}
-function heatState(s,o){const t=Math.max(0,s.time-(o.readyBatch?.doneAt??s.time))+1e-8;if(t>=25||o.burned)return {stage:'burned',label:'✕ Queimado — retirar e descartar',value:1};if(t>=20)return {stage:'danger',label:'⚠ Perto de queimar',value:(t-8)/17};if(t>=8)return {stage:'over',label:'⚠ Passando do ponto',value:(t-8)/17};return {stage:'ready',label:'✓ No ponto — retirar',value:1-t/8};}
+function ingredientPlan(s,recipe){return nativeRule("ingredientPlan",[s,recipe]);}
+function batchQuality(s,o){return nativeRule("batchQuality",[s,o]);}
+function heatState(s,o){return nativeRule("heatState",[s,o]);}
 function validQuality(s){const qok=q=>q===undefined||Number.isInteger(q)&&q>=0&&q<=3;for(const loc of allItemLocations(s))for(const p of loc.filter(Boolean))if(!qok(p.quality)||p.burned!==undefined&&(typeof p.burned!=='boolean'||!p.item.startsWith('pot_')))return false;for(const a of allActors(s))if(a.carry&&!qok(a.carry.quality))return false;for(const d of s.deliveries)if(!qok(d.quality))return false;for(const [food,a]of Object.entries(s.receivingQuality||{}))if(!FOODS[food]||!Array.isArray(a)||a.length!==4||a.some(n=>!Number.isInteger(n)||n<0)||a.slice(1).reduce((x,y)=>x+y,0)>s.inv.receiving[food])return false;for(const o of s.objects){for(const [dish,a]of Object.entries(o.dishQuality||{}))if(!ITEMS[dish]||!Array.isArray(a)||a.length!==4||a.some(n=>!Number.isInteger(n)||n<0)||a.slice(1).reduce((x,y)=>x+y,0)>(o.dishes[dish]||0))return false;if(o.readyBatch&&(!Number.isFinite(o.readyBatch.doneAt)||o.readyBatch.doneAt>s.time||!qok(o.readyBatch.quality)||!RECIPES[o.readyBatch.recipe]))return false;}return !s.cooking||qok(s.cooking.quality);}
 
 // PHYSICAL_KITCHEN
-function recognizedRecipe(o){return Object.keys(RECIPES).find(id=>{
- const need=Object.fromEntries(Object.entries(RECIPES[id].foods).map(([f,n])=>[f==='arroz'?f:f+'_cut',n*KITCHEN_CONFIG.batchPortions]));
- const got={};for(const p of o.ingredients||[])got[p.item]=(got[p.item]||0)+p.n;
- return Object.keys(got).length===Object.keys(need).length&&Object.entries(need).every(([f,n])=>got[f]===n);
-})||null;}
+function recognizedRecipe(o){return nativeRule("recognizedRecipe",[o]);}
 function takePhysicalPan(s,o){
  if(s.player.hand||s.player.carry)return result(s,false,'Suas mãos estão ocupadas.');
  if(s.plating?.prep===o.id)return result(s,false,'Cancele o empratamento antes de retirar.');

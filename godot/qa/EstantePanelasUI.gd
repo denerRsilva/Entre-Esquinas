@@ -10,7 +10,7 @@ func run():
 	check(await take_storage("Retirar Panela • espaço 1"),"Retirar panela pelo mouse")
 	check(js("state.player.hand?.item==='pot'&&R.objectCount(state.objects.find(o=>o.type==='potRack'),'pot')===2")=="true","Panela sai da estante para as mãos")
 	await click_object("potRack")
-	check(await button("Guardar item das mãos"),"Devolver panela pelo mouse")
+	check(await button("Guardar Panela"),"Devolver panela pelo mouse")
 	check(js("!state.player.hand&&R.objectCount(state.objects.find(o=>o.type==='potRack'),'pot')===3")=="true","Estante volta a ter três panelas")
 	check(js("R.valid(state)&&Boolean(R.migrateSave(state))")=="true","Conteúdo e save válidos")
 	print("FALHAS: ",failures)

@@ -69,3 +69,13 @@ Agora passam pelo dispatcher GDScript: geometria de móveis (rect/cells/hit), pr
 Referências anteriores congeladas em `qa/referencia-migracao/regras-legado.cjs` são usadas somente pelo runner Node. Não são carregadas na Godot nem exportadas. `RegrasNativas.gd` compara 904 casos por meio da ponte real. Passaram também MaosUI (incluindo migração do save final), MovimentoUI e CatalogoModernoUI. O teste RuaHorarioUI apresentava 7 falhas também no HEAD anterior: pressupunha jogador na porta, embora o início mobiliado o coloque na cozinha. Seu fixture agora posiciona o jogador na porta antes de testar a saída.
 
 A migração permanece incompleta. Atualização dos atores, validação/migração geral de saves, construção, preparo/serviço e ações de menus ainda têm implementações JavaScript. A extensão temporária deve ser excluída somente depois de eliminar todos esses consumidores.
+
+## Armazenamento e identificação das receitas nativos
+
+`Armazenamento.gd` substitui as implementações JavaScript de localização/aceitação/capacidade dos móveis, slots de estações, contagem e qualidade de itens, sincronização dos contêineres, colocação e retirada de itens e capacidade/quantidade por setor. `Receitas.gd` identifica ingredientes combinados e calcula qualidade de lote, indicador de calor e custo/qualidade do plano de ingredientes. Os adaptadores do motor chamam esses módulos via a ponte existente. Resultados mutáveis são reconciliados preservando referências de objetos e listas já usadas por outras ações.
+
+Validação: 3.920 casos de armazenamento e 110 de receitas/calor comparados à referência antiga pela ponte real. Apenas o valor visual de progresso do calor aceita tolerância absoluta de 1e-12, pois os serializadores escrevem diferentes quantidades de casas finais; rótulo e estágio continuam exatos. As operações de armazenamento são comparadas exatamente. Também passaram MaosUI, EstantePanelasUI e CatalogoModernoUI, com conservação de itens e migração do save final do fluxo de cozinha.
+
+A investigação da estante confirmou duas falhas também na versão anterior. A ação Guardar recebia um argumento extra (`panel`) na posição de `disabled` e ficava desabilitada mesmo com item nas mãos. Corrigida a chamada e atualizado o teste para o rótulo atual `Guardar Panela`; retirar e devolver pelo mouse agora passa.
+
+Ainda permanecem em JavaScript as ações e os temporizadores de preparo, empratamento e atendimento, movimentação dos atores, construção e validação/migração geral dos saves. Nenhum APK final de migração foi publicado nesta etapa.

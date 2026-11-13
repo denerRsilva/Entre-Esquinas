@@ -1,0 +1,28 @@
+{
+  "arrozLegumes": {
+    "name": "Arroz com legumes",
+    "foods": {
+      "arroz": 1,
+      "legumes": 1
+    },
+    "price": 14,
+    "time": 6
+  },
+  "sopa": {
+    "name": "Sopa de legumes",
+    "foods": {
+      "legumes": 2
+    },
+    "price": 12,
+    "time": 5
+  },
+  "frangoArroz": {
+    "name": "Frango com arroz",
+    "foods": {
+      "arroz": 1,
+      "frango": 1
+    },
+    "price": 20,
+    "time": 8
+  }
+}

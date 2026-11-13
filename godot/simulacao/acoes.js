@@ -269,7 +269,7 @@ function renderDialog(){let panel=$(constructionMode?'constructionPanel':'panel'
  if(dialogTab==='container'){
  const o=state.objects.find(o=>o.id===dialogObjectId);if(!o?.inventory){$('management').close();return;}
  const held=state.player.hand,info=document.createElement('p');info.textContent=(held?'Nas mãos: '+R.itemName(held.item):'Mãos vazias')+' • Retire uma unidade por vez. O tempo continua passando.';panel.append(info);
- action(panel,'box','Guardar '+(held?R.itemName(held.item):'item das mãos'),()=>{const res=R.handStorage(state,o.id,'put');renderDialog();tell(res.message,!res.ok)},panel,!held);
+ action(panel,'box','Guardar '+(held?R.itemName(held.item):'item das mãos'),()=>{const res=R.handStorage(state,o.id,'put');renderDialog();tell(res.message,!res.ok)},!held);
  const grid=document.createElement('div');grid.className='inventoryGrid';
  o.inventory.forEach((slot,i)=>{
   const b=button('',()=>{const res=R.handStorage(state,o.id,'take',i);if(res.ok)$('management').close();else renderDialog();tell(res.message,!res.ok)},grid,!slot||!!held);

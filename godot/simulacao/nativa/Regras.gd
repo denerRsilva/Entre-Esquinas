@@ -1,4 +1,6 @@
 extends RefCounted
+const RECIPES = preload("res://simulacao/nativa/Receitas.gd")
+const STORAGE = preload("res://simulacao/nativa/Armazenamento.gd")
 const CALENDAR = preload("res://simulacao/nativa/Calendario.gd")
 const MAP = preload("res://simulacao/nativa/Mapa.gd")
 const INVENTORY = preload("res://simulacao/nativa/Inventario.gd")
@@ -9,6 +11,31 @@ func execute(json: String) -> String:
 	var args: Array = request.get("args",[])
 	var value: Variant = null
 	match request.get("name",""):
+		"recognizedRecipe":value=RECIPES.recognized(args[0])
+		"batchQuality":value=RECIPES.batch_quality(args[0],args[1])
+		"heatState":value=RECIPES.heat(args[0],args[1])
+		"ingredientPlan":value=RECIPES.ingredient_plan(args[0],args[1])
+		"objectLocation":value=STORAGE.location(args[0])
+		"accepts":value=STORAGE.accepts(args[0],args[1])
+		"stationSlots":value=STORAGE.slots(args[0])
+		"objectCount":value=STORAGE.count(args[0],args[1])
+		"readyCount":value=STORAGE.ready_count(args[0])
+		"objectSpace":value=STORAGE.space(args[0],args[1],args[2])
+		"objectQualityCount":value=STORAGE.quality_count(args[0],args[1],args[2])
+		"firstDishQuality":value=STORAGE.first_quality(args[0],args[1])
+		"capacity":value=STORAGE.capacity(args[0],args[1],args[2])
+		"amount":value=STORAGE.amount(args[0],args[1],args[2])
+		"syncContainers":
+			STORAGE.sync(args[0])
+			return JSON.stringify({"value":null,"inv":args[0].inv})
+		"putObject","takeObject":
+			var object: Dictionary = args[1]
+			for candidate in args[0].objects:
+				if candidate.get("id")==object.get("id"):
+					object=candidate
+					break
+			value=STORAGE.put(args[0],object,args[2],args[3],args[4]) if request.name=="putObject" else STORAGE.take(args[0],object,args[2],args[3],args[4])
+			return JSON.stringify({"value":value,"object":object,"inv":args[0].inv})
 		"newServiceHours":value=CALENDAR.hours()
 		"validServiceHours":value=CALENDAR.valid_hours(args[0])
 		"serviceHours":value=args[0].get("serviceHours",CALENDAR.hours())
