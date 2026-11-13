@@ -1,6 +1,8 @@
 extends RefCounted
 ## Event routing belongs to Godot. Calls into legacy actions are temporary
 ## endpoints; the routing policy is no longer duplicated in JavaScript.
+var catalog_ui: RefCounted
+var inventory_ui: RefCounted
 var execute: Callable
 
 func _init(executor: Callable):
@@ -17,6 +19,10 @@ func dispatch(event: Dictionary) -> void:
 		"blur": execute.call("releaseKeyboard()")
 
 func widget(event: Dictionary) -> void:
+	if str(event.get("path","")).begins_with("nativo:"):
+		if inventory_ui!=null and inventory_ui.dispatch(str(event.path),execute):return
+		if catalog_ui!=null:catalog_ui.dispatch(str(event.path),execute)
+		return
 	var path := JSON.stringify(str(event.get("path","")))
 	var info = query("(()=>{const w=Host.widgets.get("+path+");return w?{tag:w.tag,disabled:!!w.disabled}:null})()")
 	if not info is Dictionary or info.disabled:return

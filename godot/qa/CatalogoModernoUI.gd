@@ -5,6 +5,8 @@ func run():
 	await layout();await button("Começar na taverna")
 	js("enterConstruction()");g.tick(0);await layout()
 	check(js("!$('constructionDrawer').hidden")=="true","Catálogo abre ao entrar")
+	check(js("$('constructionPanel').children.length")=="0","Catálogo não é montado no modelo HTML")
+	check(g.session.catalog_ui.controls.actions.size()>0,"Ações de compra registradas em GDScript")
 	var grids=g.find_children("ConstructionGrid","GridContainer",true,false)
 	check(grids.size()==1 and grids[0].columns==2,"Duas colunas nativas")
 	var icons=g.find_children("Furniture_*","TextureRect",true,false)

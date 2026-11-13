@@ -2,12 +2,16 @@ extends RefCounted
 ## Native frame coordinator. The legacy bridge remains only until its rules,
 ## menu callbacks and painter have been migrated independently.
 var menus = preload("res://simulacao/nativa/Menus.gd").new()
+var catalog_ui = preload("res://interface/ComprasConstrucaoNativas.gd").new()
+var inventory_ui = preload("res://interface/InventariosNativos.gd").new()
 var evaluate: Callable
 var input_router: RefCounted
 
 func _init(executor: Callable):
 	evaluate = executor
 	input_router = preload("res://simulacao/nativa/Entrada.gd").new(executor)
+	input_router.inventory_ui=inventory_ui
+	input_router.catalog_ui=catalog_ui
 
 func read(expression: String) -> Variant:
 	return JSON.parse_string(evaluate.call("JSON.stringify("+expression+")"))
@@ -24,12 +28,18 @@ func step(dt: float, events: Array) -> Dictionary:
 		return {}
 	evaluate.call("Host.widgets.clear();Host.menuNodes.clear()")
 	menus.widget_paths.clear()
+	inventory_ui.actions.clear()
+	catalog_ui.controls.actions.clear()
 	var ui := {}
 	if state.modal != "":
 		ui.modal = section(state.modal)
+		if state.modal=="management" and state.container:
+			var model = read("({state,objectId:dialogObjectId})")
+			inventory_ui.replace_panel(ui.modal,inventory_ui.render(model.state,model.objectId))
 	elif state.construction:
 		ui.catalog = section("constructionControls")
 		ui.drawer = section("constructionDrawer")
+		if ui.drawer!=null:catalog_ui.replace_panel(ui.drawer,catalog_ui.render(read("state")))
 		ui.build = section("buildBar")
 	else:
 		for id in ["hud","dock","actions","context","ordersHud","kitchenStatus","openBtn"]:

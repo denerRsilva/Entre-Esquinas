@@ -5,7 +5,7 @@ func run():
  await layout();await button("Começar na taverna")
  check(js("state.singleRoom&&state.workers.length===1&&state.workers[0].x<14")=="true","Garçom no salão, sem logística")
  js("enterConstruction();renderDialog()");g.tick(0);await layout()
- var catalog=js("$('constructionPanel').textContent")
+ var catalog=JSON.stringify(g.frame_data.ui.drawer)
  check(catalog.contains("Computador") and catalog.contains("Caixas de recebimento") and catalog.contains("Prateleira seca") and not catalog.contains("Geladeira do estoque"),"Equipamentos opcionais no catálogo")
  js("exitConstruction();R.place(state,'computer',8,10);R.place(state,'receiving',20,12);refresh()")
  g.tick(0);await layout()

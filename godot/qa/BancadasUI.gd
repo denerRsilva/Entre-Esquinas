@@ -4,7 +4,7 @@ func run():
  g=load("res://mundo/Restaurante.tscn").instantiate();root.add_child(g);g.set_process(false)
  await layout();await button("Começar na taverna")
  js("enterConstruction();renderDialog()");g.tick(0);await layout()
- var catalog=js("$('constructionPanel').textContent")
+ var catalog=JSON.stringify(g.frame_data.ui.drawer)
  for label in ["Bancada horizontal","Bancada vertical","Bancada de canto"]:check(catalog.contains(label),label+" no catálogo")
  js("exitConstruction()")
  for item in [["counterH",16,11],["counterCorner",17,11],["counterV",17,10]]:
