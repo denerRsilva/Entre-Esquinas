@@ -188,6 +188,8 @@ function draw(c,R,s,ui){
   if(ui.hover){const o={type:ui.building.type,room:R.CATALOG[ui.building.type].room,x:ui.hover.x,y:ui.hover.y,rot:ui.building.rot},r=R.rect(o),error=ui.previewError(o);object(c,R,s,o,true,true);box(c,r.x*40,r.y*40,r.w*40,r.h*40,error?'#bb433b55':'#55aa7055');}}
 }
 function catalogIcon(type,name){
+ if(type.startsWith('counter')){const el=document.createElement('span');el.setAttribute('aria-label',name);el.innerHTML='<svg viewBox="0 0 32 32" shape-rendering="crispEdges"><path fill="#c39461" stroke="#4a3228" d="'+(type==='counterV'?'M6 1h20v30H6z':type==='counterCorner'?'M2 2h12v16h16v12H2z':'M1 8h30v18H1z')+'"/></svg>';return el;}
+
  if(['computer','receiving'].includes(type)){const icon=document.createElement('span');icon.setAttribute('aria-label',name);icon.innerHTML=type==='computer'?'<svg viewBox="0 0 80 64"><path fill="#725037" d="M4 34h72v28H4z"/><path fill="#334443" d="M18 2h44v34H18z M35 34h10v6H35z"/><path fill="#a0ac87" d="M22 6h36v24H22z"/></svg>':'<svg viewBox="0 0 80 64"><path fill="#b4824e" stroke="#50382a" stroke-width="5" d="M5 10h70v48H5z M5 24h70 M5 44h70 M18 10v48 M62 10v48"/></svg>';return icon;}
 
  if(type==='potRack'){

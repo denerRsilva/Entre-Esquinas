@@ -2,6 +2,7 @@ extends Node2D
 const Tracos = preload("res://mundo/Tracos.gd")
 @export var cozinheira: PackedScene = preload("res://personagens/Cozinheira.tscn")
 @export var moveis: Dictionary[String,PackedScene] = {
+	"counterH":preload("res://moveis/BancadaH.tscn"),"counterV":preload("res://moveis/BancadaV.tscn"),"counterCorner":preload("res://moveis/BancadaCanto.tscn"),
 	"computer":preload("res://moveis/Computador.tscn"),"receiving":preload("res://moveis/Recebimento.tscn"),
 	"stove":preload("res://moveis/Fogao.tscn"), "kitchen":preload("res://moveis/Cozinha.tscn"), "prep":preload("res://moveis/Preparo.tscn"),
 	"sink":preload("res://moveis/Pia.tscn"), "fridge":preload("res://moveis/Geladeira.tscn"),
@@ -79,6 +80,7 @@ func paint(data: Dictionary) -> void:
 			if op[1] in ["computer","receiving","stove","prep","kitchen","sink","table","shelf","potRack"]: original.x=80
 			if op[1] in ["fridge","cold"]: original.y=80
 			n.scale = Vector2(float(op[4])/original.x,float(op[5])/original.y)
+			if str(op[1]).begins_with("counter"):n.configurar(int(op[6]))
 			if op[1]=="chair":
 				var facing := int(op[6])
 				var crop: Array = art_cuts.moveis[[9,10,8,10][facing]]

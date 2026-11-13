@@ -24,3 +24,5 @@ require("./taverna-compacta.test.cjs");
 require("./taverna-unica.test.cjs");
 
 require("./velocidade-npcs.test.cjs");
+
+require("./bancadas.test.cjs");

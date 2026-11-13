@@ -1,5 +1,6 @@
 extends Node2D
 ## Art layers use the same geometry as the simulation; decorations on walls are non-blocking.
+const WALLS=preload("res://arte/modular/modulos.svg")
 const ARCH=preload("res://arte/taverna/arquitetura.png")
 const DECOR=preload("res://arte/taverna/decoracao.png")
 const FURN=preload("res://arte/taverna/moveis.png")
@@ -48,7 +49,8 @@ func _draw():
 	var left := 160 if compact else 0
 	var top := (240 if single_room else 80) if compact else 0
 	for x in range(4 if compact else 0,24,2):
-		asset(ARCH,[27,220,285,150] if x<14 else [28,413,281,124],Rect2(x*40,top,80,62))
+		asset(WALLS,[0,0,32,32],Rect2(x*40,top,40,62))
+		asset(WALLS,[0,0,32,32],Rect2(x*40+40,top,40,62))
 	# Continuous side walls: only plaster repeats, never the horizontal wall's plinth.
 	var spans := [[left,top+40,600],[920,top+40,600],[560,top+40,400]] if single_room else [[left,top+40,600],[920,top+40,600],[560,top+40,280],[560,320,600]]
 	for span in spans:
@@ -60,7 +62,7 @@ func _draw():
 			draw_rect(Rect2(x*40+2,403,36,12),Color("a17850"))
 	for x in range(4 if compact else 0,24):
 		if x==7:continue
-		asset(ARCH,[24,619,172,77],Rect2(x*40,600,40,40))
+		asset(WALLS,[96,0,32,32],Rect2(x*40,600,40,40))
 	# Windows, lamps, foliage and carpet reproduce the approved reference's mood.
 	for x in ([240,400] if compact else [120,360]):asset(ARCH,[1310,607,64,88],Rect2(x,top+2,48,58))
 	for x in ([205,350,530,730] if compact else [65,270,530,730]):decor(0,Rect2(x,top+8,28,45))
@@ -79,15 +81,9 @@ func _draw():
 		for x in [800,840,880]:decor(18,Rect2(x,443,40,37))
 
 func side_wall(x:float, top:float, bottom:float):
-	var height := bottom-top
-	draw_rect(Rect2(x,top,40,height),Color("49352b"))
-	var y := top
-	while y < bottom:
-		var segment := minf(80,bottom-y)
-		asset(ARCH,[70,262,80,segment*0.6],Rect2(x+8,y,24,segment))
-		y += segment
-	# Longitudinal timber edges and end caps frame the passage without a ladder pattern.
-	draw_rect(Rect2(x+2,top,5,height),Color("846047"))
-	draw_rect(Rect2(x+33,top,4,height),Color("694832"))
-	draw_rect(Rect2(x+7,top,26,4),Color("a57b52"))
-	draw_rect(Rect2(x+7,bottom-5,26,5),Color("60432f"))
+	var y:=top
+	while y<bottom:
+		var size:=minf(40,bottom-y)
+		asset(WALLS,[32,0,32,size*.8],Rect2(x,y,40,size))
+		y+=size
+	asset(WALLS,[96,0,32,8],Rect2(x,bottom-6,40,6))

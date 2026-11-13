@@ -1,0 +1,6 @@
+[gd_scene format=3]
+[ext_resource type="Script" path="res://moveis/Bancada.gd" id="script"]
+[node name="BancadaH" type="Node2D"]
+script = ExtResource("script")
+forma = 0
+texture_filter = 1

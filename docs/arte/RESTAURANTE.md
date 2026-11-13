@@ -22,3 +22,11 @@ Versão .14: todos os NPCs (clientes, garçom, moradores e logística de saves a
 Versão .15: personagem principal a 3,3 células/s tanto no teclado quanto por clique (antes 4,5 e aproximadamente 5,56, respectivamente). NPCs continuam a 2,5 células/s.
 
 Versão .16: spritesheets do garçom e dos três clientes integradas como AnimatedSprite2D, quatro direções, quatro quadros por direção e 5 FPS de animação. Escala compatível com a cozinheira; filtro nearest e recorte de transparência. NPCs mantêm 2,5 células/s. Teste SpritesNPCs.gd confirma os quatro modelos e seus frames, além de saves válidos. Captura em npcs-integrados.png. Os atlas ainda são estudos ampliados, não sprites nativos finais de 32 × 32.
+
+## Paredes e bancadas modulares (Godot .17)
+
+Atlas original `godot/arte/modular/modulos.svg`, grade de 32×32, com reboco claro, molduras de madeira e módulos de bancada. O recurso `Modulos.tres` é um TileSet editável no Godot; as células 0–3 são paredes e 4–6 são bancada horizontal, vertical e canto (7 é uma variante reservada). O mapa da taverna continua montado pelo script `Taverna.gd`, que usa o novo atlas nas paredes; editar o recurso não muda automaticamente a planta.
+
+As três bancadas custam $35 cada no modo construção, ocupam uma célula, podem ser giradas, movidas e removidas, e ficam no salvamento. O canto permite junções em L; use a rotação para orientar a junção. São móveis de composição e bloqueiam passagem, sem substituir as estações de preparo e empratamento. As cenas `BancadaH`, `BancadaV` e `BancadaCanto` permitem pré-visualização no editor.
+
+Validação: `node godot/qa/Regras.cjs` e `godot --path godot --script res://qa/BancadasUI.gd -- --capturas`.
