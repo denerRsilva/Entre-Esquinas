@@ -22,3 +22,5 @@ require('./estante-panelas.test.cjs');
 require("./taverna-compacta.test.cjs");
 
 require("./taverna-unica.test.cjs");
+
+require("./velocidade-npcs.test.cjs");
