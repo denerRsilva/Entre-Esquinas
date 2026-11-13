@@ -83,3 +83,15 @@ function readLayout(node){
  n.nodes=children.map(readLayout);return n;
 }
 readLayout(InterfaceBase);
+
+// Temporary transport of legacy menu nodes. Presentation policy is in Menus.gd.
+function exportMenuNode(n,path){
+ if(typeof n==='string')return n;
+ Host.menuNodes.set(path,n);
+ const raw={tag:n.tag,cls:n.className,id:n.id,attrs:n.attrs,hidden:!!n.hidden,disabled:!!n.disabled,title:n.title||'',value:n.value,type:n.type||'',checked:!!n.checked};
+ for(const key of ['anchor','min','max','step','svg'])if(n[key]!==undefined)raw[key]=n[key];
+ if(n.tag==='canvas')raw.art=n.getContext().commands;
+ raw.nodes=n.nodes.map((c,i)=>exportMenuNode(c,path+'/'+i));return raw;
+}
+Host.menuNodes=new Map();
+kitchenAudio={state:'running',currentTime:0,createOscillator(){const tone={frequency:{value:0},connect(){},start(){Host.sound.push(tone.frequency.value)},stop(){}};return tone},createGain(){return {gain:{setValueAtTime(){},exponentialRampToValueAtTime(){}},connect(){}}}};

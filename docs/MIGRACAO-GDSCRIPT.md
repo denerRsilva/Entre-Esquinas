@@ -47,3 +47,9 @@ Validação: EntradaNativa (bloqueio modal, controles inexistentes/desabilitados
 `Alimentos.gd` centraliza atlas, recortes, cache de texturas e dimensionamento/posicionamento das sprites. `Tracos.gd` e `CatalogoUI.gd` usam esse módulo. O adaptador JavaScript apenas emite comandos de alimento; o cálculo de recorte e ajuste de tamanho foi removido de `comidas.js`. Nomes, decoração de texto e estrelas de qualidade ainda estão no legado.
 
 AlimentosNativos compara 66 comandos com a implementação anterior, incluindo pratos/panelas, tamanhos distintos, espelhamento e coordenadas negativas. Resultado: zero diferenças. MaosUI também passou no fluxo completo de cozinha. Esta é uma etapa parcial da apresentação, não a conclusão da migração.
+
+## Montagem dos menus em GDScript
+
+`Menus.gd` substitui summary/firstArtwork/pack/section: constrói descrições de controles, identifica arte, opções e caminhos dos widgets. A sessão nativa registra os callbacks correspondentes após montar as áreas visíveis. `simulacao/sessao.js` foi removido da produção e do carregador. Um exportador temporário em `apresentacao.js` apenas transporta os nós do modelo legado; criação dos menus e callbacks continuam em JavaScript.
+
+MenusNativos compara a saída com a referência anterior em boas-vindas, gestão, opções, receitas e construção. A comparação identificou labels opcionais que precisavam continuar ausentes; corrigido. Também passaram MaosUI e CatalogoModernoUI. Referência JavaScript de testes em `.txt` não é carregada pelo jogo.

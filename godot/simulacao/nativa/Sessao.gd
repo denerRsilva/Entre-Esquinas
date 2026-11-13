@@ -1,6 +1,7 @@
 extends RefCounted
 ## Native frame coordinator. The legacy bridge remains only until its rules,
 ## menu callbacks and painter have been migrated independently.
+var menus = preload("res://simulacao/nativa/Menus.gd").new()
 var evaluate: Callable
 var input_router: RefCounted
 
@@ -21,7 +22,8 @@ func step(dt: float, events: Array) -> Dictionary:
 	var scene = read("(()=>{const painter=new Painter();RestaurantArt.draw(painter,R,state,{selectedObject,building,hover,previewError,constructionMode});return painter.commands;})()")
 	if not scene is Array:
 		return {}
-	evaluate.call("Host.widgets.clear()")
+	evaluate.call("Host.widgets.clear();Host.menuNodes.clear()")
+	menus.widget_paths.clear()
 	var ui := {}
 	if state.modal != "":
 		ui.modal = section(state.modal)
@@ -33,6 +35,7 @@ func step(dt: float, events: Array) -> Dictionary:
 		for id in ["hud","dock","actions","context","ordersHud","kitchenStatus","openBtn"]:
 			ui[id] = section(id)
 		ui.notice = section("notice") if state.notice else null
+	evaluate.call("for(const path of "+JSON.stringify(menus.widget_paths)+")Host.widgets.set(path,Host.menuNodes.get(path))")
 	var writes = read("Host.writes")
 	var sounds = read("Host.sound")
 	if not writes is Dictionary or not sounds is Array:
@@ -44,4 +47,4 @@ func step(dt: float, events: Array) -> Dictionary:
 		"construction":state.construction,"door":state.door,"writes":writes,"sounds":sounds}
 
 func section(id: String) -> Variant:
-	return read("section("+JSON.stringify(id)+")")
+	return menus.pack(read("exportMenuNode($("+JSON.stringify(id)+"),"+JSON.stringify(id)+")"),id)

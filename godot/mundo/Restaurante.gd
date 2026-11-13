@@ -1,6 +1,6 @@
 extends Node
 const STORE = "user://restaurante.json"
-const SCRIPTS = ["apresentacao","restaurant-core","comidas","cenografia","acoes","sessao"]
+const SCRIPTS = ["apresentacao","restaurant-core","comidas","cenografia","acoes"]
 var session = preload("res://simulacao/nativa/Sessao.gd").new(func(code):return RestauranteVM.executar(code))
 var events:Array=[]
 var active:=false

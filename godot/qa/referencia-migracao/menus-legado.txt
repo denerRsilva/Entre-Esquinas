@@ -27,4 +27,3 @@ function pack(n,path){
  return v;
 }
 function section(id){return pack($(id),id)}
-kitchenAudio={state:'running',currentTime:0,createOscillator(){const tone={frequency:{value:0},connect(){},start(){Host.sound.push(tone.frequency.value)},stop(){}};return tone},createGain(){return {gain:{setValueAtTime(){},exponentialRampToValueAtTime(){}},connect(){}}}};
