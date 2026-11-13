@@ -18,3 +18,5 @@ Interações .11: botões contextuais sem legendas visíveis; prato, panela e in
 Versão .13: clientes caminham a 2,5 células/s (0,4 s por célula; antes 0,18 s). Velocidade da cozinheira preservada. Início mobiliado segue a imagem enviada: três mesas com quatro cadeiras, equipamentos alinhados na parede superior e garçom fora dos assentos. Testados movimento em curso/salvamento, assentos, circulação e cozinha completa.
 
 Versão .14: todos os NPCs (clientes, garçom, moradores e logística de saves antigos) usam 0,4 s por célula, equivalentes a 2,5 células/s. A velocidade do jogador permanece inalterada.
+
+Versão .15: personagem principal a 3,3 células/s tanto no teclado quanto por clique (antes 4,5 e aproximadamente 5,56, respectivamente). NPCs continuam a 2,5 células/s.

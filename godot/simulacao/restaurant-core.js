@@ -243,7 +243,7 @@ function route(s,room,from,to,a=null,avoid=new Set(),objects=s.objects){
 }
 function position(a){if(a.motion){let m=a.motion,t=Math.min(1,m.elapsed/m.duration);return {x:m.fromX+(m.toX-m.fromX)*t,y:m.fromY+(m.toY-m.fromY)*t}}let p=a.settled;return p&&p.room===a.room&&p.x===a.x&&p.y===a.y?{x:p.px,y:p.py}:{x:a.x,y:a.y};}
 // Continuous player input is transient; only the settled world position is saved.
-const PLAYER_SPEED=4.5,PLAYER_RADIUS=.20,playerInput=new WeakMap();
+const PLAYER_SPEED=3.3,PLAYER_RADIUS=.20,playerInput=new WeakMap();
 function playerVelocity(a){return playerInput.get(a)||null;}
 function isMoving(a){return !!a.motion||!!playerInput.get(a)?.moving;}
 function setPlayerInput(s,dx,dy){
@@ -298,7 +298,7 @@ function moveFreePlayer(s,a,input,dt){
  }
 }
 const NPC_WALK_TIME=.4;
-function actorWalkTime(a){return a.id==='player'?WALK_TIME:NPC_WALK_TIME;}
+function actorWalkTime(a){return a.id==='player'?1/PLAYER_SPEED:NPC_WALK_TIME;}
 function startMotion(a,to,offsetX=0,offsetY=0){let p=position(a),x=to.x+offsetX,y=to.y+offsetY,d=Math.hypot(x-p.x,y-p.y);if(d<1e-7)return false;a.motion={fromX:p.x,fromY:p.y,toX:x,toY:y,x:to.x,y:to.y,elapsed:0,duration:d*actorWalkTime(a)};return true;}
 function advanceMotion(a,dt){let m=a.motion;if(!m)return dt;let used=Math.min(dt,m.duration-m.elapsed);m.elapsed+=used;if(m.elapsed>=m.duration-1e-8){a.x=m.x;a.y=m.y;a.settled={room:a.room,x:a.x,y:a.y,px:m.toX,py:m.toY};a.motion=null;}return Math.max(0,dt-used);}
 function reserved(a){let out=[{x:a.x,y:a.y}];if(a.id==='player'&&!a.motion){const p=position(a),r=PLAYER_RADIUS;for(let y=Math.floor(p.y+.5-r);y<=Math.floor(p.y+.5+r);y++)for(let x=Math.floor(p.x+.5-r);x<=Math.floor(p.x+.5+r);x++){const dx=Math.max(x-p.x-.5,0,p.x-.5-x),dy=Math.max(y-p.y-.5,0,p.y-.5-y);if(dx*dx+dy*dy<r*r-1e-10)out.push({x,y});}}if(a.motion){out.push({x:a.motion.x,y:a.motion.y});if(a.motion.x!==a.x&&a.motion.y!==a.y)out.push({x:a.motion.x,y:a.y},{x:a.x,y:a.motion.y})}return out.filter((p,i)=>out.findIndex(q=>q.x===p.x&&q.y===p.y)===i);}
