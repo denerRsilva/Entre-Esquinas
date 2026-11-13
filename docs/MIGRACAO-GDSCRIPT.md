@@ -41,3 +41,9 @@ Na auditoria, passaram novamente PartidaNativa, MapaNativo (4.212 células) e In
 `Entrada.gd` agora decide o encaminhamento de cliques, valores de controles, mouse, teclado e perda de foco. `Sessao.gd` despacha os eventos em ordem antes do frame. A antiga função `input` foi removida de `sessao.js`. As ações finais dos widgets e os ouvintes de movimento ainda são endpoints JavaScript: esta alteração não encerra a parte 6 nem elimina QuickJS.
 
 Validação: EntradaNativa (bloqueio modal, controles inexistentes/desabilitados, ordem abrir/Escape e valores literais), CatalogoModernoUI, MaosUI e MovimentoUI passaram. O teste de entrada revelou retorno `undefined` da ponte para menus fechados; a leitura agora normaliza esse valor para null.
+
+## Apresentação nativa dos alimentos
+
+`Alimentos.gd` centraliza atlas, recortes, cache de texturas e dimensionamento/posicionamento das sprites. `Tracos.gd` e `CatalogoUI.gd` usam esse módulo. O adaptador JavaScript apenas emite comandos de alimento; o cálculo de recorte e ajuste de tamanho foi removido de `comidas.js`. Nomes, decoração de texto e estrelas de qualidade ainda estão no legado.
+
+AlimentosNativos compara 66 comandos com a implementação anterior, incluindo pratos/panelas, tamanhos distintos, espelhamento e coordenadas negativas. Resultado: zero diferenças. MaosUI também passou no fluxo completo de cozinha. Esta é uma etapa parcial da apresentação, não a conclusão da migração.

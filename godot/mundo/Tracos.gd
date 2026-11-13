@@ -25,7 +25,9 @@ func set_commands(next: Array) -> void:
 		queue_redraw()
 
 func _draw() -> void:
-	for op in commands:
+	for command in commands:
+		var op: Array = preload("res://simulacao/nativa/Alimentos.gd").image_command(command) if command[0]=="food" else command
+		if op.is_empty():continue
 		match op[0]:
 			"rect","line":
 				var col := Color.from_string(op[5],Color.WHITE)

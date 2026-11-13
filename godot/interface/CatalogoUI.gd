@@ -16,6 +16,7 @@ func label(text: String, size := 15) -> Label:
 
 func texture(ops: Array) -> Texture2D:
 	for op in ops:
+		if op[0]=="food":return preload("res://simulacao/nativa/Alimentos.gd").texture(str(op[1]))
 		if op[0]=="svg": return Paint.vector(op[1])
 		if op[0]=="img":
 			var tex := AtlasTexture.new()
