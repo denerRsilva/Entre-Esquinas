@@ -10,10 +10,16 @@ function nativeRule(name,args){
  if(name==='setPlayerInput'){nodeReference.setPlayerInput(args[0],args[1],args[2]);return {actor:args[0].player,input:nodeReference.playerVelocity(args[0].player)};}
  if(name==='moveActors'){nodeReference.moveActors(args[0],args[1]);return {...args[0],input:nodeReference.playerVelocity(args[0].player)};}
  if(name==='pushAside'){const s=args[0],actors=nodeReference.allActors(s),locked=new Set(args[3]),seen=new Set(args[4]);const value=nodeReference.pushAside(s,actors.find(a=>a.id===args[1]),actors.find(a=>a.id===args[2]),locked,seen);return {...s,value,locked:[...locked],seen:[...seen]};}
- if(['startMotion','advanceMotion','go'].includes(name)){const value=nodeReference[name](...args);return {value,actor:args[0]};}
+ if(['startMotion','advanceMotion','go'].includes(name)){const value=nodeReference[name](...args);
+ if(["place","remove"].includes(name))return {value,state:args[0]};
+ if(["chairTable","seatTable"].includes(name))return value?.id??null;
+ if(name==="seats")return value.map(o=>o.id);return {value,actor:args[0]};}
  if(name==='goObject'){const value=nodeReference.goObject(...args);return {value,actor:args[1]};}
  if(name==='route')args[5]=new Set(args[5]);
  const value=nodeReference[name](...args);
+ if(["place","remove"].includes(name))return {value,state:args[0]};
+ if(["chairTable","seatTable"].includes(name))return value?.id??null;
+ if(name==="seats")return value.map(o=>o.id);
  if(["recoverItems","migrateKitchen","migrateCleaning","migratePhysicalKitchen","migrateHands"].includes(name))return {value:["recoverItems","migrateHands"].includes(name)?value:null,state:args[0]};
  if(["putObject","takeObject"].includes(name))return {value,object:args[1],inv:args[0].inv};
  if(name==="syncContainers")return {value:null,inv:args[0].inv};
@@ -260,61 +266,24 @@ function goObject(s,a,o){const out=nativeRule('goObject',[s,a,o]);syncNative(a,o
 function applyMovement(s,out){for(const key of ['player','workers','residents','customers'])syncNative(s[key],out[key]);s.flowWaits=out.flowWaits;}
 function moveActors(s,dt=WALK_TIME){const out=nativeRule('moveActors',[s,dt,playerVelocity(s.player)]);applyMovement(s,out);if(out.input)playerInput.set(s.player,out.input);else playerInput.delete(s.player);}
 function pushAside(s,b,requester,locked,seen=new Set()){const out=nativeRule('pushAside',[s,b.id,requester.id,[...locked],[...seen]]);applyMovement(s,out);locked.clear();for(const k of out.locked)locked.add(k);seen.clear();for(const k of out.seen)seen.add(k);return out.value;}
-function editError(s){return s.open||s.customers.length||s.orders.some(o=>!['paid','lost'].includes(o.state))?'Feche o serviço e conclua os clientes antes de reorganizar.':null;}
-function layoutError(s,objects){let occupied=new Set();for(const o of objects){if(!CATALOG[o.type]||o.room!==CATALOG[o.type].room)return 'Objeto fora do setor permitido.';for(const p of cells(o)){if(wall(o.room,p.x,p.y,s)||fixed(o.room,p.x,p.y,s)||PORTALS[o.room].some(d=>Math.abs(d.x-p.x)+Math.abs(d.y-p.y)<=1))return 'Parede, porta ou infraestrutura reservada.';if(o.room==='restaurant'&&((CATALOG[o.type].area==='hall'&&p.x>=14)||(CATALOG[o.type].area==='kitchen'&&(p.x<=14||(!s.singleRoom&&p.y>=10)))||(CATALOG[o.type].area==='storage'&&(p.x<=14||(!s.singleRoom&&p.y<=10)))||(CATALOG[o.type].area==='dryStorage'&&p.x<=14)))return 'Mesas e cadeiras: salão. Fogão e geladeira de cozinha: cozinha. Prateleira: cozinha ou estoque. Geladeira de estoque: estoque.';let k=o.room+':'+key(p);if(occupied.has(k))return 'Esta célula já está ocupada.';occupied.add(k);if(allActors(s).some(a=>a.room===o.room&&reserved(a).some(q=>q.x===p.x&&q.y===p.y)))return 'Há uma pessoa nesta posição.';}}
- for(const chair of objects.filter(o=>o.type==='chair')){const error=chairLayoutError(s,chair,objects);if(error)return error;}
- // Layout validation needs connectivity, not a separate shortest path per object.
- // A legal diagonal requires both adjacent cardinal cells to be free, so a
- // cardinal flood reaches exactly the same cells as route(), without changing it.
- const room='restaurant',solid=new Uint8Array(W*H),reached=new Uint8Array(W*H);
- for(let y=0;y<H;y++)for(let x=0;x<W;x++)solid[y*W+x]=wall(room,x,y,s)||fixed(room,x,y,s)||occupied.has(room+':'+x+','+y)?1:0;
- const start=13*W+7,queue=[start];
- // route() may leave an occupied start, but cannot use it as a destination.
- reached[start]=1;
- for(let head=0;head<queue.length;head++){
-  const cell=queue[head],x=cell%W,y=Math.floor(cell/W);
-  for(const [dx,dy]of DIRS){const nx=x+dx,ny=y+dy;
-   if(nx<0||ny<0||nx>=W||ny>=H)continue;
-   const next=ny*W+nx;if(solid[next]||reached[next])continue;
-   reached[next]=1;queue.push(next);
-  }
- }
- if(solid[start])reached[start]=0;
- for(const d of PORTALS[room])if(!reached[d.y*W+d.x])return 'A disposição bloqueia uma porta.';
- for(const o of objects.filter(o=>o.room===room))if(!accessPoints(s,o,objects).some(p=>reached[p.y*W+p.x]))return 'Deixe uma passagem até cada móvel.';
- return null;}
-function place(s,type,x,y,rot=0,moving=null){let error=editError(s);if(error)return {ok:false,error};let d=CATALOG[type];if(!d)return {ok:false,error:'Objeto desconhecido.'};if(s.singleRoom&&type==='cold')return {ok:false,error:'Esta planta não possui estoque separado.'};if(['computer','receiving'].includes(type)&&s.objects.some(o=>o.type===type&&o.id!==moving))return {ok:false,error:'Este equipamento já está instalado.'};if(!Number.isInteger(x)||!Number.isInteger(y)||!Number.isInteger(rot))return {ok:false,error:'Posição inválida.'};let old=moving?s.objects.find(o=>o.id===moving):null;if(moving&&(!old||old.type!==type))return {ok:false,error:'Objeto não encontrado.'};if(old&&(s.chopping?.table===old.id||s.cooking?.stove===old.id||s.plating?.prep===old.id))return {ok:false,error:'Conclua o preparo antes de mover.'};if(old&&(s.dirtyTables[old.id]||old.type==='table'&&s.objects.some(c=>c.type==='chair'&&chairTable(s,c)?.id===old.id&&s.dirtyTables[c.id])))return {ok:false,error:'Recolha os pratos sujos antes de mover.'};let o={...old,id:old?.id||s.serial,type,x,y,rot:((rot%4)+4)%4,room:d.room,...(type==='stove'?{ingredients:old?.ingredients||[],pan:old?.pan||null,...(old?.readyBatch?{readyBatch:{...old.readyBatch},burned:!!old.burned}:{} )}:type==='kitchen'?{plates:old?.plates||0,utensil:old?.utensil||false,dishes:old?.dishes||{},dishQuality:old?.dishQuality||{}}:['shelf','cold','fridge','potRack'].includes(type)?{inventory:old?.inventory||Array(type==='potRack'?3:10).fill(null)}:{})};let objects=s.objects.filter(q=>q.id!==moving).concat(o);error=layoutError(s,objects);if(error)return {ok:false,error};if(!old&&s.cash<d.price)return {ok:false,error:'Dinheiro insuficiente.'};if(!old){s.cash-=d.price;s.ledger.investment+=d.price;s.serial++}s.objects=objects;syncContainers(s);return {ok:true,object:o};}
-function remove(s,id){let error=editError(s);if(error)return {ok:false,error};let o=s.objects.find(o=>o.id===id);if(!o)return {ok:false,error:'Objeto não encontrado.'};if(o.type==='receiving'&&(Object.values(s.inv.receiving).some(n=>n>0)||s.deliveries.some(d=>d.pending>0)))return {ok:false,error:'Recolha as entregas antes de guardar o recebimento.'};if(o.type==='table'&&s.objects.some(c=>c.type==='chair'&&chairTable(s,c)?.id===o.id&&s.dirtyTables[c.id]))return {ok:false,error:'Recolha os pratos sujos antes de guardar a mesa.'};if(s.chopping?.table===id||s.cooking?.stove===id||s.plating?.prep===id||stationSlots(o).some(Boolean)||s.dirtyTables[o.id])return {ok:false,error:'Retire os itens instalados e a comida antes de guardar.'};s.objects=s.objects.filter(o=>o.id!==id);s.cash+=CATALOG[o.type].price;s.ledger.investment-=CATALOG[o.type].price;return {ok:true};}
-function longSideSeat(chair,table){
- const r=rect(table);
- if(r.w===2&&r.h===1)return chair.x>=r.x&&chair.x<r.x+r.w&&(chair.y===r.y-1&&chair.rot===2||chair.y===r.y+r.h&&chair.rot===0);
- if(r.w===1&&r.h===2)return chair.y>=r.y&&chair.y<r.y+r.h&&(chair.x===r.x-1&&chair.rot===1||chair.x===r.x+r.w&&chair.rot===3);
- return true;
+// Native construction rules; adapters retain object identity for game callers.
+function editError(s){return nativeRule('editError',[s]);}
+function layoutError(s,objects){return nativeRule('layoutError',[s,objects]);}
+function longSideSeat(chair,table){return nativeRule('longSideSeat',[chair,table]);}
+function chairTable(s,chair,objects=s.objects){const id=nativeRule('chairTable',[s,chair||null,objects]);return objects.find(o=>o.id===id);}
+function seatTable(s,chair,objects=s.objects){const id=nativeRule('seatTable',[s,chair||null,objects]);return objects.find(o=>o.id===id);}
+function chairLayoutError(s,chair,objects){return nativeRule('chairLayoutError',[s,chair,objects]);}
+function seats(s){const ids=new Set(nativeRule('seats',[s]));return s.objects.filter(o=>ids.has(o.id));}
+function kit(s){return nativeRule('kit',[s]);}
+function applyConstruction(s,out,prior,moving=null){
+ if(!out.value.ok)return out.value;
+ s.objects=out.state.objects.map(source=>{const old=prior.find(o=>o.id===source.id&&o.id!==moving);if(old){syncNative(old,source);return old;}return source;});
+ s.cash=out.state.cash;s.serial=out.state.serial;syncNative(s.ledger,out.state.ledger);syncNative(s.inv,out.state.inv);
+ if(out.value.object)out.value.object=s.objects.find(o=>o.id===out.value.object.id);
+ return out.value;
 }
-function chairTable(s,chair,objects=s.objects){
- if(!chair)return undefined;
- const [dx,dy]=DIRS[chair.rot%4];
- return objects.find(o=>o.room===chair.room&&o.type==='table'&&hit(o,chair.x+dx,chair.y+dy));
-}
-function seatTable(s,chair,objects=s.objects){
- const table=chairTable(s,chair,objects);
- return table&&longSideSeat(chair,table)?table:undefined;
-}
-function chairLayoutError(s,chair,objects){
- const touching=list=>list.filter(t=>t.type==='table'&&t.room===chair.room&&DIRS.some(([dx,dy])=>hit(t,chair.x+dx,chair.y+dy)));
- const tables=touching(objects);
- if(!tables.length)return null; // Cadeira isolada é móvel, mas não assento de atendimento.
- const onEnd=t=>{const r=rect(t);return r.w===2&&r.h===1?(chair.x===r.x-1||chair.x===r.x+r.w):r.w===1&&r.h===2?(chair.y===r.y-1||chair.y===r.y+r.h):false;};
- if(!tables.some(onEnd)&&seatTable(s,chair,objects))return null;
- // Saves antigos conservam móveis; cadeiras incompatíveis deixam de receber clientes.
- // Uma reforma não relacionada pode prosseguir até essas cadeiras serem reorganizadas.
- const geometry=o=>[o.id,o.type,o.room,o.x,o.y,o.rot];
- const old=s.objects.find(o=>o.id===chair.id&&o.type==='chair');
- if(old&&JSON.stringify(geometry(old))===JSON.stringify(geometry(chair))&&JSON.stringify(touching(s.objects).map(geometry))===JSON.stringify(tables.map(geometry)))return null;
- return 'Posicione a cadeira no lado comprido da mesa, virada para ela. As pontas não aceitam cadeiras.';
-}
-function seats(s){return s.objects.filter(o=>o.type==='chair'&&seatTable(s,o)&&route(s,'restaurant',{x:7,y:13},o,{seat:o.id}));}
-function kit(s){let a=[];if(!seats(s).length)a.push('mesa com cadeira voltada para ela e caminho livre');for(const [t,n] of [['stove','fogão'],['fridge','geladeira na cozinha']])if(!s.objects.some(o=>o.type===t))a.push(n);if(!s.objects.some(o=>o.type==='kitchen'))a.push('mesa de preparo');return a;}
+function place(s,type,x,y,rot=0,moving=null){const prior=s.objects;return applyConstruction(s,nativeRule('place',[s,type,x,y,rot,moving]),prior,moving);}
+function remove(s,id){const prior=s.objects;return applyConstruction(s,nativeRule('remove',[s,id]),prior);}
 const ITEMS={legumes_cut:{name:'Legumes cortados',raw:'legumes'},frango_cut:{name:'Frango cortado',raw:'frango'},...FOODS,pot:{name:'Panela'},spoon:{name:'Colher / utensílio'},plate:{name:'Prato limpo'},dirtyPlate:{name:'Prato sujo'},cookingPot:{name:'Panela em preparo',limit:1}};
 for(const [r,d]of Object.entries(RECIPES)){ITEMS['dish_'+r]={name:'Prato de '+d.name,recipe:r};for(let n=1;n<=4;n++)ITEMS['pot_'+r+'_'+n]={name:'Panela: '+d.name+' ('+n+'/4 porções)',recipe:r,servings:n,limit:1};}
 function itemLimit(item){return nativeRule("itemLimit",[item]);}

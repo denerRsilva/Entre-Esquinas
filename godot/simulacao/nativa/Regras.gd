@@ -1,4 +1,5 @@
 extends RefCounted
+const BUILD = preload("res://simulacao/nativa/Construcao.gd")
 const MOVE = preload("res://simulacao/nativa/Movimento.gd")
 const KITCHEN_STATE = preload("res://simulacao/nativa/EstadoCozinha.gd")
 const MIGRATION = preload("res://simulacao/nativa/MigracaoSave.gd")
@@ -16,6 +17,19 @@ func execute(json: String) -> String:
 	var args: Array = request.get("args",[])
 	var value: Variant = null
 	match request.get("name",""):
+		"editError":value=BUILD.edit_error(args[0])
+		"layoutError":value=BUILD.layout_error(args[0],args[1])
+		"longSideSeat":value=BUILD.long_side(args[0],args[1])
+		"chairLayoutError":value=BUILD.chair_error(args[0],args[1],args[2])
+		"chairTable","seatTable":
+			var table = BUILD.chair_table(args[1],args[2]) if request.name=="chairTable" else BUILD.seat_table(args[1],args[2])
+			value=table.id if table!=null else null
+		"seats":value=BUILD.seats(args[0])
+		"kit":value=BUILD.kit(args[0])
+		"place","remove":
+			var state: Dictionary = args[0]
+			value=BUILD.place(state,args[1],args[2],args[3],args[4],args[5]) if request.name=="place" else BUILD.remove(state,args[1])
+			return JSON.stringify({"value":value,"state":state},"",true,true)
 		"position":value=MOVE.position(args[0])
 		"reserved":value=MOVE.reserved(args[0])
 		"actorWalkTime":value=MOVE.walk_time(args[0])

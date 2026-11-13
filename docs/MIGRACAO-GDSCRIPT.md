@@ -103,3 +103,11 @@ MigracaoSaveNativa: 152 comparações, incluindo fases isoladas de migração, v
 MovimentoNativo compara nove sequências completas com o motor anterior: clique longo, diagonal/parada, parede, portas manual/automática, NPCs, offsets de destino, troca teclado/clique e corredor estreito com desvio. Coordenadas/interpolação aceitam erro absoluto de 1e-8; estrutura, reservas e contadores continuam comparados. A serialização da ponte foi alterada para precisão completa: o arredondamento anterior antecipava o limiar de espera no corredor. Com a correção, a sequência e o contador flowWaits coincidem.
 
 Passaram MovimentoUI, MovimentoNativo, RuaHorarioUI, MaosUI, CatalogoModernoUI, Regras.cjs e os 904 casos de RegrasNativas. Não foi gerado APK desta etapa. O sistema ainda integra com a simulação por adaptadores temporários; remover QuickJS depende da migração dos demais sistemas.
+
+## Regras de construção em GDScript
+
+`Construcao.gd` executa bloqueio de edição durante serviço, geometria e orientação dos assentos, compatibilidade com cadeiras antigas, validação dos setores, paredes/portas, pessoas e reservas físicas, ocupação, conectividade até a saída e acesso a cada móvel. Executa também compra/posicionamento/rotação/mudança/remoção/reembolso, proteção de preparos e itens instalados, louça suja e entregas pendentes. Lista de assentos utilizáveis e equipamentos mínimos também migrou.
+
+O motor JavaScript mantém adaptadores de transporte e resolução das referências retornadas. Móveis não envolvidos na mudança preservam suas referências; o objeto reposicionado é substituído como no motor anterior. Os comandos de abertura/fechamento do catálogo e a apresentação do modo construção continuam na camada de interface ainda em JavaScript; regras e transações passam pelo módulo nativo.
+
+ConstrucaoNativa compara 2.892 operações com o motor anterior, em plantas vazia/mobiliada/antiga e estados sem dinheiro, com serviço aberto, louça suja, preparo e recebimento pendente. Compara mensagens, objetos, dinheiro, investimento, serial e contêineres; toda operação recusada também precisa preservar exatamente o estado anterior. Passaram ConstrucaoUI, CadeirasUI, CatalogoModernoUI, MaosUI e Regras.cjs. Nenhum APK final foi gerado nesta etapa.
