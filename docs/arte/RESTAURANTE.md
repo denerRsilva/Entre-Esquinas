@@ -20,3 +20,5 @@ Versão .13: clientes caminham a 2,5 células/s (0,4 s por célula; antes 0,18 s
 Versão .14: todos os NPCs (clientes, garçom, moradores e logística de saves antigos) usam 0,4 s por célula, equivalentes a 2,5 células/s. A velocidade do jogador permanece inalterada.
 
 Versão .15: personagem principal a 3,3 células/s tanto no teclado quanto por clique (antes 4,5 e aproximadamente 5,56, respectivamente). NPCs continuam a 2,5 células/s.
+
+Versão .16: spritesheets do garçom e dos três clientes integradas como AnimatedSprite2D, quatro direções, quatro quadros por direção e 5 FPS de animação. Escala compatível com a cozinheira; filtro nearest e recorte de transparência. NPCs mantêm 2,5 células/s. Teste SpritesNPCs.gd confirma os quatro modelos e seus frames, além de saves válidos. Captura em npcs-integrados.png. Os atlas ainda são estudos ampliados, não sprites nativos finais de 32 × 32.

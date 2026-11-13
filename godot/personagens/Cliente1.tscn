@@ -1,0 +1,13 @@
+[gd_scene format=3]
+[ext_resource type="SpriteFrames" path="res://personagens/Cliente1.tres" id="frames"]
+[ext_resource type="Shader" path="res://arte/taverna/recorte.gdshader" id="shader"]
+[sub_resource type="ShaderMaterial" id="material"]
+shader = ExtResource("shader")
+[node name="Cliente1" type="AnimatedSprite2D"]
+material = SubResource("material")
+sprite_frames = ExtResource("frames")
+animation = &"baixo"
+frame = 1
+offset = Vector2(0, -156.75)
+scale = Vector2(0.20414673046251994, 0.20414673046251994)
+texture_filter = 1

@@ -8,4 +8,4 @@ Três identidades visuais baseadas no manequim e no estilo da cozinheira e do ga
 
 Cada PNG contém uma grade visual 4 × 4 com transparência: frente, esquerda, direita e costas, com repouso e poses de caminhada. As sugestões de profissão usadas no desenho não atribuem funções de gameplay nem nomes oficiais.
 
-São estudos ampliados, não atlas nativos finais de 32 × 32. Antes de integrar: revisar alternância dos passos laterais, consistência das roupas, alinhamento dos pés e pivôs e acabamento em resolução-base. Ainda não substituem os clientes no jogo.
+São estudos ampliados, não atlas nativos finais de 32 × 32. Antes de integrar: revisar alternância dos passos laterais, consistência das roupas, alinhamento dos pés e pivôs e acabamento em resolução-base. Integrados aos clientes na versão .16. O identificador do cliente escolhe um dos três visuais de modo estável, inclusive ao carregar saves. As pranchas ampliadas originais foram preservadas.

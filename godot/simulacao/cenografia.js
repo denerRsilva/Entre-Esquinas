@@ -146,7 +146,7 @@ function actor(c,R,s,a,selected,construction=false){
  const pose=R.position(a),x=pose.x*40+20,bottom=pose.y*40+38;
  box(c,x-12,bottom-3,24,5,'#4c3e3540');
  const n=Number(String(a.id).replace(/\D/g,''))||0;
- const id=a.id==='player'?8:a.id==='worker2'?9:a.id==='worker1'?10:a.id==='lia'||a.id==='nina'?11:10+n%2;
+ const id=a.id==='player'?8:a.id==='worker2'?9:a.id==='worker1'?10:a.id.startsWith('client')?12+n%3:a.id==='lia'||a.id==='nina'?11:10+n%2;
  const dir=direction(a),moving=R.isMoving(a),frame=moving?Math.floor(s.time*7)%2:1;
  if(a.id==='player'){
  c.actor(x,bottom,dir,moving);

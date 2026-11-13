@@ -1,0 +1,73 @@
+[gd_resource type="SpriteFrames" format=3]
+[ext_resource type="Texture2D" path="res://arte/taverna/cliente-02-estudo-sprites.png" id="sheet"]
+[sub_resource type="AtlasTexture" id="baixo0"]
+atlas = ExtResource("sheet")
+region = Rect2(0.0, 0.0, 313.5, 313.5)
+filter_clip = true
+[sub_resource type="AtlasTexture" id="baixo1"]
+atlas = ExtResource("sheet")
+region = Rect2(313.5, 0.0, 313.5, 313.5)
+filter_clip = true
+[sub_resource type="AtlasTexture" id="baixo2"]
+atlas = ExtResource("sheet")
+region = Rect2(627.0, 0.0, 313.5, 313.5)
+filter_clip = true
+[sub_resource type="AtlasTexture" id="baixo3"]
+atlas = ExtResource("sheet")
+region = Rect2(940.5, 0.0, 313.5, 313.5)
+filter_clip = true
+[sub_resource type="AtlasTexture" id="esquerda0"]
+atlas = ExtResource("sheet")
+region = Rect2(0.0, 313.5, 313.5, 313.5)
+filter_clip = true
+[sub_resource type="AtlasTexture" id="esquerda1"]
+atlas = ExtResource("sheet")
+region = Rect2(313.5, 313.5, 313.5, 313.5)
+filter_clip = true
+[sub_resource type="AtlasTexture" id="esquerda2"]
+atlas = ExtResource("sheet")
+region = Rect2(627.0, 313.5, 313.5, 313.5)
+filter_clip = true
+[sub_resource type="AtlasTexture" id="esquerda3"]
+atlas = ExtResource("sheet")
+region = Rect2(940.5, 313.5, 313.5, 313.5)
+filter_clip = true
+[sub_resource type="AtlasTexture" id="direita0"]
+atlas = ExtResource("sheet")
+region = Rect2(0.0, 627.0, 313.5, 313.5)
+filter_clip = true
+[sub_resource type="AtlasTexture" id="direita1"]
+atlas = ExtResource("sheet")
+region = Rect2(313.5, 627.0, 313.5, 313.5)
+filter_clip = true
+[sub_resource type="AtlasTexture" id="direita2"]
+atlas = ExtResource("sheet")
+region = Rect2(627.0, 627.0, 313.5, 313.5)
+filter_clip = true
+[sub_resource type="AtlasTexture" id="direita3"]
+atlas = ExtResource("sheet")
+region = Rect2(940.5, 627.0, 313.5, 313.5)
+filter_clip = true
+[sub_resource type="AtlasTexture" id="cima0"]
+atlas = ExtResource("sheet")
+region = Rect2(0.0, 940.5, 313.5, 313.5)
+filter_clip = true
+[sub_resource type="AtlasTexture" id="cima1"]
+atlas = ExtResource("sheet")
+region = Rect2(313.5, 940.5, 313.5, 313.5)
+filter_clip = true
+[sub_resource type="AtlasTexture" id="cima2"]
+atlas = ExtResource("sheet")
+region = Rect2(627.0, 940.5, 313.5, 313.5)
+filter_clip = true
+[sub_resource type="AtlasTexture" id="cima3"]
+atlas = ExtResource("sheet")
+region = Rect2(940.5, 940.5, 313.5, 313.5)
+filter_clip = true
+[resource]
+animations = [
+{"frames":[{"duration":1.0,"texture":SubResource("baixo1")},{"duration":1.0,"texture":SubResource("baixo0")},{"duration":1.0,"texture":SubResource("baixo3")},{"duration":1.0,"texture":SubResource("baixo2")}],"loop":true,"name":&"baixo","speed":5.0},
+{"frames":[{"duration":1.0,"texture":SubResource("esquerda1")},{"duration":1.0,"texture":SubResource("esquerda0")},{"duration":1.0,"texture":SubResource("esquerda3")},{"duration":1.0,"texture":SubResource("esquerda2")}],"loop":true,"name":&"esquerda","speed":5.0},
+{"frames":[{"duration":1.0,"texture":SubResource("direita1")},{"duration":1.0,"texture":SubResource("direita0")},{"duration":1.0,"texture":SubResource("direita3")},{"duration":1.0,"texture":SubResource("direita2")}],"loop":true,"name":&"direita","speed":5.0},
+{"frames":[{"duration":1.0,"texture":SubResource("cima1")},{"duration":1.0,"texture":SubResource("cima0")},{"duration":1.0,"texture":SubResource("cima3")},{"duration":1.0,"texture":SubResource("cima2")}],"loop":true,"name":&"cima","speed":5.0},
+]

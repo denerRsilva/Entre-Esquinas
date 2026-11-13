@@ -11,6 +11,7 @@ const Tracos = preload("res://mundo/Tracos.gd")
 @export var garcom: PackedScene = preload("res://personagens/Garcom.tscn")
 @export var logistica: PackedScene = preload("res://personagens/Logistica.tscn")
 @export var moradora: PackedScene = preload("res://personagens/Moradora.tscn")
+const CLIENTES = [preload("res://personagens/Cliente1.tscn"),preload("res://personagens/Cliente2.tscn"),preload("res://personagens/Cliente3.tscn")]
 const DIRECOES = {"up":"cima","down":"baixo","left":"esquerda","right":"direita"}
 var pool: Dictionary = {}
 var used: Dictionary = {}
@@ -52,7 +53,8 @@ func paint(data: Dictionary) -> void:
 		if op[0] in ["cook","npc"]:
 			var n: AnimatedSprite2D
 			if op[0]=="npc":
-				var model: PackedScene = garcom if int(op[2])==9 else logistica if int(op[2])==10 else moradora
+				var skin := int(op[2])
+				var model: PackedScene = CLIENTES[skin-12] if skin>=12 and skin<=14 else garcom if skin==9 else logistica if skin==10 else moradora
 				# Pool by model, in display order, to bound memory across days.
 				n = piece(model.resource_path,model) as AnimatedSprite2D
 				op = ["cook",op[3],op[4],op[5],op[6]]
