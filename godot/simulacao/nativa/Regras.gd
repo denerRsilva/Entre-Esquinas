@@ -1,4 +1,5 @@
 extends RefCounted
+const ADMIN = preload("res://simulacao/nativa/Administracao.gd")
 const SERVICE = preload("res://simulacao/nativa/Atendimento.gd")
 const BUILD = preload("res://simulacao/nativa/Construcao.gd")
 const MOVE = preload("res://simulacao/nativa/Movimento.gd")
@@ -18,6 +19,28 @@ func execute(json: String) -> String:
 	var args: Array = request.get("args",[])
 	var value: Variant = null
 	match request.get("name",""):
+		"administracao":
+			var operation: String = args[0]
+			var state: Dictionary = args[1]
+			var params: Array = args[2]
+			match operation:
+				"validTimeReputation":value=ADMIN.valid_time_reputation(state)
+				"syncService":ADMIN.sync(state)
+				"servicePending":value=ADMIN.pending(state)
+				"serviceOpenError":value=ADMIN.open_error(state)
+				"setServiceHours":value=ADMIN.set_hours(state,params[0])
+				"toggleOpen":value=ADMIN.toggle(state)
+				"advanceClock":ADMIN.advance_clock(state,params[0])
+				"finishPeriod":ADMIN.finish_period(state)
+				"finishCalendarDay":value=ADMIN.finish_day(state)
+				"advanceTestClock":value=ADMIN.test_clock(state,params[0])
+				"purchase":value=ADMIN.purchase(state,params[0],params[1],params[2])
+				"deliver":ADMIN.deliver(state)
+				"buyTool":value=ADMIN.buy_tool(state,params[0])
+				"receiveQuality":ADMIN.receive(state,params[0],params[1],params[2])
+				"receivingCount":value=ADMIN.receiving_count(state,params[0],params[1])
+				"applyVisitReputation":value=ADMIN.reputation(state,params[0],params[1],params[2],params[3])
+			return JSON.stringify({"value":value,"state":state},"",true,true)
 		"satisfactionFor":value=SERVICE.new().satisfaction(args[0])
 		"waitRatio":
 			args[0].phase=args[1]

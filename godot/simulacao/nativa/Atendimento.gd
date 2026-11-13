@@ -1,4 +1,5 @@
 extends RefCounted
+const ADMIN = preload("res://simulacao/nativa/Administracao.gd")
 const MOVE = preload("res://simulacao/nativa/Movimento.gd")
 const STORE = preload("res://simulacao/nativa/Armazenamento.gd")
 const BUILD = preload("res://simulacao/nativa/Construcao.gd")
@@ -47,16 +48,7 @@ func satisfaction(p: Dictionary) -> Dictionary:
 		if score>=item.min:classification=item.id;break
 	return {"score":score,"classification":classification,"quality":p.get("servedQuality")}
 func reputation(s: Dictionary,visit: Dictionary,event: Variant) -> bool:
-	var type: Variant = "abandonment" if visit.outcome=="abandoned" else event.type if event!=null else null
-	if visit.id in s.reputation.processed:return false
-	s.reputation.processed.append(visit.id)
-	if type==null:return false
-	var before: float = s.reputation.score
-	var delta := 1 if type=="praise" else -1
-	var after := clampf(before+delta,0,100)
-	s.reputation.score=after
-	s.reputation.history.append({"visitId":visit.id,"type":type,"manifestation":event.type if event!=null else null,"requestedDelta":delta,"delta":after-before,"before":before,"after":after,"day":s.day,"time":s.time})
-	return true
+	return ADMIN.reputation(s,visit,event,true,true)
 func finalize(s: Dictionary,c: Dictionary,outcome: String) -> bool:
 	var p: Dictionary = c.experience
 	if p.reviewResolved:return false
