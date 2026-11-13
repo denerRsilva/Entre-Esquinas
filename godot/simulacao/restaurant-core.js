@@ -11,12 +11,14 @@ function nativeRule(name,args){
  if(name==='moveActors'){nodeReference.moveActors(args[0],args[1]);return {...args[0],input:nodeReference.playerVelocity(args[0].player)};}
  if(name==='pushAside'){const s=args[0],actors=nodeReference.allActors(s),locked=new Set(args[3]),seen=new Set(args[4]);const value=nodeReference.pushAside(s,actors.find(a=>a.id===args[1]),actors.find(a=>a.id===args[2]),locked,seen);return {...s,value,locked:[...locked],seen:[...seen]};}
  if(['startMotion','advanceMotion','go'].includes(name)){const value=nodeReference[name](...args);
+ if(name==="finishWait")return args[0];
  if(["place","remove"].includes(name))return {value,state:args[0]};
  if(["chairTable","seatTable"].includes(name))return value?.id??null;
  if(name==="seats")return value.map(o=>o.id);return {value,actor:args[0]};}
  if(name==='goObject'){const value=nodeReference.goObject(...args);return {value,actor:args[1]};}
  if(name==='route')args[5]=new Set(args[5]);
  const value=nodeReference[name](...args);
+ if(name==="finishWait")return args[0];
  if(["place","remove"].includes(name))return {value,state:args[0]};
  if(["chairTable","seatTable"].includes(name))return value?.id??null;
  if(name==="seats")return value.map(o=>o.id);
@@ -35,6 +37,23 @@ function syncNative(target,source){
  }
 }
 function migrateNative(name,s,...args){const out=nativeRule(name,[s,...args]);syncNative(s,out.state);return out.value;}
+// Transactional random requests consume exactly the same draws as the action.
+function serviceNative(operation,s,params,rng=Math.random){
+ if(typeof NativeRule!=='function'){
+  nodeReference??=require('../qa/referencia-migracao/regras-legado.cjs');
+  if(operation==='newExperience')return nodeReference.newExperience(rng);
+  const a=allActors(s).find(a=>a.id===params[0]),c=s.customers.find(c=>c.id===params[1]);
+  if(operation==='patienceStep')return nodeReference.patienceStep(s,params[0],rng);
+  if(['refreshCustomerVisual','customerIndicator','beginWait','finalizeVisit','abandonCustomer','expiredCustomer'].includes(operation)){const customer=s.customers.find(c=>c.id===params[0]);return nodeReference[operation](s,customer,...(['beginWait','finalizeVisit'].includes(operation)?[params[1],rng]:['abandonCustomer','expiredCustomer'].includes(operation)?[rng]:[]));}
+  if(operation==='clientsStep')return nodeReference.clientsStep(s,params[0],rng);
+  if(operation==='waiterStep')return nodeReference.workerStep(s,a);
+  if(operation==='interact')return nodeReference.interact(s,params[0]);
+  if(operation==='removeHandDish')return nodeReference.removeHandDish(s,a,c,params[2]);
+  return nodeReference[operation](s,a,...(['takeOrder','serve','customerAccess'].includes(operation)?[c]:[]));
+ }
+ const draws=[];
+ for(;;){const out=nativeRule('atendimento',[operation,s,params,draws,!!s.player&&!!playerVelocity(s.player)?.moving]);if(out.needsRandom){draws.push(rng());continue;}if(!['canceledCarry','customerAccess','readyPoint'].includes(operation))syncNative(s,out.state);return out.value;}
+}
 const W=24,H=16,CELL=40,VERSION=12;
 const FOODS={arroz:{name:'Arroz',cost:2,kind:'dry'},legumes:{name:'Legumes',cost:2,kind:'cold'},frango:{name:'Frango',cost:4,kind:'cold'}};
 const CATALOG={table:{name:'Mesa',price:45,w:2,h:1,room:'restaurant',area:'hall',color:'#ba8654'},chair:{name:'Cadeira',price:15,w:1,h:1,room:'restaurant',area:'hall',color:'#d5ad70'},stove:{name:'Fogão',price:150,w:2,h:1,room:'restaurant',area:'kitchen',color:'#718d91'},fridge:{name:'Geladeira da cozinha',price:120,w:1,h:2,room:'restaurant',area:'kitchen',color:'#8dbdb5'},shelf:{name:'Prateleira seca',price:65,w:2,h:1,room:'restaurant',area:'dryStorage',color:'#b69969'},cold:{name:'Geladeira do estoque',price:140,w:1,h:2,room:'restaurant',area:'storage',color:'#91b6cb'}};
@@ -134,54 +153,20 @@ const CUSTOMER_CONFIG={
  reviews:{verySatisfied:{probability:.6,type:'praise'},satisfied:{probability:.2,type:'praise'},neutral:{probability:.05,type:'complaint'},unsatisfied:{probability:.35,type:'complaint'},abandoned:{probability:.75,type:'complaint'}},
  indicators:{happySeconds:8,abandonSeconds:null,emoji:{patient:'⏳',impatient:'❗',stressed:'😠',leaving:'🤬',happy:'😊'},size:21}
 };
-function drawRandom(rng){return Math.max(0,Math.min(1-Number.EPSILON,rng()));}
-function newExperience(rng=Math.random){
- const entries=Object.entries(CUSTOMER_CONFIG.profiles).filter(([,p])=>p.weight>0),total=entries.reduce((n,[,p])=>n+p.weight,0);
- if(!total)throw Error('Configure ao menos um perfil de paciência com peso positivo.');
- let roll=drawRandom(rng)*total,[profile,config]=entries[entries.length-1];
- for(const entry of entries){roll-=entry[1].weight;if(roll<0){[profile,config]=entry;break;}}
- const sample=range=>range[0]+drawRandom(rng)*(range[1]-range[0]);
- return {profile,limits:{service:sample(config.service),food:sample(config.food)},elapsed:{service:0,food:0},phase:null,visual:null,results:{service:null,food:null},satisfaction:null,abandoned:false,reviewResolved:false,legacy:false,indicatorUntil:null};
-}
-function waitRatio(p,phase=p.phase){return phase?Math.max(0,1-p.elapsed[phase]/p.limits[phase]):null;}
-function refreshCustomerVisual(s,c){const p=c.experience;if(p.phase){let ratio=waitRatio(p);p.visual=ratio>CUSTOMER_CONFIG.thresholds.patient?'patient':ratio>CUSTOMER_CONFIG.thresholds.stressed?'impatient':'stressed';}
- else if(p.abandoned)p.visual=p.indicatorUntil===null||s.time<p.indicatorUntil?'leaving':null;
- else p.visual=p.satisfaction&&['verySatisfied','satisfied'].includes(p.satisfaction.classification)&&s.time<p.indicatorUntil?'happy':null;
-}
-function customerIndicator(s,c){const p=c.experience;if(!p)return null;refreshCustomerVisual(s,c);if(!p.visual)return null;return {emoji:CUSTOMER_CONFIG.indicators.emoji[p.visual],label:{patient:'Paciente',impatient:'Perdendo a paciência',stressed:'Estressado',leaving:'Indo embora',happy:'Feliz'}[p.visual],phase:p.phase,remaining:p.phase?Math.max(0,p.limits[p.phase]-p.elapsed[p.phase]):null,ratio:waitRatio(p)};}
-function beginWait(s,c,phase){c.experience.phase=phase;refreshCustomerVisual(s,c);}
-function finishWait(c){const p=c.experience;if(p.phase)p.results[p.phase]=waitRatio(p);p.phase=null;}
-function satisfactionFor(p){
- const config=CUSTOMER_CONFIG.satisfaction,weights=config.weights;
- // Não existe qualidade culinária: normalizar somente os dois pesos de espera.
- const q=p.servedQuality;const score=100*((p.results.service??0)*weights.service+(p.results.food??0)*weights.food+(q===undefined?0:QUALITY_CONFIG.satisfaction[q]*weights.quality))/(weights.service+weights.food+(q===undefined?0:weights.quality));
- const classification=config.classes.find(v=>score>=v.min)||config.classes[config.classes.length-1];
- return {score,classification:classification.id,quality:p.servedQuality??null};
-}
-function finalizeVisit(s,c,outcome,rng=Math.random){
- const p=c.experience;if(p.reviewResolved)return false;p.reviewResolved=true;
- const rule=CUSTOMER_CONFIG.reviews[outcome==='abandoned'?'abandoned':p.satisfaction.classification];
- const event=drawRandom(rng)<rule.probability?{visitId:c.id,day:s.day,period:s.period,time:s.time,type:rule.type,outcome}:null;
- if(event)s.experience.events.push(event);
- const visit={id:c.id,day:s.day,period:s.period,time:s.time,outcome,profile:p.profile,limits:{...p.limits},elapsed:{...p.elapsed},results:{...p.results},satisfaction:p.satisfaction?{...p.satisfaction}:null};
- s.experience.visits.push(visit);applyVisitReputation(s,visit,event);
- return true;
-}
-function abandonCustomer(s,c,rng=Math.random){
- const p=c.experience;if(p.abandoned||!p.phase)return false;
- finishWait(c);p.abandoned=true;p.satisfaction={score:0,classification:'unsatisfied',quality:null};p.indicatorUntil=CUSTOMER_CONFIG.indicators.abandonSeconds===null?null:s.time+CUSTOMER_CONFIG.indicators.abandonSeconds;
- const order=s.orders.find(o=>o.id===c.order);if(order){order.state='lost';s.ready=s.ready.filter(id=>id!==order.id);if(s.priority===order.id)s.priority=null;}
- c.state='leave';go(c,{room:'restaurant',x:7,y:14});s.ledger.lost++;refreshCustomerVisual(s,c);finalizeVisit(s,c,'abandoned',rng);s.message='Cliente desistiu por demora. Pedido cancelado, sem venda.';return true;
-}
-function expiredCustomer(s,c,rng=Math.random){const p=c.experience;if(p.abandoned)return true;if(p.phase&&p.elapsed[p.phase]>=p.limits[p.phase]){abandonCustomer(s,c,rng);return true;}return false;}
-function patienceStep(s,dt,rng){for(const c of s.customers){const p=c.experience;if(p.phase){p.elapsed[p.phase]=Math.min(p.limits[p.phase],p.elapsed[p.phase]+dt);expiredCustomer(s,c,rng);}refreshCustomerVisual(s,c);}}
+function newExperience(rng=Math.random){return serviceNative('newExperience',{},[],rng);}
+function waitRatio(p,phase=p.phase){return nativeRule('waitRatio',[p,phase]);}
+function refreshCustomerVisual(s,c){serviceNative('refreshCustomerVisual',s,[c.id]);}
+function customerIndicator(s,c){return serviceNative('customerIndicator',s,[c.id]);}
+function beginWait(s,c,phase){serviceNative('beginWait',s,[c.id,phase]);}
+function finishWait(c){syncNative(c,nativeRule('finishWait',[c]));}
+function satisfactionFor(p){return nativeRule('satisfactionFor',[p]);}
+function finalizeVisit(s,c,outcome,rng=Math.random){return serviceNative('finalizeVisit',s,[c.id,outcome],rng);}
+function abandonCustomer(s,c,rng=Math.random){return serviceNative('abandonCustomer',s,[c.id],rng);}
+function expiredCustomer(s,c,rng=Math.random){return serviceNative('expiredCustomer',s,[c.id],rng);}
+function patienceStep(s,dt,rng){serviceNative('patienceStep',s,[dt],rng);}
 // O prato continua existindo após o cancelamento; devolução física na bancada.
-function canceledCarry(s,a){return a.carry?.kind==='dish'&&s.orders.find(o=>o.id===a.carry.order)?.state==='lost';}
-function returnCanceledDish(s,a){
- if(a.motion||!canceledCarry(s,a))return false;const order=s.orders.find(o=>o.id===a.carry.order),item='dish_'+order.recipe;
- const prep=s.objects.find(o=>o.type==='kitchen'&&objectSpace(o,item)>0&&objectNear(s,o,a));if(!prep)return false;
- putObject(s,prep,item,1,a.carry.quality??0);a.carry=null;s.message='Pedido cancelado: prato devolvido à mesa de preparo.';return true;
-}
+function canceledCarry(s,a){return serviceNative('canceledCarry',s,[a.id]);}
+function returnCanceledDish(s,a){return serviceNative('returnCanceledDish',s,[a.id]);}
 function validExperience(s){
  const history=s.experience;if(!history||!Array.isArray(history.visits)||!Array.isArray(history.events))return false;
  const classes=CUSTOMER_CONFIG.satisfaction.classes.map(c=>c.id),phases=['service','food'];
@@ -329,24 +314,19 @@ function toggleOpen(s){if(s.clock.ending){s.message='Conclua o serviço pendente
 function chooseRecipe(s){let ids=Object.keys(RECIPES).filter(r=>s.menu[r]);return ids[s.serial%ids.length];}
 function spawn(s,rng=Math.random){if(s.clock.ending)return false;if(!Object.values(s.menu).some(Boolean)){s.ledger.lost++;return false}let free=seats(s).find(o=>{const table=seatTable(s,o);return !s.objects.some(ch=>ch.type==='chair'&&chairTable(s,ch)?.id===table.id&&((s.dirtyTables[ch.id]||0)>0||s.customers.some(c=>c.seat===ch.id&&!c.done)));});if(!free){s.ledger.lost++;return false}let id=s.serial++,c={...actor('client'+id,'restaurant',7,13),seat:free.id,state:'walk',recipe:chooseRecipe(s),order:null,timer:0,experience:newExperience(rng)};if(allActors(s).some(a=>a.room===c.room&&a.x===c.x&&a.y===c.y))return false;c.goal={room:'restaurant',x:free.x,y:free.y};s.customers.push(c);return true;}
 function atStove(s,a=s.player){if(a.motion)return false;return s.objects.filter(o=>o.type==='stove').some(o=>accessPoints(s,o).some(p=>near(a,p,0)));}
-function readyPoint(s,a=s.player){for(const o of s.objects.filter(o=>o.type==='kitchen'&&s.orders.some(q=>q.state==='ordered'&&objectCount(o,'dish_'+q.recipe)>0))){const p=closestAccess(s,a,o);if(p)return p;}return null;}
-function takeOrder(s,a,c){
- if(a.motion||!c||c.state!=='waiting'||!near(a,c,1)||expiredCustomer(s,c))return false;
- finishWait(c);const o={id:s.serial++,customer:c.id,recipe:c.recipe,state:'ordered',age:0,price:s.prices[c.recipe]};s.orders.push(o);c.order=o.id;c.state='ordered';beginWait(s,c,'food');s.message='Pedido anotado: '+RECIPES[c.recipe].name;return true;
-}
-function customerAccess(s,a,c){return DIRS.map(([dx,dy])=>({room:c.room,x:c.x+dx,y:c.y+dy})).filter(p=>!blocked(s,p.room,p.x,p.y,a)).map(p=>({p,path:route(s,a.room,a,p,a)})).filter(v=>v.path).sort((u,v)=>u.path.length-v.path.length)[0]?.p||null;}
-function interact(s,target){let a=s.player;if(a.motion){s.message='Aguarde o personagem se aproximar.';return false}let c=s.customers.find(c=>c.id===target);if(!c||!near(a,c,1)){s.message='Aproxime-se da mesa.';return false}if(expiredCustomer(s,c))return false;if(c.state==='waiting')return takeOrder(s,a,c);if(c.state==='ordered'){if(a.hand?.item==='dish_'+c.recipe){if(a.carry)return false;const p=a.hand;a.hand=null;removeHandDish(s,a,c,p);return serve(s,a,c);}if(canceledCarry(s,a)&&s.orders.find(o=>o.id===a.carry.order).recipe===c.recipe){a.carry.order=c.order;s.orders.find(o=>o.id===c.order).state='ready';return serve(s,a,c);}if(a.carry?.kind==='dish'&&a.carry.order===c.order)return serve(s,a,c);if(a.carry){s.message='Entregue primeiro o prato que está na sua mão.';return false}let item='dish_'+c.recipe,i=s.inventory.findIndex(p=>p?.item===item);if(i>=0){const quality=s.inventory[i].quality??0;removeInventory(s,i,1);s.orders.find(o=>o.id===c.order).state='ready';a.carry={kind:'dish',order:c.order,quality};return serve(s,a,c);}}s.message='Emprate a receita pedida e traga o prato pronto.';return false;}
-function pickupDish(s,a=s.player){if(canceledCarry(s,a))return returnCanceledDish(s,a);if(a.carry||a.motion)return false;const prep=s.objects.find(o=>o.type==='kitchen'&&accessPoints(s,o).some(p=>near(a,p,0))&&s.orders.some(q=>q.state==='ordered'&&objectCount(o,'dish_'+q.recipe)>0));if(!prep)return false;const o=s.orders.find(q=>q.state==='ordered'&&objectCount(prep,'dish_'+q.recipe)>0);const quality=firstDishQuality(prep,'dish_'+o.recipe);takeObject(s,prep,'dish_'+o.recipe,1,quality);o.state='ready';a.carry={kind:'dish',order:o.id,quality};return true;}
-function serve(s,a,c){if(a.motion||!c||c.state!=='ordered'||expiredCustomer(s,c)||!near(a,c,1))return false;let o=s.orders.find(o=>o.id===c.order);if(!o||o.state!=='ready'||a.carry?.order!==o.id)return false;finishWait(c);c.experience.servedQuality=a.carry.quality??0;o.quality=c.experience.servedQuality;c.experience.satisfaction=c.experience.legacy?null:satisfactionFor(c.experience);c.experience.indicatorUntil=s.time+CUSTOMER_CONFIG.indicators.happySeconds;refreshCustomerVisual(s,c);o.state='eating';c.state='eating';c.timer=4;a.carry=null;s.message='Prato servido. O cliente paga depois de comer.';return true;}
-function mealCost(r){return Object.entries(RECIPES[r].foods).reduce((n,[p,q])=>n+q*FOODS[p].cost,0);}
+function readyPoint(s,a=s.player){return serviceNative('readyPoint',s,[a.id]);}
+function takeOrder(s,a,c){return serviceNative('takeOrder',s,[a.id,c?.id??null]);}
+function customerAccess(s,a,c){return serviceNative('customerAccess',s,[a.id,c.id]);}
+function interact(s,target){return serviceNative('interact',s,[target]);}
+function pickupDish(s,a=s.player){return serviceNative('pickupDish',s,[a.id]);}
+function serve(s,a,c){return serviceNative('serve',s,[a.id,c?.id??null]);}
+function mealCost(r){return nativeRule('mealCost',[r]);}
 
-function workerStep(s,w){if(w.task==='none'&&!w.carry){w.goal=null;return}if(w.task==='waiter'&&!w.carry||w.carry?.kind==='dish'){if(w.carry?.kind==='dish'){if(canceledCarry(s,w)){const order=s.orders.find(o=>o.id===w.carry.order),prep=s.objects.find(o=>o.type==='kitchen'&&objectSpace(o,'dish_'+order.recipe)>0);if(prep){goObject(s,w,prep);returnCanceledDish(s,w);}else w.goal=null;return;}let c=s.customers.find(c=>c.order===w.carry.order);if(!c){w.goal=null;return}let p=customerAccess(s,w,c);if(!p){w.goal=null;return;}go(w,p);if(near(w,c,1))serve(s,w,c);return}if(w.carry)return;{let p=readyPoint(s,w);if(p){go(w,p);if(arrived(w))pickupDish(s,w);return;}
- const waiting=s.customers.filter(c=>c.state==='waiting').sort((a,b)=>(a.experience.limits.service-a.experience.elapsed.service)-(b.experience.limits.service-b.experience.elapsed.service));
- for(const c of waiting){const p=customerAccess(s,w,c);if(!p)continue;go(w,p);if(near(w,c,1))takeOrder(s,w,c);return;}w.goal=null;}return}
+function workerStep(s,w){if(w.task==='none'&&!w.carry||w.task==='waiter'&&!w.carry||w.carry?.kind==='dish'){serviceNative('waiterStep',s,[w.id]);return;}
  if(w.carry?.kind==='food'){let loc=w.carry.to,o=storageObject(s,loc,w.carry.food,'put',w.carry.quality??0);if(!o){w.goal=null;return}goObject(s,w,o);if(arrived(w)){let q=Math.min(w.carry.n,objectSpace(o,w.carry.food,w.carry.quality??0));putObject(s,o,w.carry.food,q,w.carry.quality??0);w.carry.n-=q;if(!w.carry.n)w.carry=null}return}
  for(const [from,to]of [['storage','kitchen'],['receiving','storage']]){const choice=Object.keys(FOODS).map(food=>({food,chunk:locationChunk(s,from,food)})).find(v=>v.chunk&&storageObject(s,to,v.food,'put',v.chunk.quality));if(!choice)continue;const {food,chunk}=choice;const p=from==='receiving'?{room:'restaurant',x:21,y:12}:closestAccess(s,w,chunk.source);if(!p)continue;go(w,p);if(arrived(w)){const target=storageObject(s,to,food,'put',chunk.quality),n=Math.min(4,chunk.n,objectSpace(target,food,chunk.quality));if(n){takeChunk(s,from,food,chunk,n);w.carry={kind:'food',food,n,to,quality:chunk.quality};}}return;}w.goal=null;}
 function finishPeriod(s){s.open=false;s.closing=false;s.cookActive=false;syncService(s);s.message='Restaurante fechado. O turno acompanha o relógio; reabra pela plaquinha enquanto estiver no horário.';}
-function simulate(s,dt,rng){patienceStep(s,dt,rng);deliver(s);s.tick=(s.tick+dt)%WALK_TIME;moveActors(s,dt);for(const w of s.workers)workerStep(s,w);kitchenStep(s,dt);for(const o of s.orders)if(!['paid','lost'].includes(o.state))o.age+=dt;for(const c of s.customers){if(c.state==='walk'&&arrived(c)){c.state='waiting';c.goal=null;beginWait(s,c,'service');}if(c.state==='eating'){c.timer-=dt;if(c.timer<=0){let o=s.orders.find(o=>o.id===c.order);o.state='paid';finalizeVisit(s,c,'completed',rng);s.meals.eaten[o.recipe]++;s.dirtyTables[c.seat]=(s.dirtyTables[c.seat]||0)+1;s.cash+=o.price;s.ledger.revenue+=o.price;s.ledger.sales++;c.state='leave';go(c,{room:'restaurant',x:7,y:14});s.message='Pagamento recebido: $'+o.price.toFixed(2);}}if(c.state==='leave'&&arrived(c)){c.done=true;}}s.customers=s.customers.filter(c=>!c.done);if(s.open&&!s.closing){s.arrival+=dt;if(s.arrival>=ARRIVAL_CONFIG.intervalSeconds){s.arrival=0;spawn(s,rng)}}if(s.closing&&!s.customers.length&&!s.cooking&&!s.plating&&!s.ready.length&&!allActors(s).some(a=>a.carry?.kind==='dish'&&!canceledCarry(s,a)))finishPeriod(s);}
+function simulate(s,dt,rng){patienceStep(s,dt,rng);deliver(s);s.tick=(s.tick+dt)%WALK_TIME;moveActors(s,dt);for(const w of s.workers)workerStep(s,w);kitchenStep(s,dt);serviceNative('clientsStep',s,[dt],rng);if(s.open&&!s.closing){s.arrival+=dt;if(s.arrival>=ARRIVAL_CONFIG.intervalSeconds){s.arrival=0;spawn(s,rng)}}if(s.closing&&!s.customers.length&&!s.cooking&&!s.plating&&!s.ready.length&&!allActors(s).some(a=>a.carry?.kind==='dish'&&!canceledCarry(s,a)))finishPeriod(s);}
 function step(s,dt,rng=Math.random){
  if(!Number.isFinite(dt)||dt<=0)return;
  let remaining=dt;
@@ -529,7 +509,7 @@ function takePhysicalPan(s,o){
  }
  return kitchenFeedback(s,o,'Panela nas mãos');
 }
-function removeHandDish(s,a,c,p){s.orders.find(o=>o.id===c.order).state='ready';a.carry={kind:'dish',order:c.order,quality:p.quality||0};}
+function removeHandDish(s,a,c,p){serviceNative('removeHandDish',s,[a.id,c.id,p]);}
 function handStorage(s,id,action,index){
  const o=s.objects.find(o=>o.id===id),a=s.player;
  if(!o?.inventory||!objectNear(s,o))return result(s,false,'Aproxime-se do armazenamento.');

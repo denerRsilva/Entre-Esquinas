@@ -1,0 +1,104 @@
+{
+  "profiles": {
+    "impatient": {
+      "weight": 1,
+      "service": [
+        40,
+        60
+      ],
+      "food": [
+        60,
+        90
+      ]
+    },
+    "normal": {
+      "weight": 1,
+      "service": [
+        60,
+        90
+      ],
+      "food": [
+        90,
+        150
+      ]
+    },
+    "patient": {
+      "weight": 1,
+      "service": [
+        90,
+        120
+      ],
+      "food": [
+        150,
+        210
+      ]
+    }
+  },
+  "thresholds": {
+    "patient": 0.5,
+    "stressed": 0.2
+  },
+  "satisfaction": {
+    "weights": {
+      "service": 35,
+      "food": 35,
+      "quality": 30
+    },
+    "classes": [
+      {
+        "id": "verySatisfied",
+        "label": "Muito satisfeito",
+        "min": 85
+      },
+      {
+        "id": "satisfied",
+        "label": "Satisfeito",
+        "min": 65
+      },
+      {
+        "id": "neutral",
+        "label": "Neutro",
+        "min": 40
+      },
+      {
+        "id": "unsatisfied",
+        "label": "Insatisfeito",
+        "min": 0
+      }
+    ]
+  },
+  "reviews": {
+    "verySatisfied": {
+      "probability": 0.6,
+      "type": "praise"
+    },
+    "satisfied": {
+      "probability": 0.2,
+      "type": "praise"
+    },
+    "neutral": {
+      "probability": 0.05,
+      "type": "complaint"
+    },
+    "unsatisfied": {
+      "probability": 0.35,
+      "type": "complaint"
+    },
+    "abandoned": {
+      "probability": 0.75,
+      "type": "complaint"
+    }
+  },
+  "indicators": {
+    "happySeconds": 8,
+    "abandonSeconds": null,
+    "emoji": {
+      "patient": "⏳",
+      "impatient": "❗",
+      "stressed": "😠",
+      "leaving": "🤬",
+      "happy": "😊"
+    },
+    "size": 21
+  }
+}

@@ -1,4 +1,5 @@
 extends RefCounted
+const SERVICE = preload("res://simulacao/nativa/Atendimento.gd")
 const BUILD = preload("res://simulacao/nativa/Construcao.gd")
 const MOVE = preload("res://simulacao/nativa/Movimento.gd")
 const KITCHEN_STATE = preload("res://simulacao/nativa/EstadoCozinha.gd")
@@ -17,6 +18,47 @@ func execute(json: String) -> String:
 	var args: Array = request.get("args",[])
 	var value: Variant = null
 	match request.get("name",""):
+		"satisfactionFor":value=SERVICE.new().satisfaction(args[0])
+		"waitRatio":
+			args[0].phase=args[1]
+			value=SERVICE.new().ratio(args[0])
+		"finishWait":
+			SERVICE.new().finish(args[0])
+			return JSON.stringify(args[0],"",true,true)
+		"mealCost":
+			value=0
+			for food in SERVICE.RECIPES.data[args[0]].foods:value+=SERVICE.RECIPES.data[args[0]].foods[food]*SERVICE.INV.ITEMS.data[food].cost
+		"atendimento":
+			var operation: String = args[0]
+			var state: Dictionary = args[1]
+			var params: Array = args[2]
+			var service = SERVICE.new()
+			service.random_values=args[3]
+			service.manual_moving=args[4] if args.size()>4 else false
+			var actor = service.find(MOVE.ACTORS.actors(state),params[0]) if not params.is_empty() and operation in ["takeOrder","serve","pickupDish","canceledCarry","returnCanceledDish","customerAccess","readyPoint","waiterStep","removeHandDish"] else null
+			var customer = service.find(state.customers,params[1]) if params.size()>1 and operation in ["takeOrder","serve","customerAccess","removeHandDish"] else null
+			match operation:
+				"newExperience":value=service.experience()
+				"refreshCustomerVisual":service.visual(state,service.find(state.customers,params[0]))
+				"customerIndicator":value=service.indicator(state,service.find(state.customers,params[0]))
+				"beginWait":service.begin(state,service.find(state.customers,params[0]),params[1])
+				"finalizeVisit":value=service.finalize(state,service.find(state.customers,params[0]),params[1])
+				"abandonCustomer":value=service.abandon(state,service.find(state.customers,params[0]))
+				"expiredCustomer":value=service.expired(state,service.find(state.customers,params[0]))
+				"patienceStep":service.patience(state,params[0])
+				"takeOrder":value=service.take_order(state,actor,customer)
+				"serve":value=service.serve(state,actor,customer)
+				"pickupDish":value=service.pickup(state,actor)
+				"canceledCarry":value=service.canceled(state,actor)
+				"returnCanceledDish":value=service.return_canceled(state,actor)
+				"customerAccess":value=service.customer_access(state,actor,customer)
+				"readyPoint":value=service.ready_point(state,actor)
+				"interact":value=service.interact(state,params[0])
+				"waiterStep":service.waiter(state,actor)
+				"removeHandDish":service.hand_dish(state,actor,customer,params[2])
+				"clientsStep":service.clients_step(state,params[0])
+			if service.needs_random:return JSON.stringify({"needsRandom":true})
+			return JSON.stringify({"value":value,"state":state},"",true,true)
 		"editError":value=BUILD.edit_error(args[0])
 		"layoutError":value=BUILD.layout_error(args[0],args[1])
 		"longSideSeat":value=BUILD.long_side(args[0],args[1])
