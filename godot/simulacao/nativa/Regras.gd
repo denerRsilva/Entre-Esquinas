@@ -1,4 +1,6 @@
 extends RefCounted
+const QUALITY = preload("res://simulacao/nativa/Qualidade.gd")
+const CONSERVATION = preload("res://simulacao/nativa/Conservacao.gd")
 const RECIPES = preload("res://simulacao/nativa/Receitas.gd")
 const STORAGE = preload("res://simulacao/nativa/Armazenamento.gd")
 const CALENDAR = preload("res://simulacao/nativa/Calendario.gd")
@@ -11,6 +13,10 @@ func execute(json: String) -> String:
 	var args: Array = request.get("args",[])
 	var value: Variant = null
 	match request.get("name",""):
+		"validQuality":value=QUALITY.valid(args[0])
+		"foodConserved":value=CONSERVATION.food(args[0])
+		"equipmentConserved":value=CONSERVATION.equipment(args[0])
+		"mealsConserved":value=CONSERVATION.meals(args[0])
 		"recognizedRecipe":value=RECIPES.recognized(args[0])
 		"batchQuality":value=RECIPES.batch_quality(args[0],args[1])
 		"heatState":value=RECIPES.heat(args[0],args[1])

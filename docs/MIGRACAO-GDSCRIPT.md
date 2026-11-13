@@ -79,3 +79,11 @@ Validação: 3.920 casos de armazenamento e 110 de receitas/calor comparados à 
 A investigação da estante confirmou duas falhas também na versão anterior. A ação Guardar recebia um argumento extra (`panel`) na posição de `disabled` e ficava desabilitada mesmo com item nas mãos. Corrigida a chamada e atualizado o teste para o rótulo atual `Guardar Panela`; retirar e devolver pelo mouse agora passa.
 
 Ainda permanecem em JavaScript as ações e os temporizadores de preparo, empratamento e atendimento, movimentação dos atores, construção e validação/migração geral dos saves. Nenhum APK final de migração foi publicado nesta etapa.
+
+## Conservação e qualidade na validação dos saves
+
+`Conservacao.gd` substitui `foodConserved`, `equipmentConserved` e `mealsConserved`, contando ingredientes crus/cortados, entregas pendentes, recuperação, itens nas mãos, panelas, utensílios, pratos, refeições carregadas/servidas, pratos sujos e a panela em preparo. `Qualidade.gd` substitui `validQuality`, verificando faixa e tipo de qualidade, marcação de queimado, distribuições de qualidade do recebimento/pratos e metadados dos lotes prontos.
+
+Os quatro adaptadores do motor passam a chamar essas implementações GDScript, inclusive durante `valid` e `migrateSave`. Não houve mudança de versão do save. A validação geral e a transformação entre versões de saves continuam no JavaScript.
+
+ConservacaoNativa compara 834 estados/regras de conservação e 84 casos de qualidade com a referência congelada (918 comparações no total), incluindo alterações de contadores, itens nas mãos, corte, recuperação, refeições carregadas, clientes comendo, panelas ocupadas, pratos sujos e metadados inválidos de qualidade. MaosUI passou no fluxo completo até empratar, pegar prato e validar/migrar o estado final. Regras.cjs também passou; seu motor de referência permanece restrito a QA.
