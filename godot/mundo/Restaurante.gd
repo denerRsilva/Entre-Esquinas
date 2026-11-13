@@ -2,6 +2,7 @@ extends Node
 const STORE = "user://restaurante.json"
 const SCRIPTS = ["apresentacao","restaurant-core","comidas","cenografia","acoes"]
 var session = preload("res://simulacao/nativa/Sessao.gd").new(func(code):return RestauranteVM.executar(code))
+var native_rules = preload("res://simulacao/nativa/Regras.gd").new()
 var events:Array=[]
 var active:=false
 var frame_data:Dictionary
@@ -13,10 +14,10 @@ var tone_cache: Dictionary = {}
 
 func _ready() -> void:
 	RestauranteVM.executar("@nova-sessao")
+	RestauranteVM.definir_callback(native_rules.execute)
 	var layout=FileAccess.get_file_as_string("res://simulacao/interface-base.json")
 	RestauranteVM.executar("const InterfaceBase="+layout)
 	RestauranteVM.executar("const NativePartidas="+JSON.stringify(preload("res://simulacao/nativa/Partida.gd").templates()))
-	RestauranteVM.executar("const NativeObstacles="+JSON.stringify(preload("res://simulacao/nativa/Mapa.gd").obstacle_tables()))
 	values=read_values()
 	for source in SCRIPTS:
 		var code=FileAccess.get_file_as_string("res://simulacao/"+source+".js")

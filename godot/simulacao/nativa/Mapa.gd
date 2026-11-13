@@ -27,11 +27,15 @@ static func blocked(state: Dictionary, room: String, point: Vector2i, actor: Dic
 
 static func route(state: Dictionary, room: String, start: Vector2i, target: Vector2i, actor: Dictionary = {}, avoid: Array = []) -> Variant:
 	if blocked(state,room,target,actor):return null
-	var queue: Array = [{"point":start,"cost":0.0}]
+	var sequence := 0
+	var queue: Array = [{"point":start,"cost":0.0,"sequence":sequence}]
 	var costs := {start:0.0}
 	var previous := {start:null}
 	while not queue.is_empty():
-		queue.sort_custom(func(a,b):return a.cost+Vector2(a.point).distance_to(Vector2(target))<b.cost+Vector2(b.point).distance_to(Vector2(target)))
+		queue.sort_custom(func(a,b):
+			var first: float = a.cost+distance(a.point,target)
+			var second: float = b.cost+distance(b.point,target)
+			return a.sequence<b.sequence if first==second else first<second)
 		var current: Dictionary = queue.pop_front()
 		var point: Vector2i = current.point
 		if current.cost>costs[point]:continue
@@ -48,11 +52,12 @@ static func route(state: Dictionary, room: String, start: Vector2i, target: Vect
 				var horizontal := point+Vector2i(direction.x,0)
 				var vertical := point+Vector2i(0,direction.y)
 				if horizontal in avoid or vertical in avoid or blocked(state,room,horizontal,actor) or blocked(state,room,vertical,actor):continue
-			var cost: float = current.cost+Vector2(direction).length()
+			var cost: float = current.cost+distance(direction,Vector2i.ZERO)
 			if cost>=costs.get(next,INF):continue
 			costs[next]=cost
 			previous[next]=point
-			queue.append({"point":next,"cost":cost})
+			sequence+=1
+			queue.append({"point":next,"cost":cost,"sequence":sequence})
 	return null
 
 ## Temporary read-only transport for rules still hosted in QuickJS.
@@ -71,3 +76,8 @@ static func obstacle_tables() -> Dictionary:
 				rooms[room]=grid
 			result[str(int(compact))+str(int(single_room))]=rooms
 	return result
+
+static func distance(a: Vector2i, b: Vector2i) -> float:
+	var dx := float(a.x-b.x)
+	var dy := float(a.y-b.y)
+	return sqrt(dx*dx+dy*dy)

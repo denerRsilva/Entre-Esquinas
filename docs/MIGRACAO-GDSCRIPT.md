@@ -59,3 +59,13 @@ MenusNativos compara a saída com a referência anterior em boas-vindas, gestão
 As decisões de parede e obstáculos fixos foram removidas do motor JavaScript. `Mapa.gd.obstacle_tables()` calcula as quatro combinações dos indicadores de planta e fornece uma grade somente de leitura ao adaptador. Construção, navegação e validação do legado agora consultam essa grade. O Node usa dados de referência congelados; MapaNativo compara os dados produzidos em Godot com essa referência, além das 4.212 células existentes.
 
 Passaram MapaNativo, Regras.cjs e MovimentoUI. A busca de caminhos e a movimentação ainda executam no legado; não declarar o mapa/construção completamente migrados. Fora da grade, a consulta retorna parede, como no domínio inteiro usado pela simulação.
+
+## Regras nativas chamadas durante a simulação
+
+A ponte temporária expõe `NativeRule` para chamadas síncronas a `Regras.gd`. Isso permite retirar implementações executáveis do JavaScript sem trocar o estado inteiro nem perder as referências dos objetos. `Restaurante.gd` mantém viva a instância do dispatcher. A ponte foi recompilada para Linux, Windows e Android (arm64, arm32 e x86_64); execução validada em Linux, demais binários apenas compilados.
+
+Agora passam pelo dispatcher GDScript: geometria de móveis (rect/cells/hit), proximidade, paredes e obstáculos, busca de caminhos, limites/contagem/capacidade/adição/remoção do inventário, horários padrão e sua validação/formatação, calendário, criação do relógio e reputação inicial/limites/faixas. O adaptador de inventário preserva a referência à lista original, inclusive quando chamada por um contêiner temporário. A ordenação do A* mantém desempate por inserção e cálculo em precisão dupla.
+
+Referências anteriores congeladas em `qa/referencia-migracao/regras-legado.cjs` são usadas somente pelo runner Node. Não são carregadas na Godot nem exportadas. `RegrasNativas.gd` compara 904 casos por meio da ponte real. Passaram também MaosUI (incluindo migração do save final), MovimentoUI e CatalogoModernoUI. O teste RuaHorarioUI apresentava 7 falhas também no HEAD anterior: pressupunha jogador na porta, embora o início mobiliado o coloque na cozinha. Seu fixture agora posiciona o jogador na porta antes de testar a saída.
+
+A migração permanece incompleta. Atualização dos atores, validação/migração geral de saves, construção, preparo/serviço e ações de menus ainda têm implementações JavaScript. A extensão temporária deve ser excluída somente depois de eliminar todos esses consumidores.

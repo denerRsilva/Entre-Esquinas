@@ -25,6 +25,9 @@ func run():
 	check(js("state.time")=="0","Salto não simulou horas de espera")
 	await capture("horario")
 	check(await button("Voltar ao jogo"),"Retornar ao restaurante")
+	# Isolate the exit interaction from the furnished kitchen spawn.
+	js("Object.assign(state.player,{x:7,y:13,motion:null,goal:null,settled:null})")
+	g.tick(0)
 	key(KEY_S,true)
 	for i in 20:g.tick(1.0/60.0)
 	key(KEY_S,false);await layout()

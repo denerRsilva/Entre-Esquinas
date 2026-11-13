@@ -1,6 +1,16 @@
 /* Entre Esquinas Restaurante 0.17.0. Parâmetros abaixo são hipóteses de protótipo. */
 (function(root){
 'use strict';
+// Temporary call boundary: gameplay runs these rules in GDScript.
+// Node-only regression tests retain the frozen previous engine as their oracle.
+let nodeReference;
+function nativeRule(name,args){
+ if(typeof NativeRule==='function')return JSON.parse(NativeRule(JSON.stringify({name,args})));
+ nodeReference??=require('../qa/referencia-migracao/regras-legado.cjs');
+ if(name==='route')args[5]=new Set(args[5]);
+ const value=nodeReference[name](...args);
+ return ['addInventory','removeInventory'].includes(name)?{value,inventory:args[0].inventory}:value;
+}
 const W=24,H=16,CELL=40,VERSION=12;
 const FOODS={arroz:{name:'Arroz',cost:2,kind:'dry'},legumes:{name:'Legumes',cost:2,kind:'cold'},frango:{name:'Frango',cost:4,kind:'cold'}};
 const CATALOG={table:{name:'Mesa',price:45,w:2,h:1,room:'restaurant',area:'hall',color:'#ba8654'},chair:{name:'Cadeira',price:15,w:1,h:1,room:'restaurant',area:'hall',color:'#d5ad70'},stove:{name:'Fogão',price:150,w:2,h:1,room:'restaurant',area:'kitchen',color:'#718d91'},fridge:{name:'Geladeira da cozinha',price:120,w:1,h:2,room:'restaurant',area:'kitchen',color:'#8dbdb5'},shelf:{name:'Prateleira seca',price:65,w:2,h:1,room:'restaurant',area:'dryStorage',color:'#b69969'},cold:{name:'Geladeira do estoque',price:140,w:1,h:2,room:'restaurant',area:'storage',color:'#91b6cb'}};
@@ -18,10 +28,10 @@ const ARRIVAL_CONFIG={intervalSeconds:25,firstDelaySeconds:8};
 const REPUTATION_CONFIG={initial:0,min:0,max:100,deltas:{praise:1,complaint:-1,abandonment:-1},levels:[{min:80,label:'Referência local'},{min:60,label:'Bem avaliado'},{min:40,label:'Reconhecido'},{min:20,label:'Pouco conhecido'},{min:0,label:'Desconhecido'}]};
 
 const DEFAULT_SERVICE_HOURS=[{start:660,end:900},{start:1080,end:1320}];
-function newServiceHours(){return DEFAULT_SERVICE_HOURS.map(h=>({...h}));}
-function validServiceHours(hours){return Array.isArray(hours)&&hours.length===2&&hours.every(h=>h&&Number.isInteger(h.start)&&Number.isInteger(h.end)&&h.start>=360&&h.end<=1560&&h.start<h.end&&h.start%10===0&&h.end%10===0)&&hours[0].end<=hours[1].start;}
-function serviceHours(s){return s.serviceHours||DEFAULT_SERVICE_HOURS;}
-function serviceTimeText(minute){return String(Math.floor(minute%1440/60)).padStart(2,'0')+':'+String(minute%60).padStart(2,'0');}
+function newServiceHours(){return nativeRule("newServiceHours",[]);}
+function validServiceHours(hours){return nativeRule("validServiceHours",[hours]);}
+function serviceHours(s){return nativeRule("serviceHours",[s]);}
+function serviceTimeText(minute){return nativeRule("serviceTimeText",[minute]);}
 function syncService(s){
  const hours=serviceHours(s),now=s.clock.minute;
  if(s.open&&!s.closing&&now>=hours[s.period].end){s.closing=true;s.message='Horário encerrado. Novas entradas suspensas; conclua os clientes presentes.';}
@@ -49,12 +59,12 @@ function advanceTestClock(s,minute){
  return {ok:true,message:s.day!==day?'Horário de teste avançado: novo dia às 06:00.':'Horário de teste avançado para '+clockText(s)+'.'+(s.closing?' Conclua os clientes e preparos pendentes.':'')};
 }
 
-function newClock(){return {minute:TIME_CONFIG.startMinute,remainder:0,ending:false};}
-function calendarDate(day){const index=day-1,seasonIndex=Math.floor(index/TIME_CONFIG.daysPerSeason)%TIME_CONFIG.seasons.length;return {day:index%TIME_CONFIG.daysPerSeason+1,weekday:TIME_CONFIG.weekdays[index%TIME_CONFIG.weekdays.length],season:TIME_CONFIG.seasons[seasonIndex],seasonIndex,year:Math.floor(index/(TIME_CONFIG.daysPerSeason*TIME_CONFIG.seasons.length))+1};}
-function clockText(s){const minute=s.clock.minute%(24*60);return String(Math.floor(minute/60)).padStart(2,'0')+':'+String(minute%60).padStart(2,'0');}
-function clampReputation(n){return Math.max(REPUTATION_CONFIG.min,Math.min(REPUTATION_CONFIG.max,n));}
-function newReputation(){const initial=clampReputation(REPUTATION_CONFIG.initial);return {initial,score:initial,history:[],processed:[]};}
-function reputationLevel(score){return REPUTATION_CONFIG.levels.find(level=>score>=level.min)?.label||REPUTATION_CONFIG.levels.at(-1).label;}
+function newClock(){return nativeRule("newClock",[]);}
+function calendarDate(day){return nativeRule("calendarDate",[day]);}
+function clockText(s){return nativeRule("clockText",[s]);}
+function clampReputation(n){return nativeRule("clampReputation",[n]);}
+function newReputation(){return nativeRule("newReputation",[]);}
+function reputationLevel(score){return nativeRule("reputationLevel",[score]);}
 function applyVisitReputation(s,visit,event=null){
  // Abandono tem prioridade: eventual reclamação da mesma visita não soma outra penalidade.
  const type=visit.outcome==='abandoned'?'abandonment':event?.type;
@@ -214,33 +224,16 @@ function clearTestScene(s){delete s.receivingQuality;
  s.message='Teste limpo: móveis e itens removidos. Serviço, entregas e preparos cancelados; dinheiro e dia preservados.';
  return s;
 }
-function rect(o){let d=CATALOG[o.type];return {x:o.x,y:o.y,w:o.rot%2?d.h:d.w,h:o.rot%2?d.w:d.h};}
-function cells(o){let r=rect(o),a=[];for(let y=r.y;y<r.y+r.h;y++)for(let x=r.x;x<r.x+r.w;x++)a.push({x,y});return a;}
-function hit(o,x,y){return cells(o).some(p=>p.x===x&&p.y===y);}
-// Obstacle rules are computed by Mapa.gd. Node uses frozen parity references.
-const OBSTACLES=typeof NativeObstacles!=='undefined'?NativeObstacles:require('../qa/referencia-migracao/obstaculos.json');
-function obstacle(room,x,y,s){
- if(x<0||y<0||x>=W||y>=H)return 1;
- const map=OBSTACLES[String(+(s?.compact===true))+String(+(s?.singleRoom===true))];
- return map[room] ? map[room][y*W+x] : map.stock[y*W+x];
-}
-function wall(room,x,y,s=null){return !!(obstacle(room,x,y,s)&1);}
-function fixed(room,x,y,s=null){return !!(obstacle(room,x,y,s)&2);}
+function rect(o){return nativeRule("rect",[o]);}
+function cells(o){return nativeRule("cells",[o]);}
+function hit(o,x,y){return nativeRule("hit",[o,x,y]);}
+function wall(room,x,y,s=null){return nativeRule("wall",[room,x,y,s?{compact:s.compact,singleRoom:s.singleRoom}:null]);}
+function fixed(room,x,y,s=null){return nativeRule("fixed",[room,x,y,s?{compact:s.compact,singleRoom:s.singleRoom}:null]);}
 function blocked(s,room,x,y,a=null,objects=s.objects){if(wall(room,x,y,s)||fixed(room,x,y,s))return true;return objects.some(o=>o.room===room&&hit(o,x,y)&&!(o.type==='chair'&&a&&a.seat===o.id));}
-function near(a,p,r=1){return a.room===p.room&&Math.abs(a.x-p.x)+Math.abs(a.y-p.y)<=r;}
+function near(a,p,r=1){return nativeRule("near",[a,p,r]);}
 function allActors(s){return [s.player,...s.workers,...s.residents,...s.customers.filter(c=>!c.done)];}
 const NAV=DIRS.concat([[1,-1],[1,1],[-1,1],[-1,-1]]),WALK_TIME=.18;
-function route(s,room,from,to,a=null,avoid=new Set(),objects=s.objects){
- if(blocked(s,room,to.x,to.y,a,objects))return null;
- let q=[{x:from.x,y:from.y,cost:0}],cost=new Map([[key(from),0]]),prev=new Map([[key(from),null]]),end=null;
- while(q.length){q.sort((p,q)=>(p.cost+Math.hypot(to.x-p.x,to.y-p.y))-(q.cost+Math.hypot(to.x-q.x,to.y-q.y)));let p=q.shift();if(p.cost>cost.get(key(p)))continue;if(p.x===to.x&&p.y===to.y){end=p;break}
-  for(const [dx,dy]of NAV){let n={x:p.x+dx,y:p.y+dy},k=key(n);if(avoid.has(k)||blocked(s,room,n.x,n.y,a,objects))continue;
-   if(dx&&dy&&([{x:p.x+dx,y:p.y},{x:p.x,y:p.y+dy}].some(c=>avoid.has(key(c))||blocked(s,room,c.x,c.y,a,objects))))continue;
-   let next=p.cost+Math.hypot(dx,dy);if(next>=(cost.get(k)??Infinity))continue;cost.set(k,next);prev.set(k,p);q.push({...n,cost:next});
-  }
- }
- if(!end)return null;let out=[];while(prev.get(key(end))){out.unshift({x:end.x,y:end.y});end=prev.get(key(end))}return out;
-}
+function route(s,room,from,to,a=null,avoid=new Set(),objects=s.objects){return nativeRule('route',[{compact:s.compact,singleRoom:s.singleRoom},room,from,to,a?{seat:a.seat}:null,[...avoid],objects]);}
 function position(a){if(a.motion){let m=a.motion,t=Math.min(1,m.elapsed/m.duration);return {x:m.fromX+(m.toX-m.fromX)*t,y:m.fromY+(m.toY-m.fromY)*t}}let p=a.settled;return p&&p.room===a.room&&p.x===a.x&&p.y===a.y?{x:p.px,y:p.py}:{x:a.x,y:a.y};}
 // Continuous player input is transient; only the settled world position is saved.
 const PLAYER_SPEED=3.3,PLAYER_RADIUS=.20,playerInput=new WeakMap();
@@ -394,13 +387,13 @@ function seats(s){return s.objects.filter(o=>o.type==='chair'&&seatTable(s,o)&&r
 function kit(s){let a=[];if(!seats(s).length)a.push('mesa com cadeira voltada para ela e caminho livre');for(const [t,n] of [['stove','fogão'],['fridge','geladeira na cozinha']])if(!s.objects.some(o=>o.type===t))a.push(n);if(!s.objects.some(o=>o.type==='kitchen'))a.push('mesa de preparo');return a;}
 const ITEMS={legumes_cut:{name:'Legumes cortados',raw:'legumes'},frango_cut:{name:'Frango cortado',raw:'frango'},...FOODS,pot:{name:'Panela'},spoon:{name:'Colher / utensílio'},plate:{name:'Prato limpo'},dirtyPlate:{name:'Prato sujo'},cookingPot:{name:'Panela em preparo',limit:1}};
 for(const [r,d]of Object.entries(RECIPES)){ITEMS['dish_'+r]={name:'Prato de '+d.name,recipe:r};for(let n=1;n<=4;n++)ITEMS['pot_'+r+'_'+n]={name:'Panela: '+d.name+' ('+n+'/4 porções)',recipe:r,servings:n,limit:1};}
-function itemLimit(item){return ITEMS[item]?.limit||99;}
+function itemLimit(item){return nativeRule("itemLimit",[item]);}
 function itemName(item){return ITEMS[item]?.name||'Item desconhecido';}
 function itemIcon(item){return FOODS[item]?{arroz:'🌾',legumes:'🥕',frango:'🍗'}[item]:item==='spoon'?'🥄':item==='plate'?'🍽️':item==='dirtyPlate'?'🧽':item.startsWith('dish_')?'🍛':item==='pot'?'🥘':'🍲';}
-function inventoryCount(s,item){return s.inventory.reduce((n,slot)=>n+(slot?.item===item?slot.n:0),0);}
-function inventorySpace(s,item,quality=0){return s.inventory.reduce((n,slot)=>n+(!slot?itemLimit(item):slot.item===item&&(slot.quality??0)===quality?itemLimit(item)-slot.n:0),0);}
-function addInventory(s,item,n,quality=0,burned=false){if(!ITEMS[item]||!Number.isInteger(n)||n<1||inventorySpace(s,item,quality)<n)return false;let left=n;for(let i=0;i<s.inventory.length&&left;i++){let slot=s.inventory[i];if(slot?.item===item&&(slot.quality??0)===quality&&!slot.burned&&!burned){let q=Math.min(left,itemLimit(item)-slot.n);slot.n+=q;left-=q;}}for(let i=0;i<s.inventory.length&&left;i++)if(!s.inventory[i]){let q=Math.min(left,itemLimit(item));s.inventory[i]={item,n:q,...(quality?{quality}:{}),...(burned?{burned:true}:{})};left-=q;}return true;}
-function removeInventory(s,index,n){let slot=s.inventory[index];if(!slot||!Number.isInteger(n)||n<1||n>slot.n)return false;slot.n-=n;if(!slot.n)s.inventory[index]=null;return true;}
+function inventoryCount(s,item){return nativeRule("inventoryCount",[{inventory:s.inventory},item]);}
+function inventorySpace(s,item,quality=0){return nativeRule("inventorySpace",[{inventory:s.inventory},item,quality]);}
+function addInventory(s,item,n,quality=0,burned=false){const out=nativeRule("addInventory",[{inventory:s.inventory},item,n,quality,burned]);s.inventory.splice(0,s.inventory.length,...out.inventory);return out.value;}
+function removeInventory(s,index,n){const out=nativeRule("removeInventory",[{inventory:s.inventory},index,n]);s.inventory.splice(0,s.inventory.length,...out.inventory);return out.value;}
 function buyTool(s,type){
  if(!['pot','plate'].includes(type)||s.player.hand||s.player.carry||s.chopping||s.plating)return false;
  const price={pot:25,plate:5}[type];if(s.cash<price)return false;

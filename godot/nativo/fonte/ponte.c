@@ -18,6 +18,45 @@ static void name_init(GodotValue *n, const char *s) {
 static void drop(GDExtensionVariantType type, GodotValue *v) {
     GD(VariantGetPtrDestructor,"variant_get_ptr_destructor")(type)(v);
 }
+/* Transitional synchronous entry point for rules already ported to GDScript. */
+static union { void *align; uint8_t data[32]; } native_callback;
+static int has_callback;
+static GodotValue callback_method, callable_call;
+static JSValue call_native(JSContext *ctx, JSValueConst self, int argc, JSValueConst *argv) {
+    if (!has_callback || argc != 1) return JS_ThrowTypeError(ctx,"Native callback unavailable");
+    const char *json=JS_ToCString(ctx,argv[0]);
+    if (!json) return JS_EXCEPTION;
+    GodotValue input, output;
+    union { void *align; uint8_t data[32]; } argument,result;
+    GD(StringNewWithUtf8Chars,"string_new_with_utf8_chars")(&input,json);
+    JS_FreeCString(ctx,json);
+    GD(GetVariantFromTypeConstructor,"get_variant_from_type_constructor")(GDEXTENSION_VARIANT_TYPE_STRING)(&argument,&input);
+    const GDExtensionConstVariantPtr args[]={&argument};
+    GDExtensionCallError error={0};
+    GD(VariantCall,"variant_call")(&native_callback,&callable_call,args,1,&result,&error);
+    GD(VariantDestroy,"variant_destroy")(&argument);
+    drop(GDEXTENSION_VARIANT_TYPE_STRING,&input);
+    if(error.error || GD(VariantGetType,"variant_get_type")(&result)!=GDEXTENSION_VARIANT_TYPE_STRING) {
+        GD(VariantDestroy,"variant_destroy")(&result);
+        return JS_ThrowTypeError(ctx,"Native callback failed");
+    }
+    GD(GetVariantToTypeConstructor,"get_variant_to_type_constructor")(GDEXTENSION_VARIANT_TYPE_STRING)(&output,&result);
+    GD(VariantDestroy,"variant_destroy")(&result);
+    size_t len=GD(StringToUtf8Chars,"string_to_utf8_chars")(&output,NULL,0);
+    char *text=malloc(len+1);
+    GD(StringToUtf8Chars,"string_to_utf8_chars")(&output,text,len);text[len]=0;
+    JSValue value=JS_NewStringLen(ctx,text,len);
+    free(text);drop(GDEXTENSION_VARIANT_TYPE_STRING,&output);return value;
+}
+static void set_callback(void *ud,GDExtensionClassInstancePtr self,const GDExtensionConstVariantPtr *args,GDExtensionInt count,GDExtensionVariantPtr result,GDExtensionCallError *error) {
+    if(count!=1 || GD(VariantGetType,"variant_get_type")(args[0])!=GDEXTENSION_VARIANT_TYPE_CALLABLE){error->error=GDEXTENSION_CALL_ERROR_INVALID_ARGUMENT;return;}
+    if(has_callback)GD(VariantDestroy,"variant_destroy")(&native_callback);
+    GD(VariantNewCopy,"variant_new_copy")(&native_callback,args[0]);has_callback=1;
+    JSValue global=JS_GetGlobalObject(context);
+    JS_SetPropertyStr(context,global,"NativeRule",JS_NewCFunction(context,call_native,"NativeRule",1));
+    JS_FreeValue(context,global);
+    GD(VariantNewNil,"variant_new_nil")(result);error->error=GDEXTENSION_CALL_OK;
+}
 static void evaluate(void *ud, GDExtensionClassInstancePtr self,
         const GDExtensionConstVariantPtr *args, GDExtensionInt count,
         GDExtensionVariantPtr result, GDExtensionCallError *error) {
@@ -63,6 +102,7 @@ static void evaluate(void *ud, GDExtensionClassInstancePtr self,
 static void start(void *ud,GDExtensionInitializationLevel level) {
     if(level!=GDEXTENSION_INITIALIZATION_SCENE)return;
     runtime=JS_NewRuntime(); JS_SetMaxStackSize(runtime,2097152); context=JS_NewContext(runtime);
+    name_init(&callback_method,"definir_callback");name_init(&callable_call,"call");
     name_init(&class_name,"RestauranteVM"); name_init(&parent_name,"Object"); name_init(&method_name,"executar"); name_init(&empty_name,"");
     GD(StringNewWithUtf8Chars,"string_new_with_utf8_chars")(&empty_string,"");
     GDExtensionClassCreationInfo4 info={0}; info.is_abstract=1; info.is_exposed=1;
@@ -71,6 +111,8 @@ static void start(void *ud,GDExtensionInitializationLevel level) {
     GDExtensionClassMethodInfo m={0};m.name=&method_name;m.method_flags=GDEXTENSION_METHOD_FLAG_VARARG|GDEXTENSION_METHOD_FLAG_STATIC|GDEXTENSION_METHOD_FLAG_NORMAL;
     m.call_func=evaluate;m.has_return_value=1;m.return_value_info=&ret;
     GD(ClassdbRegisterExtensionClassMethod,"classdb_register_extension_class_method")(library,&class_name,&m);
+    m.name=&callback_method;m.call_func=set_callback;m.has_return_value=0;
+    GD(ClassdbRegisterExtensionClassMethod,"classdb_register_extension_class_method")(library,&class_name,&m);
 }
 static void stop(void *ud,GDExtensionInitializationLevel level){
     if(level!=GDEXTENSION_INITIALIZATION_SCENE)return;
@@ -78,6 +120,8 @@ static void stop(void *ud,GDExtensionInitializationLevel level){
     drop(GDEXTENSION_VARIANT_TYPE_STRING,&empty_string);
     drop(GDEXTENSION_VARIANT_TYPE_STRING_NAME,&method_name);drop(GDEXTENSION_VARIANT_TYPE_STRING_NAME,&class_name);
     drop(GDEXTENSION_VARIANT_TYPE_STRING_NAME,&parent_name);drop(GDEXTENSION_VARIANT_TYPE_STRING_NAME,&empty_name);
+    if(has_callback){GD(VariantDestroy,"variant_destroy")(&native_callback);has_callback=0;}
+    drop(GDEXTENSION_VARIANT_TYPE_STRING_NAME,&callback_method);drop(GDEXTENSION_VARIANT_TYPE_STRING_NAME,&callable_call);
     JS_FreeContext(context); JS_FreeRuntime(runtime);
 }
 #ifdef _WIN32
