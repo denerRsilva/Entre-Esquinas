@@ -1,4 +1,5 @@
 extends RefCounted
+const MOVE = preload("res://simulacao/nativa/Movimento.gd")
 const KITCHEN_STATE = preload("res://simulacao/nativa/EstadoCozinha.gd")
 const MIGRATION = preload("res://simulacao/nativa/MigracaoSave.gd")
 const QUALITY = preload("res://simulacao/nativa/Qualidade.gd")
@@ -15,6 +16,46 @@ func execute(json: String) -> String:
 	var args: Array = request.get("args",[])
 	var value: Variant = null
 	match request.get("name",""):
+		"position":value=MOVE.position(args[0])
+		"reserved":value=MOVE.reserved(args[0])
+		"actorWalkTime":value=MOVE.walk_time(args[0])
+		"arrived":value=MOVE.arrived(args[0]) if args[0].get("goal")!=null else null
+		"goalInRoom":value=MOVE.goal_in_room(args[0])
+		"accessPoints":
+			args[0].objects=args[2]
+			value=MOVE.access(args[0],args[1])
+		"closestAccess":value=MOVE.closest(args[0],args[1],args[2])
+		"occupants":value=MOVE.occupants(args[0],args[1]).keys()
+		"isMoving":value=args[0].get("motion")!=null or (args[1]!=null and args[1].get("moving",false))
+		"startMotion","advanceMotion","go":
+			match request.name:
+				"startMotion":value=MOVE.start(args[0],args[1],args[2],args[3])
+				"advanceMotion":value=MOVE.advance(args[0],args[1])
+				"go":MOVE.go(args[0],args[1])
+			return JSON.stringify({"value":value,"actor":args[0]},"",true,true)
+		"setPlayerInput":
+			value=args[3]
+			if (args[1] is int or args[1] is float) and (args[2] is int or args[2] is float):value=MOVE.input(args[0].player,args[3],args[1],args[2])
+			return JSON.stringify({"actor":args[0].player,"input":value},"",true,true)
+		"goObject":
+			var point = MOVE.closest(args[0],args[1],args[2])
+			if point!=null:args[1].goal=point
+			return JSON.stringify({"value":point!=null,"actor":args[1]},"",true,true)
+		"moveActors","pushAside":
+			var state: Dictionary = args[0]
+			var locked := {}
+			var seen := {}
+			if request.name=="moveActors":MOVE.move(state,args[1],args[2])
+			else:
+				var actor: Variant = null
+				var requester: Variant = null
+				for candidate in MOVE.ACTORS.actors(state):
+					if candidate.id==args[1]:actor=candidate
+					if candidate.id==args[2]:requester=candidate
+				for cell in args[3]:locked[cell]=true
+				for id in args[4]:seen[id]=true
+				value=MOVE.push(state,actor,requester,locked,seen)
+			return JSON.stringify({"value":value,"player":state.player,"workers":state.workers,"residents":state.residents,"customers":state.customers,"flowWaits":state.flowWaits,"input":args[2] if request.name=="moveActors" else null,"locked":locked.keys(),"seen":seen.keys()},"",true,true)
 		"validKitchen":value=KITCHEN_STATE.valid(args[0])
 		"validPhysicalKitchen":value=KITCHEN_STATE.physical(args[0])
 		"recoverItems","migrateKitchen","migrateCleaning","migratePhysicalKitchen","migrateHands":
@@ -25,7 +66,7 @@ func execute(json: String) -> String:
 				"migrateCleaning":MIGRATION.cleaning(state)
 				"migratePhysicalKitchen":MIGRATION.physical(state,args[1])
 				"migrateHands":value=MIGRATION.hands(state)
-			return JSON.stringify({"value":value,"state":state})
+			return JSON.stringify({"value":value,"state":state},"",true,true)
 		"validQuality":value=QUALITY.valid(args[0])
 		"foodConserved":value=CONSERVATION.food(args[0])
 		"equipmentConserved":value=CONSERVATION.equipment(args[0])
@@ -46,7 +87,7 @@ func execute(json: String) -> String:
 		"amount":value=STORAGE.amount(args[0],args[1],args[2])
 		"syncContainers":
 			STORAGE.sync(args[0])
-			return JSON.stringify({"value":null,"inv":args[0].inv})
+			return JSON.stringify({"value":null,"inv":args[0].inv},"",true,true)
 		"putObject","takeObject":
 			var object: Dictionary = args[1]
 			for candidate in args[0].objects:
@@ -54,7 +95,7 @@ func execute(json: String) -> String:
 					object=candidate
 					break
 			value=STORAGE.put(args[0],object,args[2],args[3],args[4]) if request.name=="putObject" else STORAGE.take(args[0],object,args[2],args[3],args[4])
-			return JSON.stringify({"value":value,"object":object,"inv":args[0].inv})
+			return JSON.stringify({"value":value,"object":object,"inv":args[0].inv},"",true,true)
 		"newServiceHours":value=CALENDAR.hours()
 		"validServiceHours":value=CALENDAR.valid_hours(args[0])
 		"serviceHours":value=args[0].get("serviceHours",CALENDAR.hours())
@@ -92,9 +133,9 @@ func execute(json: String) -> String:
 			var quantity: Variant = args[2]
 			value=false
 			if quantity is float and is_finite(quantity) and quantity==floor(quantity):value=INVENTORY.add(args[0].inventory,args[1],int(quantity),args[3],args[4])
-			return JSON.stringify({"value":value,"inventory":args[0].inventory})
+			return JSON.stringify({"value":value,"inventory":args[0].inventory},"",true,true)
 		"removeInventory":
 			value=false
 			if args[1] is float and args[1]==floor(args[1]) and args[2] is float and args[2]==floor(args[2]):value=INVENTORY.remove(args[0].inventory,int(args[1]),int(args[2]))
-			return JSON.stringify({"value":value,"inventory":args[0].inventory})
-	return JSON.stringify(value)
+			return JSON.stringify({"value":value,"inventory":args[0].inventory},"",true,true)
+	return JSON.stringify(value,"",true,true)

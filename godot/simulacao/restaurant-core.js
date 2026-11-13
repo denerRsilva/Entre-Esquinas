@@ -7,6 +7,11 @@ let nodeReference;
 function nativeRule(name,args){
  if(typeof NativeRule==='function')return JSON.parse(NativeRule(JSON.stringify({name,args})));
  nodeReference??=require('../qa/referencia-migracao/regras-legado.cjs');
+ if(name==='setPlayerInput'){nodeReference.setPlayerInput(args[0],args[1],args[2]);return {actor:args[0].player,input:nodeReference.playerVelocity(args[0].player)};}
+ if(name==='moveActors'){nodeReference.moveActors(args[0],args[1]);return {...args[0],input:nodeReference.playerVelocity(args[0].player)};}
+ if(name==='pushAside'){const s=args[0],actors=nodeReference.allActors(s),locked=new Set(args[3]),seen=new Set(args[4]);const value=nodeReference.pushAside(s,actors.find(a=>a.id===args[1]),actors.find(a=>a.id===args[2]),locked,seen);return {...s,value,locked:[...locked],seen:[...seen]};}
+ if(['startMotion','advanceMotion','go'].includes(name)){const value=nodeReference[name](...args);return {value,actor:args[0]};}
+ if(name==='goObject'){const value=nodeReference.goObject(...args);return {value,actor:args[1]};}
  if(name==='route')args[5]=new Set(args[5]);
  const value=nodeReference[name](...args);
  if(["recoverItems","migrateKitchen","migrateCleaning","migratePhysicalKitchen","migrateHands"].includes(name))return {value:["recoverItems","migrateHands"].includes(name)?value:null,state:args[0]};
@@ -235,102 +240,26 @@ function near(a,p,r=1){return nativeRule("near",[a,p,r]);}
 function allActors(s){return [s.player,...s.workers,...s.residents,...s.customers.filter(c=>!c.done)];}
 const NAV=DIRS.concat([[1,-1],[1,1],[-1,1],[-1,-1]]),WALK_TIME=.18;
 function route(s,room,from,to,a=null,avoid=new Set(),objects=s.objects){return nativeRule('route',[{compact:s.compact,singleRoom:s.singleRoom},room,from,to,a?{seat:a.seat}:null,[...avoid],objects]);}
-function position(a){if(a.motion){let m=a.motion,t=Math.min(1,m.elapsed/m.duration);return {x:m.fromX+(m.toX-m.fromX)*t,y:m.fromY+(m.toY-m.fromY)*t}}let p=a.settled;return p&&p.room===a.room&&p.x===a.x&&p.y===a.y?{x:p.px,y:p.py}:{x:a.x,y:a.y};}
-// Continuous player input is transient; only the settled world position is saved.
+// Transient input transport; movement decisions execute in Movimento.gd.
 const PLAYER_SPEED=3.3,PLAYER_RADIUS=.20,playerInput=new WeakMap();
 function playerVelocity(a){return playerInput.get(a)||null;}
-function isMoving(a){return !!a.motion||!!playerInput.get(a)?.moving;}
-function setPlayerInput(s,dx,dy){
- const a=s.player,input=playerInput.get(a);
- if(!Number.isFinite(dx)||!Number.isFinite(dy))return;
- const length=Math.hypot(dx,dy);
- if(!length){if(input)playerInput.delete(a);return;}
- const p=position(a);
- a.x=Math.floor(p.x+.5);a.y=Math.floor(p.y+.5);
- a.settled={room:a.room,x:a.x,y:a.y,px:p.x,py:p.y};
- a.motion=null;a.goal=null;
- playerInput.set(a,{dx:dx/length,dy:dy/length,moving:input?.moving||false});
-}
-function moveFreePlayer(s,a,input,dt){
- const p=position(a),before={...p},occupied=occupants(s,a),solid=new Map();
- function collision(x,y){
-  const cx=x+.5,cy=y+.5,r=PLAYER_RADIUS;
-  for(let iy=Math.floor(cy-r);iy<=Math.floor(cy+r);iy++)for(let ix=Math.floor(cx-r);ix<=Math.floor(cx+r);ix++){
-   const k=ix+','+iy;
-   if(!solid.has(k))solid.set(k,blocked(s,a.room,ix,iy,a)||occupied.has(k));
-   if(!solid.get(k))continue;
-   const ox=Math.max(ix-cx,0,cx-ix-1),oy=Math.max(iy-cy,0,cy-iy-1);
-   if(ox*ox+oy*oy<r*r-1e-10)return true;
-  }
-  return false;
- }
- function axis(dx,dy){
-  if(!dx&&!dy)return;
-  let amount=1;
-  if(collision(p.x+dx,p.y+dy)){
-   let lo=0,hi=1;
-   for(let i=0;i<14;i++){const mid=(lo+hi)/2;if(collision(p.x+dx*mid,p.y+dy*mid))hi=mid;else lo=mid;}
-   amount=lo;
-  }
-  p.x+=dx*amount;p.y+=dy*amount;
- }
- // Short swept steps prevent tunnelling even after a slow frame. Resolve each
- // axis independently, so a blocked diagonal slides instead of locking both axes.
- const distance=PLAYER_SPEED*dt,count=Math.max(1,Math.ceil(distance/.08));
- for(let i=0;i<count;i++){axis(input.dx*distance/count,0);axis(0,input.dy*distance/count);}
- a.x=Math.floor(p.x+.5);a.y=Math.floor(p.y+.5);
- a.settled={room:a.room,x:a.x,y:a.y,px:p.x,py:p.y};
- a.motion=null;a.goal=null;a.wait=0;
- input.moveX=p.x-before.x;input.moveY=p.y-before.y;
- input.moving=Math.hypot(input.moveX,input.moveY)>1e-7;
- // Walking through the restaurant doorway uses the same links as clicking it.
- const portal=['restaurant','street'].includes(a.room)&&PORTALS[a.room]?.find(d=>Math.abs(p.x-d.x)<.35&&Math.abs(p.y-d.y)<.35&&(a.room==='restaurant'?input.dy>0&&p.y>=d.y-.2:input.dy<0&&p.y<=d.y+.2));
- if(portal){const [x,y]=portal.spawn;
-  if(!blocked(s,portal.to,x,y,a)&&!allActors(s).some(b=>b!==a&&b.room===portal.to&&reserved(b).some(q=>q.x===x&&q.y===y))){
-   a.room=portal.to;a.x=x;a.y=y;a.settled=null;
-  }
- }
-}
-const NPC_WALK_TIME=.4;
-function actorWalkTime(a){return a.id==='player'?1/PLAYER_SPEED:NPC_WALK_TIME;}
-function startMotion(a,to,offsetX=0,offsetY=0){let p=position(a),x=to.x+offsetX,y=to.y+offsetY,d=Math.hypot(x-p.x,y-p.y);if(d<1e-7)return false;a.motion={fromX:p.x,fromY:p.y,toX:x,toY:y,x:to.x,y:to.y,elapsed:0,duration:d*actorWalkTime(a)};return true;}
-function advanceMotion(a,dt){let m=a.motion;if(!m)return dt;let used=Math.min(dt,m.duration-m.elapsed);m.elapsed+=used;if(m.elapsed>=m.duration-1e-8){a.x=m.x;a.y=m.y;a.settled={room:a.room,x:a.x,y:a.y,px:m.toX,py:m.toY};a.motion=null;}return Math.max(0,dt-used);}
-function reserved(a){let out=[{x:a.x,y:a.y}];if(a.id==='player'&&!a.motion){const p=position(a),r=PLAYER_RADIUS;for(let y=Math.floor(p.y+.5-r);y<=Math.floor(p.y+.5+r);y++)for(let x=Math.floor(p.x+.5-r);x<=Math.floor(p.x+.5+r);x++){const dx=Math.max(x-p.x-.5,0,p.x-.5-x),dy=Math.max(y-p.y-.5,0,p.y-.5-y);if(dx*dx+dy*dy<r*r-1e-10)out.push({x,y});}}if(a.motion){out.push({x:a.motion.x,y:a.motion.y});if(a.motion.x!==a.x&&a.motion.y!==a.y)out.push({x:a.motion.x,y:a.y},{x:a.x,y:a.motion.y})}return out.filter((p,i)=>out.findIndex(q=>q.x===p.x&&q.y===p.y)===i);}
-function accessPoints(s,o,objects=s.objects){let r=rect(o),ps=[];for(let y=r.y-1;y<=r.y+r.h;y++)for(let x=r.x-1;x<=r.x+r.w;x++){if((x===r.x-1||x===r.x+r.w)&&(y>=r.y&&y<r.y+r.h)||(y===r.y-1||y===r.y+r.h)&&(x>=r.x&&x<r.x+r.w)){if(!blocked(s,o.room,x,y,null,objects))ps.push({room:o.room,x,y})}}return ps;}
-function closestAccess(s,a,o){let ps=accessPoints(s,o);if(a.room!==o.room)return ps[0]||null;return ps.map(p=>({p,path:route(s,a.room,a,p,a)})).filter(v=>v.path).sort((a,b)=>a.path.length-b.path.length)[0]?.p||null;}
-function goObject(s,a,o){let p=closestAccess(s,a,o);if(!p)return false;playerInput.delete(a);a.goal=p;return true;}
-function go(a,p){playerInput.delete(a);a.goal={room:p.room||a.room,x:p.x,y:p.y};if(Number.isFinite(p.offsetX)&&Number.isFinite(p.offsetY)){a.goal.offsetX=Math.max(-.25,Math.min(.25,p.offsetX));a.goal.offsetY=Math.max(-.25,Math.min(.25,p.offsetY))}}
-function arrived(a){return a.goal&&!a.motion&&near(a,a.goal,0)&&Math.hypot(position(a).x-a.goal.x-(a.goal.offsetX||0),position(a).y-a.goal.y-(a.goal.offsetY||0))<1e-6;}
-function occupants(s,a){return new Set(allActors(s).filter(b=>b!==a&&b.room===a.room).flatMap(b=>reserved(b).map(key)));}
-function goalInRoom(a){if(!a.goal)return null;if(a.goal.room===a.room)return a.goal;return PORTALS[a.room].find(p=>p.to===a.goal.room)||PORTALS[a.room][0];}
-function pushAside(s,b,requester,locked,seen=new Set()){
- if(b.motion||b.id==='player'||seen.has(b.id)||seen.size>8)return false;seen.add(b.id);
- let opts=DIRS.map(([dx,dy])=>({x:b.x+dx,y:b.y+dy})).filter(p=>!blocked(s,b.room,p.x,p.y,b)&&!locked.has(b.room+':'+key(p))&&!near(requester,{...p,room:b.room},0));
- opts.sort((p,q)=>{const score=v=>DIRS.filter(([dx,dy])=>!blocked(s,b.room,v.x+dx,v.y+dy)).length*10+Math.abs(v.x-requester.x)+Math.abs(v.y-requester.y);return score(q)-score(p)});
- for(const p of opts){let other=allActors(s).find(c=>c!==b&&c.room===b.room&&reserved(c).some(q=>q.x===p.x&&q.y===p.y));if(other&&!pushAside(s,other,b,locked,seen))continue;locked.add(b.room+':'+key(b));startMotion(b,p);b.hold=s.time+1.2;return true}return false;
-}
-function moveActors(s,dt=WALK_TIME){
- const locked=new Set();
- for(const a of allActors(s)){
-  const manual=a===s.player&&playerInput.get(a);
-  if(manual){moveFreePlayer(s,a,manual,dt);continue;}
-  // Return from a free position to a safe cell centre before an automatic route.
-  // This is interpolated, never snapped, and prevents cutting wall corners.
-  if(a===s.player&&!a.motion&&a.goal&&(a.goal.room!==a.room||a.goal.x!==a.x||a.goal.y!==a.y))startMotion(a,{x:a.x,y:a.y});
-  let budget=dt;
-  if(a.motion){let before={room:a.room,x:a.x,y:a.y};budget=advanceMotion(a,budget);if(!a.motion)locked.add(before.room+':'+key(before));if(a.motion||budget<1e-8)continue;}
-  if(!a.goal||a.hold>s.time)continue;let g=goalInRoom(a);if(!g)continue;
-  if(a.x===g.x&&a.y===g.y){
-   if(a.goal.room!==a.room){let dest=PORTALS[a.room].find(p=>p.x===g.x&&p.y===g.y),[x,y]=dest.spawn;if(!allActors(s).some(b=>b!==a&&b.room===dest.to&&reserved(b).some(p=>p.x===x&&p.y===y))){locked.add(a.room+':'+key(a));a.room=dest.to;a.x=x;a.y=y;a.settled=null;}}
-   else {a.wait=0;if(startMotion(a,g,a.goal.offsetX||0,a.goal.offsetY||0))advanceMotion(a,budget);}
-   continue;
-  }
-  let avoid=occupants(s,a);for(const k of locked)if(k.startsWith(a.room+':'))avoid.add(k.split(':')[1]);const unavailable=new Set(avoid);avoid.delete(key(g));let path=route(s,a.room,a,g,a,avoid);if(path?.length&&unavailable.has(key(path[0])))path=null;
-  if(!path?.length){const fallback=route(s,a.room,a,g,a),n=fallback?.[0];if(n&&!unavailable.has(key(n))&&(!(n.x!==a.x&&n.y!==a.y)||![{x:n.x,y:a.y},{x:a.x,y:n.y}].some(p=>unavailable.has(key(p)))))path=fallback;}
-  if(!path?.length){a.wait+=dt/WALK_TIME;s.flowWaits++;let staticPath=route(s,a.room,a,g,a);if(a.wait>=5&&staticPath?.length){let n=staticPath[0],b=allActors(s).find(b=>b!==a&&b.room===a.room&&reserved(b).some(p=>p.x===n.x&&p.y===n.y));if(b&&b.state!=='waiting'&&b.state!=='eating')pushAside(s,b,a,locked)}continue;}
-  let n=path[0],final=a.goal.room===a.room&&n.x===g.x&&n.y===g.y;locked.add(a.room+':'+key(a));startMotion(a,n,final?(a.goal.offsetX||0):0,final?(a.goal.offsetY||0):0);advanceMotion(a,budget);a.wait=0;
- }
-}
+function isMoving(a){return nativeRule('isMoving',[a,playerVelocity(a)]);}
+function position(a){return nativeRule('position',[a]);}
+function reserved(a){return nativeRule('reserved',[a]);}
+function actorWalkTime(a){return nativeRule('actorWalkTime',[a]);}
+function arrived(a){return nativeRule('arrived',[a]);}
+function goalInRoom(a){return nativeRule('goalInRoom',[a]);}
+function accessPoints(s,o,objects=s.objects){return nativeRule('accessPoints',[{compact:s.compact,singleRoom:s.singleRoom,objects},o,objects]);}
+function closestAccess(s,a,o){return nativeRule('closestAccess',[s,a,o]);}
+function occupants(s,a){return new Set(nativeRule('occupants',[s,a]));}
+function startMotion(a,to,offsetX=0,offsetY=0){const out=nativeRule('startMotion',[a,to,offsetX,offsetY]);syncNative(a,out.actor);return out.value;}
+function advanceMotion(a,dt){const out=nativeRule('advanceMotion',[a,dt]);syncNative(a,out.actor);return out.value;}
+function setPlayerInput(s,dx,dy){const out=nativeRule('setPlayerInput',[s,dx,dy,playerVelocity(s.player)]);syncNative(s.player,out.actor);if(out.input)playerInput.set(s.player,out.input);else playerInput.delete(s.player);}
+function go(a,p){playerInput.delete(a);const out=nativeRule('go',[a,p]);syncNative(a,out.actor);}
+function goObject(s,a,o){const out=nativeRule('goObject',[s,a,o]);syncNative(a,out.actor);if(out.value)playerInput.delete(a);return out.value;}
+function applyMovement(s,out){for(const key of ['player','workers','residents','customers'])syncNative(s[key],out[key]);s.flowWaits=out.flowWaits;}
+function moveActors(s,dt=WALK_TIME){const out=nativeRule('moveActors',[s,dt,playerVelocity(s.player)]);applyMovement(s,out);if(out.input)playerInput.set(s.player,out.input);else playerInput.delete(s.player);}
+function pushAside(s,b,requester,locked,seen=new Set()){const out=nativeRule('pushAside',[s,b.id,requester.id,[...locked],[...seen]]);applyMovement(s,out);locked.clear();for(const k of out.locked)locked.add(k);seen.clear();for(const k of out.seen)seen.add(k);return out.value;}
 function editError(s){return s.open||s.customers.length||s.orders.some(o=>!['paid','lost'].includes(o.state))?'Feche o serviço e conclua os clientes antes de reorganizar.':null;}
 function layoutError(s,objects){let occupied=new Set();for(const o of objects){if(!CATALOG[o.type]||o.room!==CATALOG[o.type].room)return 'Objeto fora do setor permitido.';for(const p of cells(o)){if(wall(o.room,p.x,p.y,s)||fixed(o.room,p.x,p.y,s)||PORTALS[o.room].some(d=>Math.abs(d.x-p.x)+Math.abs(d.y-p.y)<=1))return 'Parede, porta ou infraestrutura reservada.';if(o.room==='restaurant'&&((CATALOG[o.type].area==='hall'&&p.x>=14)||(CATALOG[o.type].area==='kitchen'&&(p.x<=14||(!s.singleRoom&&p.y>=10)))||(CATALOG[o.type].area==='storage'&&(p.x<=14||(!s.singleRoom&&p.y<=10)))||(CATALOG[o.type].area==='dryStorage'&&p.x<=14)))return 'Mesas e cadeiras: salão. Fogão e geladeira de cozinha: cozinha. Prateleira: cozinha ou estoque. Geladeira de estoque: estoque.';let k=o.room+':'+key(p);if(occupied.has(k))return 'Esta célula já está ocupada.';occupied.add(k);if(allActors(s).some(a=>a.room===o.room&&reserved(a).some(q=>q.x===p.x&&q.y===p.y)))return 'Há uma pessoa nesta posição.';}}
  for(const chair of objects.filter(o=>o.type==='chair')){const error=chairLayoutError(s,chair,objects);if(error)return error;}
