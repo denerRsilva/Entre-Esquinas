@@ -27,3 +27,11 @@ Verificações: PartidaNativa, MaosUI, CatalogoModernoUI e Regras.cjs. O runner 
 `Mapa.gd`: geometria rotacionada, paredes, obstáculos e busca de caminhos sem cortar quinas. Paridade de paredes/obstáculos em 4.212 células nas três plantas. Rotas possuem apenas testes básicos; equivalência de desempate ainda não demonstrada. O movimento do jogo continua no legado.
 
 `Inventario.gd`: limites de pilha, contagem, capacidade, adição e remoção. Comparação com 375 casos congelados do legado. A criação nativa de partidas usa o novo inventário para abastecer a geladeira e a geometria para conferir saída e posição inicial. Ações de transferência, preparo e construção continuam no JavaScript; estes módulos não encerram as partes 3 e 4.
+
+## Auditoria de conclusão
+
+Execute `python3 scripts/verificar-migracao.py` na raiz. O código de saída 1 indica dependências JavaScript/QuickJS ainda presentes. Esse verificador não substitui testes de gameplay e não está ligado automaticamente à exportação.
+
+Status auditado: 6 arquivos JavaScript de produção, 2 consumidores GDScript da ponte, 1 GDExtension legada. Partes 5 (simulação/serviço/economia), 6 (interface completa) e 7 (remoção do legado e validação final) **não concluídas**. Partes 2–4 também continuam parciais. A branch é um trabalho em andamento; nenhum APK final da migração foi gerado.
+
+Na auditoria, passaram novamente PartidaNativa, MapaNativo (4.212 células) e InventarioNativo (375 casos). Isso valida apenas os módulos cobertos, não o jogo inteiro em GDScript.
