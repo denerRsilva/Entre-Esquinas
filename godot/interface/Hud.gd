@@ -21,7 +21,7 @@ func _ready() -> void:
 	area("dock",Rect2(10,647,550,48),false,false)
 	area("actions",Rect2(720,641,234,54),false,false)
 	area("catalog",Rect2(10,649,168,44),false,false)
-	area("drawer",Rect2(7,7,352,628))
+	area("drawer",Rect2(7,7,440,628))
 	area("build",Rect2(188,615,762,80),false)
 	modal_background=ColorRect.new()
 	modal_background.color=Color(0.03,0.07,0.055,0.68)

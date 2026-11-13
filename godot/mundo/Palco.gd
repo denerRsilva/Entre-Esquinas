@@ -1,14 +1,7 @@
 extends Node2D
 const Tracos = preload("res://mundo/Tracos.gd")
 @export var cozinheira: PackedScene = preload("res://personagens/Cozinheira.tscn")
-@export var moveis: Dictionary[String,PackedScene] = {
-	"counterH":preload("res://moveis/BancadaH.tscn"),"counterV":preload("res://moveis/BancadaV.tscn"),"counterCorner":preload("res://moveis/BancadaCanto.tscn"),
-	"computer":preload("res://moveis/Computador.tscn"),"receiving":preload("res://moveis/Recebimento.tscn"),
-	"stove":preload("res://moveis/Fogao.tscn"), "kitchen":preload("res://moveis/Cozinha.tscn"), "prep":preload("res://moveis/Preparo.tscn"),
-	"sink":preload("res://moveis/Pia.tscn"), "fridge":preload("res://moveis/Geladeira.tscn"),
-	"cold":preload("res://moveis/Geladeira.tscn"), "chair":preload("res://moveis/Cadeira.tscn"),
-	"table":preload("res://moveis/Mesa.tscn"), "shelf":preload("res://moveis/Prateleira.tscn"),
-	"potRack":preload("res://moveis/EstantePanelas.tscn"), "bin":preload("res://moveis/Lixeira.tscn")}
+@export var moveis: Dictionary[String,PackedScene] = preload("res://moveis/Catalogo.gd").CENAS
 @export var garcom: PackedScene = preload("res://personagens/Garcom.tscn")
 @export var logistica: PackedScene = preload("res://personagens/Logistica.tscn")
 @export var moradora: PackedScene = preload("res://personagens/Moradora.tscn")

@@ -1,0 +1,25 @@
+extends "res://qa/MaosUI.gd"
+func run():
+	root.size=Vector2i(960,700)
+	g=load("res://mundo/Restaurante.tscn").instantiate();root.add_child(g);g.set_process(false)
+	await layout();await button("Começar na taverna")
+	js("enterConstruction()");g.tick(0);await layout()
+	check(js("!$('constructionDrawer').hidden")=="true","Catálogo abre ao entrar")
+	var grids=g.find_children("ConstructionGrid","GridContainer",true,false)
+	check(grids.size()==1 and grids[0].columns==2,"Duas colunas nativas")
+	var icons=g.find_children("Furniture_*","TextureRect",true,false)
+	check(icons.size()==int(js("Object.keys(R.CATALOG).filter(k=>k!=='cold').length")),"Todos os móveis usam a cena atual")
+	for icon in icons:check(icon.get_child(0).get_child_count()==1,"Cena da miniatura "+icon.name)
+	if "--capturas" in OS.get_cmdline_user_args():
+		await RenderingServer.frame_post_draw
+		root.get_texture().get_image().save_png("/tmp/catalogo-moderno.png")
+	js("beginBuild('counterH');hover={x:16,y:11};updatePreview()");g.tick(0);await layout()
+	check(js("$('constructionDrawer').hidden")=="true","Catálogo fecha para posicionar")
+	await button("Confirmar posição");await layout()
+	check(js("!building&&!$('constructionDrawer').hidden&&state.objects.some(o=>o.type==='counterH')")=="true","Compra reabre catálogo automaticamente")
+	js("beginBuild('counterV');hover={x:4,y:6};$('confirmBtn').onclick()");g.tick(0);await layout()
+	check(js("!!building&&$('constructionDrawer').hidden")=="true","Posição inválida mantém edição")
+	js("stopBuild();exitConstruction()");g.tick(0);await layout()
+	check(js("!constructionMode&&$('constructionDrawer').hidden")=="true","Sair fecha catálogo")
+	print("FALHAS: ",failures)
+	g.queue_free();await process_frame;quit(1 if failures else 0)

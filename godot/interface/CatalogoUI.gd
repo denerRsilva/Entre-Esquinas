@@ -25,7 +25,32 @@ func texture(ops: Array) -> Texture2D:
 			return tex
 	return null
 
+func furniture_control(type: String, title: String) -> Control:
+	var icon := TextureRect.new()
+	icon.name = "Furniture_"+type
+	icon.tooltip_text = title
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon.custom_minimum_size = Vector2(96,80)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	var viewport := SubViewport.new()
+	viewport.size = Vector2i(120,112)
+	viewport.transparent_bg = true
+	viewport.disable_3d = true
+	viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
+	icon.add_child(viewport)
+	var scene: PackedScene = preload("res://moveis/Catalogo.gd").CENAS.get(type)
+	if scene:
+		var furniture: Node2D = scene.instantiate()
+		furniture.position = Vector2(60,104)
+		viewport.add_child(furniture)
+	icon.texture = viewport.get_texture()
+	return icon
+
 func art_control(d: Dictionary) -> Control:
+	if not d.art.is_empty() and d.art[0][0]=="furniture_icon":
+		return furniture_control(str(d.art[0][1]),d.get("label",""))
 	var n := TextureRect.new()
 	n.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	n.texture = texture(d.art)
@@ -192,6 +217,13 @@ func render(d: Dictionary, parent: Control) -> void:
 		var grid:=GridContainer.new()
 		grid.columns=5
 		group=grid
+	elif cls=="buildCards":
+		var grid := GridContainer.new()
+		grid.name = "ConstructionGrid"
+		grid.columns = 2
+		grid.add_theme_constant_override("h_separation",10)
+		grid.add_theme_constant_override("v_separation",10)
+		group=grid
 	elif cls in ["cards","recipeGrid","inventoryGrid","splitInventories","prepSlots","prepPrimary"]:
 		var grid := GridContainer.new()
 		grid.columns = 1 if compact else (5 if cls=="inventoryGrid" else 3 if cls in ["cards","recipeGrid"] else 2)
@@ -210,4 +242,6 @@ func render(d: Dictionary, parent: Control) -> void:
 		panel.add_child(group)
 		group.add_theme_constant_override("separation",8)
 	else: parent.add_child(group)
+	if cls=="card":
+		kids=kids.filter(func(k):return k.has("art"))+kids.filter(func(k):return not k.has("art"))
 	for k in kids: render(k,group)

@@ -30,3 +30,9 @@ Atlas original `godot/arte/modular/modulos.svg`, grade de 32×32, com reboco cla
 As três bancadas custam $35 cada no modo construção, ocupam uma célula, podem ser giradas, movidas e removidas, e ficam no salvamento. O canto permite junções em L; use a rotação para orientar a junção. São móveis de composição e bloqueiam passagem, sem substituir as estações de preparo e empratamento. As cenas `BancadaH`, `BancadaV` e `BancadaCanto` permitem pré-visualização no editor.
 
 Validação: `node godot/qa/Regras.cjs` e `godot --path godot --script res://qa/BancadasUI.gd -- --capturas`.
+
+## Concept da bancada e catálogo (Godot .18)
+
+`concept-bancada-modular.png` apresenta a proposta de acabamento para as peças horizontal, vertical e canto: madeira âmbar, portas e puxadores. É um concept para avaliação; as bancadas instaladas ainda usam os módulos anteriores.
+
+O catálogo agora mostra miniaturas das mesmas cenas utilizadas no mapa, compartilhadas por `moveis/Catalogo.gd`, inclusive computador e recebimento. São duas colunas, com imagem, nome e preço. A lista abre ao entrar na construção e volta após posicionar, mover, guardar ou cancelar. Posições inválidas mantêm a edição ativa. Validação visual e de fluxo: `CatalogoModernoUI.gd`.
