@@ -1,6 +1,7 @@
 extends Node
 const STORE = "user://restaurante.json"
 const SCRIPTS = ["apresentacao","restaurant-core","comidas","cenografia","acoes","sessao"]
+var session = preload("res://simulacao/nativa/Sessao.gd").new(func(code):return RestauranteVM.executar(code))
 var events:Array=[]
 var active:=false
 var frame_data:Dictionary
@@ -72,12 +73,11 @@ func queue_command(e:Dictionary) -> void:
 
 func tick(dt:float) -> void:
 	var batch:=events.duplicate();events.clear()
-	var result:String=RestauranteVM.executar("snapshot("+str(dt)+","+JSON.stringify(batch)+")")
-	var packet=JSON.parse_string(result)
-	if not packet is Dictionary:
+	var packet:Dictionary=session.step(dt,batch)
+	if packet.is_empty():
 		active=false
-		push_error("Falha de simulação: "+result)
-		$Erro.text="Falha ao iniciar a simulação. "+result
+		push_error("Falha de simulação na sessão nativa")
+		$Erro.text="Falha ao iniciar a sessão nativa."
 		$Erro.show()
 		return
 	frame_data=packet

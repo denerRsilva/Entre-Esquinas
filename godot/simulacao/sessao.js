@@ -39,22 +39,4 @@ function input(e){
   document.emit(e.down?'keydown':'keyup',{key:e.key,repeat:false,preventDefault(){}});
  }else if(e.kind==='blur')releaseKeyboard();
 }
-function snapshot(dt,events) {
- for(const e of events)input(e);
- Host.clock+=dt*1000;frame(Host.clock);
- const painter=new Painter();
- RestaurantArt.draw(painter,R,state,{selectedObject,building,hover,previewError,constructionMode});
- const modal=$('welcome').open?'welcome':$('management').open?'management':'';
- Host.widgets.clear();
- const ui={};
- if(modal){ui.modal=section(modal)}
- else if(constructionMode){
-  ui.catalog=section('constructionControls');ui.drawer=section('constructionDrawer');ui.build=section('buildBar');
- }else{
-  for(const id of ['hud','dock','actions','context','ordersHud','kitchenStatus','openBtn'])ui[id]=section(id);
-  ui.notice=$('notice').style.opacity==='1'?section('notice'):null;
- }
- const writes=Host.writes;Host.writes={};
- return JSON.stringify({singleRoom:state.singleRoom===true,compact:state.compact===true,room:state.player.room,camera:[camera.x,camera.y,camera.zoom],scene:painter.commands,ui,modal,liveInventory:modal==='management'&&dialogMode==='container',construction:constructionMode,door:[parseFloat($('openBtn').style.left)||0,parseFloat($('openBtn').style.top)||0],writes,sounds:Host.sound.splice(0)});
-}
 kitchenAudio={state:'running',currentTime:0,createOscillator(){const tone={frequency:{value:0},connect(){},start(){Host.sound.push(tone.frequency.value)},stop(){}};return tone},createGain(){return {gain:{setValueAtTime(){},exponentialRampToValueAtTime(){}},connect(){}}}};
