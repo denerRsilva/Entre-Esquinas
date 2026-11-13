@@ -1,5 +1,7 @@
 extends RefCounted
 ## Native initial state. JSON contains configuration, never executable code.
+const INVENTORY = preload("res://simulacao/nativa/Inventario.gd")
+const MAP = preload("res://simulacao/nativa/Mapa.gd")
 const BASE = preload("res://simulacao/nativa/partida-base.json")
 const CATALOG = preload("res://simulacao/nativa/catalogo.json")
 
@@ -28,12 +30,10 @@ static func furnished(compact: bool = false, single_room: bool = false) -> Dicti
 	for object in state.objects:
 		match object.type:
 			"fridge":
-				var slot := 0
 				for food in ["arroz","legumes","frango"]:
-					object.inventory[slot] = {"item":food,"n":30}
+					INVENTORY.add(object.inventory,food,30)
 					state.purchased[food] = 30
 					state.inv.kitchen[food] = 30
-					slot += 1
 			"stove": object.pan = "pot"
 			"potRack":
 				for i in 3: object.inventory[i] = {"item":"pot","n":1}
@@ -43,6 +43,9 @@ static func furnished(compact: bool = false, single_room: bool = false) -> Dicti
 	state.player.x = 18
 	state.player.y = 11 if single_room else 6
 	state.message = "Taverna pronta: ingredientes na geladeira, panela no fogão e pratos na mesa de cozinha."
+	if not single_room or compact:
+		assert(not MAP.blocked(state,"restaurant",Vector2i(state.player.x,state.player.y)))
+		assert(MAP.route(state,"restaurant",Vector2i(7,13),Vector2i(7,14))!=null)
 	return state
 
 static func add_object(state: Dictionary, type: String, x: int, y: int, rotation: int = 0) -> void:

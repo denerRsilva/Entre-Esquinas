@@ -1,0 +1,125 @@
+{
+  "legumes_cut": {
+    "name": "Legumes cortados",
+    "raw": "legumes"
+  },
+  "frango_cut": {
+    "name": "Frango cortado",
+    "raw": "frango"
+  },
+  "arroz": {
+    "name": "Arroz",
+    "cost": 2,
+    "kind": "dry"
+  },
+  "legumes": {
+    "name": "Legumes",
+    "cost": 2,
+    "kind": "cold"
+  },
+  "frango": {
+    "name": "Frango",
+    "cost": 4,
+    "kind": "cold"
+  },
+  "pot": {
+    "name": "Panela"
+  },
+  "spoon": {
+    "name": "Colher / utensílio"
+  },
+  "plate": {
+    "name": "Prato limpo"
+  },
+  "dirtyPlate": {
+    "name": "Prato sujo"
+  },
+  "cookingPot": {
+    "name": "Panela em preparo",
+    "limit": 1
+  },
+  "dish_arrozLegumes": {
+    "name": "Prato de Arroz com legumes",
+    "recipe": "arrozLegumes"
+  },
+  "pot_arrozLegumes_1": {
+    "name": "Panela: Arroz com legumes (1/4 porções)",
+    "recipe": "arrozLegumes",
+    "servings": 1,
+    "limit": 1
+  },
+  "pot_arrozLegumes_2": {
+    "name": "Panela: Arroz com legumes (2/4 porções)",
+    "recipe": "arrozLegumes",
+    "servings": 2,
+    "limit": 1
+  },
+  "pot_arrozLegumes_3": {
+    "name": "Panela: Arroz com legumes (3/4 porções)",
+    "recipe": "arrozLegumes",
+    "servings": 3,
+    "limit": 1
+  },
+  "pot_arrozLegumes_4": {
+    "name": "Panela: Arroz com legumes (4/4 porções)",
+    "recipe": "arrozLegumes",
+    "servings": 4,
+    "limit": 1
+  },
+  "dish_sopa": {
+    "name": "Prato de Sopa de legumes",
+    "recipe": "sopa"
+  },
+  "pot_sopa_1": {
+    "name": "Panela: Sopa de legumes (1/4 porções)",
+    "recipe": "sopa",
+    "servings": 1,
+    "limit": 1
+  },
+  "pot_sopa_2": {
+    "name": "Panela: Sopa de legumes (2/4 porções)",
+    "recipe": "sopa",
+    "servings": 2,
+    "limit": 1
+  },
+  "pot_sopa_3": {
+    "name": "Panela: Sopa de legumes (3/4 porções)",
+    "recipe": "sopa",
+    "servings": 3,
+    "limit": 1
+  },
+  "pot_sopa_4": {
+    "name": "Panela: Sopa de legumes (4/4 porções)",
+    "recipe": "sopa",
+    "servings": 4,
+    "limit": 1
+  },
+  "dish_frangoArroz": {
+    "name": "Prato de Frango com arroz",
+    "recipe": "frangoArroz"
+  },
+  "pot_frangoArroz_1": {
+    "name": "Panela: Frango com arroz (1/4 porções)",
+    "recipe": "frangoArroz",
+    "servings": 1,
+    "limit": 1
+  },
+  "pot_frangoArroz_2": {
+    "name": "Panela: Frango com arroz (2/4 porções)",
+    "recipe": "frangoArroz",
+    "servings": 2,
+    "limit": 1
+  },
+  "pot_frangoArroz_3": {
+    "name": "Panela: Frango com arroz (3/4 porções)",
+    "recipe": "frangoArroz",
+    "servings": 3,
+    "limit": 1
+  },
+  "pot_frangoArroz_4": {
+    "name": "Panela: Frango com arroz (4/4 porções)",
+    "recipe": "frangoArroz",
+    "servings": 4,
+    "limit": 1
+  }
+}
