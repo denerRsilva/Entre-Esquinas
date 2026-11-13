@@ -1,4 +1,6 @@
 extends RefCounted
+const KITCHEN_STATE = preload("res://simulacao/nativa/EstadoCozinha.gd")
+const MIGRATION = preload("res://simulacao/nativa/MigracaoSave.gd")
 const QUALITY = preload("res://simulacao/nativa/Qualidade.gd")
 const CONSERVATION = preload("res://simulacao/nativa/Conservacao.gd")
 const RECIPES = preload("res://simulacao/nativa/Receitas.gd")
@@ -13,6 +15,17 @@ func execute(json: String) -> String:
 	var args: Array = request.get("args",[])
 	var value: Variant = null
 	match request.get("name",""):
+		"validKitchen":value=KITCHEN_STATE.valid(args[0])
+		"validPhysicalKitchen":value=KITCHEN_STATE.physical(args[0])
+		"recoverItems","migrateKitchen","migrateCleaning","migratePhysicalKitchen","migrateHands":
+			var state: Dictionary = args[0]
+			match request.name:
+				"recoverItems":value=MIGRATION.recover(state)
+				"migrateKitchen":MIGRATION.kitchen(state)
+				"migrateCleaning":MIGRATION.cleaning(state)
+				"migratePhysicalKitchen":MIGRATION.physical(state,args[1])
+				"migrateHands":value=MIGRATION.hands(state)
+			return JSON.stringify({"value":value,"state":state})
 		"validQuality":value=QUALITY.valid(args[0])
 		"foodConserved":value=CONSERVATION.food(args[0])
 		"equipmentConserved":value=CONSERVATION.equipment(args[0])

@@ -87,3 +87,11 @@ Ainda permanecem em JavaScript as ações e os temporizadores de preparo, emprat
 Os quatro adaptadores do motor passam a chamar essas implementações GDScript, inclusive durante `valid` e `migrateSave`. Não houve mudança de versão do save. A validação geral e a transformação entre versões de saves continuam no JavaScript.
 
 ConservacaoNativa compara 834 estados/regras de conservação e 84 casos de qualidade com a referência congelada (918 comparações no total), incluindo alterações de contadores, itens nas mãos, corte, recuperação, refeições carregadas, clientes comendo, panelas ocupadas, pratos sujos e metadados inválidos de qualidade. MaosUI passou no fluxo completo até empratar, pegar prato e validar/migrar o estado final. Regras.cjs também passou; seu motor de referência permanece restrito a QA.
+
+## Conversão dos dados antigos da cozinha
+
+`MigracaoSave.gd` executa conversão dos inventários antigos de fogão/mesa para encaixes, recolhimento dos antigos inventários de pia/lixeira, recuperação de excedentes, atualização da cozinha física e passagem da mochila/cargas para armazenamento e mãos. Os adaptadores reconciliam as alterações na cópia do estado criada pelo carregador. A escolha da versão de origem, inicialização de históricos v4/v5 e validação geral ainda são coordenadas em `migrateSave` JavaScript; portanto a migração de saves ainda não é inteiramente nativa.
+
+`EstadoCozinha.gd` substitui `validKitchen` e `validPhysicalKitchen`: limites das estações, ingredientes, apoio, mãos, recuperação e coerência dos trabalhos de corte/empratamento. Quantidades, tempos e versão do save (12) foram mantidos. Casos em que o validador antigo lançava erro de tipo são rejeitados como inválidos pelo validador nativo, que retorna false.
+
+MigracaoSaveNativa: 152 comparações, incluindo fases isoladas de migração, validação da cozinha e saves completos v9/v11, excedentes com armazenamento cheio, preservação de qualidade/porções, estados inválidos e igualdade do arquivo de entrada antes/depois. Casos v6 exercitam as fases de conversão dos inventários de estações, mas não constituem uma matriz completa de carregamento de todas as versões. MaosUI e Regras.cjs passaram. A comparação detectou a necessidade de tratar explicitamente a semântica de valores vazios, sem chamar o construtor bool com null.
