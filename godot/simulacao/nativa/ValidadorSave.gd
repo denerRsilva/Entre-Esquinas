@@ -81,7 +81,14 @@ static func valid(value: Variant,slots: int = 0) -> bool:
 	var ids := {};var occupied := {}
 	for o in s.objects:
 		if not has_keys(o,["id","type","room","x","y","rot"]) or not CATALOG.data.has(o.type):return false
+		if o.type in ["cuttingKit","platingKit"]:return false
+		if o.has("tableKit") and (o.type not in ["prep","kitchen"] or o.tableKit!={"prep":"cuttingKit","kitchen":"platingKit"}[o.type]):return false
+		if o.type=="worktable":
+			for key in ["plates","utensil","dishes","dishQuality","inventory"]:
+				if o.has(key):return false
+			if o.get("support")!=null:return false
 		if not N.integer(o.id) or ids.has(o.id) or not N.integer(o.x) or not N.integer(o.y) or not N.integer(o.rot) or o.rot<0 or o.rot>3 or o.room!=CATALOG.data[o.type].room:return false
+		if o.has("baseType") and (o.baseType not in ["worktable","counterH","counterV","counterCorner"] or o.type not in ["prep","kitchen"] or not o.has("tableKit")):return false
 		ids[o.id]=o
 		var rect := M.MAP.rect(o)
 		for y in range(rect.position.y,rect.end.y):

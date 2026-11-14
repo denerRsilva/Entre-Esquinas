@@ -12,6 +12,8 @@ const UI_COMMAND = preload("res://simulacao/nativa/ComandosInterface.gd")
 const FOOD_UI = preload("res://interface/ComidaInterface.gd")
 var rng: Callable = randf
 var state: Dictionary = PARTIDA.fresh(true,true)
+var active_slot := 1
+var kitchen_sound_stamp := ""
 var values: Dictionary = {}
 var writes: Dictionary = {}
 var sounds: Array = []
@@ -50,6 +52,7 @@ var food_ui = FOOD_UI.new()
 var root_actions: Dictionary = {}
 func initialize(saved: Dictionary) -> void:
 	values=saved.duplicate(true)
+	active_slot=clampi(int(values.get("entre-slot-ativo",1)),1,3)
 	var level: float = str(values.get("entre-camera-zoom","1")).to_float()
 	if level>=0.7 and level<=2:camera_level=level
 	update_camera()
@@ -94,6 +97,7 @@ func begin_build(type: String,moving: Variant = null) -> void:
 	building={"type":type,"rot":object.rot if object!=null else 0,"moving":moving};hover=null;state.player.goal=null
 func preview_error() -> Variant:
 	if building==null or hover==null:return null
+	if BUILD.TABLE_KITS.has(building.type):return BUILD.kit_error(state,building.type,int(hover.x),int(hover.y))
 	var candidate := {"type":building.type,"room":BUILD.CATALOG.data[building.type].room,"x":hover.x,"y":hover.y,"rot":building.rot,"id":building.moving if building.moving!=null else state.serial}
 	if candidate.room!=state.player.room:return "Vá ao setor indicado para colocar este objeto."
 	var objects: Array = []
@@ -208,11 +212,13 @@ func load_state(next: Dictionary) -> void:
 func save_game() -> void:
 	var raw = SAVE.serialize(state)
 	if raw==null:notify("Não foi possível salvar: Estado inválido",true);return
-	values["entre-restaurante-12"]=raw;writes["entre-restaurante-12"]=raw;notify("Restaurante salvo neste computador.")
+	values[slot_key(active_slot)]=raw;writes[slot_key(active_slot)]=raw
+	if active_slot==1:values["entre-restaurante-12"]=raw;writes["entre-restaurante-12"]=raw
+	notify("Partida "+str(active_slot)+" salva.")
 func load_game() -> void:
-	var raw := ""
+	var raw: String = str(values.get(slot_key(active_slot),""))
 	for version in ["12","11","10","09","07","06","05","04"]:
-		if not str(values.get("entre-restaurante-"+version,"")).is_empty():raw=values["entre-restaurante-"+version];break
+		if raw.is_empty() and active_slot==1 and not str(values.get("entre-restaurante-"+version,"")).is_empty():raw=values["entre-restaurante-"+version];break
 	var next = parse_save(raw)
 	if next==null:notify("Não foi possível carregar: salvamento ausente ou inválido. Estado atual preservado.",true);return
 	load_state(next);notify("Progresso carregado. Preparos em andamento continuam; empratamento exige proximidade da bancada.")
@@ -241,7 +247,24 @@ func admin_action(action: Dictionary,value: Variant) -> void:
 		"save":save_game()
 		"load":load_game()
 	if result!=null and result.get("message")!=null:notify(result.message,not result.ok)
+func slot_key(slot: int) -> String:return "entre-partida-"+str(slot)
+func choose_slot(slot: int) -> void:
+	if slot<1 or slot>3:return
+	var raw: String = str(values.get(slot_key(slot),values.get("entre-restaurante-12","") if slot==1 else ""))
+	var next: Variant = parse_save(raw) if not raw.is_empty() else null
+	if not raw.is_empty() and next==null:notify("Não foi possível carregar esta partida.",true);return
+	active_slot=slot;values["entre-slot-ativo"]=str(slot);writes["entre-slot-ativo"]=str(slot)
+	if next!=null:load_state(next);close_dialog();notify("Partida "+str(slot)+" carregada.")
+	else:load_state(PARTIDA.fresh(true,true));modal="welcome"
+func sleep_day() -> void:
+	if ADMIN.pending(state) or state.open or state.closing:notify("Conclua o serviço e os preparos antes de dormir.",true);return
+	state.clock={"minute":1560,"remainder":0,"ending":true}
+	if ADMIN.finish_day(state):save_game();generation+=1
 func root_action(kind: String) -> void:
+	if kind.begins_with("slot:"):choose_slot(int(kind.trim_prefix("slot:")));return
+	if kind=="sleep":sleep_day();return
+	if kind=="manualSave":save_game();return
+	if kind=="manualLoad":load_game();return
 	match kind:
 		"furnished":state=PARTIDA.furnished(true,true);building=null;hover=null;selected=null;reset_view();modal="";set_zoom(camera_level)
 		"empty":close_dialog()
@@ -265,6 +288,11 @@ func root_action(kind: String) -> void:
 			var result := BUILD.remove(state,building.moving)
 			if not result.ok:notify(result.error,true);return
 			stop_build();notify("Objeto guardado e valor devolvido.")
+		"removeTableKit":
+			if building==null or building.moving==null:return
+			var result := BUILD.remove_kit(state,building.moving)
+			if not result.ok:notify(result.error,true);return
+			stop_build();notify("Kit retirado e valor devolvido. A mesa ficou vazia.")
 func widget(event: Dictionary) -> void:
 	var path: String = event.get("path","")
 	if root_actions.has(path):root_action(root_actions[path]);return
@@ -290,6 +318,8 @@ func ui() -> Dictionary:
 	if modal=="welcome":
 		var items: Array = [node("h1",[text("Uma nova esquina.")]),label("Você está jogando a versão 0.21.2"),label("Sua taverna está pronta. Vamos cozinhar?")]
 		if tutorial:items.append(label("Retire um ingrediente da geladeira para as mãos. Corte frango ou legumes na mesa de preparo e leve à panela. Cozinhe, apoie a panela na mesa de cozinha, emprate e sirva. Você só pode carregar uma unidade nas mãos; não há mochila."))
+		for slot in range(1,4):
+			if values.has(slot_key(slot)) or (slot==1 and values.has("entre-restaurante-12")):items.append(button("Continuar partida "+str(slot),"slot:"+str(slot)))
 		items.append(node("div",[button("Começar na taverna","furnished"),button("Começar vazio","empty"),button("Fechar tutorial" if tutorial else "Tutorial","tutorial")],"","welcomeActions"))
 		return {"modal":food_ui.decorate(node("dialog",items,"welcome"))}
 	if modal=="management":
@@ -297,13 +327,31 @@ func ui() -> Dictionary:
 		if mode=="container":panel=inventory_ui.render(state,dialog_object)
 		elif mode=="recipes":panel=recipe_ui.render()
 		elif mode=="computer" and tab=="tools":panel=tools_ui.render(state)
+		if mode=="options" and tab=="save":
+			var slots: Array = [label("Partida atual: "+str(active_slot)),button("Dormir e salvar","sleep",ADMIN.pending(state) or state.open or state.closing)]
+			for slot in range(1,4):
+				var raw: String = str(values.get(slot_key(slot),values.get("entre-restaurante-12","") if slot==1 else ""))
+				var saved: Variant = JSON.parse_string(raw) if not raw.is_empty() else null
+				var title := "Partida "+str(slot)+" • "+("Dia "+str(int(saved.get("day",1))) if saved is Dictionary else "Vazia")
+				slots.append(node("div",[label(title),button("Continuar partida "+str(slot) if not raw.is_empty() else "Nova partida "+str(slot),"slot:"+str(slot))],"","card"))
+			slots.append(button("Salvar restaurante","manualSave"));slots.append(button("Carregar restaurante","manualLoad"))
+			panel=node("div",slots,"panel")
 		return {"modal":admin_ui.render(state,{"mode":mode,"tab":tab,"object":dialog_object,"camera":camera_level,"generation":generation,"notice":menu_notice},panel)}
 	if construction:
 		var result := {"catalog":node("div",[button("Construção","toggleCatalog")],"constructionControls")}
 		if drawer:result.drawer=node("div",[node("div",[node("b",[text("Modo construção")]),button("Voltar ao jogo","exitConstruction")],"","constructionHead"),label("Jogo pausado • arraste o cenário para explorar"),label("Disponível: $%.2f"%state.cash),catalog_ui.render(state),label(state.message)],"constructionDrawer")
 		if building!=null:
 			var error = preview_error()
-			result.build=node("div",[node("b",[text(("Mover: " if building.moving!=null else "Instalar: ")+BUILD.CATALOG.data[building.type].name)]),label(error if error!=null else "Toque em uma célula do setor indicado." if hover==null else "Posição válida. Arraste o mapa para explorar. A seta da cadeira aponta para a mesa."),node("div",[button("Girar ↻","rotate"),button("Confirmar posição","confirm",hover==null or error!=null)]+([button("Guardar e reembolsar","store")] if building.moving!=null else [])+[button("Cancelar","cancelBuild")],"","buildActions")],"buildBar")
+			var is_kit: bool = BUILD.TABLE_KITS.has(building.type)
+			var hint := "Toque sobre uma mesa de trabalho vazia." if is_kit else "Toque em uma célula do setor indicado." if hover==null else "Posição válida. Arraste o mapa para explorar. A seta da cadeira aponta para a mesa."
+			var actions: Array = [] if is_kit else [button("Girar ↻","rotate")]
+			actions.append(button("Confirmar posição","confirm",hover==null or error!=null))
+			if building.moving!=null:
+				var table = BUILD.find(state.objects,building.moving)
+				if table!=null and not BUILD.installed_kit(table).is_empty():actions.append(button("Retirar kit","removeTableKit"))
+				actions.append(button("Guardar e reembolsar","store"))
+			actions.append(button("Cancelar","cancelBuild"))
+			result.build=node("div",[node("b",[text(("Mover: " if building.moving!=null else "Instalar: ")+BUILD.CATALOG.data[building.type].name)]),label(error if error!=null else hint),node("div",actions,"","buildActions")],"buildBar")
 		return result
 	var door := CAMERA.door(state,camera,viewport,rect,false,false,false)
 	var result: Dictionary = game_ui.render(state,{"selectedObject":selected,"constructionMode":false,"modal":false,"building":building,"doorHidden":door.hidden},velocity)
@@ -321,6 +369,7 @@ func step(dt: float,events: Array) -> Dictionary:
 			"blur":release_keyboard()
 	clock+=dt
 	if not hidden and (modal.is_empty() or (modal=="management" and mode=="container")) and not construction:
+		var old_day: int = state.day
 		var old_message: String = state.message;var remaining := maxf(0,dt)
 		while remaining>1e-9:
 			var slice := minf(0.08,remaining)
@@ -329,14 +378,20 @@ func step(dt: float,events: Array) -> Dictionary:
 			simulation.step(state,slice);velocity=simulation.velocity
 			if pending!=null:interact("process")
 			remaining=maxf(0,remaining-slice)
+		if state.day!=old_day:save_game()
 		if state.message!=old_message:notice_until=clock+4.5
+		var chop = state.get("chopping")
+		var cook = state.get("cooking")
+		var audio_stamp := "cut:"+str(int(state.time*4)) if chop!=null else "cook:"+str(int(state.time/2)) if cook!=null else ""
+		if not audio_stamp.is_empty() and audio_stamp!=kitchen_sound_stamp:sounds.append(180 if chop!=null else 105)
+		kitchen_sound_stamp=audio_stamp
 		for object in state.objects:
 			if object.get("readyBatch")==null:continue
 			var tone: String = str(object.readyBatch.doneAt)+":"+str(object.get("heatStage"))
 			if played_heat.get(object.id)==tone:continue
 			played_heat[object.id]=tone;sounds.append(660 if object.get("heatStage")=="ready" else 440 if object.get("heatStage")=="over" else 220)
 	update_camera()
-	var scene := renderer.draw(state,{"selectedObject":selected,"constructionMode":construction,"building":building,"hover":hover},velocity)
+	var scene := renderer.draw(state,{"selectedObject":selected,"constructionMode":construction,"building":building,"hover":hover,"feedback":true},velocity)
 	var door := CAMERA.door(state,camera,viewport,rect,construction,not modal.is_empty(),modal=="welcome")
 	var packet := {"singleRoom":state.singleRoom,"compact":state.compact,"room":state.player.room,"camera":[camera.x,camera.y,camera.zoom],"scene":scene,"ui":ui(),"modal":modal,"liveInventory":modal=="management" and mode=="container","construction":construction,"door":[door.left,door.top],"writes":writes.duplicate(true),"sounds":sounds.duplicate()}
 	writes.clear();sounds.clear()

@@ -5,6 +5,49 @@ const STORE = preload("res://simulacao/nativa/Armazenamento.gd")
 const NUM = preload("res://simulacao/nativa/Conservacao.gd")
 const CATALOG = preload("res://simulacao/nativa/catalogo.json")
 const DIRS = [Vector2i.UP,Vector2i.RIGHT,Vector2i.DOWN,Vector2i.LEFT]
+const TABLE_KITS = {"cuttingKit":"prep","platingKit":"kitchen"}
+static func is_worktable(object: Dictionary) -> bool:return object.get("type") in ["worktable","prep","kitchen","counterH","counterV","counterCorner"]
+static func installed_kit(object: Dictionary) -> String:
+	# Old saves already contain equipped tables; their IDs and contents stay intact.
+	return "cuttingKit" if object.type=="prep" else "platingKit" if object.type=="kitchen" else ""
+static func table_at(state: Dictionary, x: int, y: int) -> Variant:
+	for object in state.objects:
+		if is_worktable(object) and object.room=="restaurant" and MAP.rect(object).has_point(Vector2i(x,y)):return object
+	return null
+static func kit_error(state: Dictionary, type: String, x: int, y: int) -> Variant:
+	var error = edit_error(state)
+	if error!=null:return error
+	var table = table_at(state,x,y)
+	if table==null:return "Posicione o kit sobre uma mesa de trabalho vazia."
+	if not installed_kit(table).is_empty():return "Retire o kit atual antes de instalar outro."
+	if busy(state,table.id):return "Conclua o preparo antes de trocar o kit."
+	if state.cash<CATALOG.data[type].price:return "Dinheiro insuficiente."
+	return null
+static func install_kit(state: Dictionary, type: String, x: int, y: int) -> Dictionary:
+	var error = kit_error(state,type,x,y)
+	if error!=null:return fail(error)
+	var table: Dictionary = table_at(state,x,y)
+	table.baseType=table.get("baseType",table.type)
+	table.type=TABLE_KITS[type]
+	table.tableKit=type
+	if table.type=="kitchen":table.merge({"plates":0,"utensil":false,"dishes":{},"dishQuality":{}})
+	state.cash-=CATALOG.data[type].price
+	state.ledger.investment+=CATALOG.data[type].price
+	return {"ok":true,"object":table}
+static func remove_kit(state: Dictionary, id: Variant) -> Dictionary:
+	var error = edit_error(state)
+	if error!=null:return fail(error)
+	var table = find(state.objects,id)
+	if table==null or not is_worktable(table) or installed_kit(table).is_empty():return fail("Esta mesa não possui kit instalado.")
+	if busy(state,id):return fail("Conclua o preparo antes de retirar o kit.")
+	for slot in STORE.slots(table):
+		if slot!=null:return fail("Retire a comida, a panela e os utensílios antes de retirar o kit.")
+	var price: float = CATALOG.data[installed_kit(table)].price
+	for key in ["tableKit","plates","utensil","dishes","dishQuality","support","feedback"]:table.erase(key)
+	table.type=table.get("baseType","worktable")
+	table.erase("baseType")
+	state.cash+=price;state.ledger.investment-=price
+	return {"ok":true,"object":table}
 static func find(objects: Array, id: Variant) -> Variant:
 	for object in objects:
 		if object.id==id:return object
@@ -58,13 +101,14 @@ static func layout_error(state: Dictionary, objects: Array) -> Variant:
 	var occupied := {}
 	for object in objects:
 		if not CATALOG.data.has(object.type) or object.room!=CATALOG.data[object.type].room:return "Objeto fora do setor permitido."
+		if TABLE_KITS.has(object.type):return "Os kits precisam ser instalados sobre uma mesa de trabalho."
 		var r := MAP.rect(object)
 		for y in range(r.position.y,r.end.y):
 			for x in range(r.position.x,r.end.x):
 				if MAP.wall(object.room,x,y,state) or MAP.fixed(object.room,x,y,state):return "Parede, porta ou infraestrutura reservada."
 				for door in MOVE.PORTALS[object.room]:
 					if absf(door.x-x)+absf(door.y-y)<=1:return "Parede, porta ou infraestrutura reservada."
-				var area: String = CATALOG.data[object.type].area
+				var area: String = CATALOG.data[object.get("baseType",object.type)].area
 				if object.room=="restaurant" and ((area=="hall" and x>=14) or (area=="kitchen" and (x<=14 or (not state.get("singleRoom",false) and y>=10))) or (area=="storage" and (x<=14 or (not state.get("singleRoom",false) and y<=10))) or (area=="dryStorage" and x<=14)):return "Mesas e cadeiras: salão. Fogão e geladeira de cozinha: cozinha. Prateleira: cozinha ou estoque. Geladeira de estoque: estoque."
 				var key: String = object.room+":"+str(x)+","+str(y)
 				if occupied.has(key):return "Esta célula já está ocupada."
@@ -127,6 +171,9 @@ static func place(state: Dictionary, type: Variant, x: Variant, y: Variant, rota
 		for object in state.objects:
 			if object.type==type and object.id!=moving:return fail("Este equipamento já está instalado.")
 	if not NUM.integer(x) or not NUM.integer(y) or not NUM.integer(rotation):return fail("Posição inválida.")
+	if TABLE_KITS.has(type):
+		if moving!=null:return fail("Mova a mesa para transportar o kit instalado.")
+		return install_kit(state,type,int(x),int(y))
 	var old = find(state.objects,moving) if moving!=null and moving!=0 else null
 	if moving!=null and moving!=0 and (old==null or old.type!=type):return fail("Objeto não encontrado.")
 	if old!=null:
@@ -175,8 +222,11 @@ static func remove(state: Dictionary, id: Variant) -> Dictionary:
 	for candidate in state.objects:
 		if candidate.id!=id:objects.append(candidate)
 	state.objects=objects
-	state.cash+=CATALOG.data[object.type].price
-	state.ledger.investment-=CATALOG.data[object.type].price
+	state.dirtyTables.erase(str(int(id)))
+	var refund: float = CATALOG.data[object.get("baseType",object.type)].price
+	if object.has("baseType"):refund+=CATALOG.data[installed_kit(object)].price
+	state.cash+=refund
+	state.ledger.investment-=refund
 	return {"ok":true}
 static func seats(state: Dictionary) -> Array:
 	var result: Array = []

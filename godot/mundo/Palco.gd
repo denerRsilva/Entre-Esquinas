@@ -70,10 +70,10 @@ func paint(data: Dictionary) -> void:
 			n.position = Vector2(op[2]+op[4]/2,op[3]+op[5])
 			n.modulate.a = 0.65 if op[7] else 1.0
 			var original := Vector2(40,40)
-			if op[1] in ["computer","receiving","stove","prep","kitchen","sink","table","shelf","potRack"]: original.x=80
+			if op[1] in ["computer","receiving","stove","prep","kitchen","worktable","cuttingKit","platingKit","sink","table","shelf","potRack"]: original.x=80
 			if op[1] in ["fridge","cold"]: original.y=80
 			n.scale = Vector2(float(op[4])/original.x,float(op[5])/original.y)
-			if str(op[1]).begins_with("counter"):n.configurar(int(op[6]))
+			if str(op[1]).begins_with("counter"):n.configurar(int(op[6]),int(op[8]) if op.size()>8 else 0)
 			if op[1]=="chair":
 				var facing := int(op[6])
 				var crop: Array = art_cuts.moveis[[9,10,8,10][facing]]

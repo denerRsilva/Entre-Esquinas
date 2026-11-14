@@ -1,0 +1,6 @@
+[gd_scene format=3]
+[ext_resource type="Script" path="res://moveis/MesaTrabalho.gd" id="base"]
+[node name="KitCorte" type="Node2D"]
+script = ExtResource("base")
+kit = 1
+mostrar_base = false

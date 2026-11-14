@@ -126,7 +126,7 @@ func render(s: Dictionary,model: Dictionary,input: Variant) -> Dictionary:
 		var customer = service.find(s.customers,order.get("customer"))
 		var indicator = service.indicator(s,customer) if customer!=null else null
 		var extra: String = " • "+indicator.emoji+(" "+str(int(ceil(indicator.remaining)))+"s de paciência" if indicator.phase!=null else " "+indicator.label) if indicator!=null else ""
-		var content: Array = [node("b",[plain("#"+str(int(order.id))+" • "),{"tag":"canvas","art":controls.item_art(order.recipe),"label":SERVICE.RECIPES.data[order.recipe].name}]),plain({"ordered":"A preparar","cooking":"No fogão","ready":"Pronto para servir","eating":"Cliente comendo"}.get(order.state,order.state)+extra+" • espera "+str(int(floor(order.age)))+"s")]
+		var content: Array = [node("b",[plain("#"+str(int(order.id))+" • "),{"tag":"canvas","art":controls.item_art(order.recipe),"label":SERVICE.RECIPES.data[order.recipe].name}]),plain({"ordered":"A preparar","cooking":"No fogão","ready":"A caminho da mesa","eating":"Cliente comendo"}.get(order.state,order.state)+extra+" • espera "+str(int(floor(order.age)))+"s")]
 		if order.state=="ordered":content.append(controls.button("Prioritário" if s.priority==order.id else "Priorizar","nativo:jogo:prioridade:"+str(int(order.id)),{"kind":"priority","id":order.id}))
 		orders.append(node("div",content,"","orderCard"))
 	return {"hud":node("div",[plain(summary)],"hud"),"openBtn":door if not door.is_empty() else null,"ordersHud":node("div",orders,"ordersHud"),"kitchenStatus":kitchen_status(s),"context":context(s,model)}

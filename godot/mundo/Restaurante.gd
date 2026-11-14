@@ -52,7 +52,8 @@ func import_save(path:String) -> void:
 		tick(0)
 		return
 	var next=values.duplicate()
-	next["entre-restaurante-12"]=raw
+	next[session.slot_key(session.active_slot)]=raw
+	if session.active_slot==1:next["entre-restaurante-12"]=raw
 	if persist(next):
 		values=next
 		session.values=values.duplicate(true)

@@ -101,7 +101,19 @@ func object(s: Dictionary,o: Dictionary,selected: bool,preview: bool = false) ->
 	var r := MOVE.MAP.rect(o)
 	var x: float = r.position.x*40;var y: float = r.position.y*40;var w: float = r.size.x*40;var h: float = r.size.y*40
 	alpha=0.65 if preview else 1.0
-	box(x+5,y+h-7,w-7,8,"#624a343f");commands.append(["furniture",o.type,x,y,w,h,o.rot,preview])
+	box(x+5,y+h-7,w-7,8,"#624a343f");commands.append(["furniture",o.get("baseType",o.type) if str(o.get("baseType","")).begins_with("counter") else o.type,x,y,w,h,o.rot,preview])
+	if str(o.get("baseType","")).begins_with("counter"):
+		commands.append(["furniture",o.tableKit,x,y,w,h,o.rot,preview])
+	if str(o.get("baseType",o.type)).begins_with("counter"):
+		var neighbors := 0
+		for i in 4:
+			var point: Vector2i = Vector2i(o.x,o.y)+BUILD.DIRS[i]
+			for other in s.objects:
+				if other.room==o.room and str(other.get("baseType",other.type)).begins_with("counter") and MOVE.MAP.rect(other).has_point(point):neighbors|=1<<i
+		# The kit is a separate draw command; find the base command explicitly.
+		for index in range(commands.size()-1,-1,-1):
+			if commands[index][0]=="furniture" and str(commands[index][1]).begins_with("counter"):
+				commands[index].append(neighbors);break
 	if o.type=="chair" and preview:
 		var dir: Vector2i = MOVE.DIRS[int(o.rot)]
 		box(x+19+dir.x*10,y+20+dir.y*10,3,3,"#f8deb0");text(["↑","→","↓","←"][int(o.rot)],x+20,y+24,16,"#fff2ce")
@@ -122,13 +134,13 @@ func object(s: Dictionary,o: Dictionary,selected: bool,preview: bool = false) ->
 		if recipe==null:recipe=cooking.recipe if cooking!=null else o.readyBatch.recipe if o.get("readyBatch")!=null else null
 		if recipe!=null:food(recipe,x+w/2-14,y-50,28,24)
 	if o.type=="kitchen":
-		if o.get("support")!=null:pot(x+50,y-7,INV.ITEMS.data.get(o.support.item,{}).get("servings",0)>0,false,s.time)
+		if o.get("support")!=null:pot(x+minf(50,w*0.625),y-7,INV.ITEMS.data.get(o.support.item,{}).get("servings",0)>0,false,s.time)
 		for i in mini(4,int(ceil(float(o.get("plates",0))/3))):plate(x+12,y+2-i*2)
 		if o.get("utensil",false):box(x+w-15,y+3,7,11,"#7c5b37");box(x+w-13,y-3,2,10,"#dec08c");box(x+w-9,y-1,2,9,"#cfad79")
 		var index := 0
 		for dish in o.get("dishes",{}):
 			for q in 4:
-				for j in STORE.quality_count(o,dish,q):plate(x+27+index%4*11,y+4+floor(float(index)/4)*8,INV.ITEMS.data[dish].recipe,false,q);index+=1
+				for j in STORE.quality_count(o,dish,q):plate(x+(27+index%4*11)*(w/80),y+4+floor(float(index)/4)*8,INV.ITEMS.data[dish].recipe,false,q);index+=1
 	if o.type=="table":
 		var dishes := 0
 		for ch in s.objects:
@@ -186,11 +198,27 @@ func draw(s: Dictionary,ui: Dictionary,input: Variant = null) -> Array:
 	if not ui.constructionMode:
 		for o in s.objects:
 			if o.room==room:overlays(s,o,same(ui.selectedObject,o.id),ui.get("building")!=null)
+	if ui.get("feedback",false) and not ui.constructionMode:
+		feedback(s)
 	if ui.get("building")!=null:
+		if BUILD.TABLE_KITS.has(ui.building.type):
+			for surface in s.objects:
+				if surface.room!=room or not BUILD.is_worktable(surface) or not BUILD.installed_kit(surface).is_empty():continue
+				var area := MOVE.MAP.rect(surface)
+				box(area.position.x*40,area.position.y*40,area.size.x*40,area.size.y*40,"#74d9ac44")
+				commands.append(["line",area.position.x*40,area.position.y*40,area.size.x*40,area.size.y*40,"#9fffc4",2])
 		for y in 16:
 			for x in 24:
 				if not MOVE.MAP.wall(room,x,y,s):commands.append(["line",x*40,y*40,40,40,"#33584766",1])
 		if ui.get("hover")!=null:
+			if BUILD.TABLE_KITS.has(ui.building.type):
+				var table = BUILD.table_at(s,int(ui.hover.x),int(ui.hover.y))
+				var target: Dictionary = table if table!=null else {"type":"worktable","x":int(ui.hover.x),"y":int(ui.hover.y),"rot":0}
+				var footprint := MOVE.MAP.rect(target)
+				var kit_error = BUILD.kit_error(s,ui.building.type,int(ui.hover.x),int(ui.hover.y))
+				commands.append(["furniture",ui.building.type,footprint.position.x*40,footprint.position.y*40,footprint.size.x*40,footprint.size.y*40,target.rot,true])
+				box(footprint.position.x*40,footprint.position.y*40,footprint.size.x*40,footprint.size.y*40,"#bb433b55" if kit_error!=null else "#55aa7055")
+				return commands
 			var o := {"type":ui.building.type,"room":BUILD.CATALOG.data[ui.building.type].room,"x":ui.hover.x,"y":ui.hover.y,"rot":ui.building.rot}
 			var r := MOVE.MAP.rect(o);var objects: Array = []
 			for existing in s.objects:
@@ -199,3 +227,33 @@ func draw(s: Dictionary,ui: Dictionary,input: Variant = null) -> Array:
 			var error: Variant = "Vá ao setor indicado para colocar este objeto." if o.room!=room else BUILD.layout_error(s,objects)
 			object(s,o,true,true);box(r.position.x*40,r.position.y*40,r.size.x*40,r.size.y*40,"#bb433b55" if error!=null else "#55aa7055")
 	return commands
+
+func feedback(s: Dictionary) -> void:
+	for a in MOVE.ACTORS.actors(s):
+		if a.room!=s.player.room or a.get("carry")==null or a.carry.kind!="dish":continue
+		var pos := MOVE.position(a)
+		box(pos.x*40+9,pos.y*40-48,23,17,"#25473de0")
+		plate(pos.x*40+20,pos.y*40-40)
+		text("→",pos.x*40+36,pos.y*40-36,13,"#a8efb0")
+	var job = s.get("chopping")
+	if job!=null:
+		var table = BUILD.find(s.objects,job.table)
+		if table!=null and table.room==s.player.room:
+			var area := MOVE.MAP.rect(table)
+			var x: float = area.position.x*40+area.size.x*20
+			var y: float = area.position.y*40
+			food(job.item,x-9,y-13,18,14)
+			var lift: float = 5 if int(s.time*7)%2 else 0
+			box(x+10,y-17-lift,3,13,"#e6e0c8")
+			box(x+10,y-22-lift,3,6,"#6b422d")
+	for stove in s.objects:
+		if stove.room!=s.player.room or stove.type!="stove":continue
+		var x: float = stove.x*40+30
+		var y: float = stove.y*40-30
+		if stove.get("readyBatch")!=null:
+			var stage: String = RECIPES.heat(s,stove).stage
+			if stage=="ready":
+				var pulse: float = sin(s.time*5)*3
+				text("✦",x,y+pulse,18,"#ffe4a0")
+			elif stage in ["over","danger","burned"]:
+				text("!",x,y-absf(sin(s.time*6))*4,20,"#ffb369" if stage=="over" else "#ff7059")

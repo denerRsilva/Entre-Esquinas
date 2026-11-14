@@ -11,6 +11,9 @@ func convert(value: Variant,random_values: Array = []) -> Dictionary:
 	var s: Dictionary = value.duplicate(true)
 	var source: int = s.version
 	if not s.get("objects") is Array or not s.get("customers") is Array or not s.get("inventory") is Array or not s.get("inv") is Dictionary:return {"value":null}
+	# Migration reads these containers before the full state validator runs.
+	for location in ["receiving","storage","kitchen"]:
+		if not s.inv.get(location) is Dictionary:return {"value":null}
 	for o in s.objects:
 		if not o is Dictionary or not o.get("type") is String:return {"value":null}
 		if source<10 and o.type=="prep":o.type="kitchen"
@@ -30,6 +33,10 @@ func convert(value: Variant,random_values: Array = []) -> Dictionary:
 			if not visit is Dictionary or not visit.has("id"):return {"value":null}
 			s.reputation.processed.append(visit.id)
 	if not s.get("recovery",[]) is Array:return {"value":null}
+	for portion in s.get("recovery",[]):
+		if not portion is Dictionary or not ITEMS.data.has(portion.get("item")) or not VALIDATOR.N.integer(portion.get("n")):return {"value":null}
+		var quality = portion.get("quality",0)
+		if not VALIDATOR.N.integer(quality) or quality<0 or quality>3:return {"value":null}
 	for o in s.objects:
 		if o.has("inventory"):
 			if not o.inventory is Array:return {"value":null}
@@ -49,6 +56,7 @@ func convert(value: Variant,random_values: Array = []) -> Dictionary:
 		if s.get("chopping")!=null and not s.chopping.get("hand",false):s.chopping=null
 		if s.inventory.size() not in [0,5,10] or not VALIDATOR.valid(s,s.inventory.size()):return {"value":null}
 		if not MIGRATE.hands(s):return {"value":null}
+	preload("res://simulacao/nativa/HistoricoPedidos.gd").compact(s)
 	return {"value":s if VALIDATOR.valid(s) else null}
 func parse_text(raw: Variant,random_values: Array = []) -> Dictionary:
 	if not raw is String:return {"value":null}
@@ -56,8 +64,11 @@ func parse_text(raw: Variant,random_values: Array = []) -> Dictionary:
 	if parser.parse(raw)!=OK:return {"value":null}
 	return self.convert(parser.data,random_values)
 static func serialize(value: Variant) -> Variant:
-	if not VALIDATOR.valid(value):return null
-	return JSON.stringify(value,"",true,true)
+	if not value is Dictionary:return null
+	var snapshot: Dictionary = value.duplicate(true)
+	preload("res://simulacao/nativa/HistoricoPedidos.gd").compact(snapshot)
+	if not VALIDATOR.valid(snapshot):return null
+	return JSON.stringify(snapshot,"",true,true)
 func load_value(value: Variant,rng: Callable = randf) -> Variant:
 	var draws: Array = []
 	while true:

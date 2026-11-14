@@ -3,7 +3,7 @@ const CATALOG = preload("res://simulacao/nativa/catalogo.json")
 const NAV = [Vector2i.UP,Vector2i.RIGHT,Vector2i.DOWN,Vector2i.LEFT,Vector2i(1,-1),Vector2i(1,1),Vector2i(-1,1),Vector2i(-1,-1)]
 
 static func rect(object: Dictionary) -> Rect2i:
-	var data: Dictionary = CATALOG.data[object.type]
+	var data: Dictionary = CATALOG.data[object.get("baseType",object.type)]
 	return Rect2i(object.x,object.y,data.h if int(object.rot)%2 else data.w,data.w if int(object.rot)%2 else data.h)
 
 static func wall(room: String, x: int, y: int, state: Dictionary = {}) -> bool:
@@ -60,8 +60,7 @@ static func route(state: Dictionary, room: String, start: Vector2i, target: Vect
 			queue.append({"point":next,"cost":cost,"sequence":sequence})
 	return null
 
-## Temporary read-only transport for rules still hosted in QuickJS.
-## All geometry is computed here; JavaScript only reads the resulting grid.
+## Geometry snapshots used by the native rules and migration regression tests.
 static func obstacle_tables() -> Dictionary:
 	var result := {}
 	for compact in [false,true]:

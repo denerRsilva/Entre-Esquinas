@@ -5,6 +5,7 @@ func render(state: Dictionary) -> Dictionary:
 	controls.actions.clear()
 	var cards: Array = []
 	for id in CATALOG.data:
+		if id in ["prep","kitchen"]:continue
 		if state.get("singleRoom",false) and id=="cold":continue
 		var item: Dictionary = CATALOG.data[id]
 		cards.append({"tag":"div","cls":"card","children":[

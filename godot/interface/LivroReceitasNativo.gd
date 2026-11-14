@@ -1,5 +1,5 @@
 extends RefCounted
-## Recipe pages are described directly in Godot; the remaining modal shell is temporary.
+## Visual recipe pages rendered by the native Godot interface.
 const RECIPES = preload("res://simulacao/nativa/Receitas.gd")
 const ITEMS = preload("res://simulacao/nativa/itens.json")
 const PATHS = {

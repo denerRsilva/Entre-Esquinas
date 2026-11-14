@@ -61,6 +61,7 @@ static func finish_day(s: Dictionary) -> bool:
 	report.merge({"day":s.day,"expense":12,"result":s.ledger.revenue-s.ledger.foodCost-12,"cash":s.cash-12},true)
 	s.cash-=12;s.reports.append(report);s.lastReport=report
 	s.ledger={"revenue":0,"foodCost":0,"purchases":0,"investment":0,"lost":0,"sales":0}
+	preload("res://simulacao/nativa/HistoricoPedidos.gd").compact(s)
 	s.day+=1;s.period=0;s.open=false;s.closing=false;s.clock={"minute":360,"remainder":0,"ending":false}
 	s.message="Novo dia às 06:00. Relatório diário disponível na Gestão."
 	return true

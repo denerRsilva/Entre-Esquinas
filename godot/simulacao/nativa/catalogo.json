@@ -142,5 +142,32 @@
     "room": "restaurant",
     "area": "utility",
     "color": "#bd9360"
+  },
+  "worktable": {
+    "name": "Mesa de trabalho",
+    "price": 55,
+    "w": 2,
+    "h": 1,
+    "room": "restaurant",
+    "area": "kitchen",
+    "color": "#bc955e"
+  },
+  "cuttingKit": {
+    "name": "Kit de corte e preparo",
+    "price": 35,
+    "w": 2,
+    "h": 1,
+    "room": "restaurant",
+    "area": "kitchen",
+    "color": "#bc955e"
+  },
+  "platingKit": {
+    "name": "Kit de empratamento",
+    "price": 35,
+    "w": 2,
+    "h": 1,
+    "room": "restaurant",
+    "area": "kitchen",
+    "color": "#bc955e"
   }
 }

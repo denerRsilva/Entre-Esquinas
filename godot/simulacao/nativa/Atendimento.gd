@@ -153,6 +153,10 @@ func interact(s: Dictionary,id: Variant) -> bool:
 	if expired(s,c):return false
 	if c.state=="waiting":return take_order(s,a,c)
 	if c.state=="ordered":
+		for actor in MOVE.ACTORS.actors(s):
+			var delivery = actor.get("carry")
+			if actor.id!=a.id and delivery!=null and delivery.kind=="dish" and delivery.order==c.order:
+				s.message="Este pedido já está sendo levado à mesa.";return false
 		var hand = a.get("hand")
 		if hand!=null and hand.item=="dish_"+c.recipe:
 			if a.get("carry")!=null:return false
