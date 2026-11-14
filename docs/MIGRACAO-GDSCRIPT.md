@@ -2,6 +2,12 @@
 
 Referência funcional: commit 5ae8794, APK 0.21.2-godot.18.
 
+## Estado atual
+
+Já executam em GDScript: criação de partidas, mapa/navegação, movimento, construção, inventários, conservação/qualidade/receitas, cozinha, atendimento, administração, validação/conversão de saves, logística e coordenação da simulação. Inventários, catálogo e páginas do livro também são gerados nativamente. Ainda há consultas/adaptadores no núcleo JavaScript e dependências de apresentação/interação; isso não equivale à remoção do JavaScript.
+
+As seções seguintes registram a evolução e a validação de cada etapa; descrições antigas de pendências são substituídas pelas etapas posteriores.
+
 ## Implementado
 
 A coordenação de frames antes feita por `snapshot` em `simulacao/sessao.js` passou para `simulacao/nativa/Sessao.gd`. `Restaurante.gd` usa diretamente essa sessão. Seleção das áreas da interface, montagem do pacote de renderização e coleta de gravações e sons são coordenadas em GDScript.
@@ -10,7 +16,7 @@ A coordenação de frames antes feita por `snapshot` em `simulacao/sessao.js` pa
 
 A sessão nativa ainda usa uma ponte temporária para as regras, eventos, composição gráfica e árvore de menus JavaScript. Não é uma conversão completa. QuickJS continua obrigatório. Os testes Node que chamavam `snapshot` precisam ser substituídos por testes Godot; não são mais executáveis contra o novo ponto de entrada.
 
-Próximas unidades: regras e validação de estado/saves; navegação e movimento; cozinha e conservação de itens; serviço e economia; ações de interface; composição gráfica e eliminação do DOM simulado. Só remover a extensão nativa depois que não houver consumidores.
+Unidades ainda necessárias: consultas/adaptadores residuais, ações de interface/câmera, demais painéis/HUD, composição gráfica e eliminação do DOM simulado. Só remover a extensão nativa depois que não houver consumidores.
 
 Preservar versão e estrutura dos saves, valores econômicos, velocidades, dimensões e posições dos móveis. Não publicar APK desta etapa como migração concluída.
 
@@ -143,3 +149,19 @@ SalvarCarregarNativo testa os botões Salvar/Carregar, JSON gravado, restauraç�
 Os controles nativos usam registro próprio de ações em GDScript, sem `Host.widgets`/DOM para os botões desses painéis. `Entrada.gd` encaminha os eventos; ações inexistentes/desabilitadas são descartadas e a visibilidade do menu é conferida novamente antes de chamar o sistema. Ações de cozinha e início de posicionamento ainda alcançam endpoints da simulação legada enquanto esses blocos terminam de migrar. Cabeçalhos, janelas, HUD e demais menus ainda dependem parcialmente do modelo antigo: **esta etapa não conclui a interface final**.
 
 Passaram InventariosNativosUI (sem conteúdo DOM, registro nativo, retirada/guardar, evento antigo, controle desabilitado e conservação/save), EstantePanelasUI, MaosUI, CatalogoModernoUI (duas colunas, cenas atuais e registro nativo), ConstrucaoUI e Regras.cjs. BancadasUI/TavernaUnicaUI foram atualizados para consultar os controles realmente exibidos em vez do painel DOM removido.
+
+## Cozinha, logística e coordenação da simulação
+
+`Cozinha.gd` executa retirada/devolução nas mãos, recuperação de excedentes, corte/cancelamento, instalação/retirada de panelas e pratos, composição e correção dos ingredientes, reconhecimento/início do preparo, término, calor/queima, apoio/empratamento, lavagem, louça suja e descarte. As antigas funções de cozinha foram substituídas por adaptadores; os botões nativos de inventário já alcançam as regras GDScript. Os caminhos antigos de mochila permanecem compatíveis enquanto ainda existem endpoints legados.
+
+`Logistica.gd` executa seleção de armazenamento, separação por qualidade, retirada/depósito, recebimento manual, transferências e transporte pelos funcionários. `Simulacao.gd` coordena movimento, atendimento, logística, cozinha, entregas, chegada dos clientes, escolha de assentos/receitas, turnos e transição diária. O passo completo executa os sistemas diretamente em GDScript. Os sorteios transacionais e a precisão numérica foram preservados; o adaptador também preserva o vínculo do último relatório e a entrada transitória do teclado.
+
+`CicloInterface.gd` passa a controlar o relógio de apresentação, política de pausa, subdivisão do avanço, atualização periódica dos painéis e duração das notificações. Ainda chama endpoints antigos para a fila de interação, câmera, sons e atualização visual. O laço `frame` foi removido de `acoes.js`. A conversão trata explicitamente flags ausentes do modelo antigo como falsas.
+
+`LivroReceitasNativo.gd` gera as três páginas diretamente em GDScript, usando arte da comida pronta, ingredientes, indicação de corte e três passos curtos. O conteúdo do livro foi removido de `acoes.js`; sua janela externa ainda usa o modelo transitório.
+
+Validação: `CozinhaNativa` compara 1.620 ações/temporizadores contra a referência congelada, incluindo mãos, receitas, qualidades, cozimento, queima, corte e apoio/empratamento. `SimulacaoNativa` compara 202 cenários de simulação, chegadas, teclado, turnos, transporte/recebimento e estoques. Os geradores de fixtures ficam somente em `qa/referencia-migracao`; não são parte do jogo. AtendimentoNativo e AdministracaoNativa voltaram a coincidir nos fluxos completos e fechamentos. O livro tem teste de integração próprio verificando páginas, arte disponível, ausência do conteúdo DOM antigo e retorno ao jogo.
+
+O script `scripts/testar-migracao.sh` reprova erros GDScript registrados no log, além de resultados de teste e códigos de saída, evitando considerar uma cena aprovada quando uma chamada falha antes das asserções.
+
+**A migração total ainda não está concluída.** Permanecem a apresentação do cenário, câmera/interações de interface, outros painéis/HUD, dados/adaptadores JavaScript e a extensão QuickJS. Não foi removida a ponte nem gerado um APK final desta branch. A branch principal e o APK anterior continuam preservados.

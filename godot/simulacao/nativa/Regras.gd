@@ -1,4 +1,7 @@
 extends RefCounted
+const LOGISTICS = preload("res://simulacao/nativa/Logistica.gd")
+const SIMULATION = preload("res://simulacao/nativa/Simulacao.gd")
+const KITCHEN = preload("res://simulacao/nativa/Cozinha.gd")
 const SAVES = preload("res://simulacao/nativa/Salvamentos.gd")
 const ADMIN = preload("res://simulacao/nativa/Administracao.gd")
 const SERVICE = preload("res://simulacao/nativa/Atendimento.gd")
@@ -20,6 +23,65 @@ func execute(json: String) -> String:
 	var args: Array = request.get("args",[])
 	var value: Variant = null
 	match request.get("name",""):
+		"logistica":
+			var state: Dictionary = args[1]
+			var params: Array = args[2]
+			var kitchen = KITCHEN.new();kitchen.manual_moving=args[3]
+			match args[0]:
+				"changeLocation":value=LOGISTICS.change(state,params[0],params[1],params[2])
+				"transfer":value=LOGISTICS.transfer(state,params[0],params[1],params[2],params[3])
+				"storageObject":
+					var target = LOGISTICS.storage(state,params[0],params[1],params[2],params[3])
+					value=target.id if target!=null else null
+				"locationChunk":value=LOGISTICS.chunk(state,params[0],params[1])
+				"takeChunk":
+					var portion: Dictionary = params[2]
+					if portion.has("source"):portion.source=BUILD.find(state.objects,portion.source.id)
+					LOGISTICS.take(state,params[0],params[1],portion,params[3])
+				"utilityNear":value=LOGISTICS.utility_near(state,params[0],kitchen)
+				"collectReceiving":value=LOGISTICS.collect(state,kitchen)
+				"supplyAction":value=LOGISTICS.supply(state,params[0],params[1],params[2],kitchen)
+			return JSON.stringify({"value":value,"state":state},"",true,true)
+		"simulacao":
+			var simulation = SIMULATION.new()
+			var state: Dictionary = args[1]
+			var params: Array = args[2]
+			simulation.service.random_values=args[3]
+			simulation.velocity=args[4]
+			match args[0]:
+				"step":simulation.step(state,params[0])
+				"simulate":simulation.simulate(state,params[0])
+				"spawn":value=simulation.spawn(state)
+				"chooseRecipe":value=simulation.choose_recipe(state)
+				"workerStep":simulation.worker(state,SERVICE.new().find(state.workers,params[0]))
+			if simulation.service.needs_random:return JSON.stringify({"needsRandom":true})
+			return JSON.stringify({"value":value,"state":state,"input":simulation.velocity},"",true,true)
+		"cozinha":
+			var op: String = args[0]
+			var state: Dictionary = args[1]
+			var params: Array = args[2]
+			var kitchen = KITCHEN.new();kitchen.manual_moving=args[3]
+			match op:
+				"physicalAction":value=kitchen.physical(state,params[0],params[1])
+				"handStorage":value=kitchen.storage(state,params[0],params[1],params[2])
+				"recoverHand":value=kitchen.recover(state,params[0])
+				"takePhysicalPan":value=kitchen.take_pan(state,kitchen.find(state,params[0]))
+				"cookError":value=kitchen.cook_error(state,params[0],params[1])
+				"startCook":value=kitchen.cook(state,params[0],params[1])
+				"kitchenStep":kitchen.step(state,params[0])
+				"choppingStep":kitchen.chop_step(state,params[0])
+				"platingStep":kitchen.plate_step(state,params[0])
+				"platingPlan":value=kitchen.plating_plan(state,params[0])
+				"plateFood":value=kitchen.plate(state,params[0])
+				"cancelPlating":value=kitchen.cancel_plate(state)
+				"washPlates":value=kitchen.wash(state,params[0])
+				"collectDirty":value=kitchen.collect_dirty(state,params[0])
+				"discardFood":value=kitchen.discard(state,params[0],params[1])
+				"consumeItem":value=kitchen.consume(state,params[0],params[1])
+				"kitchenAction":value=kitchen.legacy(state,params[0],params[1],params[2])
+				"objectNear":value=kitchen.near(state,params[0],params[1])
+				"kitchenFeedback":value=kitchen.feedback(state,kitchen.find(state,params[0]),params[1])
+			return JSON.stringify({"value":value,"state":state},"",true,true)
 		"valid":value=SAVES.VALIDATOR.valid(args[0],args[1])
 		"validExperience":value=SAVES.VALIDATOR.experience(args[0])
 		"serializeSave":value=SAVES.serialize(args[0])

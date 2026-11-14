@@ -1,14 +1,17 @@
 extends RefCounted
 ## Native frame coordinator. The legacy bridge remains only until its rules,
 ## menu callbacks and painter have been migrated independently.
+var recipe_ui = preload("res://interface/LivroReceitasNativo.gd").new()
 var menus = preload("res://simulacao/nativa/Menus.gd").new()
 var catalog_ui = preload("res://interface/ComprasConstrucaoNativas.gd").new()
 var inventory_ui = preload("res://interface/InventariosNativos.gd").new()
 var evaluate: Callable
 var input_router: RefCounted
+var cycle: RefCounted
 
 func _init(executor: Callable):
 	evaluate = executor
+	cycle = preload("res://simulacao/nativa/CicloInterface.gd").new(executor)
 	input_router = preload("res://simulacao/nativa/Entrada.gd").new(executor)
 	input_router.inventory_ui=inventory_ui
 	input_router.catalog_ui=catalog_ui
@@ -19,8 +22,8 @@ func read(expression: String) -> Variant:
 func step(dt: float, events: Array) -> Dictionary:
 	for event in events:
 		if event is Dictionary:input_router.dispatch(event)
-	evaluate.call("Host.clock+="+str(dt*1000.0)+";frame(Host.clock);")
-	var state = read("({singleRoom:state.singleRoom===true,compact:state.compact===true,room:state.player.room,camera:[camera.x,camera.y,camera.zoom],modal:$('welcome').open?'welcome':$('management').open?'management':'',construction:constructionMode,container:dialogMode==='container',door:[parseFloat($('openBtn').style.left)||0,parseFloat($('openBtn').style.top)||0],notice:$('notice').style.opacity==='1'})")
+	cycle.frame(dt)
+	var state = read("({singleRoom:state.singleRoom===true,compact:state.compact===true,room:state.player.room,camera:[camera.x,camera.y,camera.zoom],modal:$('welcome').open?'welcome':$('management').open?'management':'',construction:constructionMode,recipe:dialogTab==='recipes',container:dialogMode==='container',door:[parseFloat($('openBtn').style.left)||0,parseFloat($('openBtn').style.top)||0],notice:$('notice').style.opacity==='1'})")
 	if not state is Dictionary:
 		return {}
 	var scene = read("(()=>{const painter=new Painter();RestaurantArt.draw(painter,R,state,{selectedObject,building,hover,previewError,constructionMode});return painter.commands;})()")
@@ -33,6 +36,8 @@ func step(dt: float, events: Array) -> Dictionary:
 	var ui := {}
 	if state.modal != "":
 		ui.modal = section(state.modal)
+		if state.modal=="management" and state.recipe:
+			inventory_ui.replace_panel(ui.modal,recipe_ui.render())
 		if state.modal=="management" and state.container:
 			var model = read("({state,objectId:dialogObjectId})")
 			inventory_ui.replace_panel(ui.modal,inventory_ui.render(model.state,model.objectId))
