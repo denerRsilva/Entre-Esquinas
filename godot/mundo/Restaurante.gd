@@ -1,8 +1,6 @@
 extends Node
 const STORE = "user://restaurante.json"
-const SCRIPTS = ["apresentacao","restaurant-core","comidas","cenografia","acoes"]
-var session = preload("res://simulacao/nativa/Sessao.gd").new(func(code):return RestauranteVM.executar(code))
-var native_rules = preload("res://simulacao/nativa/Regras.gd").new()
+var session = preload("res://simulacao/nativa/SessaoCompleta.gd").new()
 var events:Array=[]
 var active:=false
 var frame_data:Dictionary
@@ -13,16 +11,8 @@ var tone_cache: Dictionary = {}
 @onready var palco=$Mapa/Palco
 
 func _ready() -> void:
-	RestauranteVM.executar("@nova-sessao")
-	RestauranteVM.definir_callback(native_rules.execute)
-	var layout=FileAccess.get_file_as_string("res://simulacao/interface-base.json")
-	RestauranteVM.executar("const InterfaceBase="+layout)
-	RestauranteVM.executar("const NativePartidas="+JSON.stringify(preload("res://simulacao/nativa/Partida.gd").templates()))
 	values=read_values()
-	for source in SCRIPTS:
-		var code=FileAccess.get_file_as_string("res://simulacao/"+source+".js")
-		RestauranteVM.executar(code)
-		if source=="apresentacao": RestauranteVM.executar("Host.values="+JSON.stringify(values))
+	session.initialize(values)
 	hud.command.connect(queue_command)
 	hud.import_save.connect(import_save)
 	$Mapa.gui_input.connect(map_input)
@@ -58,15 +48,16 @@ func import_save(path:String) -> void:
 	var loaded: Variant = null
 	if parser.parse(raw)==OK:loaded=preload("res://simulacao/nativa/Salvamentos.gd").new().load_value(parser.data)
 	if loaded==null:
-		RestauranteVM.executar("tell('Arquivo de salvamento inválido.',true)")
+		session.notify("Arquivo de salvamento inválido.",true)
 		tick(0)
 		return
 	var next=values.duplicate()
 	next["entre-restaurante-12"]=raw
 	if persist(next):
 		values=next
-		RestauranteVM.executar("Host.values="+JSON.stringify(values)+";tell('Arquivo importado. Use Carregar restaurante para continuar.')")
-	else: RestauranteVM.executar("tell('Falha ao gravar o arquivo importado.',true)")
+		session.values=values.duplicate(true)
+		session.notify("Arquivo importado. Use Carregar restaurante para continuar.")
+	else: session.notify("Falha ao gravar o arquivo importado.",true)
 	tick(0)
 
 func queue_command(e:Dictionary) -> void:
@@ -89,7 +80,9 @@ func tick(dt:float) -> void:
 	if not packet.writes.is_empty():
 		var next:=values.duplicate();next.merge(packet.writes,true)
 		if persist(next):values=next
-		else:RestauranteVM.executar("Host.values="+JSON.stringify(values)+";tell('Não foi possível gravar o salvamento no disco.',true)")
+		else:
+			session.values=values.duplicate(true)
+			session.notify("Não foi possível gravar o salvamento no disco.",true)
 	palco.paint(packet)
 	hud.sync(packet)
 	for frequency in packet.sounds: play_tone(frequency)
@@ -139,11 +132,11 @@ func _notification(what:int) -> void:
 	if what==NOTIFICATION_APPLICATION_FOCUS_OUT and active:
 		focused = false
 		events.clear()
-		RestauranteVM.executar("document.hidden=true;releaseKeyboard()")
+		session.focus(false)
 		palco.pause_actors()
 	elif what==NOTIFICATION_APPLICATION_FOCUS_IN and active:
 		focused = true
-		RestauranteVM.executar("document.hidden=false")
+		session.focus(true)
 
 func _exit_tree() -> void:
 	$Sinais.stop()

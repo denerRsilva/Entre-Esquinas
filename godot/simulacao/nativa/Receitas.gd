@@ -7,7 +7,10 @@ static func recognized(object: Dictionary) -> Variant:
 	for id in RECIPES.data:
 		var needed := {}
 		for food in RECIPES.data[id].foods:needed[food if food=="arroz" else food+"_cut"]=RECIPES.data[id].foods[food]
-		if got==needed:return id
+		var matches: bool = got.size()==needed.size()
+		for item in needed:
+			if not got.has(item) or got[item]!=needed[item]:matches=false;break
+		if matches:return id
 	return null
 static func batch_quality(state: Dictionary, object: Dictionary) -> int:
 	var batch = object.get("readyBatch")

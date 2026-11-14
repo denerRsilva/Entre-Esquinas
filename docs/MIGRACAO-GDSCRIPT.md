@@ -1,3 +1,25 @@
+# Migração para GDScript — concluída
+
+O jogo não executa mais JavaScript. Foram removidos os cinco arquivos de produção, o DOM simulado, os controladores transitórios, a GDExtension RestauranteVM e todas as bibliotecas/fontes QuickJS. Os testes atuais também são GDScript; permanecem fixtures JSON para comparação com o comportamento anterior.
+
+`mundo/Restaurante.gd` inicia diretamente `SessaoCompleta.gd`, mantém a gravação atômica/backup e recebe os controles Godot. A sessão possui a partida e coordena entrada, interação, câmera, pausas, simulação, notificações e sons. `Cena.gd` compõe o cenário; os TileMaps e cenas de móveis/personagens continuam editáveis. `AdministracaoUI`, `PainelJogoNativo`, inventários, catálogo, utensílios, ícones e livro geram os controles diretamente em GDScript.
+
+A integração direta detectou uma diferença entre int/float na comparação de dicionários de ingredientes. O reconhecimento de receitas foi corrigido para comparar quantidades numericamente, preservando as combinações anteriores. O gerador aleatório nativo respeita o mesmo intervalo usado nas regras de clientes. Foram mantidos formato 12 e migração dos saves 4–12, chaves de armazenamento, posições iniciais, velocidades, preços e configurações de exportação.
+
+## Validação final
+
+- Auditoria: zero arquivos JavaScript no projeto Godot, zero consumidores da ponte, zero extensões legadas.
+- 22 suítes GDScript: paridade com as fixtures anteriores e integração dos controles, armazenamento, cozinha, atendimento, pagamentos, construção, zoom/arrasto, compras, tarefas, horários e salvamento/backup/importação.
+- Composição visual comparada com 51 cenas congeladas do desenho anterior; ícones/textos comparados em 52 casos. Câmera: 3.469 comparações; interações: 1.546. As demais matrizes incluem 2.892 operações de construção, 1.620 casos de cozinha, 202 de simulação e os casos históricos de regras/armazenamento/conservação/saves.
+- Editor/importação e jogo testados em Linux/Godot 4.6.3. O editor tentou iniciar o ADB local, bloqueado pela restrição de sockets do ambiente; a exportação Android e a verificação da assinatura concluíram.
+- APK separado: `build/Android/EntreEsquinas-gdscript.apk`. A assinatura é válida e usa a mesma chave do APK anterior. O pacote não contém JavaScript, QuickJS ou QA. O APK anterior foi preservado.
+
+Não houve teste em aparelho Android. A exportação Linux independente não foi produzida neste ambiente, que não possui o modelo `linux_debug.x86_64`; os testes Linux usaram o executável Godot. O projeto não depende desse modelo para abrir no editor.
+
+## Histórico da migração
+
+As seções seguintes são registros intermediários. Menções a pendências e à ponte descrevem aquelas etapas; o estado atual é o apresentado acima.
+
 # Migração para GDScript — em andamento
 
 Referência funcional: commit 5ae8794, APK 0.21.2-godot.18.

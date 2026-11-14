@@ -3,7 +3,7 @@
 from pathlib import Path
 import sys
 root = Path(__file__).resolve().parents[1] / 'godot'
-legacy = sorted((root / 'simulacao').glob('*.js'))
+legacy = sorted(path for path in root.rglob('*') if path.suffix in ['.js','.cjs','.mjs'] and '.godot' not in path.relative_to(root).parts)
 consumers = []
 for path in sorted(root.rglob('*.gd')):
     if '.godot' in path.parts or 'qa' in path.parts:

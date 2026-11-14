@@ -1,4 +1,7 @@
 extends RefCounted
+const UI_COMMANDS = preload("res://simulacao/nativa/ComandosInterface.gd")
+const FOOD_UI = preload("res://interface/ComidaInterface.gd")
+const SCENE = preload("res://simulacao/nativa/Cena.gd")
 const INTERACTIONS = preload("res://simulacao/nativa/Interacoes.gd")
 const CAMERA = preload("res://simulacao/nativa/Camera.gd")
 const LOGISTICS = preload("res://simulacao/nativa/Logistica.gd")
@@ -25,6 +28,11 @@ func execute(json: String) -> String:
 	var args: Array = request.get("args",[])
 	var value: Variant = null
 	match request.get("name",""):
+		"uiCommand":
+			value=UI_COMMANDS.execute(args[0],args[1],args[2])
+			return JSON.stringify({"value":value,"state":args[0]},"",true,true)
+		"foodIcon":value=FOOD_UI.icon(args[0],args[1])
+		"heldItem":value=SCENE.held(args[0],args[1])
 		"interacoes":
 			var controller = INTERACTIONS.new()
 			var state: Dictionary = args[1]

@@ -1,0 +1,343 @@
+extends RefCounted
+## Native application state and input controller; no script evaluator or DOM.
+const PARTIDA = preload("res://simulacao/nativa/Partida.gd")
+const SIM = preload("res://simulacao/nativa/Simulacao.gd")
+const MOVE = preload("res://simulacao/nativa/Movimento.gd")
+const CAMERA = preload("res://simulacao/nativa/Camera.gd")
+const INTERACT = preload("res://simulacao/nativa/Interacoes.gd")
+const BUILD = preload("res://simulacao/nativa/Construcao.gd")
+const ADMIN = preload("res://simulacao/nativa/Administracao.gd")
+const SAVE = preload("res://simulacao/nativa/Salvamentos.gd")
+const UI_COMMAND = preload("res://simulacao/nativa/ComandosInterface.gd")
+const FOOD_UI = preload("res://interface/ComidaInterface.gd")
+var rng: Callable = randf
+var state: Dictionary = PARTIDA.fresh(true,true)
+var values: Dictionary = {}
+var writes: Dictionary = {}
+var sounds: Array = []
+var camera := {"x":0.0,"y":0.0,"zoom":1.0,"mode":null}
+var viewport := {"width":960.0,"height":640.0}
+var rect := {"left":0.0,"top":60.0,"width":960.0,"height":640.0}
+var camera_level := 1.0
+var modal := "welcome"
+var mode := "general"
+var tab := "guide"
+var dialog_object: Variant = null
+var generation := 0
+var construction := false
+var drawer := false
+var building: Variant = null
+var hover: Variant = null
+var build_pointer: Variant = null
+var selected: Variant = null
+var pending: Variant = null
+var velocity: Variant = null
+var keyboard: Dictionary = {}
+var hidden := false
+var tutorial := false
+var clock := 0.0
+var notice_until := 0.0
+var menu_notice := ""
+var played_heat: Dictionary = {}
+var renderer = preload("res://simulacao/nativa/Cena.gd").new()
+var game_ui = preload("res://interface/PainelJogoNativo.gd").new()
+var admin_ui = preload("res://interface/AdministracaoUI.gd").new()
+var inventory_ui = preload("res://interface/InventariosNativos.gd").new()
+var tools_ui = preload("res://interface/UtensiliosNativos.gd").new()
+var catalog_ui = preload("res://interface/ComprasConstrucaoNativas.gd").new()
+var recipe_ui = preload("res://interface/LivroReceitasNativo.gd").new()
+var food_ui = FOOD_UI.new()
+var root_actions: Dictionary = {}
+func initialize(saved: Dictionary) -> void:
+	values=saved.duplicate(true)
+	var level: float = str(values.get("entre-camera-zoom","1")).to_float()
+	if level>=0.7 and level<=2:camera_level=level
+	update_camera()
+func release_keyboard() -> void:keyboard.clear();velocity=null
+func focus(value: bool) -> void:hidden=not value;release_keyboard()
+func update_camera() -> void:camera=CAMERA.update(state,camera,viewport,camera_level,construction)
+func set_zoom(value: float) -> void:
+	camera_level=CAMERA.level(value);values["entre-camera-zoom"]=str(camera_level);writes["entre-camera-zoom"]=str(camera_level);update_camera()
+func notify(message: String,bad: bool = false) -> void:
+	state.message=message;notice_until=clock+6
+	if modal=="management":menu_notice=message
+func reset_view() -> void:
+	renderer.facing.clear();played_heat.clear();pending=null;velocity=null;keyboard.clear();generation+=1
+func open_dialog(next: String) -> void:
+	if next in ["cooking","plating","inventory"]:return
+	if next=="build":enter_construction();return
+	if construction:return
+	pending=null;release_keyboard()
+	var kitchen = INTERACT.KITCHEN.new()
+	if next=="computer" and not INTERACT.LOGISTICS.utility_near(state,"computer",kitchen):notify("Aproxime-se do computador.",true);return
+	mode=next;tab="container" if next=="container" else "supplier" if next=="computer" else "camera" if next=="options" else "recipes" if next=="recipes" else "shifts"
+	modal="management";menu_notice="";generation+=1
+func close_dialog() -> void:modal="";release_keyboard()
+func open_inventory(id: Variant) -> void:
+	var object = BUILD.find(state.objects,id)
+	var kitchen = INTERACT.KITCHEN.new();kitchen.manual_moving=velocity!=null and velocity.get("moving",false)
+	if object==null or not object.has("inventory") or not kitchen.near(state,object):notify("Aproxime-se do objeto.",true);return
+	dialog_object=id;open_dialog("container")
+func enter_construction() -> void:
+	if state.open or state.closing or not state.customers.is_empty():notify("Conclua o serviço antes de construir.",true);return
+	if state.player.room!="restaurant":notify("Entre no restaurante para construir.",true);return
+	pending=null;release_keyboard();selected=null;construction=true;modal="";drawer=true;mode="build";tab="catalog";generation+=1;update_camera()
+func stop_build(reopen: bool = true) -> void:
+	release_keyboard();building=null;hover=null
+	if reopen and construction:drawer=true;generation+=1
+func begin_build(type: String,moving: Variant = null) -> void:
+	if not construction:return
+	pending=null;release_keyboard()
+	if state.open or not state.customers.is_empty():notify("Conclua o serviço antes de montar.",true);return
+	modal="";drawer=false
+	var object = BUILD.find(state.objects,moving) if moving!=null else null
+	building={"type":type,"rot":object.rot if object!=null else 0,"moving":moving};hover=null;state.player.goal=null
+func preview_error() -> Variant:
+	if building==null or hover==null:return null
+	var candidate := {"type":building.type,"room":BUILD.CATALOG.data[building.type].room,"x":hover.x,"y":hover.y,"rot":building.rot,"id":building.moving if building.moving!=null else state.serial}
+	if candidate.room!=state.player.room:return "Vá ao setor indicado para colocar este objeto."
+	var objects: Array = []
+	for object in state.objects:
+		if not renderer.same(object.id,building.moving):objects.append(object)
+	objects.append(candidate)
+	return BUILD.layout_error(state,objects)
+func interact(operation: String,args: Array = []) -> Variant:
+	var controller = INTERACT.new();controller.pending=pending;controller.selected=selected;controller.building=building!=null
+	controller.kitchen.manual_moving=velocity!=null and velocity.get("moving",false);controller.service.manual_moving=controller.kitchen.manual_moving
+	var result: Variant = null
+	match operation:
+		"pointer":controller.pointer_down(state,args[0])
+		"process":controller.process(state)
+		"physical":result=controller.physical(state,BUILD.find(state.objects,args[0]),args[1])
+	pending=controller.pending;selected=controller.selected
+	if controller.clear_input:velocity=null
+	for effect in controller.effects:
+		match effect.kind:
+			"tell":notify(effect.message,effect.bad)
+			"dialog":open_dialog(effect.mode)
+			"inventory":open_inventory(effect.id)
+			"beginBuild":begin_build(effect.type,effect.moving)
+			"capture":build_pointer={"x":effect.x,"y":effect.y}
+			"preview":building.locked=true;hover={"x":effect.x,"y":effect.y}
+	return result
+func keyboard_move() -> void:
+	var dx := int(keyboard.get("arrowright",false) or keyboard.get("d",false))-int(keyboard.get("arrowleft",false) or keyboard.get("a",false))
+	var dy := int(keyboard.get("arrowdown",false) or keyboard.get("s",false))-int(keyboard.get("arrowup",false) or keyboard.get("w",false))
+	if dx!=0 or dy!=0:pending=null
+	velocity=MOVE.input(state.player,velocity,dx,dy)
+func pointer(event: Dictionary) -> void:
+	if not modal.is_empty():return
+	var point := {"clientX":float(event.get("x",0)),"clientY":float(event.get("y",0))}
+	if not is_finite(point.clientX) or not is_finite(point.clientY):return
+	match event.phase:
+		"down":
+			pending=null;release_keyboard()
+			interact("pointer",[{"world":CAMERA.world_pointer(point,rect,viewport,camera),"clientX":point.clientX,"clientY":point.clientY,"pointerId":1,"construction":construction,"building":building}])
+		"up","cancel":build_pointer=null
+		"move":
+			if not construction:return
+			if build_pointer!=null and event.get("drag",false):
+				camera=CAMERA.drag(camera,point,build_pointer,rect,viewport);build_pointer={"x":point.clientX,"y":point.clientY};update_camera()
+				if building!=null:building.locked=false
+			if building!=null and not building.get("locked",false):
+				var world := CAMERA.world_pointer(point,rect,viewport,camera);hover={"x":floor(world.x),"y":floor(world.y)}
+func key(event: Dictionary) -> void:
+	var name: String = event.key;var down: bool = event.down
+	if name=="escape" and down and modal=="management":close_dialog();return
+	if not modal.is_empty():return
+	var movement: bool = name in ["arrowup","arrowdown","arrowleft","arrowright","w","a","s","d"]
+	if construction:
+		if not down:return
+		if name=="escape":
+			if building!=null:stop_build()
+			elif drawer:drawer=false
+			else:root_action("exitConstruction")
+		elif movement:camera=CAMERA.pan_key(camera,name);update_camera()
+		elif name=="r" and building!=null:building.rot=(int(building.rot)+1)%4
+		return
+	if name=="escape" and down:stop_build();return
+	if name=="e" and down:
+		if game_ui.controls.actions.has(game_ui.first_context):world_action(game_ui.controls.actions[game_ui.first_context])
+		return
+	if movement:
+		if down:keyboard[name]=true
+		else:keyboard.erase(name)
+		keyboard_move()
+func request_service() -> void:
+	if building!=null or state.closing or state.clock.ending or state.player.room not in ["restaurant","street"]:return
+	pending=null;release_keyboard()
+	var door := {"room":"street","x":13,"y":6} if state.player.room=="street" else {"room":"restaurant","x":7,"y":14}
+	var service = INTERACT.SERVICE.new()
+	if not service.near(state.player,door):
+		var options: Array = [door]
+		for dir in MOVE.DIRS:options.append({"room":door.room,"x":door.x+dir.x,"y":door.y+dir.y})
+		var reachable: Array = []
+		for point in options:
+			if not MOVE.blocked(state,point.room,point.x,point.y,state.player) and MOVE.MAP.route(state,point.room,Vector2i(state.player.x,state.player.y),Vector2i(point.x,point.y),state.player)!=null:reachable.append(point)
+		for i in range(1,reachable.size()):
+			var item: Dictionary = reachable[i];var j := i-1
+			while j>=0 and absf(reachable[j].x-state.player.x)+absf(reachable[j].y-state.player.y)>absf(item.x-state.player.x)+absf(item.y-state.player.y):reachable[j+1]=reachable[j];j-=1
+			reachable[j+1]=item
+		if reachable.is_empty():notify("Não há passagem até a plaquinha.",true);return
+		MOVE.go(state.player,reachable[0])
+	pending={"kind":"serviceSign","door":door,"wasOpen":state.open,"period":state.period,"until":state.time+30};interact("process")
+func world_action(action: Dictionary) -> void:
+	if not modal.is_empty() or construction:return
+	var result: Variant = null
+	match action.kind:
+		"sign":request_service()
+		"priority":UI_COMMAND.execute(state,"priority",[action.id])
+		"portal":velocity=null;MOVE.go(state.player,{"room":action.room,"x":action.x,"y":action.y})
+		"computer":open_dialog("computer")
+		"receiving":notify(INTERACT.LOGISTICS.collect(state,INTERACT.KITCHEN.new()))
+		"inventory":open_inventory(action.id)
+		"physical":interact("physical",[action.id,action.command])
+		"customer":INTERACT.SERVICE.new().interact(state,action.id);notify(state.message)
+		"wash":result=INTERACT.KITCHEN.new().wash(state,action.id)
+		"clean":result=INTERACT.KITCHEN.new().collect_dirty(state,action.id)
+	if result!=null:notify(result.message,not result.ok)
+func parse_save(raw: String) -> Variant:
+	var draws: Array = []
+	while true:
+		var result: Dictionary = SAVE.new().parse_text(raw,draws)
+		if result.get("needsRandom",false):draws.append(rng.call());continue
+		return result.get("value")
+	return null
+func load_state(next: Dictionary) -> void:
+	state=next;state.cookActive=false;building=null;selected=null;reset_view();update_camera()
+func save_game() -> void:
+	var raw = SAVE.serialize(state)
+	if raw==null:notify("Não foi possível salvar: Estado inválido",true);return
+	values["entre-restaurante-12"]=raw;writes["entre-restaurante-12"]=raw;notify("Restaurante salvo neste computador.")
+func load_game() -> void:
+	var raw := ""
+	for version in ["12","11","10","09","07","06","05","04"]:
+		if not str(values.get("entre-restaurante-"+version,"")).is_empty():raw=values["entre-restaurante-"+version];break
+	var next = parse_save(raw)
+	if next==null:notify("Não foi possível carregar: salvamento ausente ou inválido. Estado atual preservado.",true);return
+	load_state(next);notify("Progresso carregado. Preparos em andamento continuam; empratamento exige proximidade da bancada.")
+func admin_action(action: Dictionary,value: Variant) -> void:
+	if modal!="management" or mode!=action.mode or tab!=action.tab:return
+	var k: String = action.key;var result: Variant = null
+	match action.kind:
+		"quantity":admin_ui.form.quantities[k]=value
+		"quality":admin_ui.form.qualities[k]=int(value)
+		"hours":admin_ui.form.hours[action.index][action.field]=int(value)
+		"time":admin_ui.form.time=int(value)
+		"close":close_dialog()
+		"tab":
+			if k=="build":open_dialog("build")
+			else:tab=k;generation+=1;menu_notice=""
+		"zoom":set_zoom(1 if k=="reset" else camera_level+(-0.1 if k=="out" else 0.1));generation+=1;menu_notice=""
+		"applyHours":result=ADMIN.set_hours(state,admin_ui.form.hours);generation+=int(result.ok)
+		"advance":result=ADMIN.test_clock(state,admin_ui.form.time);generation+=1
+		"menu","price","task":result=UI_COMMAND.execute(state,action.kind,[k,value])
+		"clear":result=UI_COMMAND.execute(state,"clear",[]);building=null;hover=null;selected=null;dialog_object=null;reset_view()
+		"purchase":
+			var count: Variant = admin_ui.form.quantities[k];var quality := int(admin_ui.form.qualities[k])
+			var ok := ADMIN.purchase(state,k,count,quality)
+			if ok:generation+=1
+			notify(admin_ui.number(count)+" "+INTERACT.SERVICE.INV.ITEMS.data[k].name+" encomendados por "+admin_ui.money(count*INTERACT.SERVICE.INV.ITEMS.data[k].cost*[1,1.25,1.5,2][quality])+". A entrega avança ao voltar ao jogo." if ok else "Informe de 1 a 100 unidades e confira o saldo.",not ok)
+		"save":save_game()
+		"load":load_game()
+	if result!=null and result.get("message")!=null:notify(result.message,not result.ok)
+func root_action(kind: String) -> void:
+	match kind:
+		"furnished":state=PARTIDA.furnished(true,true);building=null;hover=null;selected=null;reset_view();modal="";set_zoom(camera_level)
+		"empty":close_dialog()
+		"tutorial":tutorial=not tutorial
+		"management":open_dialog("general")
+		"options":open_dialog("options")
+		"recipes":open_dialog("recipes")
+		"zoomOut":set_zoom(camera_level-0.1)
+		"zoomIn":set_zoom(camera_level+0.1)
+		"toggleCatalog":drawer=not drawer
+		"exitConstruction":stop_build(false);construction=false;build_pointer=null;update_camera()
+		"rotate":if building!=null:building.rot=(int(building.rot)+1)%4
+		"cancelBuild":stop_build()
+		"confirm":
+			if building==null or hover==null:return
+			var result := BUILD.place(state,building.type,hover.x,hover.y,building.rot,building.moving)
+			if not result.ok:notify(result.error,true);return
+			stop_build();notify("Objeto instalado. As rotas foram atualizadas.")
+		"store":
+			if building==null or building.moving==null:return
+			var result := BUILD.remove(state,building.moving)
+			if not result.ok:notify(result.error,true);return
+			stop_build();notify("Objeto guardado e valor devolvido.")
+func widget(event: Dictionary) -> void:
+	var path: String = event.get("path","")
+	if root_actions.has(path):root_action(root_actions[path]);return
+	if admin_ui.controls.actions.has(path):admin_action(admin_ui.controls.actions[path],event.get("value"));return
+	if game_ui.controls.actions.has(path):world_action(game_ui.controls.actions[path]);return
+	if inventory_ui.actions.has(path) and modal=="management" and mode=="container":
+		var action: Dictionary = inventory_ui.actions[path];var kitchen = INTERACT.KITCHEN.new()
+		var result: Dictionary = kitchen.recover(state,action.index) if action.kind=="recover" else kitchen.storage(state,action.id,action.kind,action.get("index",0))
+		if result.ok and action.kind!="put":close_dialog()
+		notify(result.message,not result.ok);return
+	if tools_ui.controls.actions.has(path) and modal=="management" and mode=="computer" and tab=="tools":
+		var ok := ADMIN.buy_tool(state,tools_ui.controls.actions[path].item);generation+=1;notify("Item nas mãos." if ok else "Confira o saldo e libere as mãos.",not ok);return
+	if catalog_ui.controls.actions.has(path) and construction and drawer:begin_build(catalog_ui.controls.actions[path].type)
+func button(title: String,action: String,disabled: bool = false,id: String = "",art: Array = []) -> Dictionary:
+	var path := "nativo:sessao:"+action
+	if not disabled:root_actions[path]=action
+	return {"tag":"button","text":title,"label":title,"path":path,"disabled":disabled,"id":id,"art":art}
+func node(tag: String,children: Array,id: String = "",cls: String = "") -> Dictionary:return {"tag":tag,"children":children,"id":id,"cls":cls}
+func text(value: String) -> Dictionary:return {"tag":"text","text":value}
+func label(value: String) -> Dictionary:return node("p",[text(value)])
+func ui() -> Dictionary:
+	root_actions.clear();game_ui.controls.actions.clear();admin_ui.controls.actions.clear();inventory_ui.actions.clear();tools_ui.controls.actions.clear();catalog_ui.controls.actions.clear()
+	if modal=="welcome":
+		var items: Array = [node("h1",[text("Uma nova esquina.")]),label("Você está jogando a versão 0.21.2"),label("Sua taverna está pronta. Vamos cozinhar?")]
+		if tutorial:items.append(label("Retire um ingrediente da geladeira para as mãos. Corte frango ou legumes na mesa de preparo e leve à panela. Cozinhe, apoie a panela na mesa de cozinha, emprate e sirva. Você só pode carregar uma unidade nas mãos; não há mochila."))
+		items.append(node("div",[button("Começar na taverna","furnished"),button("Começar vazio","empty"),button("Fechar tutorial" if tutorial else "Tutorial","tutorial")],"","welcomeActions"))
+		return {"modal":food_ui.decorate(node("dialog",items,"welcome"))}
+	if modal=="management":
+		var panel: Variant = null
+		if mode=="container":panel=inventory_ui.render(state,dialog_object)
+		elif mode=="recipes":panel=recipe_ui.render()
+		elif mode=="computer" and tab=="tools":panel=tools_ui.render(state)
+		return {"modal":admin_ui.render(state,{"mode":mode,"tab":tab,"object":dialog_object,"camera":camera_level,"generation":generation,"notice":menu_notice},panel)}
+	if construction:
+		var result := {"catalog":node("div",[button("Construção","toggleCatalog")],"constructionControls")}
+		if drawer:result.drawer=node("div",[node("div",[node("b",[text("Modo construção")]),button("Voltar ao jogo","exitConstruction")],"","constructionHead"),label("Jogo pausado • arraste o cenário para explorar"),label("Disponível: $%.2f"%state.cash),catalog_ui.render(state),label(state.message)],"constructionDrawer")
+		if building!=null:
+			var error = preview_error()
+			result.build=node("div",[node("b",[text(("Mover: " if building.moving!=null else "Instalar: ")+BUILD.CATALOG.data[building.type].name)]),label(error if error!=null else "Toque em uma célula do setor indicado." if hover==null else "Posição válida. Arraste o mapa para explorar. A seta da cadeira aponta para a mesa."),node("div",[button("Girar ↻","rotate"),button("Confirmar posição","confirm",hover==null or error!=null)]+([button("Guardar e reembolsar","store")] if building.moving!=null else [])+[button("Cancelar","cancelBuild")],"","buildActions")],"buildBar")
+		return result
+	var door := CAMERA.door(state,camera,viewport,rect,false,false,false)
+	var result: Dictionary = game_ui.render(state,{"selectedObject":selected,"constructionMode":false,"modal":false,"building":building,"doorHidden":door.hidden},velocity)
+	for key in ["ordersHud","kitchenStatus"]:result[key]=food_ui.decorate(result[key])
+	result.dock=node("div",[button("Gestão","management",false,"menuBtn",game_ui.icon("note")),button("Opções","options",false,"optionsBtn",game_ui.icon("options")),button("Livro de receitas","recipes")],"dock")
+	result.actions=node("div",[button("−","zoomOut",camera_level<=0.7),button("+","zoomIn",camera_level>=2)],"actions")
+	if clock<=notice_until:result.notice=food_ui.decorate(node("div",[text(state.message)],"notice"))
+	return result
+func step(dt: float,events: Array) -> Dictionary:
+	for event in events:
+		match event.get("kind",""):
+			"widget":widget(event)
+			"pointer":pointer(event)
+			"key":key(event)
+			"blur":release_keyboard()
+	clock+=dt
+	if not hidden and (modal.is_empty() or (modal=="management" and mode=="container")) and not construction:
+		var old_message: String = state.message;var remaining := maxf(0,dt)
+		while remaining>1e-9:
+			var slice := minf(0.08,remaining)
+			if modal.is_empty():keyboard_move()
+			var simulation = SIM.new();simulation.velocity=velocity;simulation.service.random_source=rng
+			simulation.step(state,slice);velocity=simulation.velocity
+			if pending!=null:interact("process")
+			remaining=maxf(0,remaining-slice)
+		if state.message!=old_message:notice_until=clock+4.5
+		for object in state.objects:
+			if object.get("readyBatch")==null:continue
+			var tone: String = str(object.readyBatch.doneAt)+":"+str(object.get("heatStage"))
+			if played_heat.get(object.id)==tone:continue
+			played_heat[object.id]=tone;sounds.append(660 if object.get("heatStage")=="ready" else 440 if object.get("heatStage")=="over" else 220)
+	update_camera()
+	var scene := renderer.draw(state,{"selectedObject":selected,"constructionMode":construction,"building":building,"hover":hover},velocity)
+	var door := CAMERA.door(state,camera,viewport,rect,construction,not modal.is_empty(),modal=="welcome")
+	var packet := {"singleRoom":state.singleRoom,"compact":state.compact,"room":state.player.room,"camera":[camera.x,camera.y,camera.zoom],"scene":scene,"ui":ui(),"modal":modal,"liveInventory":modal=="management" and mode=="container","construction":construction,"door":[door.left,door.top],"writes":writes.duplicate(true),"sounds":sounds.duplicate()}
+	writes.clear();sounds.clear()
+	return packet

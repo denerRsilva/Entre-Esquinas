@@ -1,21 +1,16 @@
-extends "res://qa/UIBase.gd"
+extends "res://qa/BaseNativa.gd"
 func run():
-	g=load("res://mundo/Restaurante.tscn").instantiate();root.add_child(g);g.set_process(false)
-	await layout()
-	var phases = load("res://qa/referencia-migracao/migracao-fases.json").data
-	phases+=load("res://qa/referencia-migracao/estado-cozinha.json").data
-	for test in phases:
-		var request := JSON.stringify({"name":test.name,"args":test.args})
-		var actual = JSON.parse_string(js("NativeRule("+JSON.stringify(request)+")"))
-		check(actual==test.expected,"Fase nativa "+test.name)
+	var rules = preload("res://simulacao/nativa/Regras.gd").new()
+	var phases = load("res://qa/referencia-migracao/migracao-fases.json").data;phases+=load("res://qa/referencia-migracao/estado-cozinha.json").data
+	for test in phases:check(equivalent(JSON.parse_string(rules.execute(JSON.stringify({"name":test.name,"args":test.args},"",true,true))),test.expected),test.name)
 	var tests = load("res://qa/referencia-migracao/migracao-saves.json").data
 	for test in tests:
-		js("globalThis.migrationInput="+JSON.stringify(test.input))
-		var before := js("JSON.stringify(migrationInput)")
-		js("globalThis.migrationDraws=0")
-		var actual = JSON.parse_string(js("JSON.stringify(R.migrateSave(migrationInput,()=>{migrationDraws++;return .5}))"))
-		if test.has("draws"):check(int(js("migrationDraws"))==test.draws,"Sorteios preservados")
-		check(actual==test.expected,test.label)
-		check(js("JSON.stringify(migrationInput)")==before,"Entrada preservada")
-	print("CASOS: ",tests.size()+phases.size()," FALHAS: ",failures)
-	g.queue_free();await process_frame;quit(1 if failures else 0)
+		var before: Dictionary = test.input.duplicate(true) if test.input is Dictionary else {};var draws: Array = [];var actual: Variant = null
+		while true:
+			var result = preload("res://simulacao/nativa/Salvamentos.gd").new().convert(test.input,draws)
+			if not result.get("needsRandom",false):actual=result.value;break
+			draws.append(0.5)
+		if test.has("draws"):check(draws.size()==test.draws,"Sorteios preservados")
+		check(equivalent(actual,test.expected),test.label)
+		if test.input is Dictionary:check(equivalent(test.input,before),"Entrada preservada")
+	print("CASOS: ",tests.size()+phases.size()," FALHAS: ",failures);quit(1 if failures else 0)

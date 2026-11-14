@@ -123,7 +123,9 @@ func render(d: Dictionary, parent: Control) -> void:
 		n.disabled = d.disabled
 		for i in d.options.size():
 			n.add_item(str(d.options[i][0]))
-			if str(d.options[i][1])==str(d.value): n.select(i)
+			var option: Variant = d.options[i][1]
+			var numeric: bool = (option is int or option is float) and (d.value is int or d.value is float)
+			if (float(option)==float(d.value)) if numeric else (str(option)==str(d.value)):n.select(i)
 		n.item_selected.connect(func(i):send.call({"kind":"widget","path":d.path,"value":d.options[i][1]}))
 		parent.add_child(n)
 		return

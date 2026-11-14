@@ -18,8 +18,3 @@ func replace_panel(node: Dictionary,panel: Dictionary) -> void:
 	for i in children.size():
 		if children[i].get("id")=="constructionPanel":children[i]=panel
 		else:replace_panel(children[i],panel)
-func dispatch(path: String,execute: Callable) -> bool:
-	if not controls.actions.has(path):return false
-	var type: String = controls.actions[path].type
-	execute.call("if(constructionMode&&!$('constructionDrawer').hidden)beginBuild("+JSON.stringify(type)+")")
-	return true

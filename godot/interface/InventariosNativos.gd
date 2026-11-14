@@ -1,6 +1,5 @@
 extends RefCounted
-## Native inventory view and native action registry. Remaining kitchen rules are
-## called through the temporary simulation boundary, never through DOM widgets.
+## Native inventory view. SessaoCompleta executes the registered actions.
 const ITEMS = preload("res://simulacao/nativa/itens.json")
 const FOOD = preload("res://simulacao/nativa/Alimentos.gd")
 var actions: Dictionary = {}
@@ -55,10 +54,3 @@ func replace_panel(node: Dictionary,panel: Dictionary) -> void:
 	for index in children.size():
 		if children[index].get("id")=="panel":children[index]=panel
 		else:replace_panel(children[index],panel)
-func dispatch(path: String,execute: Callable) -> bool:
-	if not actions.has(path):return false
-	var action: Dictionary = actions[path]
-	# Revalidate visibility in addition to the current native registry.
-	var expression := "R.recoverHand(state,"+str(action.get("index",0))+")" if action.kind=="recover" else "R.handStorage(state,"+str(int(action.id))+","+JSON.stringify(action.kind)+","+str(action.get("index",0))+")"
-	execute.call("(()=>{if(!$('management').open||dialogMode!=='container')return;const result="+expression+";if(result.ok&&"+str(action.kind!="put").to_lower()+")$('management').close();tell(result.message,!result.ok)})()")
-	return true

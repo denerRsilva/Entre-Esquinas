@@ -1,4 +1,4 @@
-extends "res://qa/AtendimentoNativo.gd"
+extends "res://qa/BaseNativa.gd"
 func run():
 	var rules = preload("res://simulacao/nativa/Regras.gd").new()
 	var tests = load("res://qa/referencia-migracao/camera.json").data

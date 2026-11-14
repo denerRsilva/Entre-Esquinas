@@ -1,0 +1,30 @@
+extends "res://qa/BaseInterfaceNativa.gd"
+func run():
+	await start_game()
+	g.session.PARTIDA.add_object(g.session.state,"computer",20,11);g.session.PARTIDA.add_object(g.session.state,"receiving",20,13)
+	g.session.state.player.x=20;g.session.state.player.y=10;g.session.open_dialog("computer");g.tick(0)
+	widget("nativo:admin:quantity:frango",5);widget("nativo:admin:quality:frango",2);widget("nativo:admin:purchase:frango")
+	check(g.session.state.deliveries.size()==1 and g.session.state.deliveries[0].quality==2 and g.session.state.cash==1470,"Compra preserva quantidade, qualidade e preço")
+	check(await press("Utensílios"),"Loja nativa de utensílios")
+	widget("nativo:utensilio:pot");check(g.session.state.player.hand.item=="pot" and g.session.state.cash==1445,"Compra da panela vai para mãos")
+	check(await press("Cardápio e preços"),"Cardápio nativo")
+	widget("nativo:admin:price:frangoArroz",24.25);widget("nativo:admin:menu:sopa",false)
+	check(g.session.state.prices.frangoArroz==24.25 and not g.session.state.menu.sopa,"Preço e oferta aplicados nativamente")
+	check(await press("Voltar ao jogo"),"Fechar computador")
+	advance(5.1)
+	check(g.session.ADMIN.receiving_count(g.session.state,"frango",2)==5,"Entrega avança ao retornar ao jogo")
+	g.session.open_dialog("general");g.tick(0)
+	var correct_hour := false
+	for control in g.hud.find_children("*","OptionButton",true,false):
+		if control.tooltip_text=="Almoço — Início":correct_hour=control.get_item_text(control.selected)=="11:00"
+	check(correct_hour,"Seleção inicial de horário numérico preservada")
+	widget("nativo:admin:hours:0:start",670);check(await press("Aplicar horários"),"Aplicar horários")
+	check(g.session.state.serviceHours[0].start==670,"Horário preservado")
+	check(await press("Equipe"),"Equipe nativa");widget("nativo:admin:task:worker2","waiter")
+	check(g.session.state.workers[0].task=="waiter","Atribuição ao garçom")
+	check(await press("Voltar ao jogo"),"Fechar gestão")
+	g.session.open_dialog("options");g.session.tab="test";g.session.generation+=1;g.tick(0)
+	var time: float = g.session.state.time;widget("nativo:admin:time:",660)
+	check(await press("Avançar horário") and g.session.state.clock.minute==660 and g.session.state.time==time,"Avanço de horário não acelera processos")
+	check(g.session.SAVE.VALIDATOR.valid(g.session.state),"Estado administrativo válido")
+	await finish()

@@ -6,11 +6,13 @@ const BUILD = preload("res://simulacao/nativa/Construcao.gd")
 const INV = preload("res://simulacao/nativa/Inventario.gd")
 const RECIPES = preload("res://simulacao/nativa/receitas.json")
 const CONFIG = preload("res://simulacao/nativa/clientes.json")
+var random_source: Callable
 var random_values: Array = []
 var manual_moving := false
 var random_index := 0
 var needs_random := false
 func draw() -> float:
+	if random_source.is_valid():return clampf(random_source.call(),0,1-2.220446049250313e-16)
 	if random_index>=random_values.size():needs_random=true;return 0
 	var value: float = random_values[random_index]
 	random_index+=1

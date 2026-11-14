@@ -1,4 +1,4 @@
-extends "res://qa/AtendimentoNativo.gd"
+extends "res://qa/BaseNativa.gd"
 func patched(base: Dictionary,changes: Array) -> Dictionary:
 	var state: Dictionary = base.duplicate(true)
 	for change in changes:

@@ -1,3 +1,7 @@
+# Migração concluída para GDScript
+
+O projeto atual e o APK `EntreEsquinas-gdscript.apk` usam somente GDScript. Veja [o relatório](../docs/MIGRACAO-GDSCRIPT.md) e [os testes atuais](qa/LEIA-ME.md). Os registros antigos de versões abaixo são históricos; a validação desta migração foi executada na Godot 4.6.3 Standard.
+
 # Fluxo atual: somente as mãos
 
 O jogador não tem inventário nem barra de slots. No início mobiliado, ingredientes ficam na geladeira, uma panela no fogão e pratos na mesa de cozinha. Frango e legumes podem ser cortados. Consulte [COZINHA-FISICA.md](COZINHA-FISICA.md) para controles, migração e testes. Os registros abaixo descrevem entregas anteriores.
@@ -23,7 +27,7 @@ Regras e decisões de design: [GDD consolidado](../GDD.md).
 
 ## Abrir e jogar
 
-1. Extraia o ZIP por completo. Mantenha a pasta `nativo` junto ao projeto.
+1. Extraia o ZIP por completo. O jogo usa somente GDScript e os recursos normais da Godot.
 2. No gerenciador da Godot, escolha **Importar**, selecione `project.godot` e abra o projeto. Aguarde a primeira importação das texturas.
 3. Pressione **F5**. **Começar na taverna** abre o restaurante equipado. **Começar vazio** inicia a montagem do zero. O botão **Tutorial** exibe os primeiros passos.
 
@@ -46,15 +50,15 @@ A alternativa usa **arte/cozinheira-12-poses-64.png**, com 3 colunas, 4 linhas e
 | Piso e paredes visuais do salão | `mundo/Salao.tscn`, com TileSet de 40 px. A unidade original do projeto foi preservada |
 | Fachada e rua | `mundo/Rua.tscn` |
 | Moldura, cores e botões | `interface/Restaurante.tres`; controles da interface em `interface/` |
-| Receitas, preços, capacidade, colisões, ocupação e passagem entre cômodos | `simulacao/restaurant-core.js` |
-| Mapeamento de compras, ações, menus e atalhos | `simulacao/acoes.js` |
+| Receitas, preços, capacidade, colisões, ocupação e passagem entre cômodos | `simulacao/nativa/` |
+| Mapeamento de compras, ações, menus e atalhos | `simulacao/nativa/SessaoCompleta.gd` e `interface/` |
 | Direções, ordenação no cenário e vínculo com as cenas de arte | `mundo/Palco.gd` |
 
 Ao mudar a planta, atualize também as regras de circulação e a disposição do cenário mobiliado. Pintar uma parede visual na camada de tiles, por si só, só altera sua aparência.
 
 ## Como o jogo roda
 
-A Godot cuida da janela, dos eventos, do mapa, dos sprites animados, dos controles, do áudio e da gravação local. A simulação da versão publicada 0.21.2 executa dentro do próprio processo da Godot, por meio da extensão **RestauranteVM**, com QuickJS compilado para Windows e Linux x86-64. O projeto abre no editor padrão, sem instalar Node.js ou iniciar servidor. As fontes para recompilar a extensão estão em `nativo/fonte/`.
+A Godot executa todo o jogo em GDScript. `mundo/Restaurante.gd` cuida do ciclo de execução e da gravação em disco. `simulacao/nativa/SessaoCompleta.gd` mantém a partida, entrada, câmera e estado das janelas; os módulos de regras ficam na mesma pasta. A interface usa controles nativos, sem navegador, DOM, Node.js ou extensão QuickJS.
 
 A origem usada na migração foi o commit `f8781d25ee5747ad57b39db8f947ee1328892f53` do projeto publicado. A rua e as conversas mantêm o alcance da demonstração 0.21.2. O protótipo HTML foi removido; o desenvolvimento ativo é exclusivamente Godot.
 
@@ -62,7 +66,7 @@ A origem usada na migração foi o commit `f8781d25ee5747ad57b39db8f947ee1328892
 
 A versão Godot grava em `user://restaurante.json` e preserva uma cópia da gravação anterior. Para trazer um progresso do navegador, o botão **Importar salvamento (.json)** recebe o JSON do estado do restaurante. Em seguida use **Carregar restaurante**. O progresso do site e o do PC são independentes.
 
-Os perfis de exportação **Windows PC** e **Linux PC** estão configurados. Para gerar um executável no seu computador, instale os modelos de exportação correspondentes à Godot 4.6.3. Esta entrega contém o projeto de edição e as bibliotecas nativas para essas duas plataformas.
+Os perfis de exportação **Windows PC** e **Linux PC** estão configurados. Para gerar um executável no seu computador, instale os modelos de exportação correspondentes à Godot 4.6.3. Não há bibliotecas de extensão para recompilar; instale os modelos de exportação da versão da Godot usada.
 
 ## Validação
 

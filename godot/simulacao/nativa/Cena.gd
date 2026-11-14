@@ -1,0 +1,201 @@
+extends RefCounted
+## Composes world details around the native TileMaps, furniture and characters.
+const MOVE = preload("res://simulacao/nativa/Movimento.gd")
+const BUILD = preload("res://simulacao/nativa/Construcao.gd")
+const STORE = preload("res://simulacao/nativa/Armazenamento.gd")
+const INV = preload("res://simulacao/nativa/Inventario.gd")
+const FOOD = preload("res://simulacao/nativa/Alimentos.gd")
+const RECIPES = preload("res://simulacao/nativa/Receitas.gd")
+const SERVICE = preload("res://simulacao/nativa/Atendimento.gd")
+const PORTALS = {"restaurant":[{"x":7,"y":14,"name":"Sair para a cidade"}],"street":[{"x":12,"y":5,"name":"Entrar no restaurante"}],"stock":[{"x":21,"y":14,"name":"Voltar à cozinha"}]}
+var commands: Array = []
+var alpha := 1.0
+var facing: Dictionary = {}
+var velocity: Variant = null
+var identities: Dictionary = {}
+var service = SERVICE.new()
+static func same(a: Variant,b: Variant) -> bool:
+	if (a is String)!=(b is String):return false
+	return a==b
+func box(x: float,y: float,w: float,h: float,color: String) -> void:commands.append(["rect",FOOD.pixel(x),FOOD.pixel(y),FOOD.pixel(w),FOOD.pixel(h),color,alpha])
+func text(value: String,x: float,y: float,size: int,color: String,align: String = "center") -> void:commands.append(["text",FOOD.pixel(x),FOOD.pixel(y),value,size,color,align])
+func label(value: String,x: float,y: float,color: String = "#25473d") -> void:
+	var width := (value.to_utf16_buffer().size()/2)*10*0.60+12
+	box(x-width/2,y-10,width,16,color);text(value,x,y+2,10,"#fff0ce")
+func food(item: String,x: float,y: float,w: float,h: float) -> bool:
+	if FOOD.food_key(item) not in FOOD.KEYS:return false
+	commands.append(["food",item,x,y,w,h,1,1,0,0,alpha]);return true
+func star(quality: int,x: float,y: float,size: float) -> void:
+	if quality==0:return
+	var points: Array = []
+	for i in 10:
+		var angle := -PI/2+i*PI/5
+		var radius := size*(0.22 if i%2 else 0.5)
+		points.append([x+size/2+cos(angle)*radius,y+size/2+sin(angle)*radius])
+	commands.append(["poly",points,["","#c5c9cc","#ffd14c","#c286ff"][quality]])
+func plate(x: float,y: float,recipe: Variant = null,dirty: bool = false,quality: int = 0) -> void:
+	if not dirty and recipe!=null and food(recipe,x-10,y-7,20,14):star(quality,x+3,y-8,8);return
+	box(x-7,y-3,14,6,"#aa9a76" if dirty else "#e4d5aa");box(x-5,y-5,10,10,"#cbb78b" if dirty else "#fff4d5")
+	if dirty:box(x-3,y,3,2,"#805332");box(x+2,y-2,2,2,"#9a6434")
+func pot(x: float,y: float,filled: bool,active: bool,time: float) -> void:
+	if active:box(x-8,y+3,16,4,"#f5a331");box(x-5,y+5,10,2,"#cb5428")
+	commands.append(["img","taverna/moveis.png",710,802,180,140,FOOD.pixel(x-13),FOOD.pixel(y-12),26,20,alpha])
+	if filled:box(x-5,y-7,10,3,"#d1963d")
+	if active:
+		for i in 3:box(x-5+i*5,y-9-fmod(time*7+i*6,18),2,4,"#f6ecd5aa")
+static func held(s: Dictionary,a: Dictionary) -> Variant:
+	if a.get("hand")!=null:return a.hand
+	var carry = a.get("carry")
+	if carry==null:return null
+	if carry.kind=="dish":
+		for order in s.orders:
+			if order.id==carry.order:return {"item":"dish_"+order.recipe,"n":1,"quality":carry.get("quality",0)}
+	elif carry.kind=="food":return {"item":carry.food,"n":carry.n,"quality":carry.get("quality",0)}
+	return null
+func draw_held(s: Dictionary,p: Variant,x: float,y: float) -> void:
+	if p==null:return
+	var item: String = p.item
+	var portions: float = INV.ITEMS.data.get(item,{}).get("servings",0)
+	if item in ["pot","cookingPot"] or portions>0:pot(x,y,portions>0,false,s.time);return
+	if item.begins_with("dish_"):plate(x,y,INV.ITEMS.data[item].recipe,false,p.get("quality",0));return
+	if item in ["plate","dirtyPlate"]:plate(x,y,null,item=="dirtyPlate");return
+	if item=="spoon":box(x-1,y-3,3,16,"#527576");box(x-4,y-9,9,8,"#d6e5d9");box(x-2,y-8,5,5,"#90aaa3");return
+	food(item,x-12,y-12,24,24);star(p.get("quality",0),x+4,y-13,9)
+func direction(a: Dictionary) -> String:
+	var token: Variant = identities.get(a.id,a.id)
+	var result: String = facing.get(token,"down")
+	var input = velocity if a.id=="player" else null
+	var dx := 0.0;var dy := 0.0
+	if input!=null:
+		dx=input.get("moveX",input.dx) if input.get("moving",false) else input.dx
+		dy=input.get("moveY",input.dy) if input.get("moving",false) else input.dy
+	elif a.get("motion")!=null:dx=a.motion.toX-a.motion.fromX;dy=a.motion.toY-a.motion.fromY
+	else:return result
+	if absf(dy)>1e-7:result="up" if dy<0 else "down"
+	elif absf(dx)>1e-7:result="left" if dx<0 else "right"
+	facing[token]=result
+	return result
+func actor(s: Dictionary,a: Dictionary,selected: Variant,construction: bool) -> void:
+	var pose := MOVE.position(a)
+	var x: float = pose.x*40+20;var bottom: float = pose.y*40+38
+	box(x-12,bottom-3,24,5,"#4c3e3540")
+	var digits := ""
+	for ch in str(a.id):
+		if ch>="0" and ch<="9":digits+=ch
+	var number := int(digits) if not digits.is_empty() else 0
+	var skin: int = 8 if a.id=="player" else 9 if a.id=="worker2" else 10 if a.id=="worker1" else 12+number%3 if a.id.begins_with("client") else 11 if a.id in ["lia","nina"] else 10+number%2
+	var dir := direction(a)
+	var moving: bool = a.get("motion")!=null or (a.id=="player" and velocity!=null and velocity.get("moving",false))
+	commands.append(["cook",x,bottom,dir,moving] if a.id=="player" else ["npc",a.id,skin,x,bottom,dir,moving])
+	draw_held(s,held(s,a),x+(-12 if dir=="left" else 12 if dir=="right" else 8),bottom-(32 if dir=="up" else 22))
+	if construction:return
+	if a.id=="player":label("Você",x,bottom+12,"#77603a")
+	elif a.id.begins_with("worker"):label("Logística" if a.id=="worker1" else "Garçom",x,bottom+11)
+	elif a.get("recipe")!=null and a.get("order")!=null and a.state in ["ordered","eating"]:box(x-17,bottom-82,34,28,"#25473df2");food(a.recipe,x-15,bottom-82,30,26)
+	elif same(selected,a.id):label({"lia":"Lia","beto":"Beto","nina":"Nina"}.get(a.id,"Cliente"),x,bottom+11)
+	if a.wait>=5:label("Aguardando passagem",x,bottom-68,"#78503a")
+	if a.get("experience")!=null:
+		var indicator = service.indicator(s,a)
+		if indicator!=null:box(x+18,bottom-82,28,25,"#25473df2");text(indicator.emoji,x+32,bottom-62,20,"#fff3d5")
+func object(s: Dictionary,o: Dictionary,selected: bool,preview: bool = false) -> void:
+	var r := MOVE.MAP.rect(o)
+	var x: float = r.position.x*40;var y: float = r.position.y*40;var w: float = r.size.x*40;var h: float = r.size.y*40
+	alpha=0.65 if preview else 1.0
+	box(x+5,y+h-7,w-7,8,"#624a343f");commands.append(["furniture",o.type,x,y,w,h,o.rot,preview])
+	if o.type=="chair" and preview:
+		var dir: Vector2i = MOVE.DIRS[int(o.rot)]
+		box(x+19+dir.x*10,y+20+dir.y*10,3,3,"#f8deb0");text(["↑","→","↓","←"][int(o.rot)],x+20,y+24,16,"#fff2ce")
+	if o.type=="stove" and o.get("pan")!=null:pot(x+w*0.3,y-9,o.pan.begins_with("pot_"),o.pan=="cookingPot" or o.get("readyBatch")!=null,s.time)
+	if o.get("readyBatch")!=null:
+		var stage: String = RECIPES.heat(s,o).stage
+		if stage in ["over","danger","burned"]:
+			box(x+10,y-15,12,7,"#514d40")
+			for i in 3:box(x+10+i*4,y-22-fmod(s.time*8+i*6,18),5,7,"#383a36aa" if stage=="burned" else "#71695c99")
+	if o.type=="potRack":
+		for i in 3:
+			if o.get("inventory",[]).size()>i and o.inventory[i]!=null and o.inventory[i].item=="pot":pot(x+w/2,y-20+i*23,false,false,s.time)
+	var cooking = s.get("cooking") if o.has("id") and s.get("cooking")!=null and s.cooking.stove==o.id else null
+	if o.type=="stove" and (not o.get("ingredients",[]).is_empty() or cooking!=null or o.get("readyBatch")!=null):
+		var index := 0
+		for p in o.get("ingredients",[]):food(p.item,x+5+index*19,y-15,18,18);index+=1
+		var recipe = RECIPES.recognized(o)
+		if recipe==null:recipe=cooking.recipe if cooking!=null else o.readyBatch.recipe if o.get("readyBatch")!=null else null
+		if recipe!=null:food(recipe,x+w/2-14,y-50,28,24)
+	if o.type=="kitchen":
+		if o.get("support")!=null:pot(x+50,y-7,INV.ITEMS.data.get(o.support.item,{}).get("servings",0)>0,false,s.time)
+		for i in mini(4,int(ceil(float(o.get("plates",0))/3))):plate(x+12,y+2-i*2)
+		if o.get("utensil",false):box(x+w-15,y+3,7,11,"#7c5b37");box(x+w-13,y-3,2,10,"#dec08c");box(x+w-9,y-1,2,9,"#cfad79")
+		var index := 0
+		for dish in o.get("dishes",{}):
+			for q in 4:
+				for j in STORE.quality_count(o,dish,q):plate(x+27+index%4*11,y+4+floor(float(index)/4)*8,INV.ITEMS.data[dish].recipe,false,q);index+=1
+	if o.type=="table":
+		var dishes := 0
+		for ch in s.objects:
+			if ch.type!="chair":continue
+			var linked = BUILD.chair_table(ch,s.objects)
+			if linked==null or linked.id!=o.id:continue
+			for customer in s.customers:
+				if customer.seat==ch.id and customer.state=="eating":
+					var order = service.find(s.orders,customer.order)
+					plate(x+18+dishes*19,y+6,customer.recipe,false,order.get("quality",0) if order!=null else 0);dishes+=1;break
+			if s.dirtyTables.get(str(int(ch.id)),0)>0:plate(x+18+dishes*19,y+7,null,true);dishes+=1
+	if selected:commands.append(["line",FOOD.pixel(x+1),FOOD.pixel(y+1),w-2,h-2,"#fff0be",2])
+	alpha=1
+func overlays(s: Dictionary,o: Dictionary,selected: bool,building: bool) -> void:
+	var r := MOVE.MAP.rect(o)
+	var x: float = r.position.x*40;var y: float = r.position.y*40;var w: float = r.size.x*40;var h: float = r.size.y*40
+	if selected or building:label(BUILD.CATALOG.data[o.type].name,x+w/2,y+h+11)
+	var job: Variant = null
+	for pair in [["chopping","table"],["cooking","stove"],["plating","prep"]]:
+		if s.get(pair[0])!=null and s[pair[0]].get(pair[1])==o.id:job=s[pair[0]];break
+	if job!=null:
+		label(("Cortando " if job.has("table") else "Cozinhando " if job.has("stove") else "Empratando ")+str(int(ceil(job.left)))+"s",x+w/2,y-30);box(x,y-19,w,4,"#315447");box(x,y-19,w*(1-job.left/job.total),4,"#f3c56e")
+	elif o.type=="stove" and o.get("readyBatch")!=null:
+		var heat := RECIPES.heat(s,o)
+		label(heat.label,x+w/2,y-30)
+		if heat.stage!="burned":box(x,y-19,w,5,"#315447");box(x,y-19,w*heat.value,5,{"ready":"#74b66b","over":"#e0a044","danger":"#d75b3e","burned":"#57534b"}[heat.stage])
+	elif o.type=="kitchen" and STORE.ready_count(o)>0:label(str(STORE.ready_count(o))+" pratos prontos",x+w/2,y-20)
+	if o.get("feedback")!=null and o.feedback.until>s.time:label("✓ "+o.feedback.label,x+w/2,y-47,"#3b6448")
+func draw(s: Dictionary,ui: Dictionary,input: Variant = null) -> Array:
+	commands=[];alpha=1;velocity=input;identities=ui.get("actorTokens",{})
+	var room: String = s.player.room
+	if room=="street":label("ENCERRANDO" if s.closing else "ABERTO" if s.open else "FECHADO",675,200,"#3b6448" if s.open else "#77503a")
+	if room=="restaurant" and not s.singleRoom:
+		var received := 0.0
+		for value in s.inv.receiving.values():received+=value
+		if not ui.constructionMode:label("Computador",680,409);label("Recebimento • "+str(int(received))+"/60",860,490)
+		for i in mini(5,int(ceil(received/12))):box(804+i*21,444,18,22,"#d0a56d");box(810+i*21,444,4,22,"#e3c58c")
+		if s.objects.is_empty() and not ui.constructionMode:label("Use Gestão → Modo construção para equipar seu restaurante",280,230)
+	for p in PORTALS[room]:
+		box(p.x*40+2,p.y*40+2,36,36,"#866139");box(p.x*40+4,p.y*40+4,32,5,"#d4b77a")
+		if not ui.constructionMode:label(p.name,p.x*40+20,p.y*40+22)
+	var items: Array = []
+	for o in s.objects:
+		if o.room==room:items.append({"depth":(o.y+MOVE.MAP.rect(o).size.y)*40,"object":o})
+	var tokens: Array = []
+	for a in MOVE.ACTORS.actors(s):
+		tokens.append(identities.get(a.id,a.id))
+		if a.room==room:items.append({"depth":(MOVE.position(a).y+1)*40,"actor":a})
+	for token in facing.keys():
+		if token not in tokens:facing.erase(token)
+	preload("res://simulacao/nativa/Camadas.gd").sort(items)
+	for item in items:
+		if item.has("object"):object(s,item.object,same(ui.selectedObject,item.object.id))
+		else:actor(s,item.actor,ui.selectedObject,ui.constructionMode)
+	if not ui.constructionMode:
+		for o in s.objects:
+			if o.room==room:overlays(s,o,same(ui.selectedObject,o.id),ui.get("building")!=null)
+	if ui.get("building")!=null:
+		for y in 16:
+			for x in 24:
+				if not MOVE.MAP.wall(room,x,y,s):commands.append(["line",x*40,y*40,40,40,"#33584766",1])
+		if ui.get("hover")!=null:
+			var o := {"type":ui.building.type,"room":BUILD.CATALOG.data[ui.building.type].room,"x":ui.hover.x,"y":ui.hover.y,"rot":ui.building.rot}
+			var r := MOVE.MAP.rect(o);var objects: Array = []
+			for existing in s.objects:
+				if existing.id!=ui.building.get("moving"):objects.append(existing)
+			var candidate: Dictionary = o.duplicate(true);candidate.id=ui.building.get("moving") if ui.building.get("moving") else s.serial;objects.append(candidate)
+			var error: Variant = "Vá ao setor indicado para colocar este objeto." if o.room!=room else BUILD.layout_error(s,objects)
+			object(s,o,true,true);box(r.position.x*40,r.position.y*40,r.size.x*40,r.size.y*40,"#bb433b55" if error!=null else "#55aa7055")
+	return commands
