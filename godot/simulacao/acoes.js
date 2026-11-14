@@ -4,29 +4,22 @@ let prepOptionsId=null,prepChoice=null,constructionMode=false;
 let state=R.fresh(true,true),building=null,hover=null,selectedObject=null,transferQuantity=99,dialogObjectId=null,dialogMode='general',dialogTab='guide',last=performance.now(),renderedKey='',noticeTime=0;
 const NAME={street:'Rua da Praça',restaurant:'Restaurante • salão e cozinha',stock:'Estoque • recebimento e administração'};
 const PERSON={lia:'Lia',beto:'Beto',nina:'Nina',worker1:'Logística',worker2:'Garçom'};
+function viewNative(name,args){return JSON.parse(NativeRule(JSON.stringify({name,args})));}
 function tell(message,bad=false){state.message=message;$('notice').textContent=message;$('notice').classList.toggle('bad',bad);$('notice').style.opacity='1';noticeTime=performance.now()+6000;if($('management').open)$('menuNotice').textContent=message;refresh();}
 function button(text,action,parent,disabled=false){let b=document.createElement('button');b.textContent=text;b.disabled=disabled;b.onclick=action;parent.append(b);return b;}
 function money(n){return '$'+n.toFixed(2)}
 let cameraLevel=1;try{const saved=Number(localStorage.getItem('entre-camera-zoom'));if(saved>=.7&&saved<=2)cameraLevel=saved;}catch{}
 const camera={zoom:1,x:0,y:0,mode:null};
-function setCameraLevel(value){cameraLevel=Math.round(Math.max(.7,Math.min(2,value))*10)/10;try{localStorage.setItem('entre-camera-zoom',String(cameraLevel))}catch{}updateCamera();positionActions();$('zoomOutBtn').disabled=cameraLevel<=.7;$('zoomInBtn').disabled=cameraLevel>=2;}
+function setCameraLevel(value){cameraLevel=viewNative('camera',['level',value]);try{localStorage.setItem('entre-camera-zoom',String(cameraLevel))}catch{}updateCamera();positionActions();$('zoomOutBtn').disabled=cameraLevel<=.7;$('zoomInBtn').disabled=cameraLevel>=2;}
 $('zoomOutBtn').onclick=()=>setCameraLevel(cameraLevel-.1);$('zoomInBtn').onclick=()=>setCameraLevel(cameraLevel+.1);
 const viewport={width:960,height:640};
 let buildPointer=null;
-function updateCamera(){
- const p=R.position(state.player),mode=constructionMode?'build':'play';
- const compact=state.compact===true&&state.player.room==='restaurant';
- const left=compact?160:0,top=compact?(state.singleRoom?240:80):0,width=compact?800:960,height=compact?(state.singleRoom?400:560):640;
- camera.zoom=(compact?Math.min(viewport.width/width,(viewport.height-50)/height):Math.max(1,viewport.height/height))*cameraLevel;
- const maxX=Math.max(0,left+width-viewport.width/camera.zoom),maxY=Math.max(0,top+height-viewport.height/camera.zoom);
- if(!constructionMode||camera.mode!==mode){camera.x=p.x*40+20-viewport.width/2/camera.zoom;camera.y=p.y*40+20-viewport.height/2/camera.zoom;}
- camera.x=viewport.width/camera.zoom>width?left+(width-viewport.width/camera.zoom)/2:Math.max(left,Math.min(maxX,camera.x));camera.y=viewport.height/camera.zoom>height?top+(height-viewport.height/camera.zoom)/2:Math.max(top,Math.min(maxY,camera.y));camera.mode=mode;
-}
-function worldPointer(e){const r=canvas.getBoundingClientRect();return {x:((e.clientX-r.left)*viewport.width/r.width/camera.zoom+camera.x)/40,y:((e.clientY-r.top)*viewport.height/r.height/camera.zoom+camera.y)/40};}
-function screenPoint(x,y){const r=canvas.getBoundingClientRect();return {x:r.left+(x-camera.x)*camera.zoom*r.width/viewport.width,y:r.top+(y-camera.y)*camera.zoom*r.height/viewport.height};}
-function resize(){const w=innerWidth,h=Math.max(1,innerHeight-parseInt(getComputedStyle(document.documentElement).getPropertyValue('--top')));viewport.width=960;viewport.height=960*h/w;canvas.style.width=w+'px';canvas.style.height=h+'px';const k=Math.min(2,devicePixelRatio||1);canvas.width=Math.round(w*k);canvas.height=Math.round(h*k);updateCamera();}
+function updateCamera(){Object.assign(camera,viewNative('camera',['update',{compact:state.compact===true,singleRoom:state.singleRoom===true,player:state.player},camera,viewport,cameraLevel,constructionMode]));}
+function worldPointer(e){return viewNative('camera',['worldPointer',{clientX:e.clientX,clientY:e.clientY},canvas.getBoundingClientRect(),viewport,camera]);}
+function screenPoint(x,y){return viewNative('camera',['screenPoint',x,y,canvas.getBoundingClientRect(),viewport,camera]);}
+function resize(){const out=viewNative('camera',['resize',innerWidth,innerHeight,parseInt(getComputedStyle(document.documentElement).getPropertyValue('--top')),devicePixelRatio||1]);Object.assign(viewport,out.viewport);canvas.style.width=innerWidth+'px';canvas.style.height=out.height+'px';canvas.width=out.pixels.width;canvas.height=out.pixels.height;updateCamera();}
 function serviceSignPoint(){return state.player.room==='street'?{room:'street',x:13,y:6}:{room:'restaurant',x:7,y:14};}
-function positionDoorSign(){const b=$('openBtn'),outside=state.player.room==='street';const p=screenPoint(outside?675:345,outside?245:615),r=canvas.getBoundingClientRect();b.hidden=!['restaurant','street'].includes(state.player.room)||constructionMode||$('management').open||$('welcome').open||p.x<r.left+28||p.x>r.left+r.width-28||p.y<r.top+22||p.y>r.top+r.height-12;b.style.left=p.x+'px';b.style.top=p.y+'px';}
+function positionDoorSign(){const result=viewNative('camera',['door',{player:{room:state.player.room}},camera,viewport,canvas.getBoundingClientRect(),constructionMode,!!$('management').open,!!$('welcome').open]),b=$('openBtn');b.hidden=result.hidden;b.style.left=result.left+'px';b.style.top=result.top+'px';}
 window.addEventListener('resize',resize);document.addEventListener('fullscreenchange',resize);resize();
 function RECIPENAME(id){return R.RECIPES[id]?.name||'Morador'}
 let previewCache=null;
@@ -61,82 +54,34 @@ function updatePreview(){if(!building||!hover)return;let err=previewError({type:
 $('storeBuild').onclick=()=>{if(!constructionMode||!building?.moving)return;const result=R.remove(state,building.moving);if(!result.ok){$('buildStatus').textContent=result.error;return}stopBuild();renderDialog();tell('Objeto guardado e valor devolvido.');};
 $('rotateBtn').onclick=()=>{if(!constructionMode||!building)return;building.rot=(building.rot+1)%4;updatePreview()};$('cancelBuild').onclick=stopBuild;
 $('confirmBtn').onclick=()=>{if(!constructionMode||!building||!hover)return;let r=R.place(state,building.type,hover.x,hover.y,building.rot,building.moving);if(!r.ok){$('buildStatus').textContent=r.error;return}stopBuild();renderDialog();tell('Objeto instalado. As rotas foram atualizadas.')};
-canvas.onpointermove=e=>{if(!constructionMode)return;if(buildPointer&&(e.buttons||e.pointerType==='touch')){const r=canvas.getBoundingClientRect();camera.x-=(e.clientX-buildPointer.x)*viewport.width/r.width/camera.zoom;camera.y-=(e.clientY-buildPointer.y)*viewport.height/r.height/camera.zoom;buildPointer={x:e.clientX,y:e.clientY};updateCamera();if(building)building.locked=false;}if(!building||building.locked)return;hover={x:Math.floor(worldPointer(e).x),y:Math.floor(worldPointer(e).y)};updatePreview();};
+canvas.onpointermove=e=>{if(!constructionMode)return;if(buildPointer&&(e.buttons||e.pointerType==='touch')){const r=canvas.getBoundingClientRect();Object.assign(camera,viewNative('camera',['drag',camera,{clientX:e.clientX,clientY:e.clientY},buildPointer,r,viewport]));buildPointer={x:e.clientX,y:e.clientY};updateCamera();if(building)building.locked=false;}if(!building||building.locked)return;hover={x:Math.floor(worldPointer(e).x),y:Math.floor(worldPointer(e).y)};updatePreview();};
 canvas.onpointerup=canvas.onpointercancel=()=>{buildPointer=null;};
 // One click queues exactly one action; walking and menus never repeat it.
 let pendingInteraction=null;
-function approachCustomer(c){
- const a=state.player,options=R.DIRS.map(([dx,dy])=>({room:c.room,x:c.x+dx,y:c.y+dy})).filter(p=>!R.blocked(state,p.room,p.x,p.y,a)&&R.route(state,p.room,a,p,a));
- options.sort((p,q)=>Math.abs(p.x-a.x)+Math.abs(p.y-a.y)-Math.abs(q.x-a.x)-Math.abs(q.y-a.y));
- if(!options.length)return false;R.go(a,options[0]);return true;
-}
-function queueInteraction(kind,target){
- const c=kind==='customer'?state.customers.find(c=>c.id===target):null;
- const o=kind!=='customer'?state.objects.find(o=>o.id===target):null;
- if(c&&!['waiting','ordered'].includes(c.state))return false;
- if(!c&&!o)return false;
- if(!(c?approachCustomer(c):R.goObject(state,state.player,o))){tell('Não há passagem até o alvo.',true);return true;}
- pendingInteraction={state,kind,target,phase:c?.state,until:state.time+30};
- processInteraction();return true;
-}
-function processInteraction(){
- const job=pendingInteraction;if(!job)return;
- if(['computer','receiving'].includes(job.kind)){
-  if(job.state!==state||state.time>job.until){pendingInteraction=null;return;}
-  const point={room:'restaurant',x:job.kind==='computer'?16:21,y:12};
-  if(state.player.motion||!R.near(state.player,point,1))return;
-  pendingInteraction=null;if(job.kind==='computer')openDialog('computer');else tell(R.collectReceiving(state));return;
+// Only transport identity and presentation effects through the temporary UI shell.
+function nativeInteraction(operation,params){
+ const previousState=pendingInteraction?.state;
+ const job=pendingInteraction?Object.fromEntries(Object.entries(pendingInteraction).filter(([key])=>key!=='state')):null;
+ const out=R.uiInteraction(state,operation,params,{pending:job,current:!pendingInteraction||previousState===state,selected:selectedObject,building:!!building});
+ pendingInteraction=out.pending?{...out.pending,state:out.current?state:previousState}:null;
+ selectedObject=out.selected;
+ for(const effect of out.effects){
+  if(effect.kind==='tell')tell(effect.message,effect.bad);
+  else if(effect.kind==='dialog')openDialog(effect.mode);
+  else if(effect.kind==='inventory')openObjectInventory(effect.id);
+  else if(effect.kind==='refresh')refresh();
+  else if(effect.kind==='beginBuild')beginBuild(effect.type,effect.moving);
+  else if(effect.kind==='capture'){buildPointer={x:effect.x,y:effect.y};canvas.setPointerCapture?.(effect.pointerId);}
+  else if(effect.kind==='preview'){building.locked=true;hover={x:effect.x,y:effect.y};updatePreview();}
  }
-
- if(job.state!==state||building||state.time>job.until){pendingInteraction=null;return;}
- if(job.kind==='serviceSign'){if(state.player.motion||!R.near(state.player,job.door||{room:'restaurant',x:7,y:14},1))return;pendingInteraction=null;if(state.open!==job.wasOpen||state.period!==job.period||state.closing||state.clock.ending)return;R.toggleOpen(state);tell(state.message,!state.open&&!state.closing);return;}
- const c=job.kind==='customer'?state.customers.find(c=>c.id===job.target):null;
- const o=job.kind!=='customer'?state.objects.find(o=>o.id===job.target):null;
- if(job.kind==='customer'&&(!c||c.state!==job.phase)||job.kind!=='customer'&&!o){pendingInteraction=null;return;}
- if(state.player.motion)return;
- if(!(c?R.near(state.player,c,1):R.objectNear(state,o)))return;
- pendingInteraction=null;
- if(c){const ok=R.interact(state,c.id);tell(state.message,!ok);}
- else if(job.kind==='physical'){const r=R.physicalAction(state,o.id,job.action,job.index);tell(r.message,!r.ok);}
- else if(job.kind==='utility'){if(o.type==='computer')openDialog('computer');else tell(R.collectReceiving(state));}
- else if(job.kind==='storage'){openObjectInventory(o.id);}
- else {const r=job.kind==='wash'?R.washPlates(state,o.id):R.collectDirty(state,o.id);tell(r.message,!r.ok);}
+ return out.value;
 }
-function queuePhysical(o,action){
- selectedObject=o.id;
- if(!R.goObject(state,state.player,o))return tell('Não há passagem.',true);
- pendingInteraction={state,kind:'physical',target:o.id,action,index:state.selectedSlot,until:state.time+30};processInteraction();return true;
-}
-function primaryObjectAction(o){
- if(['computer','receiving'].includes(o.type)){if(!R.goObject(state,state.player,o))return false;pendingInteraction={state,kind:'utility',target:o.id,until:state.time+30};processInteraction();return true;}
- if(['fridge','cold','shelf','potRack'].includes(o.type)){
-  if(!R.goObject(state,state.player,o))return false;
-  pendingInteraction={state,kind:'storage',target:o.id,until:state.time+30};processInteraction();return true;
- }
- if(o.type==='prep')return ['frango','legumes'].includes(state.player.hand?.item)&&!state.chopping&&!state.plating?queuePhysical(o,'chop'):false;
- if(o.type==='stove'){
-  const p=state.player.hand;
-  const cmd=!o.pan?(p?.item==='pot'?'installPan':null):o.pan.startsWith('pot_')?(!p?'takePan':null):o.pan==='cookingPot'?null:p&&['arroz','legumes_cut','frango_cut'].includes(p.item)?'add':!p&&R.recognizedRecipe(o)?'cook':!p&&!o.ingredients?.length?'takePan':null;
-  return cmd?queuePhysical(o,cmd):false;
- }
- if(o.type==='kitchen'){
-  const p=state.player.hand;
-  const cmd=p?.item==='plate'?'installPlates':p?.item.startsWith('dish_')?'putDish':p?(p.item==='pot'||R.ITEMS[p.item]?.servings?'support':null):R.readyCount(o)?'takeDish':o.support?.item.startsWith('pot_')?'plate':o.support?'takePan':o.plates?'takePlates':null;
-  return cmd?queuePhysical(o,cmd):false;
- }
- if(o.type==='sink'&&state.player.hand?.item==='dirtyPlate')return queueInteraction('wash',o.id);
- if(['sink','bin'].includes(o.type)&&R.ITEMS[state.player.hand?.item]?.recipe)return queuePhysical(o,'discardHand');
- const table=o.type==='table'?o:o.type==='chair'?R.chairTable(state,o):null;
- if(!table)return false;
- const chairs=state.objects.filter(ch=>ch.type==='chair'&&R.chairTable(state,ch)?.id===table.id);
- const clients=state.customers.filter(c=>chairs.some(ch=>ch.id===c.seat)&&['waiting','ordered'].includes(c.state));
- const matching=clients.find(c=>c.state==='ordered'&&(R.inventoryCount(state,'dish_'+c.recipe)>0||state.player.hand?.item==='dish_'+c.recipe||state.player.carry?.order===c.order));
- const client=matching||clients.find(c=>c.state==='waiting')||clients[0];
- if(client)return queueInteraction('customer',client.id);
- if(chairs.some(ch=>(state.dirtyTables[ch.id]||0)>0))return queueInteraction('clean',table.id);
- return false;
-}
-canvas.onpointerdown=e=>{prepOptionsId=null;prepChoice=null;pendingInteraction=null;releaseKeyboard();const r=canvas.getBoundingClientRect(),x=Math.floor(worldPointer(e).x),y=Math.floor(worldPointer(e).y);if(constructionMode){if(!building){const object=state.objects.find(o=>o.room===state.player.room&&R.hit(o,x,y));if(object){beginBuild(object.type,object.id);return}}buildPointer={x:e.clientX,y:e.clientY};canvas.setPointerCapture?.(e.pointerId);if(building){building.locked=true;hover={x,y};updatePreview();}return}let room=state.player.room;selectedObject=null;const portal=R.PORTALS[room].find(p=>p.x===x&&p.y===y);if(portal){selectedObject='portal:'+room+':'+portal.x+':'+portal.y;R.go(state.player,{room:portal.to,x:portal.spawn[0],y:portal.spawn[1]});refresh();return}const clickedClient=state.customers.find(c=>c.room===room&&c.x===x&&c.y===y&&['waiting','ordered'].includes(c.state));if(clickedClient){selectedObject=clickedClient.id;queueInteraction('customer',clickedClient.id);refresh();return}const o=state.objects.find(o=>o.room===room&&R.hit(o,x,y));if(o){selectedObject=o.id;if(primaryObjectAction(o)){refresh();return}if(!R.goObject(state,state.player,o))tell('Móvel sem acesso.',true);refresh();return}const person=R.allActors(state).find(a=>a!==state.player&&a.room===room&&a.x===x&&a.y===y);if(person){selectedObject=person.id;let options=R.DIRS.map(([dx,dy])=>({room,x:x+dx,y:y+dy})).filter(p=>!R.blocked(state,room,p.x,p.y,state.player)&&R.route(state,room,state.player,p,state.player));options.sort((p,q)=>Math.abs(p.x-state.player.x)+Math.abs(p.y-state.player.y)-Math.abs(q.x-state.player.x)-Math.abs(q.y-state.player.y));if(options[0])R.go(state.player,options[0]);refresh();return}if(!state.singleRoom&&room==='restaurant'&&x>=16&&x<=17&&y>=10&&y<=11){selectedObject='computer';R.go(state.player,{room,x:16,y:12});pendingInteraction={state,kind:'computer',until:state.time+30};processInteraction();refresh();return}if(!state.singleRoom&&room==='restaurant'&&x>=20&&x<=22&&y===11){selectedObject='receiving';R.go(state.player,{room,x:21,y:12});pendingInteraction={state,kind:'receiving',until:state.time+30};processInteraction();refresh();return}if(x<0||x>=R.W||y<0||y>=R.H)return;if(!R.route(state,room,state.player,{x,y},state.player))return tell('Passagem bloqueada. Toque em uma célula livre.',true);R.go(state.player,{room,x,y,offsetX:worldPointer(e).x-x-.5,offsetY:worldPointer(e).y-y-.5});refresh();};
+function approachCustomer(c){return nativeInteraction("approachCustomer",[c.id]);}
+function queueInteraction(kind,target){return nativeInteraction("queueInteraction",[kind,target]);}
+function processInteraction(){if(!pendingInteraction)return;return nativeInteraction("processInteraction",[]);}
+function queuePhysical(o,action){return nativeInteraction("queuePhysical",[o.id,action]);}
+function primaryObjectAction(o){return nativeInteraction("primaryObjectAction",[o.id]);}
+canvas.onpointerdown=e=>{prepOptionsId=null;prepChoice=null;pendingInteraction=null;releaseKeyboard();nativeInteraction('pointerDown',[{world:worldPointer(e),clientX:e.clientX,clientY:e.clientY,pointerId:e.pointerId,construction:constructionMode,building}]);};
 function nearbyObjects(){return state.objects.filter(o=>o.room===state.player.room&&R.accessPoints(state,o).some(p=>R.near(state.player,p,0)))}
 function actionRow(o){let row=document.createElement('div');row.className='objectActions';row.anchor={x:o.x,y:o.y,w:R.CATALOG[o.type]?R.rect(o).w:1,lift:state.customers.some(c=>c.id===o.id||c.seat===o.id||o.type==='table'&&state.objects.some(ch=>ch.id===c.seat&&R.hit(o,ch.x+R.DIRS[ch.rot][0],ch.y+R.DIRS[ch.rot][1])))?40:0};$('context').append(row);return row;}
 const CONTROL_PATHS={
@@ -283,7 +228,7 @@ function releaseKeyboard(){keyboard={};R.setPlayerInput(state,0,0);}
 function resetFrameClock(){last=performance.now();releaseKeyboard();}
 window.addEventListener('blur',releaseKeyboard);document.addEventListener('visibilitychange',resetFrameClock);
 $('management').addEventListener('close',resetFrameClock);
- document.addEventListener('keydown',e=>{if($('management').open||$('welcome').open)return;const k=e.key.toLowerCase();if(constructionMode){if(k==='escape'){e.preventDefault();if(building)stopBuild();else if(!$('constructionDrawer').hidden)toggleCatalog();else exitConstruction();return}if(moveKeys.includes(k)){e.preventDefault();camera.x+=k==='a'||k==='arrowleft'?-30:k==='d'||k==='arrowright'?30:0;camera.y+=k==='w'||k==='arrowup'?-30:k==='s'||k==='arrowdown'?30:0;updateCamera();return}if(k==='r'&&building){e.preventDefault();$('rotateBtn').click();}return}if(k==='escape'){stopBuild();return}if(building&&moveKeys.includes(k)){e.preventDefault();const dx=k==='a'||k==='arrowleft'?-30:k==='d'||k==='arrowright'?30:0,dy=k==='w'||k==='arrowup'?-30:k==='s'||k==='arrowdown'?30:0;camera.x+=dx;camera.y+=dy;updateCamera();return;}if(building&&k==='r'){$('rotateBtn').click();return}if(moveKeys.includes(k)&&!building){e.preventDefault();keyboard[k]=true;keyboardMove()}if(k==='e'&&!e.repeat){let b=$('context').querySelector('.prepPrimary button:not(:disabled)')||$('context').querySelector('.prepSlot:not(:disabled)')||(!$('context').querySelector('.prepPanel')&&$('context').querySelector('button:not(:disabled)'));if(b)b.click()}});
+ document.addEventListener('keydown',e=>{if($('management').open||$('welcome').open)return;const k=e.key.toLowerCase();if(constructionMode){if(k==='escape'){e.preventDefault();if(building)stopBuild();else if(!$('constructionDrawer').hidden)toggleCatalog();else exitConstruction();return}if(moveKeys.includes(k)){e.preventDefault();Object.assign(camera,viewNative('camera',['panKey',camera,k]));updateCamera();return}if(k==='r'&&building){e.preventDefault();$('rotateBtn').click();}return}if(k==='escape'){stopBuild();return}if(building&&moveKeys.includes(k)){e.preventDefault();Object.assign(camera,viewNative('camera',['panKey',camera,k]));updateCamera();return;}if(building&&k==='r'){$('rotateBtn').click();return}if(moveKeys.includes(k)&&!building){e.preventDefault();keyboard[k]=true;keyboardMove()}if(k==='e'&&!e.repeat){let b=$('context').querySelector('.prepPrimary button:not(:disabled)')||$('context').querySelector('.prepSlot:not(:disabled)')||(!$('context').querySelector('.prepPanel')&&$('context').querySelector('button:not(:disabled)'));if(b)b.click()}});
  document.addEventListener('keyup',e=>{const k=e.key.toLowerCase();if(!moveKeys.includes(k))return;delete keyboard[k];keyboardMove();});
 $('tutorialBtn').onclick=()=>{
  const tutorial=$('welcomeTutorial');

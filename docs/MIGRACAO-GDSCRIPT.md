@@ -4,7 +4,7 @@ Referência funcional: commit 5ae8794, APK 0.21.2-godot.18.
 
 ## Estado atual
 
-Já executam em GDScript: criação de partidas, mapa/navegação, movimento, construção, inventários, conservação/qualidade/receitas, cozinha, atendimento, administração, validação/conversão de saves, logística e coordenação da simulação. Inventários, catálogo e páginas do livro também são gerados nativamente. Ainda há consultas/adaptadores no núcleo JavaScript e dependências de apresentação/interação; isso não equivale à remoção do JavaScript.
+Já executam em GDScript: criação de partidas, mapa/navegação, movimento, construção, inventários, conservação/qualidade/receitas, cozinha, atendimento, administração, validação/conversão de saves, logística e coordenação da simulação. Inventários, catálogo e páginas do livro também são gerados nativamente. Câmera, seleção dos alvos por clique e fila de interação também executam em GDScript. Ainda há consultas/adaptadores no núcleo JavaScript e dependências de apresentação; isso não equivale à remoção do JavaScript.
 
 As seções seguintes registram a evolução e a validação de cada etapa; descrições antigas de pendências são substituídas pelas etapas posteriores.
 
@@ -16,7 +16,7 @@ A coordenação de frames antes feita por `snapshot` em `simulacao/sessao.js` pa
 
 A sessão nativa ainda usa uma ponte temporária para as regras, eventos, composição gráfica e árvore de menus JavaScript. Não é uma conversão completa. QuickJS continua obrigatório. Os testes Node que chamavam `snapshot` precisam ser substituídos por testes Godot; não são mais executáveis contra o novo ponto de entrada.
 
-Unidades ainda necessárias: consultas/adaptadores residuais, ações de interface/câmera, demais painéis/HUD, composição gráfica e eliminação do DOM simulado. Só remover a extensão nativa depois que não houver consumidores.
+Unidades ainda necessárias: consultas/adaptadores residuais, demais ações de interface e painéis/HUD, composição gráfica e eliminação do DOM simulado. Só remover a extensão nativa depois que não houver consumidores.
 
 Preservar versão e estrutura dos saves, valores econômicos, velocidades, dimensões e posições dos móveis. Não publicar APK desta etapa como migração concluída.
 
@@ -165,3 +165,18 @@ Validação: `CozinhaNativa` compara 1.620 ações/temporizadores contra a refer
 O script `scripts/testar-migracao.sh` reprova erros GDScript registrados no log, além de resultados de teste e códigos de saída, evitando considerar uma cena aprovada quando uma chamada falha antes das asserções.
 
 **A migração total ainda não está concluída.** Permanecem a apresentação do cenário, câmera/interações de interface, outros painéis/HUD, dados/adaptadores JavaScript e a extensão QuickJS. Não foi removida a ponte nem gerado um APK final desta branch. A branch principal e o APK anterior continuam preservados.
+
+
+## Câmera e interação por clique em GDScript
+
+`Camera.gd` calcula enquadramento das três plantas e ambientes, acompanhamento da posição interpolada do jogador, limites do mapa, aproximação de 70% a 200%, conversão entre coordenadas da tela/mundo, posição/visibilidade da placa de serviço, dimensões do viewport, arrasto e deslocamento da câmera por teclado na construção. Os cálculos anteriores foram removidos de `acoes.js`; os adaptadores mantêm a aplicação aos controles e a persistência da preferência de zoom.
+
+`Interacoes.gd` escolhe a ação principal de cada equipamento e mesa, seleciona clientes/prioridades, calcula a aproximação, cria/valida a fila com prazo e identidade de partida e executa uma única ação quando o alvo é alcançado. Trata cancelamento por troca de partida, expiração, alvo removido/mudança de fase, construção e movimento. O clique no mapa decide alvos, portas, funcionários/moradores, estações antigas, células livres e offsets de caminhada diretamente em GDScript. Seleção de móveis e confirmação inicial do ponto de construção também passam por esse módulo.
+
+Os comandos nativos produzem efeitos de apresentação (notificação, abrir janela/inventário, atualizar prévia/catálogo) aplicados pela interface transitória. A referência da partida e o transporte do item pendente ainda ficam no adaptador; as decisões e a execução da fila não ficam em JavaScript. A entrada transitória do teclado é liberada quando um destino por clique é aceito, preservando o comportamento anterior.
+
+`CameraNativa` compara 3.469 casos, incluindo enquadramento, coordenadas, placa, zoom e dimensões de tela. `InteracoesNativas` compara 1.546 operações/células nas três plantas e na rua/estoque com funções de apresentação congeladas antes da migração. Inclui mãos/estações, receitas, clientes, fila expirada/antiga, construção, movimento, portas e caminhos bloqueados. Referências e geradores JavaScript ficam exclusivamente em `qa/referencia-migracao`.
+
+`CameraInteracoesUI` verifica botões de zoom, restauração, arrasto, teclado, liberação do arrasto e pausa da construção. `AtendimentoPorCliqueUI` verifica anotação e serviço pelo clique na mesa, pagamento único, recolhimento, lavagem e conservação final. MaosUI, ConstrucaoUI, RuaHorarioUI, MovimentoUI, MenusUI, CatalogoModernoUI e InventariosNativosUI verificam a integração com os controles existentes.
+
+Esta etapa não remove QuickJS. O cenário desenhado, criação de outros painéis/HUD, controles da janela e adaptadores restantes ainda precisam de conversão. Não foi gerado APK desta etapa.

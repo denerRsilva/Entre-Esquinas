@@ -1,0 +1,23 @@
+extends "res://qa/MaosUI.gd"
+func run():
+	root.size=Vector2i(960,700)
+	g=load("res://mundo/Restaurante.tscn").instantiate();root.add_child(g);g.set_process(false)
+	await layout();check(await button("Começar na taverna"),"Início mobiliado")
+	var fixture = load("res://qa/referencia-migracao/atendimento-fluxo.json").data[1].input
+	js("state="+JSON.stringify(fixture)+";state.arrival=-1000;state.workers.forEach(w=>w.task='none');R.spawn(state,()=>.5);for(let i=0;i<80;i++)R.step(state,.1,()=>.5);selectedObject=null;renderedKey='';refresh()")
+	g.tick(0);await layout()
+	check(js("state.customers.length===1&&state.customers[0].state==='waiting'")=="true","Cliente chega ao assento")
+	await click_object("table")
+	check(js("state.customers[0].state==='ordered'&&state.orders.length===1&&pendingInteraction===null")=="true","Clique na mesa aproxima e anota uma vez")
+	js("const prepClick=state.objects.find(o=>o.type==='kitchen');R.takeObject(state,prepClick,'dish_sopa',1,2);state.player.hand={item:'dish_sopa',n:1,quality:2};refresh()")
+	g.tick(0);await layout();await click_object("table")
+	check(js("!state.player.hand&&['eating','paid'].includes(state.orders[0].state)&&pendingInteraction===null")=="true","Clique na mesa entrega prato e encerra ação")
+	advance(12)
+	check(js("state.ledger.sales===1&&state.ledger.revenue===12&&state.orders.length===1")=="true","Consumo e pagamento únicos")
+	await click_object("table")
+	check(js("state.player.hand?.item==='dirtyPlate'&&Object.values(state.dirtyTables).every(n=>n===0)")=="true","Clique recolhe louça da mesa")
+	await click_object("sink")
+	check(js("state.player.hand?.item==='plate'")=="true","Clique na pia lava prato")
+	check(js("R.valid(state)&&R.foodConserved(state)&&R.equipmentConserved(state)&&R.mealsConserved(state)")=="true","Conservação e salvamento válidos após atendimento visual")
+	print("FALHAS: ",failures)
+	g.queue_free();await process_frame;quit(1 if failures else 0)

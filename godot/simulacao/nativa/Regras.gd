@@ -1,4 +1,6 @@
 extends RefCounted
+const INTERACTIONS = preload("res://simulacao/nativa/Interacoes.gd")
+const CAMERA = preload("res://simulacao/nativa/Camera.gd")
 const LOGISTICS = preload("res://simulacao/nativa/Logistica.gd")
 const SIMULATION = preload("res://simulacao/nativa/Simulacao.gd")
 const KITCHEN = preload("res://simulacao/nativa/Cozinha.gd")
@@ -23,6 +25,32 @@ func execute(json: String) -> String:
 	var args: Array = request.get("args",[])
 	var value: Variant = null
 	match request.get("name",""):
+		"interacoes":
+			var controller = INTERACTIONS.new()
+			var state: Dictionary = args[1]
+			var params: Array = args[2]
+			var context: Dictionary = args[3]
+			controller.pending=context.pending;controller.current=context.current
+			controller.selected=context.selected;controller.building=context.building
+			controller.kitchen.manual_moving=context.moving;controller.service.manual_moving=context.moving
+			match args[0]:
+				"approachCustomer":value=controller.approach(state,controller.service.find(state.customers,params[0]))
+				"queueInteraction":value=controller.queue(state,params[0],params[1])
+				"queuePhysical":value=controller.physical(state,BUILD.find(state.objects,params[0]),params[1])
+				"primaryObjectAction":value=controller.primary(state,BUILD.find(state.objects,params[0]))
+				"processInteraction":controller.process(state)
+				"pointerDown":controller.pointer_down(state,params[0])
+			return JSON.stringify({"value":value,"state":state,"pending":controller.pending,"current":controller.current,"selected":controller.selected,"clearInput":controller.clear_input,"effects":controller.effects},"",true,true)
+		"camera":
+			match args[0]:
+				"update":value=CAMERA.update(args[1],args[2],args[3],args[4],args[5])
+				"worldPointer":value=CAMERA.world_pointer(args[1],args[2],args[3],args[4])
+				"screenPoint":value=CAMERA.screen_point(args[1],args[2],args[3],args[4],args[5])
+				"door":value=CAMERA.door(args[1],args[2],args[3],args[4],args[5],args[6],args[7])
+				"level":value=CAMERA.level(args[1])
+				"drag":value=CAMERA.drag(args[1],args[2],args[3],args[4],args[5])
+				"panKey":value=CAMERA.pan_key(args[1],args[2])
+				"resize":value=CAMERA.resize(args[1],args[2],args[3],args[4])
 		"logistica":
 			var state: Dictionary = args[1]
 			var params: Array = args[2]
