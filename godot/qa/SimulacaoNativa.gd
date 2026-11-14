@@ -2,6 +2,8 @@ extends "res://qa/CozinhaNativa.gd"
 func run():
 	var fixtures = load("res://qa/referencia-migracao/simulacao.json").data
 	var rules = preload("res://simulacao/nativa/Regras.gd").new()
+	# Freeze idle walking only for old JS snapshots; PolimentoSalaoUI tests it enabled.
+	rules.idle_walk_enabled=false
 	var count := 0
 	for test in fixtures.cases:
 		var state := patched(fixtures.base,test.input)

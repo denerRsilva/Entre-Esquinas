@@ -6,6 +6,8 @@ const BUILD = preload("res://simulacao/nativa/Construcao.gd")
 const INV = preload("res://simulacao/nativa/Inventario.gd")
 const RECIPES = preload("res://simulacao/nativa/receitas.json")
 const CONFIG = preload("res://simulacao/nativa/clientes.json")
+var idle_walk_enabled := true
+var wander_random: Callable = randf
 var random_source: Callable
 var random_values: Array = []
 var manual_moving := false
@@ -174,9 +176,32 @@ func interact(s: Dictionary,id: Variant) -> bool:
 				INV.remove(s.inventory,index,1);find(s.orders,c.order).state="ready";a.carry={"kind":"dish","order":c.order,"quality":quality};return serve(s,a,c)
 	s.message="Emprate a receita pedida e traga o prato pronto."
 	return false
+func wander(s: Dictionary,w: Dictionary) -> void:
+	if not idle_walk_enabled or w.id!="worker2" or w.room!="restaurant":w.goal=null;return
+	var goal = w.get("goal")
+	if goal!=null and goal.get("idleWalk",false) and not MOVE.arrived(w) and w.wait<5 and not MOVE.blocked(s,w.room,goal.x,goal.y,w):return
+	var occupied := MOVE.occupants(s,w)
+	var avoid := MOVE.hall_limits(w.x>=14)
+	for cell in occupied:
+		var parts: PackedStringArray = cell.split(",")
+		avoid.append(Vector2i(int(parts[0]),int(parts[1])))
+	var candidates: Array[Vector2i] = []
+	for y in range(1,14):
+		for x in range(1,14):
+			if Vector2i(x,y)==Vector2i(w.x,w.y) or MOVE.blocked(s,w.room,x,y,w) or occupied.has(str(x)+","+str(y)):continue
+			candidates.append(Vector2i(x,y))
+	if not candidates.is_empty():
+		var start := mini(candidates.size()-1,int(wander_random.call()*candidates.size()))
+		for i in candidates.size():
+			var point: Vector2i = candidates[(start+i)%candidates.size()]
+			var path = MOVE.MAP.route(s,w.room,Vector2i(w.x,w.y),point,w,avoid)
+			if path==null or path.is_empty():continue
+			MOVE.go(w,{"room":"restaurant","x":point.x,"y":point.y});w.goal.idleWalk=true;w.wait=0;return
+	w.goal=null
+
 func waiter(s: Dictionary,w: Dictionary) -> void:
 	var carry = w.get("carry")
-	if w.task=="none" and carry==null:w.goal=null;return
+	if w.task=="none" and carry==null:wander(s,w);return
 	if carry!=null and carry.kind=="dish":
 		if canceled(s,w):
 			var item: String = "dish_"+find(s.orders,carry.order).recipe
@@ -217,7 +242,7 @@ func waiter(s: Dictionary,w: Dictionary) -> void:
 		MOVE.go(w,p)
 		if near(w,c):take_order(s,w,c)
 		return
-	w.goal=null
+	wander(s,w)
 func clients_step(s: Dictionary,dt: float) -> void:
 	for order in s.orders:
 		if order.state not in ["paid","lost"]:order.age+=dt

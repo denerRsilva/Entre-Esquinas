@@ -14,6 +14,7 @@ const ATLAS = MESA.BASE
 const PASSO := 2
 const CELULAS := 20
 const ALTURA := MESA.ALTURA_BASE
+static var centros_kit: Dictionary = {}
 const BORDA = Color("#302019")
 
 func _ready() -> void:
@@ -42,6 +43,33 @@ static func perfil(shape: int, rotation_index: int) -> PackedByteArray:
 			for turn in posmod(rotation_index,4):point=Vector2i(CELULAS-1-point.y,point.x)
 			cells[point.y*CELULAS+point.x]=1
 	return cells
+
+static func centro_kit(shape: int, rotation_index: int) -> Vector2:
+	var key := Vector2i(shape,posmod(rotation_index,4))
+	if centros_kit.has(key):return centros_kit[key]
+	var cells := perfil(shape,rotation_index)
+	var centroid := Vector2.ZERO
+	var count := 0
+	for y in CELULAS:
+		for x in CELULAS:
+			if cells[y*CELULAS+x]:centroid+=Vector2(x+0.5,y+0.5);count+=1
+	centroid/=count
+	var best := Vector2(10,10)
+	var distance := INF
+	# The kit is 24x20 px on a counter. Keep its complete rectangle on wood,
+	# choosing the position nearest the surface centroid (also for elbows).
+	for y in range(5,16):
+		for x in range(6,15):
+			var fits := true
+			for row in range(y-5,y+5):
+				for col in range(x-6,x+6):
+					if cells[row*CELULAS+col]==0:fits=false;break
+				if not fits:break
+			var candidate := Vector2(x,y)
+			if fits and candidate.distance_squared_to(centroid)<distance:
+				best=candidate;distance=candidate.distance_squared_to(centroid)
+	centros_kit[key]=Vector2(-20,-40-ALTURA)+best*PASSO
+	return centros_kit[key]
 
 static func faixas(cells: PackedByteArray, horizontal: bool) -> int:
 	var mask := 0

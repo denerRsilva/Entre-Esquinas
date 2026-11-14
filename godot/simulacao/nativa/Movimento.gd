@@ -180,6 +180,13 @@ static func escape_score(s: Dictionary, actor: Dictionary, requester: Dictionary
 	for dir in DIRS:
 		if not blocked(s,actor.room,point.x+dir.x,point.y+dir.y):score+=10
 	return score+absf(point.x-requester.x)+absf(point.y-requester.y)
+static func hall_limits(leaving_kitchen: bool = false) -> Array:
+	var result: Array = []
+	for y in range(1,15):
+		for x in range(1,23):
+			if (x>=14 and not leaving_kitchen) or y==14:result.append(Vector2i(x,y))
+	return result
+
 static func move(s: Dictionary, dt: float, velocity: Variant) -> void:
 	var locked := {}
 	for actor in ACTORS.actors(s):
@@ -217,21 +224,23 @@ static func move(s: Dictionary, dt: float, velocity: Variant) -> void:
 			if str(cell).begins_with(actor.room+":"):avoid[str(cell).split(":")[1]]=true
 		var unavailable := avoid.duplicate()
 		avoid.erase(key(g))
-		var avoid_points: Array = []
+		var strolling: bool = goal.get("idleWalk",false)
+		var avoid_points: Array = hall_limits(actor.x>=14) if strolling else []
 		for cell in avoid:
 			var parts = str(cell).split(",")
 			avoid_points.append(Vector2i(int(parts[0]),int(parts[1])))
 		var path = MAP.route(s,actor.room,Vector2i(actor.x,actor.y),Vector2i(g.x,g.y),actor,avoid_points)
 		if path!=null and not path.is_empty() and unavailable.has(key(path[0])):path=null
-		if path==null or path.is_empty():
+		if (path==null or path.is_empty()) and not strolling:
 			var fallback = MAP.route(s,actor.room,Vector2i(actor.x,actor.y),Vector2i(g.x,g.y),actor)
 			if fallback!=null and not fallback.is_empty():
 				var n: Dictionary = fallback[0]
 				if not unavailable.has(key(n)) and (n.x==actor.x or n.y==actor.y or (not unavailable.has(key({"x":n.x,"y":actor.y})) and not unavailable.has(key({"x":actor.x,"y":n.y})))):path=fallback
 		if path==null or path.is_empty():
-			actor.wait+=dt/WALK_TIME;s.flowWaits+=1
+			actor.wait+=dt/WALK_TIME
+			if not strolling:s.flowWaits+=1
 			var static_path = MAP.route(s,actor.room,Vector2i(actor.x,actor.y),Vector2i(g.x,g.y),actor)
-			if actor.wait>=5 and static_path!=null and not static_path.is_empty():
+			if not strolling and actor.wait>=5 and static_path!=null and not static_path.is_empty():
 				var n: Dictionary = static_path[0]
 				var other: Variant = null
 				for candidate in ACTORS.actors(s):
@@ -239,7 +248,7 @@ static func move(s: Dictionary, dt: float, velocity: Variant) -> void:
 						for p in reserved(candidate):
 							if p.x==n.x and p.y==n.y:other=candidate;break
 						if other!=null:break
-				if other!=null and other.state not in ["waiting","eating"]:push(s,other,actor,locked,{})
+				if other!=null and other.state not in ["waiting","ordered","eating"]:push(s,other,actor,locked,{})
 			continue
 		var n: Dictionary = path[0]
 		var final: bool = goal.room==actor.room and n.x==g.x and n.y==g.y

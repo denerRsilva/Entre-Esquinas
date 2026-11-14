@@ -85,6 +85,12 @@ func actor(s: Dictionary,a: Dictionary,selected: Variant,construction: bool) -> 
 	var number := int(digits) if not digits.is_empty() else 0
 	var skin: int = 8 if a.id=="player" else 9 if a.id=="worker2" else 10 if a.id=="worker1" else 12+number%3 if a.id.begins_with("client") else 11 if a.id in ["lia","nina"] else 10+number%2
 	var dir := direction(a)
+	# Seated customers face their table, not their last walking direction.
+	if a.get("state","") in ["waiting","ordered","eating"] and a.get("motion")==null:
+		var chair = BUILD.find(s.objects,a.get("seat"))
+		if chair!=null and a.room==chair.room and a.x==chair.x and a.y==chair.y and BUILD.seat_table(chair,s.objects)!=null:
+			dir=["up","right","down","left"][posmod(int(chair.rot),4)]
+			facing[identities.get(a.id,a.id)]=dir
 	var moving: bool = a.get("motion")!=null or (a.id=="player" and velocity!=null and velocity.get("moving",false))
 	commands.append(["cook",x,bottom,dir,moving] if a.id=="player" else ["npc",a.id,skin,x,bottom,dir,moving])
 	draw_held(s,held(s,a),x+(-12 if dir=="left" else 12 if dir=="right" else 8),bottom-(32 if dir=="up" else 22))

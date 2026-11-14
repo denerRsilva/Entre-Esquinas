@@ -41,9 +41,11 @@ func paint(data: Dictionary) -> void:
 	scale = Vector2.ONE*float(camera[2])
 	position = -Vector2(camera[0],camera[1])*scale
 	var counter_profiles := {}
+	var counter_kit_centers := {}
 	for command in data.scene:
 		if command[0]=="furniture" and FORMAS_BANCADA.has(command[1]):
 			counter_profiles[Vector2i(command[2],command[3])]=BANCADA.perfil(FORMAS_BANCADA[command[1]],int(command[6]))
+			counter_kit_centers[Vector2i(command[2],command[3])]=BANCADA.centro_kit(FORMAS_BANCADA[command[1]],int(command[6]))
 	var segment := []
 	for op in data.scene:
 		if op[0] not in ["cook","furniture","npc"]:
@@ -80,6 +82,8 @@ func paint(data: Dictionary) -> void:
 			if op[1] in ["computer","receiving","stove","prep","kitchen","worktable","cuttingKit","platingKit","sink","table","shelf","potRack"]: original.x=80
 			if op[1] in ["fridge","cold"]: original.y=80
 			n.scale = Vector2(float(op[4])/original.x,float(op[5])/original.y)
+			if op[1] in ["cuttingKit","platingKit"] and counter_kit_centers.has(Vector2i(op[2],op[3])):
+				n.position+=counter_kit_centers[Vector2i(op[2],op[3])]-n.CENTRO_KIT*n.scale
 			if str(op[1]).begins_with("counter"):
 				var profiles := []
 				for direction in LADOS_BANCADA:profiles.append(counter_profiles.get(Vector2i(op[2],op[3])+direction*40,PackedByteArray()))
