@@ -42,7 +42,7 @@ func run():
 	check(customer.state=="ordered","Garçom anota pedido após passear")
 	sim.service.waiter(s,w)
 	check(w.goal!=null and w.goal.get("idleWalk",false),"Passeio recomeça depois do atendimento")
-	check(sim.MOVE.walk_time(w)==sim.MOVE.walk_time(customer),"Passeio mantém velocidade dos clientes")
+	check(sim.MOVE.walk_time(w)>sim.MOVE.walk_time(customer),"Passeio é mais lento que atendimento")
 	var kitchen: Variant = null
 	for object in s.objects:
 		if object.type=="kitchen":kitchen=object;break

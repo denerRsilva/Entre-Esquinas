@@ -131,6 +131,7 @@ static func valid(value: Variant,slots: int = 0) -> bool:
 		var goal = a.get("goal")
 		if goal!=null:
 			if goal is Dictionary and goal.has("idleWalk") and not goal.idleWalk is bool:return false
+			if goal is Dictionary and goal.has("idleUntil") and (not number(goal.idleUntil) or goal.idleUntil<0):return false
 			if not has_keys(goal,["room","x","y"]) or not M.PORTALS.has(goal.room) or not N.integer(goal.x) or not N.integer(goal.y) or goal.x<1 or goal.x>=23 or goal.y<1 or goal.y>=15:return false
 			for key in ["offsetX","offsetY"]:
 				if goal.has(key) and (not number(goal[key]) or absf(goal[key])>0.25):return false

@@ -177,28 +177,43 @@ func interact(s: Dictionary,id: Variant) -> bool:
 				INV.remove(s.inventory,index,1);find(s.orders,c.order).state="ready";a.carry={"kind":"dish","order":c.order,"quality":quality};return serve(s,a,c)
 	s.message="Emprate a receita pedida e traga o prato pronto."
 	return false
+func idle_pause(s: Dictionary,w: Dictionary) -> void:
+	MOVE.go(w,{"room":w.room,"x":w.x,"y":w.y,"idleWalk":true,"idleUntil":s.time+3+4*wander_random.call()})
+	w.wait=0
+
 func wander(s: Dictionary,w: Dictionary) -> void:
 	if not idle_walk_enabled or w.id!="worker2" or w.room!="restaurant":w.goal=null;return
 	var goal = w.get("goal")
-	if goal!=null and goal.get("idleWalk",false) and not MOVE.arrived(w) and w.wait<5 and not MOVE.blocked(s,w.room,goal.x,goal.y,w):return
+	var returning: bool = w.x>=14
+	if goal!=null and goal.get("idleWalk",false):
+		if goal.has("idleUntil"):
+			if s.time<goal.idleUntil:return
+		elif not MOVE.arrived(w) and w.wait<5 and not MOVE.blocked(s,w.room,goal.x,goal.y,w):return
+		else:
+			if w.get("motion")!=null:return
+			idle_pause(s,w);return
+	elif not returning:
+		if w.get("motion")!=null:w.goal=null;return
+		idle_pause(s,w);return
 	var occupied := MOVE.occupants(s,w)
-	var avoid := MOVE.hall_limits(w.x>=14)
+	var avoid := MOVE.hall_limits(returning)
 	for cell in occupied:
 		var parts: PackedStringArray = cell.split(",")
 		avoid.append(Vector2i(int(parts[0]),int(parts[1])))
 	var candidates: Array[Vector2i] = []
 	for y in range(1,14):
 		for x in range(1,14):
-			if Vector2i(x,y)==Vector2i(w.x,w.y) or MOVE.blocked(s,w.room,x,y,w) or occupied.has(str(x)+","+str(y)):continue
+			var distance: int = absi(x-int(w.x))+absi(y-int(w.y))
+			if distance==0 or (not returning and (distance<2 or distance>4)) or MOVE.blocked(s,w.room,x,y,w) or occupied.has(str(x)+","+str(y)):continue
 			candidates.append(Vector2i(x,y))
 	if not candidates.is_empty():
 		var start := mini(candidates.size()-1,int(wander_random.call()*candidates.size()))
 		for i in candidates.size():
 			var point: Vector2i = candidates[(start+i)%candidates.size()]
 			var path = MOVE.MAP.route(s,w.room,Vector2i(w.x,w.y),point,w,avoid)
-			if path==null or path.is_empty():continue
-			MOVE.go(w,{"room":"restaurant","x":point.x,"y":point.y});w.goal.idleWalk=true;w.wait=0;return
-	w.goal=null
+			if path==null or path.is_empty() or (not returning and path.size()>5):continue
+			MOVE.go(w,{"room":"restaurant","x":point.x,"y":point.y,"idleWalk":true});w.wait=0;return
+	idle_pause(s,w)
 
 func waiter(s: Dictionary,w: Dictionary) -> void:
 	var carry = w.get("carry")

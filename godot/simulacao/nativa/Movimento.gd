@@ -16,7 +16,9 @@ static func position(actor: Dictionary) -> Dictionary:
 	var settled = actor.get("settled")
 	if settled!=null and settled.room==actor.room and settled.x==actor.x and settled.y==actor.y:return {"x":settled.px,"y":settled.py}
 	return {"x":actor.x,"y":actor.y}
-static func walk_time(actor: Dictionary) -> float:return 1/SPEED if actor.id=="player" else 0.4
+static func walk_time(actor: Dictionary) -> float:
+	if actor.id=="player":return 1/SPEED
+	return 0.7 if actor.id=="worker2" and actor.get("goal")!=null and actor.goal.get("idleWalk",false) else 0.4
 static func start(actor: Dictionary, target: Dictionary, ox: float = 0, oy: float = 0) -> bool:
 	var p := position(actor)
 	var x: float = target.x+ox
@@ -72,7 +74,15 @@ static func closest(s: Dictionary, actor: Dictionary, object: Dictionary) -> Var
 		if path!=null and path.size()<length:best=p;length=path.size()
 	return best
 static func go(actor: Dictionary, target: Dictionary) -> void:
+	var previous_speed := walk_time(actor)
 	actor.goal={"room":(target.get("room") if target.get("room") else actor.room),"x":target.x,"y":target.y}
+	if target.get("idleWalk",false):actor.goal.idleWalk=true
+	if target.has("idleUntil"):actor.goal.idleUntil=target.idleUntil
+	# A task can interrupt a slow stroll between cells. Preserve progress
+	# while immediately restoring the normal service pace.
+	if actor.get("motion")!=null:
+		var ratio := walk_time(actor)/previous_speed
+		actor.motion.duration*=ratio;actor.motion.elapsed*=ratio
 	if target.get("offsetX") is float and target.get("offsetY") is float:
 		actor.goal.offsetX=clampf(target.offsetX,-0.25,0.25);actor.goal.offsetY=clampf(target.offsetY,-0.25,0.25)
 static func arrived(actor: Dictionary) -> bool:
