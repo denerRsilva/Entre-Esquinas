@@ -22,7 +22,9 @@ func _ready() -> void:
 	area("actions",Rect2(720,641,234,54),false,false)
 	area("catalog",Rect2(10,649,168,44),false,false)
 	area("drawer",Rect2(7,7,440,628))
-	area("build",Rect2(188,615,762,80),false)
+	area("build",Rect2(188,535,762,160))
+	resized.connect(func():fit_build.call_deferred())
+	get_viewport().size_changed.connect(func():fit_build.call_deferred())
 	modal_background=ColorRect.new()
 	modal_background.color=Color(0.03,0.07,0.055,0.68)
 	modal_background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -135,3 +137,16 @@ func sync(data: Dictionary) -> void:
 				if not decoration is BaseButton: decoration.mouse_filter=Control.MOUSE_FILTER_IGNORE
 		if scroll and scroll_y: scroll.set_deferred("scroll_vertical",scroll_y)
 		root.set_deferred("size",entry[2].size)
+	fit_build.call_deferred()
+
+func fit_build() -> void:
+	if not slots.has("build"):return
+	var panel: Control = slots.build[0]
+	if not panel.visible:return
+	var viewport_size := get_viewport_rect().size
+	var width := minf(762,viewport_size.x-20)
+	panel.size.x=width
+	var content: VBoxContainer = slots.build[1]
+	var desired_height := content.get_combined_minimum_size().y+28
+	panel.size=Vector2(width,minf(desired_height,viewport_size.y-80))
+	panel.position=Vector2(viewport_size.x-width-10,viewport_size.y-panel.size.y-8)

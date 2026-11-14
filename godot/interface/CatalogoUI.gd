@@ -214,8 +214,10 @@ func render(d: Dictionary, parent: Control) -> void:
 		group=HBoxContainer.new()
 		group.add_theme_constant_override("separation",12)
 	elif cls=="buildActions":
-		group=HBoxContainer.new()
+		group=HFlowContainer.new()
 		group.name="BuildActions"
+	elif id=="buildBar":
+		group=VBoxContainer.new()
 	elif cls=="hotbarSlots":
 		var grid:=GridContainer.new()
 		grid.columns=5
@@ -233,7 +235,7 @@ func render(d: Dictionary, parent: Control) -> void:
 		if cls=="inventoryGrid" and compact: grid.columns=2
 		if cls in ["prepSlots","prepPrimary"]: grid.columns=2
 		group=grid
-	elif tag=="nav" or id in ["dock","actions","buildBar"] or cls in ["welcomeActions","dialogHead","objectActions"]:
+	elif tag=="nav" or id in ["dock","actions"] or cls in ["welcomeActions","dialogHead","objectActions"]:
 		group=HFlowContainer.new()
 	else:
 		group=VBoxContainer.new()
