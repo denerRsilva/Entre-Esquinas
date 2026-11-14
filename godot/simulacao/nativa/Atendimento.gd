@@ -6,8 +6,9 @@ const BUILD = preload("res://simulacao/nativa/Construcao.gd")
 const INV = preload("res://simulacao/nativa/Inventario.gd")
 const RECIPES = preload("res://simulacao/nativa/receitas.json")
 const CONFIG = preload("res://simulacao/nativa/clientes.json")
+static var wander_rng := RandomNumberGenerator.new()
 var idle_walk_enabled := true
-var wander_random: Callable = randf
+var wander_random: Callable = func():return wander_rng.randf()
 var random_source: Callable
 var random_values: Array = []
 var manual_moving := false
