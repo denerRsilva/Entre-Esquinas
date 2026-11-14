@@ -93,6 +93,9 @@ func actor(s: Dictionary,a: Dictionary,selected: Variant,construction: bool) -> 
 			facing[identities.get(a.id,a.id)]=dir
 	var moving: bool = a.get("motion")!=null or (a.id=="player" and velocity!=null and velocity.get("moving",false))
 	commands.append(["cook",x,bottom,dir,moving] if a.id=="player" else ["npc",a.id,skin,x,bottom,dir,moving])
+	if a.get("noteJob")!=null:
+		var job: Dictionary = a.noteJob
+		box(x-18,bottom-78,36,4,"#315447");box(x-18,bottom-78,36*(1-job.left/job.total),4,"#f3c56e")
 	draw_held(s,held(s,a),x+(-12 if dir=="left" else 12 if dir=="right" else 8),bottom-(32 if dir=="up" else 22))
 	if construction:return
 	if a.id=="player":label("Você",x,bottom+12,"#77603a")

@@ -3,9 +3,11 @@ func run():
 	var rules = preload("res://simulacao/nativa/Regras.gd").new()
 	# Freeze idle walking only for old JS snapshots; PolimentoSalaoUI tests it enabled.
 	rules.idle_walk_enabled=false
+	rules.timed_orders_enabled=false
 	for test in load("res://qa/referencia-migracao/atendimento-fluxo.json").data:
 		var state: Dictionary = test.input.duplicate(true);var simulation = preload("res://simulacao/nativa/Simulacao.gd").new();var draws: Array = [0]
 		simulation.service.idle_walk_enabled=false
+		simulation.service.timed_orders_enabled=false
 		simulation.service.random_source=func():var value: float = [0.1,0.8,0.2,0.9,0.5][draws[0]%5];draws[0]+=1;return value
 		for i in 800:
 			simulation.step(state,0.1)

@@ -14,7 +14,6 @@ func _ready() -> void:
 	area("hud",Rect2(8,5,940,47),false,false)
 	area("ordersHud",Rect2(710,74,245,170))
 	area("kitchenStatus",Rect2(8,74,320,120))
-	area("openBtn",Rect2(0,0,100,38),false,false)
 	area("context",Rect2(150,360,500,110),false,false)
 	area("hint",Rect2(10,604,610,42),false,true)
 	area("notice",Rect2(10,500,520,70),false,true)
@@ -94,11 +93,6 @@ func sync(data: Dictionary) -> void:
 				var actions_y:float=slots.context[0].position.y
 				notice_y=actions_y-80.0 if actions_y>=140.0 else actions_y+120.0
 			root.position=Vector2(10,notice_y)
-		if key=="openBtn":
-			var sign_size:=Vector2(190,54) if data.room=="street" else Vector2(100,38)
-			entry[2]=Rect2(Vector2.ZERO,sign_size)
-			root.position=Vector2(data.door[0]-sign_size.x/2,minf(data.door[1]-19,570.0))
-			root.set_deferred("size",sign_size)
 		var signature:String=JSON.stringify(item)
 		if cache.get(key)==signature: continue
 		cache[key]=signature

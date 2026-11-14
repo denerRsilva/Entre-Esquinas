@@ -21,6 +21,14 @@ static func sync(s: Dictionary) -> void:
 	var now: float = s.clock.minute
 	if s.open and not s.closing and now>=times[int(s.period)].end:s.closing=true;s.message="Horário encerrado. Novas entradas suspensas; conclua os clientes presentes."
 	if not s.open and not s.closing:s.period=1 if now>=times[0].end else 0
+static func auto_open(s: Dictionary) -> void:
+	if s.open or s.closing or s.clock.ending:return
+	sync(s)
+	var h: Dictionary = hours(s)[int(s.period)]
+	if s.clock.minute>=h.start and s.clock.minute<h.end:
+		s.open=true;s.arrival=17
+		s.message=("Almoço" if s.period==0 else "Jantar")+" aberto."
+
 static func open_error(s: Dictionary) -> String:
 	var h: Dictionary = hours(s)[int(s.period)]
 	if s.clock.minute<h.start:return "Este turno começa às "+CALENDAR.time_text(h.start)+"."
@@ -30,10 +38,10 @@ static func set_hours(s: Dictionary,value: Variant) -> Dictionary:
 	if s.open or s.closing or pending(s):return {"ok":false,"message":"Conclua o serviço antes de alterar os horários."}
 	if not CALENDAR.valid_hours(value):return {"ok":false,"message":"Use horários entre 06:00 e 02:00, em intervalos de 10 minutos. O almoço deve terminar antes do jantar começar."}
 	s.serviceHours=value.duplicate(true);sync(s)
-	return {"ok":true,"message":"Horários atualizados. Abra o serviço pela plaquinha durante o período escolhido."}
+	return {"ok":true,"message":"Horários atualizados. O restaurante abre automaticamente no horário escolhido."}
 static func finish_period(s: Dictionary) -> void:
 	s.open=false;s.closing=false;s.cookActive=false;sync(s)
-	s.message="Restaurante fechado. O turno acompanha o relógio; reabra pela plaquinha enquanto estiver no horário."
+	s.message="Restaurante fechado. O próximo turno abre automaticamente no horário marcado."
 static func toggle(s: Dictionary) -> bool:
 	if s.clock.ending:s.message="Conclua o serviço pendente das 02:00 antes de reabrir.";return false
 	if s.closing:return false

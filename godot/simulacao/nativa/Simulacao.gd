@@ -46,6 +46,7 @@ func simulate(s: Dictionary,dt: float) -> void:
 	service.manual_moving=velocity!=null and velocity.get("moving",false)
 	kitchen.manual_moving=service.manual_moving
 	for w in s.workers:worker(s,w)
+	service.notes_step(s,dt)
 	kitchen.step(s,dt);service.clients_step(s,dt)
 	if s.open and not s.closing:
 		s.arrival+=dt

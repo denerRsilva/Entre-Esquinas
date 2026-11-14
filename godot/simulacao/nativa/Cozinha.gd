@@ -86,12 +86,19 @@ func cook(s: Dictionary,id: Variant,recipe: Variant) -> Dictionary:
 	return feedback(s,o,"Cozinhando — pode realizar outras tarefas")
 func plating_plan(s: Dictionary,o: Variant) -> Dictionary:
 	if o==null or o.type!="kitchen":return {"error":"Use a mesa de cozinha."}
-	if s.player.get("hand")!=null:return {"error":"Libere as mãos."}
+	if s.player.get("carry")!=null:return {"error":"Libere as mãos."}
+	var hand = s.player.get("hand")
+	if hand!=null and not INV.ITEMS.data.get(hand.item,{}).get("servings",0):return {"error":"Libere as mãos."}
 	if o.plates==0:return {"error":"Instale pratos limpos."}
-	var p = o.get("support")
+	var from_hand: bool = hand!=null
+	var p = hand if from_hand else o.get("support")
 	if p==null or not INV.ITEMS.data.get(p.item,{}).get("servings",0) or p.get("burned",false):return {"error":"Apoie uma panela com comida utilizável."}
-	if STORE.ready_count(o)>=12:return {"error":"Área de retirada cheia."}
-	return {"recipe":INV.ITEMS.data[p.item].recipe,"item":p.item,"quality":p.get("quality",0),"portions":INV.ITEMS.data[p.item].servings,"count":1}
+	var portions: int = INV.ITEMS.data[p.item].servings if from_hand else 1
+	if o.plates<portions:return {"error":"Instale pratos limpos suficientes."}
+	if STORE.ready_count(o)+portions>12:return {"error":"Área de retirada cheia."}
+	var plan := {"recipe":INV.ITEMS.data[p.item].recipe,"item":p.item,"quality":p.get("quality",0),"portions":INV.ITEMS.data[p.item].servings,"count":portions}
+	if from_hand:plan.hand=true
+	return plan
 func plate(s: Dictionary,id: Variant) -> Dictionary:
 	var o = find(s,id)
 	if not near(s,o):return result(s,false,"Aproxime-se da mesa de cozinha.")
@@ -114,12 +121,14 @@ func plate_step(s: Dictionary,dt: float) -> void:
 	var job = s.get("plating")
 	if job==null:return
 	var o = find(s,job.prep)
-	if o==null or o.get("support")==null or o.support.item!=job.item:cancel_plate(s);return
+	var p = s.player.get("hand") if job.get("hand",false) else o.get("support") if o!=null else null
+	if o==null or p==null or p.item!=job.item or p.get("quality",0)!=job.quality or p.get("burned",false):cancel_plate(s);return
 	if not near(s,o):return
 	job.left=maxf(0,job.left-dt)
-	if job.left>1e-8 or o.plates==0 or STORE.ready_count(o)>=12:return
-	o.support={"item":"pot","n":1} if job.portions==1 else {"item":"pot_"+job.recipe+"_"+str(int(job.portions)-1),"n":1,"quality":job.quality}
-	o.plates-=1;STORE.put(s,o,"dish_"+job.recipe,1,job.quality);s.plating=null;feedback(s,o,"Um prato pronto")
+	if job.left>1e-8 or o.plates<job.count or STORE.ready_count(o)+job.count>12:return
+	if job.get("hand",false):s.player.hand={"item":"pot","n":1}
+	else:o.support={"item":"pot","n":1} if job.portions==1 else {"item":"pot_"+job.recipe+"_"+str(int(job.portions)-1),"n":1,"quality":job.quality}
+	o.plates-=job.count;STORE.put(s,o,"dish_"+job.recipe,job.count,job.quality);s.plating=null;feedback(s,o,"Um prato pronto")
 func step(s: Dictionary,dt: float) -> void:
 	var job = s.get("cooking")
 	if job!=null:

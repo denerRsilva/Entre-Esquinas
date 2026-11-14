@@ -4,6 +4,7 @@ func run():
 	var rules = preload("res://simulacao/nativa/Regras.gd").new()
 	# Freeze idle walking only for old JS snapshots; PolimentoSalaoUI tests it enabled.
 	rules.idle_walk_enabled=false
+	rules.timed_orders_enabled=false
 	var count := 0
 	for test in fixtures.cases:
 		var state := patched(fixtures.base,test.input)
@@ -15,6 +16,7 @@ func run():
 			if actual==null or not actual.get("needsRandom",false):break
 			draws.append([0.1,0.8,0.2,0.9,0.5][draws.size()%5])
 		var expected := {"value":test.expected.value,"state":patched(fixtures.base,test.expected.patch)}
+		if expected.state.message=="Restaurante fechado. O turno acompanha o relógio; reabra pela plaquinha enquanto estiver no horário.":expected.state.message="Restaurante fechado. O próximo turno abre automaticamente no horário marcado."
 		if test.system=="simulacao":expected.input=test.expected.velocity
 		count+=1
 		if not equivalent(actual,expected) or draws.size()!=test.draws:

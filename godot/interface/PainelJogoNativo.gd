@@ -62,6 +62,7 @@ func context(s: Dictionary,model: Dictionary) -> Dictionary:
 					if KITCHEN.RECIPES.recognized(o)!=null:add_physical(target,o,"flame","Cozinhar","cook")
 			else:
 				if hand!=null and hand.item=="plate":add_physical(target,o,"box","Instalar prato das mãos","installPlates")
+				elif hand!=null and KITCHEN.INV.ITEMS.data.get(hand.item,{}).get("servings",0)>0:add_physical(target,o,"serve","Empratar","plate")
 				elif hand!=null and (hand.item=="pot" or KITCHEN.INV.ITEMS.data.get(hand.item,{}).get("servings",0)>0 or hand.item.begins_with("dish_")):add_physical(target,o,"pot","Apoiar item carregado","putDish" if hand.item.begins_with("dish_") else "support")
 				if o.get("support")!=null:add_physical(target,o,"take","Retirar panela apoiada","takePan")
 				if o.utensil:add_physical(target,o,"take","Retirar talher preservado","takeUtensil")
@@ -112,10 +113,6 @@ func render(s: Dictionary,model: Dictionary,input: Variant) -> Dictionary:
 	var status := "Encerrando o dia" if s.clock.ending else "Concluindo" if s.closing else "Aberto" if s.open else "Encerrado" if s.clock.minute>=hours.end else "Preparação" if s.clock.minute<hours.start else "Fechado"
 	var date := CALENDAR.date(int(s.day))
 	var summary: String = period+" • "+status+"  ★ "+str(int(s.reputation.score))+"/100 • "+CALENDAR.reputation_level(s.reputation.score)+"    "+CALENDAR.time_text(s.clock.minute)+" • "+date.weekday+" "+str(date.day)+" • "+date.season+" • Ano "+str(date.year)+"  $%.2f"%s.cash
-	var title := "Encerrando" if s.closing else ("Encerrar restaurante" if s.player.room=="street" else "Aberto") if s.open else "Abre às "+CALENDAR.time_text(hours.start) if s.clock.minute<hours.start else "Abrir restaurante" if s.player.room=="street" else "Fechado"
-	var door := controls.button(title,"nativo:jogo:placa",{"kind":"sign"},s.clock.ending or s.closing or model.get("building")!=null)
-	door.label="Conclua os pedidos" if s.closing else ("Encerrar " if s.open else "Abrir ")+period.to_lower();door.id="openBtn";door.cls="doorSign"
-	if model.get("doorHidden",false):door={}
 	var orders: Array = []
 	for c in s.customers:
 		if c.state!="waiting":continue
@@ -129,4 +126,4 @@ func render(s: Dictionary,model: Dictionary,input: Variant) -> Dictionary:
 		var content: Array = [node("b",[plain("#"+str(int(order.id))+" • "),{"tag":"canvas","art":controls.item_art(order.recipe),"label":SERVICE.RECIPES.data[order.recipe].name}]),plain({"ordered":"A preparar","cooking":"No fogão","ready":"A caminho da mesa","eating":"Cliente comendo"}.get(order.state,order.state)+extra+" • espera "+str(int(floor(order.age)))+"s")]
 		if order.state=="ordered":content.append(controls.button("Prioritário" if s.priority==order.id else "Priorizar","nativo:jogo:prioridade:"+str(int(order.id)),{"kind":"priority","id":order.id}))
 		orders.append(node("div",content,"","orderCard"))
-	return {"hud":node("div",[plain(summary)],"hud"),"openBtn":door if not door.is_empty() else null,"ordersHud":node("div",orders,"ordersHud"),"kitchenStatus":kitchen_status(s),"context":context(s,model)}
+	return {"hud":node("div",[plain(summary)],"hud"),"openBtn":null,"ordersHud":node("div",orders,"ordersHud"),"kitchenStatus":kitchen_status(s),"context":context(s,model)}

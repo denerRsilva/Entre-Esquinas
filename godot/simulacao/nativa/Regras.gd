@@ -23,6 +23,7 @@ const MAP = preload("res://simulacao/nativa/Mapa.gd")
 const INVENTORY = preload("res://simulacao/nativa/Inventario.gd")
 
 # Historical migration fixtures can isolate the former stationary behavior.
+var timed_orders_enabled := true
 var idle_walk_enabled := true
 
 func execute(json: String) -> String:
@@ -84,6 +85,7 @@ func execute(json: String) -> String:
 		"simulacao":
 			var simulation = SIMULATION.new()
 			simulation.service.idle_walk_enabled=idle_walk_enabled
+			simulation.service.timed_orders_enabled=timed_orders_enabled
 			var state: Dictionary = args[1]
 			var params: Array = args[2]
 			simulation.service.random_values=args[3]
@@ -165,6 +167,7 @@ func execute(json: String) -> String:
 			var params: Array = args[2]
 			var service = SERVICE.new()
 			service.idle_walk_enabled=idle_walk_enabled
+			service.timed_orders_enabled=timed_orders_enabled
 			service.random_values=args[3]
 			service.manual_moving=args[4] if args.size()>4 else false
 			var actor = service.find(MOVE.ACTORS.actors(state),params[0]) if not params.is_empty() and operation in ["takeOrder","serve","pickupDish","canceledCarry","returnCanceledDish","customerAccess","readyPoint","waiterStep","removeHandDish"] else null

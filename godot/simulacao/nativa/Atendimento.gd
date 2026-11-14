@@ -7,6 +7,7 @@ const INV = preload("res://simulacao/nativa/Inventario.gd")
 const RECIPES = preload("res://simulacao/nativa/receitas.json")
 const CONFIG = preload("res://simulacao/nativa/clientes.json")
 static var wander_rng := RandomNumberGenerator.new()
+var timed_orders_enabled := true
 var idle_walk_enabled := true
 var wander_random: Callable = func():return wander_rng.randf()
 var random_source: Callable
@@ -215,8 +216,27 @@ func wander(s: Dictionary,w: Dictionary) -> void:
 			MOVE.go(w,{"room":"restaurant","x":point.x,"y":point.y,"idleWalk":true});w.wait=0;return
 	idle_pause(s,w)
 
+func note_order(s: Dictionary,w: Dictionary,c: Dictionary) -> void:
+	if not timed_orders_enabled:take_order(s,w,c);return
+	if w.get("motion")!=null:return
+	w.goal=null
+	if not w.has("noteJob"):w.noteJob={"customer":c.id,"left":1.2,"total":1.2}
+
+func notes_step(s: Dictionary,dt: float) -> void:
+	for w in s.workers:
+		var job = w.get("noteJob")
+		if job==null:continue
+		var c = find(s.customers,job.customer)
+		if w.task!="waiter" or w.get("carry")!=null or w.get("motion")!=null or c==null or c.state!="waiting" or not near(w,c):w.erase("noteJob");continue
+		job.left=maxf(0,job.left-dt)
+		if job.left<=1e-8:take_order(s,w,c);w.erase("noteJob")
+
 func waiter(s: Dictionary,w: Dictionary) -> void:
 	var carry = w.get("carry")
+	if w.get("noteJob")!=null:
+		var c = find(s.customers,w.noteJob.customer)
+		if w.task=="waiter" and carry==null and c!=null and c.state=="waiting" and near(w,c):w.goal=null;return
+		w.erase("noteJob")
 	if w.task=="none" and carry==null:wander(s,w);return
 	if carry!=null and carry.kind=="dish":
 		if canceled(s,w):
@@ -256,7 +276,7 @@ func waiter(s: Dictionary,w: Dictionary) -> void:
 		var p = customer_access(s,w,c)
 		if p==null:continue
 		MOVE.go(w,p)
-		if near(w,c):take_order(s,w,c)
+		if near(w,c):note_order(s,w,c)
 		return
 	wander(s,w)
 func clients_step(s: Dictionary,dt: float) -> void:

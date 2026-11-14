@@ -128,6 +128,9 @@ static func valid(value: Variant,slots: int = 0) -> bool:
 		if not has_keys(a,["id","room","x","y","wait","hold"]) or not M.PORTALS.has(a.room) or not N.integer(a.x) or not N.integer(a.y) or a.x<1 or a.x>=23 or a.y<1 or a.y>=15:return false
 		if M.blocked(s,a.room,a.x,a.y,a) or not number(a.hold) or not number(a.wait):return false
 		if s.workers.has(a) and a.get("task") not in ["none","logistics","waiter"]:return false
+		if a.has("noteJob"):
+			var note = a.noteJob
+			if not s.workers.has(a) or not has_keys(note,["customer","left","total"]) or not note.customer is String or not number(note.left) or not number(note.total) or note.total!=1.2 or note.left<0 or note.left>note.total:return false
 		var goal = a.get("goal")
 		if goal!=null:
 			if goal is Dictionary and goal.has("idleWalk") and not goal.idleWalk is bool:return false

@@ -167,29 +167,10 @@ func key(event: Dictionary) -> void:
 		if down:keyboard[name]=true
 		else:keyboard.erase(name)
 		keyboard_move()
-func request_service() -> void:
-	if building!=null or state.closing or state.clock.ending or state.player.room not in ["restaurant","street"]:return
-	pending=null;release_keyboard()
-	var door := {"room":"street","x":13,"y":6} if state.player.room=="street" else {"room":"restaurant","x":7,"y":14}
-	var service = INTERACT.SERVICE.new()
-	if not service.near(state.player,door):
-		var options: Array = [door]
-		for dir in MOVE.DIRS:options.append({"room":door.room,"x":door.x+dir.x,"y":door.y+dir.y})
-		var reachable: Array = []
-		for point in options:
-			if not MOVE.blocked(state,point.room,point.x,point.y,state.player) and MOVE.MAP.route(state,point.room,Vector2i(state.player.x,state.player.y),Vector2i(point.x,point.y),state.player)!=null:reachable.append(point)
-		for i in range(1,reachable.size()):
-			var item: Dictionary = reachable[i];var j := i-1
-			while j>=0 and absf(reachable[j].x-state.player.x)+absf(reachable[j].y-state.player.y)>absf(item.x-state.player.x)+absf(item.y-state.player.y):reachable[j+1]=reachable[j];j-=1
-			reachable[j+1]=item
-		if reachable.is_empty():notify("Não há passagem até a plaquinha.",true);return
-		MOVE.go(state.player,reachable[0])
-	pending={"kind":"serviceSign","door":door,"wasOpen":state.open,"period":state.period,"until":state.time+30};interact("process")
 func world_action(action: Dictionary) -> void:
 	if not modal.is_empty() or construction:return
 	var result: Variant = null
 	match action.kind:
-		"sign":request_service()
 		"priority":UI_COMMAND.execute(state,"priority",[action.id])
 		"portal":velocity=null;MOVE.go(state.player,{"room":action.room,"x":action.x,"y":action.y})
 		"computer":open_dialog("computer")
@@ -375,7 +356,7 @@ func step(dt: float,events: Array) -> Dictionary:
 			var slice := minf(0.08,remaining)
 			if modal.is_empty():keyboard_move()
 			var simulation = SIM.new();simulation.velocity=velocity;simulation.service.random_source=rng
-			simulation.step(state,slice);velocity=simulation.velocity
+			simulation.step(state,slice);ADMIN.auto_open(state);velocity=simulation.velocity
 			if pending!=null:interact("process")
 			remaining=maxf(0,remaining-slice)
 		if state.day!=old_day:save_game()

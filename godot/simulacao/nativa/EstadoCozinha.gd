@@ -56,11 +56,16 @@ static func physical(state: Dictionary) -> bool:
 	var plating = state.get("plating")
 	if truthy(plating):
 		if not plating is Dictionary:return false
+		if plating.has("hand") and not plating.hand is bool:return false
+		if plating.get("hand",false):
+			var data: Dictionary = INV.ITEMS.data.get(plating.get("item"),{})
+			if data.get("servings",0)<1 or plating.get("recipe")!=data.get("recipe") or plating.get("portions")!=data.get("servings"):return false
+			if not NUM.integer(plating.get("quality")) or plating.quality<0 or plating.quality>3 or hand==null or plating.quality!=hand.get("quality",0) or hand.get("burned",false):return false
 		var found := false
 		for object in state.objects:
-			var support = object.get("support")
+			var support = hand if plating.get("hand",false) else object.get("support")
 			if object.id==plating.get("prep") and object.type=="kitchen" and support is Dictionary and support.get("item")==plating.get("item"):found=true
-		if not found or not RECIPES.data.has(plating.get("recipe")) or not numeric(plating.get("count")) or plating.count!=1:return false
+		if not found or not RECIPES.data.has(plating.get("recipe")) or not numeric(plating.get("count")) or plating.count!=(INV.ITEMS.data.get(plating.get("item"),{}).get("servings",0) if plating.get("hand",false) else 1):return false
 		if not numeric(plating.get("left")) or plating.left<0 or not numeric(plating.get("total")) or plating.left>plating.total or plating.total!=2:return false
 	return true
 

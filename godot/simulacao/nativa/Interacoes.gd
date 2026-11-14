@@ -75,7 +75,7 @@ func primary(s: Dictionary,o: Dictionary) -> Variant:
 		var action: Variant = null
 		if item=="plate":action="installPlates"
 		elif item.begins_with("dish_"):action="putDish"
-		elif p!=null:action="support" if item=="pot" or INV.ITEMS.data.get(item,{}).get("servings",0)>0 else null
+		elif p!=null:action="plate" if INV.ITEMS.data.get(item,{}).get("servings",0)>0 else "support" if item=="pot" else null
 		elif SERVICE.STORE.ready_count(o)>0:action="takeDish"
 		elif o.get("support")!=null:action="plate" if o.support.item.begins_with("pot_") else "takePan"
 		elif o.plates>0:action="takePlates"
