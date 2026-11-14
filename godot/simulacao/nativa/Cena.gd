@@ -106,6 +106,24 @@ func actor(s: Dictionary,a: Dictionary,selected: Variant,construction: bool) -> 
 	if a.get("experience")!=null:
 		var indicator = service.indicator(s,a)
 		if indicator!=null:box(x+18,bottom-82,28,25,"#25473df2");text(indicator.emoji,x+32,bottom-62,20,"#fff3d5")
+static func table_plate_position(table: Dictionary,chair: Dictionary) -> Vector2:
+	var rect := MOVE.MAP.rect(table)
+	var origin := Vector2(rect.position)*40
+	var size := Vector2(rect.size)*40
+	# Match Mesa.tscn's projected tabletop, including its rotated footprint.
+	var left := origin.x+size.x*0.025
+	var right := origin.x+size.x*0.975
+	var back := origin.y-size.y*0.45
+	var front := origin.y+size.y*0.25
+	var x := clampf(chair.x*40+20,left+9,right-9)
+	var y := lerpf(back,front,clampf((chair.y*40+20-origin.y)/size.y,0,1))
+	match posmod(int(chair.rot),4):
+		0:y=front-6
+		2:y=back+6
+		1:x=left+9
+		3:x=right-9
+	return Vector2(x,y)
+
 func object(s: Dictionary,o: Dictionary,selected: bool,preview: bool = false) -> void:
 	var r := MOVE.MAP.rect(o)
 	var x: float = r.position.x*40;var y: float = r.position.y*40;var w: float = r.size.x*40;var h: float = r.size.y*40
@@ -151,16 +169,16 @@ func object(s: Dictionary,o: Dictionary,selected: bool,preview: bool = false) ->
 			for q in 4:
 				for j in STORE.quality_count(o,dish,q):plate(x+(27+index%4*11)*(w/80),y+4+floor(float(index)/4)*8,INV.ITEMS.data[dish].recipe,false,q);index+=1
 	if o.type=="table":
-		var dishes := 0
 		for ch in s.objects:
 			if ch.type!="chair":continue
 			var linked = BUILD.chair_table(ch,s.objects)
 			if linked==null or linked.id!=o.id:continue
+			var place := table_plate_position(o,ch)
 			for customer in s.customers:
 				if customer.seat==ch.id and customer.state=="eating":
 					var order = service.find(s.orders,customer.order)
-					plate(x+18+dishes*19,y+6,customer.recipe,false,order.get("quality",0) if order!=null else 0);dishes+=1;break
-			if s.dirtyTables.get(str(int(ch.id)),0)>0:plate(x+18+dishes*19,y+7,null,true);dishes+=1
+					plate(place.x,place.y,customer.recipe,false,order.get("quality",0) if order!=null else 0);break
+			if s.dirtyTables.get(str(int(ch.id)),0)>0:plate(place.x,place.y,null,true)
 	if selected:commands.append(["line",FOOD.pixel(x+1),FOOD.pixel(y+1),w-2,h-2,"#fff0be",2])
 	alpha=1
 func overlays(s: Dictionary,o: Dictionary,selected: bool,building: bool) -> void:

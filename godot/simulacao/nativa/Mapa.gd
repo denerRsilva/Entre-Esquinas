@@ -25,18 +25,72 @@ static func blocked(state: Dictionary, room: String, point: Vector2i, actor: Dic
 		if object.room==room and rect(object).has_point(point) and not (object.type=="chair" and actor.get("seat")==object.id):return true
 	return false
 
+# A binary heap preserves the old A* tie order without sorting the whole
+# frontier on every visited cell. Blocked cells are indexed once per search.
+static func precedes(a: Dictionary,b: Dictionary) -> bool:
+	return a.sequence<b.sequence if a.priority==b.priority else a.priority<b.priority
+static func heap_push(heap: Array, entry: Dictionary) -> void:
+	heap.append(entry)
+	var i := heap.size()-1
+	while i>0:
+		var parent := (i-1)/2
+		if not precedes(entry,heap[parent]):break
+		heap[i]=heap[parent];i=parent
+	heap[i]=entry
+static func heap_pop(heap: Array) -> Dictionary:
+	var result: Dictionary = heap[0]
+	var last: Dictionary = heap.pop_back()
+	if heap.is_empty():return result
+	var i := 0
+	while i*2+1<heap.size():
+		var child := i*2+1
+		if child+1<heap.size() and precedes(heap[child+1],heap[child]):child+=1
+		if not precedes(heap[child],last):break
+		heap[i]=heap[child];i=child
+	heap[i]=last
+	return result
+
+static var wall_grids: Dictionary = {}
+static func route_obstacles(state: Dictionary,room: String,actor: Dictionary) -> Dictionary:
+	var key := room+str(state.get("compact",false))+str(state.get("singleRoom",false))
+	if not wall_grids.has(key):
+		var walls := {}
+		for y in 16:
+			for x in 24:
+				if wall(room,x,y,state) or fixed(room,x,y,state):walls[Vector2i(x,y)]=true
+		wall_grids[key]=walls
+	var obstacles: Dictionary = wall_grids[key].duplicate()
+	for object in state.objects:
+		if object.room!=room or (object.type=="chair" and actor.get("seat")==object.id):continue
+		var bounds := rect(object)
+		for y in range(bounds.position.y,bounds.end.y):
+			for x in range(bounds.position.x,bounds.end.x):obstacles[Vector2i(x,y)]=true
+	return obstacles
+
+static func reachable(state: Dictionary,room: String,start: Vector2i,actor: Dictionary,avoid: Array = []) -> Dictionary:
+	var obstacles := route_obstacles(state,room,actor)
+	for cell in avoid:obstacles[cell]=true
+	var found := {start:true}
+	var queue: Array[Vector2i] = [start]
+	var index := 0
+	while index<queue.size():
+		var point := queue[index];index+=1
+		for direction in [Vector2i.UP,Vector2i.RIGHT,Vector2i.DOWN,Vector2i.LEFT]:
+			var next: Vector2i = point+direction
+			if next.x<1 or next.x>=23 or next.y<1 or next.y>=15 or obstacles.has(next) or found.has(next):continue
+			found[next]=true;queue.append(next)
+	return found
+
 static func route(state: Dictionary, room: String, start: Vector2i, target: Vector2i, actor: Dictionary = {}, avoid: Array = []) -> Variant:
-	if blocked(state,room,target,actor):return null
+	var obstacles := route_obstacles(state,room,actor)
+	if target.x<1 or target.x>=23 or target.y<1 or target.y>=15 or obstacles.has(target):return null
+	for cell in avoid:obstacles[cell]=true
 	var sequence := 0
-	var queue: Array = [{"point":start,"cost":0.0,"sequence":sequence}]
+	var queue: Array = [{"point":start,"cost":0.0,"priority":distance(start,target),"sequence":sequence}]
 	var costs := {start:0.0}
 	var previous := {start:null}
 	while not queue.is_empty():
-		queue.sort_custom(func(a,b):
-			var first: float = a.cost+distance(a.point,target)
-			var second: float = b.cost+distance(b.point,target)
-			return a.sequence<b.sequence if first==second else first<second)
-		var current: Dictionary = queue.pop_front()
+		var current := heap_pop(queue)
 		var point: Vector2i = current.point
 		if current.cost>costs[point]:continue
 		if point==target:
@@ -47,17 +101,13 @@ static func route(state: Dictionary, room: String, start: Vector2i, target: Vect
 			return path
 		for direction in NAV:
 			var next: Vector2i = point+direction
-			if next in avoid or blocked(state,room,next,actor):continue
+			if next.x<1 or next.x>=23 or next.y<1 or next.y>=15 or obstacles.has(next):continue
 			if direction.x and direction.y:
-				var horizontal := point+Vector2i(direction.x,0)
-				var vertical := point+Vector2i(0,direction.y)
-				if horizontal in avoid or vertical in avoid or blocked(state,room,horizontal,actor) or blocked(state,room,vertical,actor):continue
+				if obstacles.has(point+Vector2i(direction.x,0)) or obstacles.has(point+Vector2i(0,direction.y)):continue
 			var cost: float = current.cost+distance(direction,Vector2i.ZERO)
 			if cost>=costs.get(next,INF):continue
-			costs[next]=cost
-			previous[next]=point
-			sequence+=1
-			queue.append({"point":next,"cost":cost,"sequence":sequence})
+			costs[next]=cost;previous[next]=point;sequence+=1
+			heap_push(queue,{"point":next,"cost":cost,"priority":cost+distance(next,target),"sequence":sequence})
 	return null
 
 ## Geometry snapshots used by the native rules and migration regression tests.

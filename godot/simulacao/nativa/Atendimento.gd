@@ -208,9 +208,11 @@ func wander(s: Dictionary,w: Dictionary) -> void:
 			if distance==0 or (not returning and (distance<2 or distance>4)) or MOVE.blocked(s,w.room,x,y,w) or occupied.has(str(x)+","+str(y)):continue
 			candidates.append(Vector2i(x,y))
 	if not candidates.is_empty():
+		var reachable := MOVE.MAP.reachable(s,w.room,Vector2i(w.x,w.y),w,avoid)
 		var start := mini(candidates.size()-1,int(wander_random.call()*candidates.size()))
 		for i in candidates.size():
 			var point: Vector2i = candidates[(start+i)%candidates.size()]
+			if not reachable.has(point):continue
 			var path = MOVE.MAP.route(s,w.room,Vector2i(w.x,w.y),point,w,avoid)
 			if path==null or path.is_empty() or (not returning and path.size()>5):continue
 			MOVE.go(w,{"room":"restaurant","x":point.x,"y":point.y,"idleWalk":true});w.wait=0;return
