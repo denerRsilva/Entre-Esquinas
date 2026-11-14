@@ -6,6 +6,8 @@ extends Node2D
 		kit=value
 		queue_redraw()
 @export var mostrar_base := true
+const ALTURA_BASE := 30
+const PROFUNDIDADE_TAMPO := 28
 const BASE = preload("res://arte/modular/mesa-trabalho.png")
 const KITS = preload("res://arte/modular/kits-mesa.png")
 const RECORTES = [Rect2(155,335,599,255),Rect2(1017,335,621,255)]
@@ -15,6 +17,6 @@ func _ready() -> void:
 	cut.shader=preload("res://arte/taverna/recorte.gdshader")
 	material=cut
 func _draw() -> void:
-	if mostrar_base:draw_texture_rect_region(BASE,Rect2(-38,-58,76,58),Rect2(94,122,1245,877))
+	if mostrar_base:draw_texture_rect_region(BASE,Rect2(-38,-ALTURA_BASE-PROFUNDIDADE_TAMPO,76,ALTURA_BASE+PROFUNDIDADE_TAMPO),Rect2(94,122,1245,877))
 	if kit>0:
 		draw_texture_rect_region(KITS,Rect2(-24,-49,48,20),RECORTES[kit-1])

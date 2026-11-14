@@ -54,3 +54,21 @@ empratar, atender, receber pagamento e lavar louça usando bancadas equipadas.
 As demais suítes de regressão verificam compatibilidade com os sistemas
 anteriores. Os testes de interface são headless; a avaliação visual e auditiva
 em um aparelho Android continua sendo uma etapa de aceitação.
+
+## Bancadas: coerência com as mesas e três formas reais
+
+A bancada agora recorta a própria `mesa-trabalho.png`: mesma madeira, tampo
+horizontal com 28 pixels de profundidade e base com 30 pixels de altura. Cada
+módulo continua ocupando uma célula de 40 pixels; dois módulos horizontais
+correspondem às duas células de uma mesa. Isso mantém posições, colisões e
+partidas existentes compatíveis.
+
+As cenas horizontal, vertical e de quina usam perfis diferentes. A rotação altera
+o perfil do tampo, mantendo a frente e os pés em pé na perspectiva da câmera.
+As junções consideram o perfil da peça vizinha, inclusive equipada, e removem
+somente as bordas compartilhadas. O catálogo usa essas mesmas cenas.
+
+Validação: `ArteBancadasUI` verifica formas, rotações e junções. Executado com
+renderização OpenGL, também verifica imagens diferentes e gera uma comparação
+em `/tmp/esquinas-bancadas-comparacao.png`. Os testes de cozinha, kits, construção
+e enquadramento continuam cobrindo o funcionamento dessas peças.

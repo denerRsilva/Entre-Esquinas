@@ -1,4 +1,7 @@
 extends Node2D
+const BANCADA = preload("res://moveis/Bancada.gd")
+const FORMAS_BANCADA = {"counterH":0,"counterV":1,"counterCorner":2}
+const LADOS_BANCADA = [Vector2i.UP,Vector2i.RIGHT,Vector2i.DOWN,Vector2i.LEFT]
 const Tracos = preload("res://mundo/Tracos.gd")
 @export var cozinheira: PackedScene = preload("res://personagens/Cozinheira.tscn")
 @export var moveis: Dictionary[String,PackedScene] = preload("res://moveis/Catalogo.gd").CENAS
@@ -37,6 +40,10 @@ func paint(data: Dictionary) -> void:
 	var camera: Array = data.camera
 	scale = Vector2.ONE*float(camera[2])
 	position = -Vector2(camera[0],camera[1])*scale
+	var counter_profiles := {}
+	for command in data.scene:
+		if command[0]=="furniture" and FORMAS_BANCADA.has(command[1]):
+			counter_profiles[Vector2i(command[2],command[3])]=BANCADA.perfil(FORMAS_BANCADA[command[1]],int(command[6]))
 	var segment := []
 	for op in data.scene:
 		if op[0] not in ["cook","furniture","npc"]:
@@ -73,7 +80,10 @@ func paint(data: Dictionary) -> void:
 			if op[1] in ["computer","receiving","stove","prep","kitchen","worktable","cuttingKit","platingKit","sink","table","shelf","potRack"]: original.x=80
 			if op[1] in ["fridge","cold"]: original.y=80
 			n.scale = Vector2(float(op[4])/original.x,float(op[5])/original.y)
-			if str(op[1]).begins_with("counter"):n.configurar(int(op[6]),int(op[8]) if op.size()>8 else 0)
+			if str(op[1]).begins_with("counter"):
+				var profiles := []
+				for direction in LADOS_BANCADA:profiles.append(counter_profiles.get(Vector2i(op[2],op[3])+direction*40,PackedByteArray()))
+				n.configurar(int(op[6]),int(op[8]) if op.size()>8 else 0,profiles)
 			if op[1]=="chair":
 				var facing := int(op[6])
 				var crop: Array = art_cuts.moveis[[9,10,8,10][facing]]
