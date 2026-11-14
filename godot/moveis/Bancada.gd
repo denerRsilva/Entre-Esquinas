@@ -15,6 +15,7 @@ const PASSO := 2
 const CELULAS := 20
 const ALTURA := MESA.ALTURA_BASE
 static var centros_kit: Dictionary = {}
+static var perfis: Dictionary = {}
 const BORDA = Color("#302019")
 
 func _ready() -> void:
@@ -31,6 +32,8 @@ func configurar(rotation_index: int, neighbors: int = 0, profiles: Array = []) -
 	queue_redraw()
 
 static func perfil(shape: int, rotation_index: int) -> PackedByteArray:
+	var key := Vector2i(shape,posmod(rotation_index,4))
+	if perfis.has(key):return perfis[key].duplicate()
 	# Each module keeps its saved 40x40 footprint. H has the same 28px top
 	# depth as the worktable; V runs back into the cell; the elbow joins both.
 	var cells := PackedByteArray()
@@ -42,7 +45,8 @@ static func perfil(shape: int, rotation_index: int) -> PackedByteArray:
 			var point := Vector2i(x,y)
 			for turn in posmod(rotation_index,4):point=Vector2i(CELULAS-1-point.y,point.x)
 			cells[point.y*CELULAS+point.x]=1
-	return cells
+	perfis[key]=cells
+	return cells.duplicate()
 
 static func centro_kit(shape: int, rotation_index: int) -> Vector2:
 	var key := Vector2i(shape,posmod(rotation_index,4))

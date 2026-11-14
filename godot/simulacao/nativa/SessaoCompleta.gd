@@ -10,6 +10,7 @@ const ADMIN = preload("res://simulacao/nativa/Administracao.gd")
 const SAVE = preload("res://simulacao/nativa/Salvamentos.gd")
 const UI_COMMAND = preload("res://simulacao/nativa/ComandosInterface.gd")
 const FOOD_UI = preload("res://interface/ComidaInterface.gd")
+var simulation = SIM.new()
 var rng: Callable = randf
 var state: Dictionary = PARTIDA.fresh(true,true)
 var active_slot := 1
@@ -355,7 +356,7 @@ func step(dt: float,events: Array) -> Dictionary:
 		while remaining>1e-9:
 			var slice := minf(0.08,remaining)
 			if modal.is_empty():keyboard_move()
-			var simulation = SIM.new();simulation.velocity=velocity;simulation.service.random_source=rng
+			simulation.velocity=velocity;simulation.service.random_source=rng
 			simulation.step(state,slice);ADMIN.auto_open(state);velocity=simulation.velocity
 			if pending!=null:interact("process")
 			remaining=maxf(0,remaining-slice)

@@ -5,6 +5,7 @@ var builder = Builder.new()
 var slots := {}
 var cache := {}
 var by_id := {}
+var kitchen_bars: Array = []
 var modal_background: ColorRect
 var import_dialog: FileDialog
 signal import_save(path:String)
@@ -67,6 +68,19 @@ func area(key:String,rect:Rect2,scrollable:=true,boxed:=true) -> void:
 	slots[key]=[root,content,rect]
 	root.hide()
 
+func progress_signature(item: Dictionary, values: Array) -> Dictionary:
+	var result := item.duplicate()
+	if item.get("tag")=="progress":
+		values.append(item.value);result.value=0
+	if item.has("children"):
+		result.children=[]
+		for child in item.children:result.children.append(progress_signature(child,values))
+	return result
+
+func update_kitchen_bars(values: Array) -> void:
+	for i in mini(values.size(),kitchen_bars.size()):
+		kitchen_bars[i].value=values[i]
+
 func sync(data: Dictionary) -> void:
 	modal_background.visible = data.modal!=""
 	for key in slots:
@@ -93,8 +107,11 @@ func sync(data: Dictionary) -> void:
 				var actions_y:float=slots.context[0].position.y
 				notice_y=actions_y-80.0 if actions_y>=140.0 else actions_y+120.0
 			root.position=Vector2(10,notice_y)
-		var signature:String=JSON.stringify(item)
-		if cache.get(key)==signature: continue
+		var progress_values: Array = []
+		var signature:String=JSON.stringify(progress_signature(item,progress_values) if key=="kitchenStatus" else item)
+		if cache.get(key)==signature:
+			if key=="kitchenStatus":update_kitchen_bars(progress_values)
+			continue
 		cache[key]=signature
 		var content:VBoxContainer=entry[1]
 		var scroll=content.get_parent() as ScrollContainer
@@ -119,6 +136,7 @@ func sync(data: Dictionary) -> void:
 			content.add_child(builder.label(item.children[0].text,12))
 		else:
 			builder.render(item,content)
+		if key=="kitchenStatus":kitchen_bars=content.find_children("*","ProgressBar",true,false)
 		if key=="modal" and signature.contains("Salvar restaurante") and signature.contains("Carregar restaurante"):
 			var b:=Button.new();b.text="Importar salvamento (.json)"
 			b.pressed.connect(func():import_dialog.popup_centered_ratio(0.72))
@@ -131,7 +149,7 @@ func sync(data: Dictionary) -> void:
 				if not decoration is BaseButton: decoration.mouse_filter=Control.MOUSE_FILTER_IGNORE
 		if scroll and scroll_y: scroll.set_deferred("scroll_vertical",scroll_y)
 		root.set_deferred("size",entry[2].size)
-	fit_build.call_deferred()
+	if slots.build[0].visible:fit_build.call_deferred()
 
 func fit_build() -> void:
 	if not slots.has("build"):return
