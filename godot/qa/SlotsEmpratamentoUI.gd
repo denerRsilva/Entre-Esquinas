@@ -85,7 +85,7 @@ func run():
 		for counter in [false,true]:
 			var geometry := LAYOUT.frame(axes,counter)
 			for i in 4:
-				var dish := Rect2(LAYOUT.ready(i,geometry)-Vector2(9,5)*geometry.size,Vector2(18,10)*geometry.size)
+				var dish := Rect2(LAYOUT.ready(i,geometry)-LAYOUT.READY_SIZE/2*geometry.size,LAYOUT.READY_SIZE*geometry.size)
 				for pile in 2:
 					for layer in 10:check(not dish.intersects(LAYOUT.clean(pile,layer,geometry)),"Limpos e servidos separados nas rotações")
 	if "--capture" in OS.get_cmdline_user_args():

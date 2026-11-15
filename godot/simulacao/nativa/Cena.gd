@@ -192,7 +192,7 @@ func object(s: Dictionary,o: Dictionary,selected: bool,preview: bool = false) ->
 				for j in STORE.quality_count(o,dish,q):
 					# Old snapshots can exceed four; loaded games migrate overflow.
 					var position: Vector2 = anchor+layout.ready(index%STORE.READY_DISH_CAPACITY,geometry)
-					plate(position.x,position.y,INV.ITEMS.data[dish].recipe,false,q,Vector2(18,10)*geometry.size)
+					plate(position.x,position.y,INV.ITEMS.data[dish].recipe,false,q,layout.READY_SIZE*geometry.size)
 					index+=1
 	if o.type=="table":
 		for ch in s.objects:

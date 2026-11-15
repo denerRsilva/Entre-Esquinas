@@ -48,4 +48,10 @@ Captura do jogo com vinte pratos limpos e quatro pratos prontos:
 `docs/arte/empratamento-quatro-pratos.png`. Renderizador Compatibility; sem teste
 em aparelho Android físico nesta execução.
 
-Android 0.21.2-godot.34 (21234). ZIP e assinatura APK v2/v3 verificados.
+Android 0.21.2-godot.35 (21235). ZIP e assinatura APK v2/v3 verificados.
+
+Ajuste de tamanho: pratos limpos passaram de 10×5 para 12×6; pratos com receita,
+de 18×10 para 22×12. As pilhas ficam próximas aos cantos superior e inferior
+da borda esquerda. A disposição compacta das bancadas mantém os pratos dentro
+do tampo. Após esse ajuste passaram `SlotsEmpratamentoUI`, `PratosEstoqueUI` e
+`CenaNativa`, além da conferência da captura atualizada no Compatibility.
