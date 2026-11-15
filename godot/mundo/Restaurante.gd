@@ -6,6 +6,7 @@ var active:=false
 var frame_data:Dictionary
 var values:Dictionary={}
 var focused := true
+var view_size := Vector2.ZERO
 var tone_cache: Dictionary = {}
 @onready var hud=$HUD
 @onready var palco=$Mapa/Palco
@@ -17,7 +18,20 @@ func _ready() -> void:
 	hud.import_save.connect(import_save)
 	$Mapa.gui_input.connect(map_input)
 	active=true
+	get_viewport().size_changed.connect(resize_view)
+	resize_view()
 	tick(0)
+
+func resize_view() -> void:
+	var size := get_viewport().get_visible_rect().size
+	if size.x<=0 or size.y<=0 or size==view_size:return
+	view_size=size
+	$Mapa.position=Vector2.ZERO
+	$Mapa.size=size
+	$HUD.size=size
+	session.resize_view(size.x,size.y)
+	# Resizing must also repaint menus, which normally suspend the game loop.
+	if active:tick(0)
 
 func saved_dictionary(path: String):
 	if not FileAccess.file_exists(path): return null
@@ -61,11 +75,13 @@ func import_save(path:String) -> void:
 	else: session.notify("Falha ao gravar o arquivo importado.",true)
 	tick(0)
 
+func toggle_fullscreen() -> void:
+	var full=DisplayServer.window_get_mode()==DisplayServer.WINDOW_MODE_FULLSCREEN
+	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED if full else DisplayServer.WINDOW_MODE_FULLSCREEN)
+
 func queue_command(e:Dictionary) -> void:
 	if e.get("id","")=="fullscreenBtn":
-		var full=DisplayServer.window_get_mode()==DisplayServer.WINDOW_MODE_FULLSCREEN
-		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED if full else DisplayServer.WINDOW_MODE_FULLSCREEN)
-		return
+		toggle_fullscreen();return
 	events.append(e)
 
 func tick(dt:float) -> void:
@@ -123,6 +139,8 @@ func map_input(event:InputEvent) -> void:
 
 func _input(event:InputEvent) -> void:
 	if not active or not event is InputEventKey or event.echo:return
+	if event.keycode==KEY_F11 and event.pressed:
+		toggle_fullscreen();return
 	var editing := get_viewport().gui_get_focus_owner() is LineEdit
 	if editing and event.pressed and event.keycode != KEY_ESCAPE:return
 	var names={KEY_UP:"arrowup",KEY_DOWN:"arrowdown",KEY_LEFT:"arrowleft",KEY_RIGHT:"arrowright",KEY_ESCAPE:"escape",KEY_W:"w",KEY_S:"s",KEY_A:"a",KEY_D:"d",KEY_E:"e",KEY_R:"r"}

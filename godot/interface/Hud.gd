@@ -7,6 +7,9 @@ var cache := {}
 var by_id := {}
 var kitchen_bars: Array = []
 var order_bars: Array = []
+var layout_size := Vector2.ZERO
+var layout_bounds := Rect2()
+var small_modal := false
 var modal_background: ColorRect
 var import_dialog: FileDialog
 signal import_save(path:String)
@@ -69,6 +72,48 @@ func area(key:String,rect:Rect2,scrollable:=true,boxed:=true) -> void:
 	slots[key]=[root,content,rect]
 	root.hide()
 
+static func safe_layout(logical: Vector2, physical: Vector2, safe: Rect2) -> Rect2:
+	var full := Rect2(Vector2.ZERO,logical)
+	if physical.x<=0 or physical.y<=0 or not safe.has_area():return full
+	var factor := logical/physical
+	var area := full.intersection(Rect2(safe.position*factor,safe.size*factor))
+	return area if area.size.x>=320 and area.size.y>=240 else full
+
+func usable_rect() -> Rect2:
+	var full := get_viewport_rect()
+	if OS.has_feature("android"):
+		return safe_layout(full.size,Vector2(DisplayServer.window_get_size()),Rect2(DisplayServer.get_display_safe_area()))
+	return full
+
+func region(key: String, rect: Rect2) -> void:
+	rect.position+=layout_bounds.position
+	var entry: Array = slots[key]
+	entry[2]=rect
+	entry[0].position=rect.position
+	entry[0].size=rect.size
+	if key in ["hint","notice"]:
+		entry[1].size=rect.size-Vector2(12,6)
+
+func fit_regions(welcome_small: bool) -> void:
+	var bounds := usable_rect()
+	var screen := bounds.size
+	if bounds==layout_bounds and welcome_small==small_modal:return
+	layout_size=screen;layout_bounds=bounds;small_modal=welcome_small
+	var w := screen.x;var h := screen.y
+	region("hud",Rect2(8,5,w-16,47))
+	region("ordersHud",Rect2(w-253,64,245,minf(210,h-150)))
+	region("kitchenStatus",Rect2(8,64,minf(320,w*0.34),minf(180,h-160)))
+	region("hint",Rect2(10,h-96,minf(610,w-290),42))
+	region("notice",Rect2(10,maxf(64,h-200),minf(520,w-20),70))
+	region("dock",Rect2(10,h-53,minf(550,w-280),48))
+	region("actions",Rect2(w-244,h-59,234,54))
+	region("catalog",Rect2(10,h-51,168,44))
+	region("drawer",Rect2(7,7,minf(440,w-20),h-70))
+	var dialog_size := Vector2(minf(604 if welcome_small else 844,w-32),minf(234 if welcome_small else 612,h-32))
+	region("modal",Rect2((screen-dialog_size)/2,dialog_size))
+	region("context",Rect2(10,64,minf(500,w-20),110))
+	if slots.build[0].visible:fit_build.call_deferred()
+
 func progress_signature(item: Dictionary, values: Array) -> Dictionary:
 	var result := item.duplicate()
 	if item.get("tag")=="progress":
@@ -84,6 +129,7 @@ func update_kitchen_bars(values: Array) -> void:
 
 func sync(data: Dictionary) -> void:
 	modal_background.visible = data.modal!=""
+	fit_regions(data.modal=="welcome" and not JSON.stringify(data.ui.get("modal",{})).contains("Fechar tutorial"))
 	for key in slots:
 		var entry:Array=slots[key]
 		var root:Control=entry[0]
@@ -95,19 +141,16 @@ func sync(data: Dictionary) -> void:
 			var anchor:Dictionary=item.children[0].get("anchor",{})
 			if not anchor.is_empty():
 				var cam:Array=data.camera
-				var anchor_y := (float(anchor.y)*40.0-float(cam[1]))*float(cam[2])+60.0
+				var anchor_y := (float(anchor.y)*40.0-float(cam[1]))*float(cam[2])
 				var panel_y := anchor_y-100.0 if anchor_y>=160.0 else anchor_y+80.0
-				root.position=Vector2(clampf((float(anchor.x)+float(anchor.w)/2.0)*40.0*float(cam[2])-float(cam[0])*float(cam[2])-250.0,5.0,455.0),clampf(panel_y,60.0,520.0))
-		if key=="modal":
-			var welcome_small:bool=data.modal=="welcome" and not JSON.stringify(item).contains("Fechar tutorial")
-			entry[2]=Rect2(178,218,604,234) if welcome_small else Rect2(58,44,844,612)
-			root.position=entry[2].position
+				var width: float = entry[2].size.x
+				root.position=Vector2(clampf((float(anchor.x)+float(anchor.w)/2.0)*40.0*float(cam[2])-float(cam[0])*float(cam[2])-width/2,layout_bounds.position.x+5,layout_bounds.end.x-width-5),clampf(panel_y,layout_bounds.position.y+60,layout_bounds.end.y-120))
 		if key=="notice":
-			var notice_y:=500.0
+			var notice_y:=layout_bounds.position.y+maxf(64,layout_size.y-200)
 			if slots.context[0].visible:
 				var actions_y:float=slots.context[0].position.y
 				notice_y=actions_y-80.0 if actions_y>=140.0 else actions_y+120.0
-			root.position=Vector2(10,notice_y)
+			root.position=Vector2(layout_bounds.position.x+10,clampf(notice_y,layout_bounds.position.y+60,layout_bounds.end.y-100))
 		var progress_values: Array = []
 		var signature:String=JSON.stringify(progress_signature(item,progress_values) if key in ["kitchenStatus","ordersHud"] else item)
 		if cache.get(key)==signature:
@@ -159,10 +202,11 @@ func fit_build() -> void:
 	if not slots.has("build"):return
 	var panel: Control = slots.build[0]
 	if not panel.visible:return
-	var viewport_size := get_viewport_rect().size
+	var bounds := usable_rect()
+	var viewport_size := bounds.size
 	var width := minf(762,viewport_size.x-20)
 	panel.size.x=width
 	var content: VBoxContainer = slots.build[1]
 	var desired_height := content.get_combined_minimum_size().y+28
 	panel.size=Vector2(width,minf(desired_height,viewport_size.y-80))
-	panel.position=Vector2(viewport_size.x-width-10,viewport_size.y-panel.size.y-8)
+	panel.position=bounds.position+Vector2(viewport_size.x-width-10,viewport_size.y-panel.size.y-8)

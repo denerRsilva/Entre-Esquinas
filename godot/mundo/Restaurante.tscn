@@ -9,9 +9,8 @@
 [node name="EntreEsquinas" type="Node"]
 script = ExtResource("game")
 [node name="Mapa" type="Control" parent="."]
-offset_top = 60.0
 offset_right = 960.0
-offset_bottom = 700.0
+offset_bottom = 540.0
 clip_contents = true
 [node name="Palco" type="Node2D" parent="Mapa"]
 script = ExtResource("world")
@@ -26,7 +25,7 @@ z_index = -1
 [node name="HUD" type="Control" parent="."]
 z_index = 4096
 offset_right = 960.0
-offset_bottom = 700.0
+offset_bottom = 540.0
 mouse_filter = 2
 theme = ExtResource("theme")
 script = ExtResource("hud")

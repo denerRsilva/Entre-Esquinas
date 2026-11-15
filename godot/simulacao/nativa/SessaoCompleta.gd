@@ -22,6 +22,7 @@ var camera := {"x":0.0,"y":0.0,"zoom":1.0,"mode":null}
 var viewport := {"width":960.0,"height":640.0}
 var rect := {"left":0.0,"top":60.0,"width":960.0,"height":640.0}
 var camera_level := 1.0
+var responsive_view := false
 var modal := "welcome"
 var mode := "general"
 var tab := "guide"
@@ -59,7 +60,12 @@ func initialize(saved: Dictionary) -> void:
 	update_camera()
 func release_keyboard() -> void:keyboard.clear();velocity=null
 func focus(value: bool) -> void:hidden=not value;release_keyboard()
-func update_camera() -> void:camera=CAMERA.update(state,camera,viewport,camera_level,construction)
+func resize_view(width: float,height: float) -> void:
+	responsive_view=true;build_pointer=null
+	viewport={"width":maxf(1,width),"height":maxf(1,height)}
+	rect={"left":0.0,"top":0.0,"width":viewport.width,"height":viewport.height}
+	update_camera()
+func update_camera() -> void:camera=CAMERA.update(state,camera,viewport,camera_level,construction,responsive_view)
 func set_zoom(value: float) -> void:
 	camera_level=CAMERA.level(value);values["entre-camera-zoom"]=str(camera_level);writes["entre-camera-zoom"]=str(camera_level);update_camera()
 func notify(message: String,bad: bool = false) -> void:

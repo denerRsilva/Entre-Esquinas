@@ -1,7 +1,8 @@
 extends RefCounted
 const MOVE = preload("res://simulacao/nativa/Movimento.gd")
 static func level(value: float) -> float:return floor(clampf(value,0.7,2.0)*10+0.5)/10
-static func update(state: Dictionary,camera: Dictionary,viewport: Dictionary,zoom_level: float,construction: bool) -> Dictionary:
+static func update(state: Dictionary,camera: Dictionary,viewport: Dictionary,zoom_level: float,construction: bool,full_view: bool = false) -> Dictionary:
+	if full_view:return expanded_view(state,camera,viewport,zoom_level,construction)
 	var result: Dictionary = camera.duplicate(true)
 	var player := MOVE.position(state.player)
 	var mode := "build" if construction else "play"
@@ -20,6 +21,27 @@ static func update(state: Dictionary,camera: Dictionary,viewport: Dictionary,zoo
 	result.y=top+(height-viewport.height/result.zoom)/2 if viewport.height/result.zoom>height else clampf(result.y,top,maximum_y)
 	result.mode=mode
 	return result
+static func room_bounds(state: Dictionary) -> Rect2:
+	if state.player.room=="restaurant" and state.get("compact",false):
+		return Rect2(160,240,800,400) if state.get("singleRoom",false) else Rect2(160,80,800,560)
+	return Rect2(0,0,960,640)
+
+static func expanded_view(state: Dictionary,camera: Dictionary,viewport: Dictionary,zoom_level: float,construction: bool) -> Dictionary:
+	var bounds := room_bounds(state)
+	# Fit the interior with breathing room for the overlay HUD. Wider screens
+	# reveal more world/void rather than stretching sprites or adding side bars.
+	var base := minf((viewport.width-64)/bounds.size.x,(viewport.height-120)/bounds.size.y)
+	var zoom := maxf(0.35,base)*zoom_level
+	var limits := bounds.grow(40)
+	var player := MOVE.position(state.player)
+	var result := {"zoom":zoom,"mode":"build" if construction else "play"}
+	# Keep camera coordinates as doubles; Vector2 would quantize every drag.
+	for axis in [["x",viewport.width/zoom,player.x*40+20,limits.position.x,limits.size.x],["y",viewport.height/zoom,player.y*40+20,limits.position.y,limits.size.y]]:
+		var key: String = axis[0]
+		var position: float = camera[key] if construction and camera.get("mode")=="build" else axis[2]-axis[1]/2
+		result[key]=axis[3]+(axis[4]-axis[1])/2 if axis[1]>=axis[4] else clampf(position,axis[3],axis[3]+axis[4]-axis[1])
+	return result
+
 static func world_pointer(point: Dictionary,rect: Dictionary,viewport: Dictionary,camera: Dictionary) -> Dictionary:
 	return {"x":((point.clientX-rect.left)*viewport.width/rect.width/camera.zoom+camera.x)/40,"y":((point.clientY-rect.top)*viewport.height/rect.height/camera.zoom+camera.y)/40}
 static func screen_point(x: float,y: float,rect: Dictionary,viewport: Dictionary,camera: Dictionary) -> Dictionary:

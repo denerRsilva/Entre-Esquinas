@@ -1,15 +1,16 @@
 config_version=5
 [application]
 config/name="Entre Esquinas — Restaurante"
-config/version="0.21.2-godot.27"
+config/version="0.21.2-godot.28"
 run/main_scene="res://mundo/Restaurante.tscn"
 run/max_fps=60
 config/features=PackedStringArray("4.6", "GL Compatibility")
 [display]
 window/size/viewport_width=960
-window/size/viewport_height=700
+window/size/viewport_height=540
 window/stretch/mode="canvas_items"
-window/stretch/aspect="keep"
+window/stretch/aspect="expand"
+window/size/mode=3
 [input_devices]
 pointing/emulate_mouse_from_touch=true
 [rendering]
@@ -17,4 +18,4 @@ textures/vram_compression/import_etc2_astc=true
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 textures/canvas_textures/default_texture_filter=0
-environment/defaults/default_clear_color=Color(0.13,0.22,0.17,1)
+environment/defaults/default_clear_color=Color(0,0,0,1)
