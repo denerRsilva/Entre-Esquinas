@@ -327,7 +327,7 @@ func ui() -> Dictionary:
 		return {"modal":admin_ui.render(state,{"mode":mode,"tab":tab,"object":dialog_object,"camera":camera_level,"generation":generation,"notice":menu_notice},panel)}
 	if construction:
 		var result := {"catalog":node("div",[button("Construção","toggleCatalog")],"constructionControls")}
-		if drawer:result.drawer=node("div",[node("div",[node("b",[text("Modo construção")]),button("Voltar ao jogo","exitConstruction")],"","constructionHead"),label("Jogo pausado • arraste o cenário para explorar"),label("Disponível: $%.2f"%state.cash),catalog_ui.render(state),label(state.message)],"constructionDrawer")
+		if drawer:result.drawer=node("div",[node("div",[node("b",[text("Modo construção")]),button("Voltar ao jogo","exitConstruction")],"","constructionHead"),label("Jogo pausado • arraste o cenário para explorar"),label("Disponível: $%.2f"%state.cash),catalog_ui.render(state)],"constructionDrawer")
 		if building!=null:
 			var error = preview_error()
 			var is_kit: bool = BUILD.TABLE_KITS.has(building.type)
@@ -342,11 +342,9 @@ func ui() -> Dictionary:
 			result.build=node("div",[node("b",[text(("Mover: " if building.moving!=null else "Instalar: ")+BUILD.CATALOG.data[building.type].name)]),label(error if error!=null else hint),node("div",actions,"","buildActions")],"buildBar")
 		return result
 	var door := CAMERA.door(state,camera,viewport,rect,false,false,false)
-	var result: Dictionary = game_ui.render(state,{"selectedObject":selected,"constructionMode":false,"modal":false,"building":building,"doorHidden":door.hidden},velocity)
-	for key in ["ordersHud","kitchenStatus"]:result[key]=food_ui.decorate(result[key])
+	var result: Dictionary = game_ui.render(state,{"selectedObject":selected,"constructionMode":false,"modal":false,"building":building,"doorHidden":door.hidden,"cleanView":true},velocity)
 	result.dock=node("div",[button("Gestão","management",false,"menuBtn",game_ui.icon("note")),button("Opções","options",false,"optionsBtn",game_ui.icon("options")),button("Livro de receitas","recipes")],"dock")
 	result.actions=node("div",[button("−","zoomOut",camera_level<=0.7),button("+","zoomIn",camera_level>=2)],"actions")
-	if clock<=notice_until:result.notice=food_ui.decorate(node("div",[text(state.message)],"notice"))
 	return result
 func step(dt: float,events: Array) -> Dictionary:
 	for event in events:
@@ -379,7 +377,7 @@ func step(dt: float,events: Array) -> Dictionary:
 			if played_heat.get(object.id)==tone:continue
 			played_heat[object.id]=tone;sounds.append(660 if object.get("heatStage")=="ready" else 440 if object.get("heatStage")=="over" else 220)
 	update_camera()
-	var scene := renderer.draw(state,{"selectedObject":selected,"constructionMode":construction,"building":building,"hover":hover,"feedback":true},velocity)
+	var scene := renderer.draw(state,{"selectedObject":selected,"constructionMode":construction,"building":building,"hover":hover,"feedback":true,"cleanView":true},velocity)
 	var door := CAMERA.door(state,camera,viewport,rect,construction,not modal.is_empty(),modal=="welcome")
 	var packet := {"singleRoom":state.singleRoom,"compact":state.compact,"room":state.player.room,"camera":[camera.x,camera.y,camera.zoom],"scene":scene,"ui":ui(),"modal":modal,"liveInventory":modal=="management" and mode=="container","construction":construction,"door":[door.left,door.top],"writes":writes.duplicate(true),"sounds":sounds.duplicate()}
 	writes.clear();sounds.clear()

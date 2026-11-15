@@ -10,6 +10,7 @@ const SERVICE = preload("res://simulacao/nativa/Atendimento.gd")
 const PORTALS = {"restaurant":[{"x":7,"y":14,"name":"Sair para a cidade"}],"street":[{"x":12,"y":5,"name":"Entrar no restaurante"}],"stock":[{"x":21,"y":14,"name":"Voltar à cozinha"}]}
 var commands: Array = []
 var alpha := 1.0
+var clean_view := false
 var facing: Dictionary = {}
 var velocity: Variant = null
 var identities: Dictionary = {}
@@ -20,6 +21,7 @@ static func same(a: Variant,b: Variant) -> bool:
 func box(x: float,y: float,w: float,h: float,color: String) -> void:commands.append(["rect",FOOD.pixel(x),FOOD.pixel(y),FOOD.pixel(w),FOOD.pixel(h),color,alpha])
 func text(value: String,x: float,y: float,size: int,color: String,align: String = "center") -> void:commands.append(["text",FOOD.pixel(x),FOOD.pixel(y),value,size,color,align])
 func label(value: String,x: float,y: float,color: String = "#25473d") -> void:
+	if clean_view:return
 	var width := (value.to_utf16_buffer().size()/2)*10*0.60+12
 	box(x-width/2,y-10,width,16,color);text(value,x,y+2,10,"#fff0ce")
 func food(item: String,x: float,y: float,w: float,h: float) -> bool:
@@ -100,13 +102,15 @@ func actor(s: Dictionary,a: Dictionary,selected: Variant,construction: bool) -> 
 	if construction:return
 	if a.id=="player":label("Você",x,bottom+12,"#77603a")
 	elif a.id.begins_with("worker"):label("Logística" if a.id=="worker1" else "Garçom",x,bottom+11)
-	elif a.get("recipe")!=null and a.get("order")!=null and a.state in ["ordered","eating"]:box(x-17,bottom-82,34,28,"#25473df2");food(a.recipe,x-15,bottom-82,30,26)
+	elif a.get("recipe")!=null and a.get("order")!=null and a.state in ["ordered","eating"]:
+		if not clean_view:box(x-17,bottom-82,34,28,"#25473df2")
+		food(a.recipe,x-15,bottom-82,30,26)
 	elif same(selected,a.id):label({"lia":"Lia","beto":"Beto","nina":"Nina"}.get(a.id,"Cliente"),x,bottom+11)
 	if a.wait>=5:label("Aguardando passagem",x,bottom-68,"#78503a")
 	if a.get("experience")!=null:
 		var indicator = service.indicator(s,a)
 		if indicator!=null:
-			box(x+18,bottom-82,28,25,"#25473df2");text(indicator.emoji,x+32,bottom-62,20,"#fff3d5")
+			if not clean_view:box(x+18,bottom-82,28,25,"#25473df2");text(indicator.emoji,x+32,bottom-62,20,"#fff3d5")
 			if indicator.phase!=null:commands.append(["progress","patience:"+str(a.id)+":"+str(indicator.phase),x-22,bottom-94,44,8,indicator.ratio,"patience"])
 static func table_plate_position(table: Dictionary,chair: Dictionary) -> Vector2:
 	var rect := MOVE.MAP.rect(table)
@@ -199,7 +203,7 @@ func overlays(s: Dictionary,o: Dictionary,selected: bool,building: bool) -> void
 	elif o.type=="kitchen" and STORE.ready_count(o)>0:label(str(STORE.ready_count(o))+" pratos prontos",x+w/2,y-20)
 	if o.get("feedback")!=null and o.feedback.until>s.time:label("✓ "+o.feedback.label,x+w/2,y-47,"#3b6448")
 func draw(s: Dictionary,ui: Dictionary,input: Variant = null) -> Array:
-	commands=[];alpha=1;velocity=input;identities=ui.get("actorTokens",{})
+	commands=[];alpha=1;clean_view=ui.get("cleanView",false);velocity=input;identities=ui.get("actorTokens",{})
 	var room: String = s.player.room
 	if room=="street":label("ENCERRANDO" if s.closing else "ABERTO" if s.open else "FECHADO",675,200,"#3b6448" if s.open else "#77503a")
 	if room=="restaurant" and not s.singleRoom:
@@ -258,7 +262,7 @@ func draw(s: Dictionary,ui: Dictionary,input: Variant = null) -> Array:
 	return commands
 
 func feedback(s: Dictionary) -> void:
-	for a in MOVE.ACTORS.actors(s):
+	for a in ([] if clean_view else MOVE.ACTORS.actors(s)):
 		if a.room!=s.player.room or a.get("carry")==null or a.carry.kind!="dish":continue
 		var pos := MOVE.position(a)
 		box(pos.x*40+9,pos.y*40-48,23,17,"#25473de0")

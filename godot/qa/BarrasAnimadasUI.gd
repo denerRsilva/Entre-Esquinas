@@ -36,7 +36,11 @@ func run():
 		if op[0]=="progress" and str(op[1]).begins_with("patience:"):patient_bar=true
 	check(patient_bar,"Cliente aguardando mostra paciência no cenário")
 	g.hud.sync(packet);await layout()
-	check(g.hud.order_bars.size()==1 and g.hud.order_bars[0].value>0,"Cliente tem barra correspondente no painel de pedidos")
+	check(not g.hud.slots.ordersHud[0].visible and packet.ui.ordersHud==null,"Paciência fica só no cenário, sem painel automático duplicado")
+	# The reusable progress control is still tested independently of gameplay HUD.
+	packet.ui.ordersHud={"tag":"div","children":[{"tag":"div","children":[{"tag":"progress","max":1,"value":0.8,"color":"patience"}]}]}
+	g.hud.sync(packet);await layout()
+	check(g.hud.order_bars.size()==1 and g.hud.order_bars[0].value>0,"Controle reutilizável mantém valores fracionários")
 	var id: int = g.hud.order_bars[0].get_instance_id()
 	for child in packet.ui.ordersHud.children[0].children:
 		if child.tag=="progress":child.value=0.91

@@ -86,7 +86,11 @@ func context(s: Dictionary,model: Dictionary) -> Dictionary:
 		if not SCENE.same(selected,c.id) and not SCENE.same(selected,c.seat) and (table==null or not SCENE.same(selected,table.id)):continue
 		var target := row(s,rows,selected_object if selected_object!=null else chair if chair!=null else c)
 		if c.state=="waiting":target.children.append(button("Anotar pedido","note",{"kind":"customer","id":c.id}))
-		if c.state=="ordered":target.children.append(button("Servir "+SERVICE.RECIPES.data[c.recipe].name,"serve",{"kind":"customer","id":c.id,"recipe":c.recipe}))
+		if c.state=="ordered":
+			target.children.append(button("Servir "+SERVICE.RECIPES.data[c.recipe].name,"serve",{"kind":"customer","id":c.id,"recipe":c.recipe}))
+			var order = service.find(s.orders,c.order)
+			if model.get("cleanView",false) and order!=null and order.state=="ordered":
+				target.children.append(button("Pedido prioritário" if s.priority==order.id else "Priorizar pedido","note",{"kind":"priority","id":order.id}))
 	return node("div",rows.values(),"context")
 func kitchen_status(s: Dictionary) -> Dictionary:
 	var jobs: Array = []
@@ -113,6 +117,8 @@ func render(s: Dictionary,model: Dictionary,input: Variant) -> Dictionary:
 	var status := "Encerrando o dia" if s.clock.ending else "Concluindo" if s.closing else "Aberto" if s.open else "Encerrado" if s.clock.minute>=hours.end else "Preparação" if s.clock.minute<hours.start else "Fechado"
 	var date := CALENDAR.date(int(s.day))
 	var summary: String = period+" • "+status+"  ★ "+str(int(s.reputation.score))+"/100 • "+CALENDAR.reputation_level(s.reputation.score)+"    "+CALENDAR.time_text(s.clock.minute)+" • "+date.weekday+" "+str(date.day)+" • "+date.season+" • Ano "+str(date.year)+"  $%.2f"%s.cash
+	if model.get("cleanView",false):
+		return {"hud":node("div",[plain(summary)],"hud"),"openBtn":null,"ordersHud":null,"kitchenStatus":null,"context":context(s,model)}
 	var orders: Array = []
 	for c in s.customers:
 		if c.state!="waiting":continue

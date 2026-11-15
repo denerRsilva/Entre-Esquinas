@@ -20,8 +20,6 @@ func _ready() -> void:
 	area("ordersHud",Rect2(710,74,245,170))
 	area("kitchenStatus",Rect2(8,74,320,120))
 	area("context",Rect2(150,360,500,110),false,false)
-	area("hint",Rect2(10,604,610,42),false,true)
-	area("notice",Rect2(10,500,520,70),false,true)
 	area("dock",Rect2(10,647,550,48),false,false)
 	area("actions",Rect2(720,641,234,54),false,false)
 	area("catalog",Rect2(10,649,168,44),false,false)
@@ -103,8 +101,6 @@ func fit_regions(welcome_small: bool) -> void:
 	region("hud",Rect2(8,5,w-16,47))
 	region("ordersHud",Rect2(w-253,64,245,minf(210,h-150)))
 	region("kitchenStatus",Rect2(8,64,minf(320,w*0.34),minf(180,h-160)))
-	region("hint",Rect2(10,h-96,minf(610,w-290),42))
-	region("notice",Rect2(10,maxf(64,h-200),minf(520,w-20),70))
 	region("dock",Rect2(10,h-53,minf(550,w-280),48))
 	region("actions",Rect2(w-244,h-59,234,54))
 	region("catalog",Rect2(10,h-51,168,44))
@@ -145,12 +141,6 @@ func sync(data: Dictionary) -> void:
 				var panel_y := anchor_y-100.0 if anchor_y>=160.0 else anchor_y+80.0
 				var width: float = entry[2].size.x
 				root.position=Vector2(clampf((float(anchor.x)+float(anchor.w)/2.0)*40.0*float(cam[2])-float(cam[0])*float(cam[2])-width/2,layout_bounds.position.x+5,layout_bounds.end.x-width-5),clampf(panel_y,layout_bounds.position.y+60,layout_bounds.end.y-120))
-		if key=="notice":
-			var notice_y:=layout_bounds.position.y+maxf(64,layout_size.y-200)
-			if slots.context[0].visible:
-				var actions_y:float=slots.context[0].position.y
-				notice_y=actions_y-80.0 if actions_y>=140.0 else actions_y+120.0
-			root.position=Vector2(layout_bounds.position.x+10,clampf(notice_y,layout_bounds.position.y+60,layout_bounds.end.y-100))
 		var progress_values: Array = []
 		var signature:String=JSON.stringify(progress_signature(item,progress_values) if key in ["kitchenStatus","ordersHud"] else item)
 		if cache.get(key)==signature:
