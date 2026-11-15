@@ -21,7 +21,6 @@ const ALTURA_BASE := 30
 const PROFUNDIDADE_TAMPO := 28
 const BASE = preload("res://arte/modular/mesa-trabalho.png")
 const PRATO = preload("res://arte/modular/prato-vazio.png")
-const UTENSILIOS = preload("res://arte/modular/kit-empratamento-utensilios.png")
 const KITS = preload("res://arte/modular/kits-mesa.png")
 const CENTRO_KIT := Vector2(0,-ALTURA_BASE-PROFUNDIDADE_TAMPO/2.0)
 const RECORTES = [Rect2(155,335,599,255),Rect2(1017,335,621,255)]
@@ -45,8 +44,6 @@ func desenhar_empratamento() -> void:
 	# The furniture footprint may rotate/stretch; the ceramic stays oval.
 	var compensate := Vector2(1/maxf(absf(scale.x),0.001),1/maxf(absf(scale.y),0.001))
 	draw_set_transform(CENTRO_KIT,0,compensate)
-	var geometry := LAYOUT.frame(scale)
-	draw_texture_rect_region(UTENSILIOS,LAYOUT.cloth(geometry),Rect2(157,461,619,356))
 	# One sprite per real clean plate, including zero. Never use a baked stack.
 	for rect in layout.plates:draw_texture_rect_region(PRATO,rect,LAYOUT.FOOD.CLEAN_PLATE_SOURCE)
 	draw_set_transform(Vector2.ZERO,0,Vector2.ONE)

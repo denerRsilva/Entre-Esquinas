@@ -10,8 +10,10 @@ func run():
 		if command[0]=="line" and command[5]=="#9fffc4":outlines+=1
 	check(outlines==0,"Mesas equipadas não são destacadas como vazias")
 	g.session.stop_build();g.session.drawer=true
-	widget("nativo:comprar:counterH");g.session.hover={"x":20,"y":11};g.tick(0)
-	check(await press("Confirmar posição"),"Compra de bancada com a nova arte")
+	# Legacy pieces remain editable, but new purchases are paused during refinement.
+	check(not g.session.catalog_ui.controls.actions.has("nativo:comprar:counterH"),"Bancadas indisponíveis para novas compras")
+	check(build.place(s,"counterH",20,11).ok,"Carrega peça de bancada de partida anterior")
+	g.tick(0)
 	var counter: Dictionary = s.objects.back();var id: int = counter.id
 	widget("nativo:comprar:cuttingKit");packet=g.session.step(0,[]);outlines=0
 	for command in packet.scene:

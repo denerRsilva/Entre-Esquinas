@@ -11,5 +11,3 @@ static func ready(index: int, layout: Dictionary) -> Vector2:
 static func clean(pile: int, layer: int, layout: Dictionary) -> Rect2:
 	if layout.vertical:return Rect2(Vector2(-20,(-27 if pile==0 else 15)-layer),FOOD.CLEAN_PLATE_SIZE)
 	return Rect2(Vector2(-36,(-14 if pile==0 else 2)-layer),FOOD.CLEAN_PLATE_SIZE)
-static func cloth(layout: Dictionary) -> Rect2:
-	return Rect2(-18,-25,36,50) if layout.vertical else Rect2(-34,-13,68,26)

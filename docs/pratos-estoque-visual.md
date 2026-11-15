@@ -3,7 +3,9 @@
 A estação aceita até **20 pratos limpos**, em duas pilhas de dez na borda
 esquerda, uma acima da outra, e até **quatro pratos prontos**. Cada sprite
 corresponde a um prato real; sem estoque, não há prato decorativo.
-O kit de empratamento é representado apenas pelo pano aprovado, sem pegador.
+A estação de empratamento não tem pano nem pegador: o tampo de madeira fica
+livre, mostrando apenas os pratos que existem no estoque. No catálogo, a função
+de empratamento é identificada por um ícone de prato.
 
 `Alimentos.gd` centraliza as dimensões do mundo: prato limpo 20×12, prato servido
 20×14 e ingrediente em uma caixa de 24×24. Cada ingrediente mantém sua proporção
@@ -21,7 +23,9 @@ O cache é atualizado por quantidade e orientação, inclusive ao reutilizar nó
 O empratamento exige uma superfície com as dimensões da mesa de preparo: **2×1**
 (ou 1×2 após girar). A mesa/bancada de trabalho existente tem esse tamanho.
 As peças modulares horizontal, vertical e de quina atuais têm 1×1 e não aceitam
-empratamento. Elas continuam aceitando corte e apoio de panela quando vazias.
+empratamento. Suas novas compras estão suspensas enquanto a arte é refinada.
+Peças presentes em saves antigos continuam aceitando corte e apoio de panela
+quando vazias; elas não são apagadas nem alteradas pela pausa do catálogo.
 A instalação, o destaque de compatibilidade, as ações de cozinha, o armazenamento
 e o validador usam a mesma regra, baseada no tamanho da base física.
 
@@ -37,7 +41,7 @@ posição e uma eventual panela apoiada são preservadas. Um empratamento em cur
 nessa peça é cancelado sem consumir a panela nem seu conteúdo. O processo trabalha
 por cópia e não repete o reembolso no próximo carregamento.
 
-Validação: 41 suítes de regressão. `TamanhoItensUI` compara as dimensões efetivas
+A base dessas regras passou por 41 suítes de regressão. `TamanhoItensUI` compara as dimensões efetivas
 das texturas entre mão, corte, fogão, empratamento e serviço. `BancadasEmpratamentoUI`
 cobre recusa sem cobrança em todas as peças pequenas e rotações, corte preservado,
 superfície 2×1, migração de estoques/qualidades, recuperação sem espaço, tarefa
@@ -46,5 +50,10 @@ antiga, rejeição de dados corrompidos e ausência de reembolso duplicado.
 limites, separação dos pratos, instâncias independentes e reuso de nós.
 
 Captura atual: `docs/arte/empratamento-quatro-pratos.png`, feita com Compatibility.
-Android 0.21.2-godot.36 (21236), com ZIP e assinatura v2/v3 verificados.
+Android 0.21.2-godot.37 (21237), com ZIP e assinatura v2/v3 verificados.
 Sem teste em aparelho Android físico nesta execução.
+
+Após remover o pano e suspender as novas compras de bancadas passaram oito suítes:
+`PratosEstoqueUI`, `TamanhoItensUI`, `SlotsEmpratamentoUI`, `MesasModularesUI`,
+`NovidadesTavernaUI`, `ConstrucaoCompletaUI`, `EnquadramentoConstrucaoUI` e
+`InterfaceLimpaUI`. A captura acima foi atualizada sem o pano.

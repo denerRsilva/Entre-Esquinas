@@ -7,6 +7,8 @@ func run():
 	var cash: float = state.cash
 	g.session.enter_construction();g.tick(0)
 	check(not g.session.catalog_ui.controls.actions.has("nativo:comprar:prep") and not g.session.catalog_ui.controls.actions.has("nativo:comprar:kitchen"),"Catálogo vende mesa e kits separados")
+	for type in ["counterH","counterV","counterCorner"]:
+		check(not g.session.catalog_ui.controls.actions.has("nativo:comprar:"+type),"Bancadas em refinamento não estão à venda: "+type)
 	widget("nativo:comprar:worktable");g.session.hover={"x":20,"y":11};g.tick(0)
 	check(await press("Confirmar posição"),"Compra da mesa vazia pela interface")
 	var table: Dictionary = state.objects.back()

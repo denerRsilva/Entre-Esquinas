@@ -2,14 +2,14 @@ extends "res://qa/BaseInterfaceNativa.gd"
 func run():
 	await start_game();g.session.enter_construction();g.tick(0)
 	var quantity: int = g.session.state.objects.size();var cash: float = g.session.state.cash
-	widget("nativo:comprar:counterH");check(g.session.building.type=="counterH" and not g.session.drawer,"Catálogo inicia posicionamento")
+	widget("nativo:comprar:worktable");check(g.session.building.type=="worktable" and not g.session.drawer,"Catálogo inicia posicionamento")
 	g.session.hover={"x":20,"y":11};g.tick(0)
 	check(g.session.preview_error()==null and await press("Confirmar posição"),"Posicionamento pela interface")
-	check(g.session.state.objects.size()==quantity+1 and g.session.state.cash==cash-35 and g.session.drawer,"Compra e retorno automático do catálogo")
+	check(g.session.state.objects.size()==quantity+1 and g.session.state.cash==cash-55 and g.session.drawer,"Compra e retorno automático do catálogo")
 	var counter: Variant = null
 	for object in g.session.state.objects:
-		if object.type=="counterH":counter=object;break
-	g.session.begin_build("counterH",counter.id);g.tick(0)
+		if object.type=="worktable":counter=object;break
+	g.session.begin_build("worktable",counter.id);g.tick(0)
 	check(await press("Girar ↻") and g.session.building.rot==1,"Rotação nativa")
 	check(await press("Guardar e reembolsar") and g.session.state.objects.size()==quantity and g.session.state.cash==cash,"Remoção e reembolso")
 	g.session.root_action("exitConstruction");g.session.set_zoom(2);g.session.enter_construction();g.session.drawer=false;g.session.camera.x=300;g.session.camera.y=300;g.session.update_camera();g.tick(0)
