@@ -1,15 +1,15 @@
 extends RefCounted
-## Shared tabletop coordinates for real clean stock and four served dishes.
-const READY_SIZE := Vector2(22,12)
-const READY_CENTERS = [Vector2(24,8),Vector2(24,-7),Vector2(0,-7),Vector2(0,8)]
-static func frame(furniture_scale: Vector2, counter: bool = false) -> Dictionary:
-	var axes := Vector2(24.0/72,20.0/32) if counter else furniture_scale.abs()
-	return {"axes":axes,"size":minf(axes.x,axes.y),"offset":Vector2(0,1) if counter else Vector2.ZERO}
-static func point(local: Vector2, layout: Dictionary) -> Vector2:
-	return local*layout.axes+layout.offset
-static func rect(local: Rect2, layout: Dictionary) -> Rect2:
-	return Rect2(point(local.get_center(),layout)-local.size*layout.size/2,local.size*layout.size)
+## Shared tabletop coordinates. Physical items never shrink with the furniture.
+const FOOD = preload("res://simulacao/nativa/Alimentos.gd")
+const READY_SIZE := FOOD.DISH_SIZE
+const READY_CENTERS = [Vector2(24,7),Vector2(24,-7),Vector2(0,-7),Vector2(0,7)]
+static func frame(furniture_scale: Vector2) -> Dictionary:
+	return {"vertical":furniture_scale.y>furniture_scale.x}
 static func ready(index: int, layout: Dictionary) -> Vector2:
-	return point(READY_CENTERS[index],layout)
+	if layout.vertical:return [Vector2(10,21),Vector2(10,-21),Vector2(10,-7),Vector2(10,7)][index]
+	return READY_CENTERS[index]
 static func clean(pile: int, layer: int, layout: Dictionary) -> Rect2:
-	return rect(Rect2(-36,(-5 if pile==0 else 8)-layer,12,6),layout)
+	if layout.vertical:return Rect2(Vector2(-20,(-27 if pile==0 else 15)-layer),FOOD.CLEAN_PLATE_SIZE)
+	return Rect2(Vector2(-36,(-14 if pile==0 else 2)-layer),FOOD.CLEAN_PLATE_SIZE)
+static func cloth(layout: Dictionary) -> Rect2:
+	return Rect2(-18,-25,36,50) if layout.vertical else Rect2(-34,-13,68,26)

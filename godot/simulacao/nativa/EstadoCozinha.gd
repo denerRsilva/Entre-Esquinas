@@ -83,6 +83,7 @@ static func valid(state: Dictionary) -> bool:
 			var pan = object.pan
 			if pan!=null and pan not in ["pot","cookingPot"] and (not pan is String or not pan.begins_with("pot_") or not INV.ITEMS.data.has(pan)):return false
 		if object.type=="kitchen":
+			if not STORAGE.plating_surface(object):return false
 			if object.has("inventory") or not NUM.integer(object.get("plates")) or object.plates<0 or object.plates>STORAGE.CLEAN_PLATE_CAPACITY:return false
 			if not object.get("utensil") is bool or not object.get("dishes") is Dictionary:return false
 			for item in object.dishes:

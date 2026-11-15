@@ -1,10 +1,16 @@
 extends "res://qa/BaseInterfaceNativa.gd"
 const STOCK = preload("res://simulacao/nativa/Armazenamento.gd")
 var table: Dictionary
+func view_for(object: Dictionary):
+	var rect = g.session.MOVE.MAP.rect(object)
+	var position := Vector2(rect.position)*40+Vector2(rect.size.x*20,rect.size.y*40)
+	for node in g.palco.pool.kitchen:
+		if node.visible and node.position.is_equal_approx(position):return node
+	return null
 func set_stock(count: int):
 	g.session.state.equipment.plate+=count-int(table.plates);table.plates=count;g.tick(0)
 func check_stock(count: int,label: String):
-	var node = g.palco.pool.kitchen[0]
+	var node = view_for(table)
 	check(table.plates==count and node.pratos_limpos==count,label+": estoque chega ao móvel")
 	var layout: Dictionary = node.disposicao_pratos()
 	check(layout.plates.size()==count and layout.piles==[mini(10,count),maxi(0,count-10)],label+": um sprite por prato, duas pilhas de até dez")
@@ -78,11 +84,11 @@ func run():
 	var raw = g.session.SAVE.serialize(s)
 	var restored = g.session.SAVE.new().load_value(JSON.parse_string(raw)) if raw is String else null
 	check(restored!=null and g.session.BUILD.find(restored.objects,table.id).plates==2,"Salvar e carregar preserva estoque exibido")
-	var built: Dictionary = g.session.BUILD.place(s,"counterCorner",20,11)
+	var built: Dictionary = g.session.BUILD.place(s,"worktable",20,11)
 	check(built.ok and g.session.BUILD.install_kit(s,"platingKit",20,11).ok,"Instala kit em bancada")
 	g.tick(0)
 	var counter: Dictionary = built.object
-	var view = g.palco.pool.platingKit[0]
+	var view = view_for(counter)
 	check(view.pratos_limpos==0 and view.disposicao_pratos().plates.is_empty(),"Kit novo não contém prato decorativo")
 	counter.plates=3;s.equipment.plate+=3;g.tick(0)
 	check(view.pratos_limpos==3 and view.disposicao_pratos().plates.size()==3,"Bancada mostra três pratos reais")

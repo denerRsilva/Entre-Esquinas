@@ -166,3 +166,42 @@ static func ready_capacity(state: Dictionary) -> bool:
 					state.recovery.append({"item":item,"n":amount,"quality":tier})
 					excess-=amount
 	return true
+
+# Small modular counters used to accept plating. Restore their bare surface,
+# preserve physical items and refund the removed kit without changing the map.
+static func plating_surfaces(state: Dictionary) -> bool:
+	var kitchen = preload("res://simulacao/nativa/EstadoCozinha.gd")
+	var catalog = preload("res://simulacao/nativa/catalogo.json")
+	for object in state.objects:
+		if object.type!="kitchen" or STORAGE.plating_surface(object):continue
+		if object.get("baseType") not in ["counterH","counterV","counterCorner"] or object.get("tableKit")!="platingKit":return false
+		if not kitchen.NUM.integer(object.get("plates")) or object.plates<0 or object.plates>STORAGE.CLEAN_PLATE_CAPACITY or not object.get("utensil") is bool:return false
+		if not kitchen.numeric(state.get("cash")) or not state.get("ledger") is Dictionary or not kitchen.numeric(state.ledger.get("investment")):return false
+		var job = state.get("plating")
+		if job!=null:
+			if not job is Dictionary:return false
+			if job.get("prep")==object.get("id"):
+				if not state.get("player") is Dictionary or not kitchen.physical(state):return false
+				state.plating=null # The pot/food is still in the hands or support.
+		preserve(state,{"item":"plate","n":int(object.plates)})
+		if object.utensil:preserve(state,{"item":"spoon","n":1})
+		for item in object.dishes:
+			for quality in 4:preserve(state,{"item":item,"n":STORAGE.quality_count(object,item,quality),"quality":quality})
+		object.type=object.baseType
+		for key in ["baseType","tableKit","plates","utensil","dishes","dishQuality","feedback"]:object.erase(key)
+		state.cash+=catalog.data.platingKit.price
+		state.ledger.investment-=catalog.data.platingKit.price
+	STORAGE.sync(state)
+	return true
+
+static func preserve(state: Dictionary, portion: Dictionary) -> void:
+	var left := int(portion.n)
+	var quality := int(portion.get("quality",0))
+	for receiver in state.objects:
+		if left==0:break
+		if not receiver.has("inventory") or not STORAGE.accepts(receiver,portion.item):continue
+		var amount := mini(left,INV.space(receiver.inventory,portion.item,quality))
+		if amount>0 and INV.add(receiver.inventory,portion.item,amount,quality,portion.get("burned",false)):left-=amount
+	while left>0:
+		var saved: Dictionary = portion.duplicate(true)
+		saved.n=mini(left,INV.limit(portion.item));state.recovery.append(saved);left-=saved.n

@@ -1,4 +1,10 @@
 extends RefCounted
+# Physical world sizes. Camera zoom is applied later to the whole scene.
+# HUD/menu icons may use other sizes; carried and placed items share these.
+const CLEAN_PLATE_SIZE := Vector2(20,12)
+const DISH_SIZE := Vector2(20,14)
+const INGREDIENT_SIZE := Vector2(24,24)
+const CLEAN_PLATE_SOURCE := Rect2(125,166,1249,736)
 const ATLAS = preload("res://arte/taverna/alimentos.png")
 const KEYS = ["arroz","legumes","frango","arrozLegumes","sopa","frangoArroz","legumes_cut","frango_cut"]
 const CROPS = [Rect2(154,44,310,306),Rect2(594,35,344,323),Rect2(1054,103,361,244),Rect2(83,714,440,280),Rect2(588,714,350,280),Rect2(1004,714,448,280),Rect2(586,425,361,212),Rect2(1067,428,327,208)]

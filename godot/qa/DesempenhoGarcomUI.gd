@@ -44,7 +44,7 @@ func run():
 	s.customers=[];s.dirtyTables={"901":1};renderer.commands=[];renderer.object(s,table,false)
 	var dirty_correct := false
 	for command in renderer.commands:
-		if command[0]=="rect" and command[5]=="#aa9a76":dirty_correct=command[1]==333 and command[2]==385
+		if command[0]=="img" and command[1]=="modular/prato-vazio.png":dirty_correct=command[6]+command[8]/2==340 and command[7]+command[9]/2==388
 	check(dirty_correct,"Louça suja permanece no lugar do cliente")
 	var vertical := {"id":903,"type":"table","room":"restaurant","x":8,"y":10,"rot":1}
 	var left := {"x":7,"y":10,"rot":1};var right := {"x":9,"y":10,"rot":3}

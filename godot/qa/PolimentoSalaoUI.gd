@@ -84,7 +84,7 @@ func run():
 	# Check actual world placement, rather than only the geometry helper.
 	for shape in 3:
 		for rot in 4:
-			for kit in ["cuttingKit","platingKit"]:
+			for kit in ["cuttingKit"]:
 				var packet: Dictionary = g.session.step(0,[])
 				packet.scene=[["furniture",["counterH","counterV","counterCorner"][shape],400,400,40,40,rot,false,0],["furniture",kit,400,400,40,40,rot,false]]
 				g.palco.paint(packet)

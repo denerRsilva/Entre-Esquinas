@@ -19,6 +19,7 @@ static func kit_error(state: Dictionary, type: String, x: int, y: int) -> Varian
 	if error!=null:return error
 	var table = table_at(state,x,y)
 	if table==null:return "Posicione o kit sobre uma mesa de trabalho vazia."
+	if type=="platingKit" and not STORE.plating_surface(table):return "O empratamento precisa de uma superfície do tamanho da mesa de preparo (2×1)."
 	if not installed_kit(table).is_empty():return "Retire o kit atual antes de instalar outro."
 	if busy(state,table.id):return "Conclua o preparo antes de trocar o kit."
 	if not STORE.surface_empty(table):return "Libere a superfície antes de instalar o kit."

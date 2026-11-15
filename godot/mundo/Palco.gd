@@ -82,7 +82,7 @@ func paint(data: Dictionary) -> void:
 			if op[1] in ["computer","receiving","stove","prep","kitchen","worktable","cuttingKit","platingKit","sink","table","shelf","potRack"]: original.x=80
 			if op[1] in ["fridge","cold"]: original.y=80
 			n.scale = Vector2(float(op[4])/original.x,float(op[5])/original.y)
-			if op[1] in ["kitchen","platingKit"]:n.atualizar_pratos(int(op[8].get("plates",0)) if op.size()>8 and op[8] is Dictionary else 0,op[1]=="platingKit" and counter_kit_centers.has(Vector2i(op[2],op[3])))
+			if op[1] in ["kitchen","platingKit"]:n.atualizar_pratos(int(op[8].get("plates",0)) if op.size()>8 and op[8] is Dictionary else 0)
 			if op[1] in ["cuttingKit","platingKit"] and counter_kit_centers.has(Vector2i(op[2],op[3])):
 				n.position+=counter_kit_centers[Vector2i(op[2],op[3])]-n.CENTRO_KIT*n.scale
 			if str(op[1]).begins_with("counter"):

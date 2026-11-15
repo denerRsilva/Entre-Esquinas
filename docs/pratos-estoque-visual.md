@@ -1,57 +1,50 @@
-# Pratos reais na arte da estação
+# Pratos reais e tamanho físico consistente
 
-Cada estação de empratamento aceita até **20 pratos limpos**, organizados em
-duas pilhas de até 10 na borda esquerda, uma acima da outra. A pilha superior
-recebe os primeiros dez; os demais vão para a inferior. Três pratos desenhados correspondem a três unidades de estoque;
-zero remove todos os sprites de pratos. Não há pratos decorativos embutidos
-no pano ou no pegador. A arte aprovada do kit foi aplicada com esses acessórios
-separados do estoque.
+A estação aceita até **20 pratos limpos**, em duas pilhas de dez na borda
+esquerda, uma acima da outra, e até **quatro pratos prontos**. Cada sprite
+corresponde a um prato real; sem estoque, não há prato decorativo.
+O kit de empratamento é representado apenas pelo pano aprovado, sem pegador.
 
-`Cena.gd` envia `plates` junto da instância de móvel para `Palco.gd`, que atualiza
-a propriedade `pratos_limpos` de `MesaTrabalho.gd`. A geometria é recalculada
-quando a quantidade, a escala ou o tipo de superfície muda. Cada unidade gera um sprite independente,
-com cache por instância; o reuso de nós não conserva pilhas de outra estação.
-As cerâmicas preservam a proporção quando o móvel é girado ou usa uma bancada.
+`Alimentos.gd` centraliza as dimensões do mundo: prato limpo 20×12, prato servido
+20×14 e ingrediente em uma caixa de 24×24. Cada ingrediente mantém sua proporção
+e o mesmo tamanho entre mão, corte e fogão. Pratos limpos usam a mesma textura,
+recorte e dimensões nas mãos e nas pilhas; pratos sujos usam a mesma louça com
+marcas de sujeira. A comida pronta mantém a escala entre mãos do jogador/garçom,
+estação e mesa do cliente. Ícones de pedidos e menus continuam sendo elementos
+de interface. O zoom da câmera afeta toda a cena igualmente.
 
-O prato sai da pilha quando é retirado ou consumido no empratamento; volta
-quando o jogador o coloca na estação. A compra do kit inclui pano e pegador,
-sem pratos fictícios na miniatura ou no cenário. Os pratos prontos com comida
-ocupam quatro posições individuais: direita inferior, direita superior, centro
-superior e centro inferior. A estação aceita no máximo **quatro pratos prontos**;
-a quantidade de pratos desenhados sempre corresponde ao estoque real.
-O jogo mobiliado continua começando com 12 pratos reais: uma pilha de 10 e
-outra de 2. Uma estação nova começa sem pratos.
+`Cena.gd` envia o estoque para `Palco.gd` e `MesaTrabalho.gd`. As posições de limpos
+e servidos ficam em `LayoutEmpratamento.gd`; as cerâmicas não encolhem para caber
+na superfície. Ao girar a mesa, a organização se adapta sem esticar os pratos.
+O cache é atualizado por quantidade e orientação, inclusive ao reutilizar nós.
 
-O limite de vinte é aplicado na colocação pelas mãos, na API de armazenamento,
-nas ações de compatibilidade e no validador de estado. Ao carregar um save
-antigo com até 99 pratos por estação, o excedente é enviado a um armazenamento
-compatível. Se não houver espaço, fica na recuperação de itens preservados.
-O total de pratos não muda; o arquivo de origem é processado por cópia.
+O empratamento exige uma superfície com as dimensões da mesa de preparo: **2×1**
+(ou 1×2 após girar). A mesa/bancada de trabalho existente tem esse tamanho.
+As peças modulares horizontal, vertical e de quina atuais têm 1×1 e não aceitam
+empratamento. Elas continuam aceitando corte e apoio de panela quando vazias.
+A instalação, o destaque de compatibilidade, as ações de cozinha, o armazenamento
+e o validador usam a mesma regra, baseada no tamanho da base física.
 
-As posições de limpos e servidos usam a mesma geometria em `LayoutEmpratamento.gd`.
-Mesas giradas preservam o formato das cerâmicas; bancadas recebem uma versão
-compacta dentro de sua área útil. A tarefa de empratamento só começa com espaço
-para todas as porções. Se outra ação ocupar a última vaga durante a tarefa,
-ela aguarda a retirada de um prato, sem consumir pratos limpos nem comida.
+A tarefa só começa com espaço para todas as porções. Se outra ação ocupar a
+última vaga, ela aguarda a retirada de um prato sem consumir louça ou comida.
+O jogo mobiliado começa com 12 pratos limpos reais; uma estação nova começa vazia.
 
-Salvamentos antigos com até doze pratos prontos por estação mantêm quatro no
-tampo. O excedente é transferido para armazenamento compatível ou recuperação,
-com receita e qualidade preservadas, sem alterar os totais de refeições e pratos.
+Saves antigos preservam seus itens: acima de vinte pratos limpos ou quatro
+pratos prontos, o excedente vai para armazenamento compatível ou recuperação,
+com receita e qualidade mantidas. Em bancadas pequenas anteriormente equipadas,
+os itens são recolhidos e o valor integral do kit é reembolsado. A peça, sua
+posição e uma eventual panela apoiada são preservadas. Um empratamento em curso
+nessa peça é cancelado sem consumir a panela nem seu conteúdo. O processo trabalha
+por cópia e não repete o reembolso no próximo carregamento.
 
-Validação: 39 suítes de regressão. `SlotsEmpratamentoUI` verifica quatro posições
-separadas, pilhas à esquerda, limite de capacidade, espera e retomada da tarefa,
-conservação, qualidades e migração com e sem armazenamento livre. `PratosEstoqueUI`
-continua cobrindo quantidades reais de zero a vinte, retirada, reposição, consumo,
-estoques independentes e reuso dos nós.
+Validação: 41 suítes de regressão. `TamanhoItensUI` compara as dimensões efetivas
+das texturas entre mão, corte, fogão, empratamento e serviço. `BancadasEmpratamentoUI`
+cobre recusa sem cobrança em todas as peças pequenas e rotações, corte preservado,
+superfície 2×1, migração de estoques/qualidades, recuperação sem espaço, tarefa
+antiga, rejeição de dados corrompidos e ausência de reembolso duplicado.
+`PratosEstoqueUI` e `SlotsEmpratamentoUI` cobrem contagem real, reposição, consumo,
+limites, separação dos pratos, instâncias independentes e reuso de nós.
 
-Captura do jogo com vinte pratos limpos e quatro pratos prontos:
-`docs/arte/empratamento-quatro-pratos.png`. Renderizador Compatibility; sem teste
-em aparelho Android físico nesta execução.
-
-Android 0.21.2-godot.35 (21235). ZIP e assinatura APK v2/v3 verificados.
-
-Ajuste de tamanho: pratos limpos passaram de 10×5 para 12×6; pratos com receita,
-de 18×10 para 22×12. As pilhas ficam próximas aos cantos superior e inferior
-da borda esquerda. A disposição compacta das bancadas mantém os pratos dentro
-do tampo. Após esse ajuste passaram `SlotsEmpratamentoUI`, `PratosEstoqueUI` e
-`CenaNativa`, além da conferência da captura atualizada no Compatibility.
+Captura atual: `docs/arte/empratamento-quatro-pratos.png`, feita com Compatibility.
+Android 0.21.2-godot.36 (21236), com ZIP e assinatura v2/v3 verificados.
+Sem teste em aparelho Android físico nesta execução.

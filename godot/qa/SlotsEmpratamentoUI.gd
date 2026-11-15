@@ -80,14 +80,13 @@ func run():
 	kitchen.plate_step(s,0)
 	check(s.plating==null and s.player.hand.item=="pot" and table.plates==count-1 and STORE.ready_count(table)==4,"Conclui ao liberar vaga e mantém panela vazia nas mãos")
 	check(g.session.SAVE.VALIDATOR.valid(s),"Estado final conserva comida e pratos")
-	# All compact/rotated layouts keep their six positions distinct and oval.
+	# Both orientations keep clean and served items separate at their real size.
 	for axes in [Vector2.ONE,Vector2(0.5,2)]:
-		for counter in [false,true]:
-			var geometry := LAYOUT.frame(axes,counter)
-			for i in 4:
-				var dish := Rect2(LAYOUT.ready(i,geometry)-LAYOUT.READY_SIZE/2*geometry.size,LAYOUT.READY_SIZE*geometry.size)
-				for pile in 2:
-					for layer in 10:check(not dish.intersects(LAYOUT.clean(pile,layer,geometry)),"Limpos e servidos separados nas rotações")
+		var geometry := LAYOUT.frame(axes)
+		for i in 4:
+			var dish := Rect2(LAYOUT.ready(i,geometry)-LAYOUT.READY_SIZE/2,LAYOUT.READY_SIZE)
+			for pile in 2:
+				for layer in 10:check(not dish.intersects(LAYOUT.clean(pile,layer,geometry)),"Limpos e servidos separados nas rotações")
 	if "--capture" in OS.get_cmdline_user_args():
 		root.mode=Window.MODE_WINDOWED;root.size=Vector2i(1920,1080);await layout();g.session.set_zoom(1.6)
 		for plates in [0,3,20]:

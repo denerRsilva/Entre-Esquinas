@@ -86,6 +86,7 @@ func cook(s: Dictionary,id: Variant,recipe: Variant) -> Dictionary:
 	return feedback(s,o,"Cozinhando — pode realizar outras tarefas")
 func plating_plan(s: Dictionary,o: Variant) -> Dictionary:
 	if o==null or o.type!="kitchen":return {"error":"Use a mesa de cozinha."}
+	if not STORE.plating_surface(o):return {"error":"Use uma superfície de empratamento do tamanho da mesa de preparo."}
 	if s.player.get("carry")!=null:return {"error":"Libere as mãos."}
 	var hand = s.player.get("hand")
 	if hand!=null and not INV.ITEMS.data.get(hand.item,{}).get("servings",0):return {"error":"Libere as mãos."}
@@ -217,10 +218,10 @@ func physical(s: Dictionary,id: Variant,action: String) -> Dictionary:
 					STORE.take(s,o,dish,1,quality);a.hand={"item":dish,"n":1,"quality":quality};return feedback(s,o,"Prato nas mãos")
 			return result(s,false,"Não há prato pronto.")
 		"putDish":
-			if o.type!="kitchen" or o.get("support")!=null or p==null or not str(p.item).begins_with("dish_") or STORE.space(o,p.item)==0:return result(s,false,"Sem espaço para apoiar o prato.")
+			if o.type!="kitchen" or not STORE.plating_surface(o) or o.get("support")!=null or p==null or not str(p.item).begins_with("dish_") or STORE.space(o,p.item)==0:return result(s,false,"Sem espaço para apoiar o prato.")
 			STORE.put(s,o,p.item,1,p.get("quality",0));a.hand=null;return feedback(s,o,"Prato apoiado")
 		"installPlates":
-			if o.type!="kitchen" or o.get("support")!=null or p==null or p.item!="plate" or o.plates>=STORE.CLEAN_PLATE_CAPACITY:return result(s,false,"Traga um prato limpo; verifique o espaço na mesa.")
+			if o.type!="kitchen" or not STORE.plating_surface(o) or o.get("support")!=null or p==null or p.item!="plate" or o.plates>=STORE.CLEAN_PLATE_CAPACITY:return result(s,false,"Traga um prato limpo; verifique o espaço na mesa.")
 			o.plates+=1;a.hand=null;return feedback(s,o,"Prato limpo instalado")
 		"takePlates","takeUtensil":
 			if o.type!="kitchen" or p!=null or a.get("carry")!=null:return result(s,false,"Libere as mãos.")

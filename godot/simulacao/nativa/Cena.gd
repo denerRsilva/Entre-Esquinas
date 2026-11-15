@@ -35,9 +35,9 @@ func star(quality: int,x: float,y: float,size: float) -> void:
 		var radius := size*(0.22 if i%2 else 0.5)
 		points.append([x+size/2+cos(angle)*radius,y+size/2+sin(angle)*radius])
 	commands.append(["poly",points,["","#c5c9cc","#ffd14c","#c286ff"][quality]])
-func plate(x: float,y: float,recipe: Variant = null,dirty: bool = false,quality: int = 0,size: Vector2 = Vector2(20,14)) -> void:
+func plate(x: float,y: float,recipe: Variant = null,dirty: bool = false,quality: int = 0,size: Vector2 = FOOD.DISH_SIZE) -> void:
 	if not dirty and recipe!=null and food(recipe,x-size.x/2,y-size.y/2,size.x,size.y):star(quality,x+3,y-8,8);return
-	box(x-7,y-3,14,6,"#aa9a76" if dirty else "#e4d5aa");box(x-5,y-5,10,10,"#cbb78b" if dirty else "#fff4d5")
+	empty_plate(x,y)
 	if dirty:box(x-3,y,3,2,"#805332");box(x+2,y-2,2,2,"#9a6434")
 func pot(x: float,y: float,filled: bool,active: bool,time: float) -> void:
 	if active:box(x-8,y+3,16,4,"#f5a331");box(x-5,y+5,10,2,"#cb5428")
@@ -45,6 +45,13 @@ func pot(x: float,y: float,filled: bool,active: bool,time: float) -> void:
 	if filled:box(x-5,y-7,10,3,"#d1963d")
 	if active:
 		for i in 3:box(x-5+i*5,y-9-fmod(time*7+i*6,18),2,4,"#f6ecd5aa")
+func empty_plate(x: float,y: float) -> void:
+	var crop := FOOD.CLEAN_PLATE_SOURCE
+	var size := FOOD.CLEAN_PLATE_SIZE
+	commands.append(["img","modular/prato-vazio.png",crop.position.x,crop.position.y,crop.size.x,crop.size.y,FOOD.pixel(x-size.x/2),FOOD.pixel(y-size.y/2),size.x,size.y,alpha])
+func ingredient(item: String,x: float,y: float) -> void:
+	var size := FOOD.INGREDIENT_SIZE
+	food(item,x-size.x/2,y-size.y/2,size.x,size.y)
 static func held(s: Dictionary,a: Dictionary) -> Variant:
 	if a.get("hand")!=null:return a.hand
 	var carry = a.get("carry")
@@ -61,10 +68,10 @@ func draw_held(s: Dictionary,p: Variant,x: float,y: float) -> void:
 	if item in ["pot","cookingPot"] or portions>0:pot(x,y,portions>0,false,s.time);return
 	if item.begins_with("dish_"):plate(x,y,INV.ITEMS.data[item].recipe,false,p.get("quality",0));return
 	if item=="plate":
-		commands.append(["img","modular/prato-vazio.png",125,166,1249,736,FOOD.pixel(x-10),FOOD.pixel(y-6),20,12,alpha]);return
+		empty_plate(x,y);return
 	if item=="dirtyPlate":plate(x,y,null,true);return
 	if item=="spoon":box(x-1,y-3,3,16,"#527576");box(x-4,y-9,9,8,"#d6e5d9");box(x-2,y-8,5,5,"#90aaa3");return
-	food(item,x-12,y-12,24,24);star(p.get("quality",0),x+4,y-13,9)
+	ingredient(item,x,y);star(p.get("quality",0),x+4,y-13,9)
 func direction(a: Dictionary) -> String:
 	var token: Variant = identities.get(a.id,a.id)
 	var result: String = facing.get(token,"down")
@@ -168,7 +175,7 @@ func object(s: Dictionary,o: Dictionary,selected: bool,preview: bool = false) ->
 	var cooking = s.get("cooking") if o.has("id") and s.get("cooking")!=null and s.cooking.stove==o.id else null
 	if o.type=="stove" and (not o.get("ingredients",[]).is_empty() or cooking!=null or o.get("readyBatch")!=null):
 		var index := 0
-		for p in o.get("ingredients",[]):food(p.item,x+5+index*19,y-15,18,18);index+=1
+		for p in o.get("ingredients",[]):ingredient(p.item,x+14+index*24,y-6);index+=1
 		var recipe = RECIPES.recognized(o)
 		if recipe==null:recipe=cooking.recipe if cooking!=null else o.readyBatch.recipe if o.get("readyBatch")!=null else null
 		if recipe!=null:food(recipe,x+w/2-14,y-50,28,24)
@@ -179,12 +186,11 @@ func object(s: Dictionary,o: Dictionary,selected: bool,preview: bool = false) ->
 		pot(x+w/2+center.x,y+h+center.y,INV.ITEMS.data[o.support.item].get("servings",0)>0,false,s.time)
 	if o.type=="kitchen":
 		if o.get("support")!=null:pot(x+minf(50,w*0.625),y-7,INV.ITEMS.data.get(o.support.item,{}).get("servings",0)>0,false,s.time)
-		if o.get("utensil",false):box(x+w-15,y+3,7,11,"#7c5b37");box(x+w-13,y-3,2,10,"#dec08c");box(x+w-9,y-1,2,9,"#cfad79")
 		var index := 0
 		var counter_type: String = o.get("baseType","")
 		var counter := counter_type.begins_with("counter")
 		var layout = preload("res://moveis/LayoutEmpratamento.gd")
-		var geometry: Dictionary = layout.frame(Vector2(w/80,h/40),counter)
+		var geometry: Dictionary = layout.frame(Vector2(w/80,h/40))
 		var kit_center := preload("res://moveis/Bancada.gd").centro_kit({"counterH":0,"counterV":1,"counterCorner":2}[counter_type],int(o.rot)) if counter else Vector2(0,-44*h/40)
 		var anchor := Vector2(x+w/2,y+h)+kit_center
 		for dish in o.get("dishes",{}):
@@ -192,7 +198,7 @@ func object(s: Dictionary,o: Dictionary,selected: bool,preview: bool = false) ->
 				for j in STORE.quality_count(o,dish,q):
 					# Old snapshots can exceed four; loaded games migrate overflow.
 					var position: Vector2 = anchor+layout.ready(index%STORE.READY_DISH_CAPACITY,geometry)
-					plate(position.x,position.y,INV.ITEMS.data[dish].recipe,false,q,layout.READY_SIZE*geometry.size)
+					plate(position.x,position.y,INV.ITEMS.data[dish].recipe,false,q)
 					index+=1
 	if o.type=="table":
 		for ch in s.objects:
@@ -257,6 +263,7 @@ func draw(s: Dictionary,ui: Dictionary,input: Variant = null) -> Array:
 		if BUILD.TABLE_KITS.has(ui.building.type):
 			for surface in s.objects:
 				if surface.room!=room or not BUILD.is_worktable(surface) or not BUILD.installed_kit(surface).is_empty():continue
+				if ui.building.type=="platingKit" and not STORE.plating_surface(surface):continue
 				var area := MOVE.MAP.rect(surface)
 				box(area.position.x*40,area.position.y*40,area.size.x*40,area.size.y*40,"#74d9ac44")
 				commands.append(["line",area.position.x*40,area.position.y*40,area.size.x*40,area.size.y*40,"#9fffc4",2])
@@ -295,7 +302,7 @@ func feedback(s: Dictionary) -> void:
 			var area := MOVE.MAP.rect(table)
 			var x: float = area.position.x*40+area.size.x*20
 			var y: float = area.position.y*40
-			food(job.item,x-9,y-13,18,14)
+			ingredient(job.item,x,y-6)
 			var lift: float = 5 if int(s.time*7)%2 else 0
 			box(x+10,y-17-lift,3,13,"#e6e0c8")
 			box(x+10,y-22-lift,3,6,"#6b422d")

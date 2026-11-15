@@ -1,10 +1,14 @@
 extends RefCounted
 const INV = preload("res://simulacao/nativa/Inventario.gd")
+const CATALOG = preload("res://simulacao/nativa/catalogo.json")
 
 const READY_DISH_CAPACITY = 4
 const CLEAN_PLATE_CAPACITY = 20
 const PLATES_PER_STACK = 10
 const SUPPORT_SURFACES = ["worktable","counterH","counterV","counterCorner"]
+static func plating_surface(object: Dictionary) -> bool:
+	var data: Dictionary = CATALOG.data.get(object.get("baseType",object.get("type")),{})
+	return data.get("w")==CATALOG.data.prep.w and data.get("h")==CATALOG.data.prep.h
 static func is_pot(item: String) -> bool:
 	return item=="pot" or INV.ITEMS.data.get(item,{}).get("servings",0)>0
 static func is_support_surface(object: Dictionary) -> bool:return object.get("type") in SUPPORT_SURFACES
@@ -34,7 +38,7 @@ static func accepts(object: Dictionary, item: String) -> bool:
 	match object.type:
 		"potRack":return item=="pot"
 		"stove":return item in ["pot","cookingPot"] or item.begins_with("pot_")
-		"kitchen":return item in ["plate","spoon"] or item.begins_with("dish_")
+		"kitchen":return plating_surface(object) and (item in ["plate","spoon"] or item.begins_with("dish_"))
 		"sink","bin":return false
 		"fridge","cold":return item!="cookingPot"
 	var food: Dictionary = INV.ITEMS.data.get(INV.ITEMS.data[item].get("raw",item),{})
@@ -62,6 +66,7 @@ static func ready_count(object: Dictionary) -> int:
 	return total
 
 static func space(object: Dictionary, item: String, quality: int = 0) -> int:
+	if object.type=="kitchen" and not plating_surface(object):return 0
 	if is_support_surface(object):return 1 if is_pot(item) and surface_empty(object) else 0
 	match object.type:
 		"potRack":return maxi(0,3-count(object,"pot")) if item=="pot" else 0

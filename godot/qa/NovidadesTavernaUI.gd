@@ -24,7 +24,12 @@ func run():
 	var loaded: Variant = g.session.SAVE.new().load_value(JSON.parse_string(encoded)) if encoded is String else null
 	check(loaded!=null and build.find(loaded.objects,id).baseType=="counterH","Save preserva bancada equipada")
 	check(build.remove_kit(s,id).ok and counter.type=="counterH","Retirar kit devolve a bancada original")
-	check(build.place(s,"platingKit",20,11).ok and counter.type=="kitchen","Bancada também aceita empratamento")
+	widget("nativo:comprar:platingKit");packet=g.session.step(0,[]);outlines=0
+	for command in packet.scene:
+		if command[0]=="line" and command[5]=="#9fffc4":outlines+=1
+	check(outlines==0,"Bancada pequena não é destacada para empratamento")
+	g.session.stop_build()
+	check(not build.place(s,"platingKit",20,11).ok and counter.type=="counterH","Bancada pequena recusa empratamento")
 	check(build.place(s,"counterH",21,11).ok,"Peças vizinhas mantêm passagem")
 	packet=g.session.step(0,[])
 	var east_join := false;var west_join := false
