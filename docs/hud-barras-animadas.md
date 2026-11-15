@@ -26,3 +26,8 @@ O teste específico cobre valores fracionários, crescimento e redução suave,
 faixas de cor, troca de tarefas e reaproveitamento dos controles. Captura visual
 com o renderizador Compatibility: executar `BarrasAnimadasUI.gd -- --capture`.
 A galeria usa os controles reais: `docs/arte/hud-barras.png`.
+
+As 34 suítes do conjunto padrão de regressão passaram, além da conferência
+visual com Godot Compatibility. Android 0.21.2-godot.27 (21227) exportado do
+commit 6fa6f88; ZIP, presença do atlas/scripts, exclusão de QA e assinatura
+v2/v3 verificados. Sem teste em aparelho físico nesta execução.
