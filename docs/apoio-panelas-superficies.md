@@ -40,3 +40,6 @@ a suíte de interações também registra os contratos substituídos de retorno
 ao fogão. A regressão padrão contém 37 suítes, todas aprovadas, além da
 verificação adicional de apoio/salvamento e da captura Compatibility
 `ApoioPanelasUI.gd -- --capture`. Não houve teste em aparelho Android físico.
+
+Android 0.21.2-godot.31 (21231), exportado do commit 3cb2311. ZIP e assinatura
+APK v2/v3 verificados. Captura visual em `docs/arte/apoio-panelas.png`.
