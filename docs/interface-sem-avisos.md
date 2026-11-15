@@ -31,3 +31,6 @@ priorização por interação. A captura visual usa Godot Compatibility:
 
 Validação: 36 suítes de regressão aprovadas e conferência visual com
 Compatibility. Captura em `docs/arte/interface-sem-avisos.png`.
+
+Android 0.21.2-godot.29 (21229) exportado do commit b5ee888. ZIP e assinatura
+v2/v3 verificados; sem teste em aparelho Android físico nesta execução.
