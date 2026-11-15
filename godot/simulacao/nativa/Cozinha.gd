@@ -95,7 +95,7 @@ func plating_plan(s: Dictionary,o: Variant) -> Dictionary:
 	if p==null or not INV.ITEMS.data.get(p.item,{}).get("servings",0) or p.get("burned",false):return {"error":"Apoie uma panela com comida utilizável."}
 	var portions: int = INV.ITEMS.data[p.item].servings if from_hand else 1
 	if o.plates<portions:return {"error":"Instale pratos limpos suficientes."}
-	if STORE.ready_count(o)+portions>12:return {"error":"Área de retirada cheia."}
+	if STORE.ready_count(o)+portions>STORE.READY_DISH_CAPACITY:return {"error":"Área de retirada cheia."}
 	var plan := {"recipe":INV.ITEMS.data[p.item].recipe,"item":p.item,"quality":p.get("quality",0),"portions":INV.ITEMS.data[p.item].servings,"count":portions}
 	if from_hand:plan.hand=true
 	return plan
@@ -125,7 +125,7 @@ func plate_step(s: Dictionary,dt: float) -> void:
 	if o==null or p==null or p.item!=job.item or p.get("quality",0)!=job.quality or p.get("burned",false):cancel_plate(s);return
 	if not near(s,o):return
 	job.left=maxf(0,job.left-dt)
-	if job.left>1e-8 or o.plates<job.count or STORE.ready_count(o)+job.count>12:return
+	if job.left>1e-8 or o.plates<job.count or STORE.ready_count(o)+job.count>STORE.READY_DISH_CAPACITY:return
 	if job.get("hand",false):s.player.hand={"item":"pot","n":1}
 	else:o.support={"item":"pot","n":1} if job.portions==1 else {"item":"pot_"+job.recipe+"_"+str(int(job.portions)-1),"n":1,"quality":job.quality}
 	o.plates-=job.count;STORE.put(s,o,"dish_"+job.recipe,job.count,job.quality);s.plating=null;feedback(s,o,"Um prato pronto")

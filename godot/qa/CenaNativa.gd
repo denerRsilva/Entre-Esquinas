@@ -33,10 +33,10 @@ func run():
 			if command[0] in ["cook","npc","furniture"]:
 				kitchen=command if command[0]=="furniture" and command[1] in ["kitchen","platingKit"] else []
 				dish_index=0;dish_delta=Vector2.ZERO
-			if not kitchen.is_empty() and command[0]=="food" and int(command[4]) in [14,20] and int(command[5]) in [8,14]:
+			if not kitchen.is_empty() and command[0]=="food" and int(command[4]) in [9,14,18,20] and int(command[5]) in [5,8,10,14]:
 				var old_x: float = kitchen[2]+(27+dish_index%4*11)*(kitchen[4]/80)-10
 				var old_y: float = kitchen[3]+4+floor(float(dish_index)/4)*8-7
-				dish_delta=Vector2(old_x-command[2],old_y-command[3])
+				dish_delta=Vector2(old_x-command[2]+10-command[4]/2,old_y-command[3]+7-command[5]/2)
 				command[2]=old_x;command[3]=old_y;command[4]=20;command[5]=14;dish_index+=1
 			elif not kitchen.is_empty() and command[0]=="poly" and dish_delta!=Vector2.ZERO:
 				for point in command[1]:point[0]+=dish_delta.x;point[1]+=dish_delta.y

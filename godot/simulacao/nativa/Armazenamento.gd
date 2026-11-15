@@ -1,6 +1,7 @@
 extends RefCounted
 const INV = preload("res://simulacao/nativa/Inventario.gd")
 
+const READY_DISH_CAPACITY = 4
 const CLEAN_PLATE_CAPACITY = 20
 const PLATES_PER_STACK = 10
 const SUPPORT_SURFACES = ["worktable","counterH","counterV","counterCorner"]
@@ -68,7 +69,7 @@ static func space(object: Dictionary, item: String, quality: int = 0) -> int:
 		"kitchen":
 			if item=="plate":return maxi(0,CLEAN_PLATE_CAPACITY-int(object.plates))
 			if item=="spoon":return 0 if object.utensil else 1
-			return maxi(0,12-ready_count(object)) if item.begins_with("dish_") and INV.ITEMS.data.has(item) else 0
+			return maxi(0,READY_DISH_CAPACITY-ready_count(object)) if item.begins_with("dish_") and INV.ITEMS.data.has(item) else 0
 	return INV.space(object.get("inventory",[]),item,quality) if accepts(object,item) else 0
 
 static func quality_count(object: Dictionary, item: String, quality: int) -> int:

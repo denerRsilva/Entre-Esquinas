@@ -88,7 +88,7 @@ static func valid(state: Dictionary) -> bool:
 			for item in object.dishes:
 				var count = object.dishes[item]
 				if not str(item).begins_with("dish_") or not INV.ITEMS.data.has(item) or not NUM.integer(count) or count<0:return false
-			if STORAGE.ready_count(object)>12:return false
+			if STORAGE.ready_count(object)>STORAGE.READY_DISH_CAPACITY:return false
 	var cooking = state.get("cooking")
 	if truthy(cooking):
 		if not cooking is Dictionary or not numeric(cooking.get("total")) or cooking.total<=0:return false

@@ -15,6 +15,8 @@ extends Node2D
 		queue_redraw()
 var layout_pratos: Dictionary = {}
 var escala_kit := Vector2.ZERO
+var bancada := false
+const LAYOUT = preload("res://moveis/LayoutEmpratamento.gd")
 const STOCK = preload("res://simulacao/nativa/Armazenamento.gd")
 const ALTURA_BASE := 30
 const PROFUNDIDADE_TAMPO := 28
@@ -24,17 +26,18 @@ const UTENSILIOS = preload("res://arte/modular/kit-empratamento-utensilios.png")
 const KITS = preload("res://arte/modular/kits-mesa.png")
 const CENTRO_KIT := Vector2(0,-ALTURA_BASE-PROFUNDIDADE_TAMPO/2.0)
 const RECORTES = [Rect2(155,335,599,255),Rect2(1017,335,621,255)]
-func atualizar_pratos(quantidade: int) -> void:
+func atualizar_pratos(quantidade: int, compacta: bool = false) -> void:
 	pratos_limpos=quantidade
-	if escala_kit!=scale:
-		escala_kit=scale;queue_redraw()
+	if escala_kit!=scale or bancada!=compacta:
+		escala_kit=scale;bancada=compacta;layout_pratos.clear();queue_redraw()
 
 func disposicao_pratos() -> Dictionary:
 	if not layout_pratos.is_empty():return layout_pratos
 	var plates: Array[Rect2] = []
 	var piles := [mini(STOCK.PLATES_PER_STACK,pratos_limpos),maxi(0,pratos_limpos-STOCK.PLATES_PER_STACK)]
+	var geometry := LAYOUT.frame(scale,bancada)
 	for pile in 2:
-		for layer in piles[pile]:plates.append(Rect2(-12+pile*9,-layer*2,8,5))
+		for layer in piles[pile]:plates.append(LAYOUT.clean(pile,layer,geometry))
 	layout_pratos={"plates":plates,"piles":piles}
 	return layout_pratos
 
@@ -43,8 +46,9 @@ func desenhar_empratamento() -> void:
 	# The furniture footprint may rotate/stretch; the ceramic stays oval.
 	var compensate := Vector2(1/maxf(absf(scale.x),0.001),1/maxf(absf(scale.y),0.001))
 	draw_set_transform(CENTRO_KIT,0,compensate)
-	draw_texture_rect_region(UTENSILIOS,Rect2(-12,0,9,6),Rect2(157,461,619,356))
-	draw_texture_rect_region(UTENSILIOS,Rect2(6,-7,6,13),Rect2(899,270,509,515))
+	var geometry := LAYOUT.frame(scale,bancada)
+	draw_texture_rect_region(UTENSILIOS,LAYOUT.rect(Rect2(-35,8,11,6),geometry),Rect2(157,461,619,356))
+	draw_texture_rect_region(UTENSILIOS,LAYOUT.rect(Rect2(-22,-3,6,12),geometry),Rect2(899,270,509,515))
 	# One sprite per real clean plate, including zero. Never use a baked stack.
 	for rect in layout.plates:draw_texture_rect_region(PRATO,rect,Rect2(125,166,1249,736))
 	draw_set_transform(Vector2.ZERO,0,Vector2.ONE)

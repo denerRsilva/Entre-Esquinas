@@ -27,6 +27,9 @@ func run():
 	check(g.session.SAVE.VALIDATOR.valid(s),"Conservação após empratar")
 	# Simulate an older four-portion batch: all contents become dishes and the
 	# pot returns empty, provided the surface has plates and pickup capacity.
+	# Clear the existing pickup place before plating a four-portion legacy pot.
+	g.session.BUILD.STORE.take(s,table,"dish_frangoArroz",1)
+	s.recovery.append({"item":"dish_frangoArroz","n":1})
 	s.player.hand={"item":"pot_frangoArroz_4","n":1,"quality":2};s.meals.made.frangoArroz+=4
 	var kitchen = g.session.SIM.KITCHEN.new()
 	check(kitchen.plate(s,table.id).ok,"Lote antigo com quatro porções aceito")
@@ -37,7 +40,7 @@ func run():
 	table.plates=11;s.equipment.plate+=9
 	check(kitchen.plate(s,table.id).ok,"Lote pronto para empratar")
 	kitchen.plate_step(s,2.1)
-	check(s.player.hand.item=="pot" and g.session.BUILD.STORE.count(table,"dish_frangoArroz")==5,"Lote inteiro vira pratos sem perder comida")
+	check(s.player.hand.item=="pot" and g.session.BUILD.STORE.count(table,"dish_frangoArroz")==4,"Lote inteiro vira pratos sem perder comida")
 	check(g.session.SAVE.VALIDATOR.valid(s),"Conservação também com lote antigo")
 	# Move time across opening without touching a sign or walking to the door.
 	g.session.ADMIN.test_clock(s,650);g.tick(0)

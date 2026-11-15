@@ -132,3 +132,37 @@ static func plate_capacity(state: Dictionary) -> void:
 			if amount>0 and INV.add(receiver.inventory,"plate",amount):excess-=amount
 			if excess==0:break
 		if excess>0:state.recovery.append({"item":"plate","n":excess})
+
+# Older stations held twelve served dishes. Keep four on the tabletop and
+# preserve the remainder, with its quality, in storage or item recovery.
+static func ready_capacity(state: Dictionary) -> bool:
+	var num = preload("res://simulacao/nativa/Conservacao.gd")
+	var quality = preload("res://simulacao/nativa/Qualidade.gd")
+	for object in state.objects:
+		if object.type!="kitchen":continue
+		if not object.get("dishes") is Dictionary or not object.get("dishQuality",{}) is Dictionary:return false
+		for item in object.dishes:
+			if not str(item).begins_with("dish_") or not INV.ITEMS.data.has(item) or not num.integer(object.dishes[item]) or object.dishes[item]<0:return false
+		for item in object.get("dishQuality",{}):
+			var counts = object.dishQuality[item]
+			if not object.dishes.has(item) or not quality.counts_valid(counts) or counts[1]+counts[2]+counts[3]>object.dishes[item]:return false
+		if STORAGE.ready_count(object)>12:return false
+		var free := STORAGE.READY_DISH_CAPACITY
+		for item in object.dishes.keys():
+			for tier in 4:
+				var count := STORAGE.quality_count(object,item,tier)
+				var kept := mini(free,count)
+				free-=kept
+				var excess := count-kept
+				if excess==0:continue
+				STORAGE.take(state,object,item,excess,tier)
+				for receiver in state.objects:
+					if not receiver.has("inventory") or not STORAGE.accepts(receiver,item):continue
+					var amount := mini(excess,INV.space(receiver.inventory,item,tier))
+					if amount>0 and INV.add(receiver.inventory,item,amount,tier):excess-=amount
+					if excess==0:break
+				while excess>0:
+					var amount := mini(excess,INV.limit(item))
+					state.recovery.append({"item":item,"n":amount,"quality":tier})
+					excess-=amount
+	return true

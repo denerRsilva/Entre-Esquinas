@@ -6,7 +6,7 @@ func run():
 		var expected: Variant = test.expected
 		if test.name=="validKitchen":
 			for object in test.args[0].objects:
-				if object.type=="kitchen" and (object.get("plates",0) is int or object.get("plates",0) is float) and object.plates>20:expected=false
+				if object.type=="kitchen" and (object.get("plates",0) is int or object.get("plates",0) is float) and (object.plates>20 or preload("res://simulacao/nativa/Armazenamento.gd").ready_count(object)>4):expected=false
 		check(equivalent(JSON.parse_string(rules.execute(JSON.stringify({"name":test.name,"args":test.args},"",true,true))),expected),test.name)
 	var tests = load("res://qa/referencia-migracao/migracao-saves.json").data
 	for test in tests:

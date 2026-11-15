@@ -9,6 +9,11 @@ func run():
 		var expected: Variant = test.expected
 		if test.name=="objectSpace" and test.args[0].type=="kitchen" and test.args[1]=="plate":
 			expected=maxi(0,20-int(test.args[0].plates))
+		if test.name=="objectSpace" and test.args[0].type=="kitchen" and str(test.args[1]).begins_with("dish_"):
+			expected=maxi(0,4-preload("res://simulacao/nativa/Armazenamento.gd").ready_count(test.args[0]))
+		# Four pickup places replace the old twelve-dish contract.
+		if test.name=="putObject" and test.args[1].type=="kitchen" and str(test.args[2]).begins_with("dish_") and preload("res://simulacao/nativa/Armazenamento.gd").ready_count(test.args[1])>=4:
+			expected={"value":0,"object":test.args[1],"inv":test.args[0].inv}
 		if not equivalent(actual,expected):check(false,test.name+" "+JSON.stringify(test.args))
 	print("CASOS: ",tests.size()," FALHAS: ",failures)
 	quit(1 if failures else 0)
