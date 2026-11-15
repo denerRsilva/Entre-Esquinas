@@ -186,9 +186,7 @@ func object(s: Dictionary,o: Dictionary,selected: bool,preview: bool = false) ->
 		if BUILD.CATALOG.data[o.type].has("counterPart"):
 			var part: String = BUILD.CATALOG.data[o.type].counterPart
 			var thick: bool = BUILD.CATALOG.data[o.type].counterFamily=="wide"
-			center=Vector2(0,-30-(12 if thick else 7))
-			if part in ["Top","Vertical","Base"]:center=Vector2(-4 if thick else -10,-50)
-			if int(o.rot)%2:center.x=-center.x
+			center=preload("res://moveis/BancadaPiskel.gd").apoio(thick,part in ["Top","Vertical","Base"],int(o.rot)%2==1)
 		pot(x+w/2+center.x,y+h+center.y,INV.ITEMS.data[o.support.item].get("servings",0)>0,false,s.time)
 	if o.type=="kitchen":
 		if o.get("support")!=null:pot(x+minf(50,w*0.625),y-7,INV.ITEMS.data.get(o.support.item,{}).get("servings",0)>0,false,s.time)

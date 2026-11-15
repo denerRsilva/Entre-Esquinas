@@ -41,7 +41,7 @@ func run():
 	if "--capture" in OS.get_cmdline_user_args():await capture_art()
 	await finish()
 func capture_art() -> void:
-	var view := SubViewport.new();view.size=Vector2i(1600,1020);view.transparent_bg=false
+	var view := SubViewport.new();view.size=Vector2i(1600,1020);view.transparent_bg=true
 	view.render_target_update_mode=SubViewport.UPDATE_ALWAYS;root.add_child(view)
 	var background := ColorRect.new();background.color=Color("#34483e");background.size=Vector2(1600,1020);view.add_child(background)
 	for family in 2:
@@ -49,14 +49,14 @@ func capture_art() -> void:
 		var origin := Vector2(100,460+family*490)
 		for item in [["Left",Vector2i(0,0)],["Middle",Vector2i(1,0)],["Right",Vector2i(2,0)],["Top",Vector2i(4,-2)],["Vertical",Vector2i(4,-1)],["CornerLeft",Vector2i(4,0)],["Middle",Vector2i(5,0)],["Right",Vector2i(6,0)]]:
 			var node = SCENES.CENAS[prefix+item[0]].instantiate();view.add_child(node)
-			node.position=origin+Vector2(item[1])*120;node.scale=Vector2.ONE*3;node.definir_origem(item[1]*40)
+			node.position=origin+Vector2(item[1])*120;node.scale=Vector2.ONE*3
 		for item in [["Left",Vector2i(8,0)],["Middle",Vector2i(9,0)],["CornerRight",Vector2i(10,0)],["Top",Vector2i(10,-2)],["Vertical",Vector2i(10,-1)]]:
 			var node = SCENES.CENAS[prefix+item[0]].instantiate();view.add_child(node)
-			node.position=origin+Vector2(item[1])*120;node.scale=Vector2.ONE*3;node.definir_origem(item[1]*40)
+			node.position=origin+Vector2(item[1])*120;node.scale=Vector2.ONE*3
 			if item[0] in ["Top","Vertical"]:node.configurar(1)
 		for item in [["Top",Vector2i(12,-2)],["Vertical",Vector2i(12,-1)],["Base",Vector2i(12,0)]]:
 			var node = SCENES.CENAS[prefix+item[0]].instantiate();view.add_child(node)
-			node.position=origin+Vector2(item[1])*120;node.scale=Vector2.ONE*3;node.definir_origem(item[1]*40)
+			node.position=origin+Vector2(item[1])*120;node.scale=Vector2.ONE*3
 		var title := Label.new();title.text="Bancada fina" if family==0 else "Bancada grossa";title.position=Vector2(30,30+family*490);title.add_theme_font_size_override("font_size",25);view.add_child(title)
 	await layout();await RenderingServer.frame_post_draw
 	var shot := view.get_texture().get_image()
@@ -65,9 +65,30 @@ func capture_art() -> void:
 		var bottom := 460+family*490
 		# External raster checks: no transparent gaps in the common front lip,
 		# in either elbow, or where a vertical band meets its terminal base.
-		for interval in [Vector2i(46,394),Vector2i(526,874),Vector2i(1006,1354)]:
+		for interval in [Vector2i(70,369),Vector2i(568,849),Vector2i(1030,1312)]:
 			for x in range(interval.x,interval.y):check(shot.get_pixel(x,bottom-94)!=background_pixel,"Tampo contínuo, sem buraco entre peças")
-		var center_x := 1508 if family==0 else 1526
+		var center_x := 1556 if family==0 else 1547
 		for y in range(bottom-437,bottom-94):check(shot.get_pixel(center_x,y)!=background_pixel,"Vertical e base sem faixa transparente")
 	shot.save_png("/tmp/esquinas-bancadas-piskel-montadas.png")
+	background.hide()
+	await layout();await RenderingServer.frame_post_draw
+	var alpha := view.get_texture().get_image()
+	for family in 2:
+		var bottom := 460+family*490
+		var depth := 14 if family==0 else 24
+		for seam in [160,280,640,760,1120,1240]:
+			check_port(alpha,seam-1,seam+2,bottom-90-depth*3+3,bottom-9,"Emenda horizontal coberta")
+		for column in [4,10,12]:
+			var center: float = 100+column*120+(5.5 if family==0 else 2.5)*3*(-1 if column==10 else 1)
+			var half := (23 if family==0 else 31)*1.5
+			for offset in [330,210]:
+				check_port(alpha,int(center-half)+3,int(center+half)-3,bottom-offset-1,bottom-offset+2,"Emenda vertical coberta")
+			if column!=12:
+				check_port(alpha,int(center-half)+3,int(center+half)-3,bottom-(46 if family==0 else 56)*3-1,bottom-(46 if family==0 else 56)*3+2,"Entrada da quina coberta")
 	view.queue_free();await process_frame
+func check_port(shot: Image,x0: int,x1: int,y0: int,y1: int,label: String) -> void:
+	var missing := []
+	for y in range(y0,y1):
+		for x in range(x0,x1):
+			if shot.get_pixel(x,y).a<0.90 and missing.size()<8:missing.append(Vector2i(x,y))
+	check(missing.is_empty(),label+": "+str(missing))
