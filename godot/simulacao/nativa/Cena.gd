@@ -95,7 +95,7 @@ func actor(s: Dictionary,a: Dictionary,selected: Variant,construction: bool) -> 
 	commands.append(["cook",x,bottom,dir,moving] if a.id=="player" else ["npc",a.id,skin,x,bottom,dir,moving])
 	if a.get("noteJob")!=null:
 		var job: Dictionary = a.noteJob
-		box(x-18,bottom-78,36,4,"#315447");box(x-18,bottom-78,36*(1-job.left/job.total),4,"#f3c56e")
+		commands.append(["progress","note:"+str(a.id),x-22,bottom-78,44,8,1-job.left/job.total,"blue"])
 	draw_held(s,held(s,a),x+(-12 if dir=="left" else 12 if dir=="right" else 8),bottom-(32 if dir=="up" else 22))
 	if construction:return
 	if a.id=="player":label("Você",x,bottom+12,"#77603a")
@@ -105,7 +105,9 @@ func actor(s: Dictionary,a: Dictionary,selected: Variant,construction: bool) -> 
 	if a.wait>=5:label("Aguardando passagem",x,bottom-68,"#78503a")
 	if a.get("experience")!=null:
 		var indicator = service.indicator(s,a)
-		if indicator!=null:box(x+18,bottom-82,28,25,"#25473df2");text(indicator.emoji,x+32,bottom-62,20,"#fff3d5")
+		if indicator!=null:
+			box(x+18,bottom-82,28,25,"#25473df2");text(indicator.emoji,x+32,bottom-62,20,"#fff3d5")
+			if indicator.phase!=null:commands.append(["progress","patience:"+str(a.id)+":"+str(indicator.phase),x-22,bottom-94,44,8,indicator.ratio,"patience"])
 static func table_plate_position(table: Dictionary,chair: Dictionary) -> Vector2:
 	var rect := MOVE.MAP.rect(table)
 	var origin := Vector2(rect.position)*40
@@ -189,11 +191,11 @@ func overlays(s: Dictionary,o: Dictionary,selected: bool,building: bool) -> void
 	for pair in [["chopping","table"],["cooking","stove"],["plating","prep"]]:
 		if s.get(pair[0])!=null and s[pair[0]].get(pair[1])==o.id:job=s[pair[0]];break
 	if job!=null:
-		label(("Cortando " if job.has("table") else "Cozinhando " if job.has("stove") else "Empratando ")+str(int(ceil(job.left)))+"s",x+w/2,y-30);box(x,y-19,w,4,"#315447");box(x,y-19,w*(1-job.left/job.total),4,"#f3c56e")
+		label(("Cortando " if job.has("table") else "Cozinhando " if job.has("stove") else "Empratando ")+str(int(ceil(job.left)))+"s",x+w/2,y-30);commands.append(["progress","task:"+str(o.id)+":"+("cut" if job.has("table") else "cook" if job.has("stove") else "plate"),x,y-19,w,8,1-job.left/job.total,"blue"])
 	elif o.type=="stove" and o.get("readyBatch")!=null:
 		var heat := RECIPES.heat(s,o)
 		label(heat.label,x+w/2,y-30)
-		if heat.stage!="burned":box(x,y-19,w,5,"#315447");box(x,y-19,w*heat.value,5,{"ready":"#74b66b","over":"#e0a044","danger":"#d75b3e","burned":"#57534b"}[heat.stage])
+		if heat.stage!="burned":commands.append(["progress","heat:"+str(o.id),x,y-19,w,8,heat.value,{"ready":"green","over":"yellow","danger":"red"}[heat.stage]])
 	elif o.type=="kitchen" and STORE.ready_count(o)>0:label(str(STORE.ready_count(o))+" pratos prontos",x+w/2,y-20)
 	if o.get("feedback")!=null and o.feedback.until>s.time:label("✓ "+o.feedback.label,x+w/2,y-47,"#3b6448")
 func draw(s: Dictionary,ui: Dictionary,input: Variant = null) -> Array:

@@ -6,6 +6,7 @@ var slots := {}
 var cache := {}
 var by_id := {}
 var kitchen_bars: Array = []
+var order_bars: Array = []
 var modal_background: ColorRect
 var import_dialog: FileDialog
 signal import_save(path:String)
@@ -108,9 +109,11 @@ func sync(data: Dictionary) -> void:
 				notice_y=actions_y-80.0 if actions_y>=140.0 else actions_y+120.0
 			root.position=Vector2(10,notice_y)
 		var progress_values: Array = []
-		var signature:String=JSON.stringify(progress_signature(item,progress_values) if key=="kitchenStatus" else item)
+		var signature:String=JSON.stringify(progress_signature(item,progress_values) if key in ["kitchenStatus","ordersHud"] else item)
 		if cache.get(key)==signature:
 			if key=="kitchenStatus":update_kitchen_bars(progress_values)
+			elif key=="ordersHud":
+				for i in mini(progress_values.size(),order_bars.size()):order_bars[i].value=progress_values[i]
 			continue
 		cache[key]=signature
 		var content:VBoxContainer=entry[1]
@@ -137,6 +140,7 @@ func sync(data: Dictionary) -> void:
 		else:
 			builder.render(item,content)
 		if key=="kitchenStatus":kitchen_bars=content.find_children("*","ProgressBar",true,false)
+		elif key=="ordersHud":order_bars=content.find_children("*","ProgressBar",true,false)
 		if key=="modal" and signature.contains("Salvar restaurante") and signature.contains("Carregar restaurante"):
 			var b:=Button.new();b.text="Importar salvamento (.json)"
 			b.pressed.connect(func():import_dialog.popup_centered_ratio(0.72))

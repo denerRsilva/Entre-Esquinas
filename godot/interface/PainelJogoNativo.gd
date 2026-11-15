@@ -102,7 +102,7 @@ func kitchen_status(s: Dictionary) -> Dictionary:
 	var children: Array = []
 	for job in jobs:
 		var parts: Array = [plain(job.label+("" if job.has("heat") else " • "+str(int(ceil(job.left)))+"s"))]
-		if job.get("heat")!="burned":parts.append({"tag":"progress","max":job.total,"value":job.total-job.left,"label":job.label})
+		if job.get("heat")!="burned":parts.append({"tag":"progress","max":job.total,"value":job.total-job.left,"label":job.label,"color":{"ready":"green","over":"yellow","danger":"red"}.get(job.get("heat",""),"blue")})
 		children.append(node("label",parts,"","heat-"+job.heat if job.has("heat") else ""))
 	return node("div",children,"kitchenStatus")
 func render(s: Dictionary,model: Dictionary,input: Variant) -> Dictionary:
@@ -117,13 +117,16 @@ func render(s: Dictionary,model: Dictionary,input: Variant) -> Dictionary:
 	for c in s.customers:
 		if c.state!="waiting":continue
 		var indicator = service.indicator(s,c)
-		orders.append(node("div",[plain((indicator.emoji+" " if indicator!=null else "")+"Mesa aguardando pedido"+(" • "+str(int(ceil(indicator.remaining)))+"s de paciência" if indicator!=null else ""))],"","orderCard"))
+		var waiting_parts: Array = [plain((indicator.emoji+" " if indicator!=null else "")+"Mesa aguardando pedido"+(" • "+str(int(ceil(indicator.remaining)))+"s de paciência" if indicator!=null else ""))]
+		if indicator!=null and indicator.phase!=null:waiting_parts.append({"tag":"progress","max":1,"value":indicator.ratio,"color":"patience","label":"Paciência"})
+		orders.append(node("div",waiting_parts,"","orderCard"))
 	for order in s.orders:
 		if order.state in ["paid","lost"]:continue
 		var customer = service.find(s.customers,order.get("customer"))
 		var indicator = service.indicator(s,customer) if customer!=null else null
 		var extra: String = " • "+indicator.emoji+(" "+str(int(ceil(indicator.remaining)))+"s de paciência" if indicator.phase!=null else " "+indicator.label) if indicator!=null else ""
 		var content: Array = [node("b",[plain("#"+str(int(order.id))+" • "),{"tag":"canvas","art":controls.item_art(order.recipe),"label":SERVICE.RECIPES.data[order.recipe].name}]),plain({"ordered":"A preparar","cooking":"No fogão","ready":"A caminho da mesa","eating":"Cliente comendo"}.get(order.state,order.state)+extra+" • espera "+str(int(floor(order.age)))+"s")]
+		if indicator!=null and indicator.phase!=null:content.append({"tag":"progress","max":1,"value":indicator.ratio,"color":"patience","label":"Paciência"})
 		if order.state=="ordered":content.append(controls.button("Prioritário" if s.priority==order.id else "Priorizar","nativo:jogo:prioridade:"+str(int(order.id)),{"kind":"priority","id":order.id}))
 		orders.append(node("div",content,"","orderCard"))
 	return {"hud":node("div",[plain(summary)],"hud"),"openBtn":null,"ordersHud":node("div",orders,"ordersHud"),"kitchenStatus":kitchen_status(s),"context":context(s,model)}

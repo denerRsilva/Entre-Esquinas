@@ -1,6 +1,8 @@
 extends Node2D
 ## Details attached to the scene: utensils, dishes, shadows, indicators and order labels.
+const BARS = preload("res://interface/ArteBarras.gd")
 var commands: Array = []
+var progress_values: Dictionary = {}
 static var textures: Dictionary = {}
 static var vectors: Dictionary = {}
 
@@ -22,13 +24,32 @@ static func vector(source: String) -> Texture2D:
 func set_commands(next: Array) -> void:
 	if commands != next:
 		commands = next
+		var active := {}
+		for op in commands:
+			if op[0]=="progress":active[op[1]]=progress_values.get(op[1],float(op[6]))
+		progress_values=active
+		texture_filter=CanvasItem.TEXTURE_FILTER_NEAREST
+		set_process(not progress_values.is_empty())
 		queue_redraw()
+
+func _process(dt: float) -> void:
+	if not is_visible_in_tree():return
+	var changed := false
+	for op in commands:
+		if op[0]!="progress":continue
+		var current: float = progress_values[op[1]]
+		var next := move_toward(current,clampf(op[6],0,1),dt*4.0)
+		if not is_equal_approx(current,next):
+			progress_values[op[1]]=next;changed=true
+	if changed:queue_redraw()
 
 func _draw() -> void:
 	for command in commands:
 		var op: Array = preload("res://simulacao/nativa/Alimentos.gd").image_command(command) if command[0]=="food" else command
 		if op.is_empty():continue
 		match op[0]:
+			"progress":
+				BARS.paint(self,Rect2(op[2],op[3],op[4],op[5]),progress_values.get(op[1],op[6]),op[7])
 			"rect","line":
 				var col := Color.from_string(op[5],Color.WHITE)
 				if op[0] == "rect":

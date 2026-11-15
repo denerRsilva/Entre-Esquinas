@@ -149,11 +149,12 @@ func render(d: Dictionary, parent: Control) -> void:
 			parent.add_child(n)
 		return
 	if tag=="progress":
-		var bar := ProgressBar.new()
+		var bar := preload("res://interface/BarraAnimada.gd").new()
 		bar.max_value = d.max
 		bar.value = d.value
 		bar.show_percentage = false
-		bar.custom_minimum_size.y = 8
+		bar.kind = d.get("color","blue")
+		bar.tooltip_text = d.get("label","")
 		parent.add_child(bar)
 		return
 	if d.has("art"):

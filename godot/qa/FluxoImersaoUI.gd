@@ -60,7 +60,7 @@ func run():
 	var packet: Dictionary = g.session.step(0,[])
 	var bar := false
 	for command in packet.scene:
-		if command[0]=="rect" and command[4]==4 and command[5]=="#315447":bar=true
+		if command[0]=="progress" and str(command[1]).begins_with("note:"):bar=true
 	check(bar,"Anotação mostra barra no mundo")
 	saved=g.session.SAVE.serialize(s);loaded=g.session.SAVE.new().load_value(JSON.parse_string(saved)) if saved is String else null
 	check(loaded!=null and loaded.workers[0].has("noteJob"),"Save durante anotação")
