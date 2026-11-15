@@ -34,3 +34,18 @@ Compatibility. Captura em `docs/arte/interface-sem-avisos.png`.
 
 Android 0.21.2-godot.29 (21229) exportado do commit b5ee888. ZIP e assinatura
 v2/v3 verificados; sem teste em aparelho Android físico nesta execução.
+
+## Nomes em aproximação e seleção
+
+A composição do cenário agora adota a visualização sem rótulos também quando
+o chamador não informa opções de limpeza. Os ícones de interação com NPCs,
+móveis e saídas não apresentam texto nem tooltip, incluindo “Sair para a cidade”.
+As descrições continuam nas propriedades de acessibilidade para leitores de
+tela. Nomes dos produtos nos menus de compra e inventário permanecem nesses
+menus. A referência histórica de migração habilita os rótulos antigos apenas
+no teste, enquanto `InterfaceLimpaUI` valida a apresentação atual por padrão,
+a seleção de cada móvel e o ícone da saída próximo à porta.
+
+A nova verificação visual mantém o cursor sobre o ícone da porta por mais de
+0,5 segundo e confirma que o texto não reaparece. Captura em
+`docs/arte/saida-sem-rotulo.png`. As 36 suítes de regressão passaram novamente.

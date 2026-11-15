@@ -89,7 +89,9 @@ func render(d: Dictionary, parent: Control) -> void:
 			b.add_theme_constant_override("icon_max_width",32)
 		if cls.contains("objectAction"):
 			b.text = ""
-			b.tooltip_text = d.label
+			b.tooltip_text = ""
+			b.accessibility_name = d.label
+			b.set_meta("action_label",d.label)
 			b.icon = preload("res://interface/IconesAcao.gd").icon(d.label,b.icon)
 			b.add_theme_constant_override("icon_max_width",56)
 			b.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER

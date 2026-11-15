@@ -10,7 +10,7 @@ const SERVICE = preload("res://simulacao/nativa/Atendimento.gd")
 const PORTALS = {"restaurant":[{"x":7,"y":14,"name":"Sair para a cidade"}],"street":[{"x":12,"y":5,"name":"Entrar no restaurante"}],"stock":[{"x":21,"y":14,"name":"Voltar à cozinha"}]}
 var commands: Array = []
 var alpha := 1.0
-var clean_view := false
+var clean_view := true
 var facing: Dictionary = {}
 var velocity: Variant = null
 var identities: Dictionary = {}
@@ -203,7 +203,7 @@ func overlays(s: Dictionary,o: Dictionary,selected: bool,building: bool) -> void
 	elif o.type=="kitchen" and STORE.ready_count(o)>0:label(str(STORE.ready_count(o))+" pratos prontos",x+w/2,y-20)
 	if o.get("feedback")!=null and o.feedback.until>s.time:label("✓ "+o.feedback.label,x+w/2,y-47,"#3b6448")
 func draw(s: Dictionary,ui: Dictionary,input: Variant = null) -> Array:
-	commands=[];alpha=1;clean_view=ui.get("cleanView",false);velocity=input;identities=ui.get("actorTokens",{})
+	commands=[];alpha=1;clean_view=ui.get("cleanView",true);velocity=input;identities=ui.get("actorTokens",{})
 	var room: String = s.player.room
 	if room=="street":label("ENCERRANDO" if s.closing else "ABERTO" if s.open else "FECHADO",675,200,"#3b6448" if s.open else "#77503a")
 	if room=="restaurant" and not s.singleRoom:

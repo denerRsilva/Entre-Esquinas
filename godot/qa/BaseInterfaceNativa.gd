@@ -8,7 +8,7 @@ func start_game() -> void:
 func press(title: String) -> bool:
 	await layout()
 	for control in g.hud.find_children("*","Button",true,false):
-		if control.is_visible_in_tree() and not control.disabled and (control.text==title or control.tooltip_text==title):
+		if control.is_visible_in_tree() and not control.disabled and (control.text==title or control.tooltip_text==title or control.get_meta("action_label","")==title):
 			control.emit_signal("pressed");g.tick(0);await layout();return true
 	return false
 func widget(path: String,value: Variant = null) -> void:g.events.append({"kind":"widget","path":path,"value":value});g.tick(0)

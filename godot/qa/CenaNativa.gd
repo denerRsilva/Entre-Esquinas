@@ -2,7 +2,11 @@ extends "res://qa/BaseNativa.gd"
 func run():
 	var tests = load("res://qa/referencia-migracao/cenas.json").data
 	for test in tests:
-		var actual = preload("res://simulacao/nativa/Cena.gd").new().draw(test.state.duplicate(true),test.ui)
+		# Historical snapshots retain their pre-cleanup labels explicitly.
+		# Current/default rendering is covered by InterfaceLimpaUI.
+		var legacy_ui: Dictionary = test.ui.duplicate(true)
+		legacy_ui.cleanView=false
+		var actual = preload("res://simulacao/nativa/Cena.gd").new().draw(test.state.duplicate(true),legacy_ui)
 		# Migration snapshots precede the purchased UI atlas. Compare the old
 		# progress geometry/value here; BarrasAnimadasUI checks the new renderer.
 		var legacy := []
