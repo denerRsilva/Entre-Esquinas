@@ -183,11 +183,14 @@ func object(s: Dictionary,o: Dictionary,selected: bool,preview: bool = false) ->
 		var index := 0
 		var counter_type: String = o.get("baseType","")
 		var counter := counter_type.begins_with("counter")
+		var compact_serving: bool = counter or w<=40
 		var serving_center := Vector2(x+w*0.8125,y+1)
-		if counter:serving_center=Vector2(x+w/2,y+h)+preload("res://moveis/Bancada.gd").centro_kit({"counterH":0,"counterV":1,"counterCorner":2}[counter_type],int(o.rot))+Vector2(0,9)
+		if compact_serving:
+			var kit_center := preload("res://moveis/Bancada.gd").centro_kit({"counterH":0,"counterV":1,"counterCorner":2}[counter_type],int(o.rot)) if counter else Vector2(0,-44*h/40)
+			serving_center=Vector2(x+w/2,y+h)+kit_center+Vector2(0,9)
 		for dish in o.get("dishes",{}):
 			for q in 4:
-				for j in STORE.quality_count(o,dish,q):plate(serving_center.x,serving_center.y-index*2,INV.ITEMS.data[dish].recipe,false,q,Vector2(14,8) if counter else Vector2(20,14));index+=1
+				for j in STORE.quality_count(o,dish,q):plate(serving_center.x,serving_center.y-index*2,INV.ITEMS.data[dish].recipe,false,q,Vector2(14,8) if compact_serving else Vector2(20,14));index+=1
 	if o.type=="table":
 		for ch in s.objects:
 			if ch.type!="chair":continue
