@@ -85,6 +85,7 @@ func paint(data: Dictionary) -> void:
 			if op[1] in ["kitchen","platingKit"]:n.atualizar_pratos(int(op[8].get("plates",0)) if op.size()>8 and op[8] is Dictionary else 0)
 			if op[1] in ["cuttingKit","platingKit"] and counter_kit_centers.has(Vector2i(op[2],op[3])):
 				n.position+=counter_kit_centers[Vector2i(op[2],op[3])]-n.CENTRO_KIT*n.scale
+			if n.has_method("definir_origem"):n.definir_origem(Vector2i(op[2],op[3]))
 			if str(op[1]).begins_with("counter"):
 				var profiles := []
 				for direction in LADOS_BANCADA:profiles.append(counter_profiles.get(Vector2i(op[2],op[3])+direction*40,PackedByteArray()))

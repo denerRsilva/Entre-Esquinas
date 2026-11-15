@@ -8,10 +8,12 @@ SHA256: 44326e2adec2351337c2d3f8449bac3d111f8770bacc8aab1d8b05614a425f61.
 Cada uma das duas famílias (fina e grossa) tem oito peças compráveis: ponta
 esquerda, horizontal repetível, ponta direita, topo vertical, prolongamento
 vertical, base vertical e duas quinas. Cada módulo ocupa uma célula de 40×40,
-com frente de 30 de altura. O tampo horizontal tem profundidade 14 na fina e 24
-na grossa; os braços verticais têm largura 20 e 32, respectivamente. Os recortes
-são ajustados à grade mantendo a frente em pé e separando o plano do tampo.
-Margens transparentes de cada recorte são consideradas no alinhamento.
+com frente de 30 de altura. A densidade dos recortes é compartilhada: 0,2 unidade por pixel do PNG.
+Os braços verticais medem 19,4 e 31,4 unidades; os tampos horizontais têm
+profundidade 14 e 24,6. Os recortes repetem ou são cortados para preencher a
+grade. Painéis, postes e bordas não são alargados para caber na célula.
+A frente mantém 30 de altura, com vigas de espessura constante e preenchimento
+da madeira entre elas. Margens transparentes são consideradas no alinhamento.
 
 Coloque pontas nas extremidades e peças centrais para alongar. Nas verticais,
 o topo inicia o trecho, o prolongamento aumenta o comprimento e a base fecha
@@ -47,5 +49,22 @@ capturadas com o renderizador Compatibility.
 
 Capturas: `docs/arte/bancadas-piskel-montadas.png` e
 `docs/arte/catalogo-construcao-secoes.png`.
-Android 0.21.2-godot.38 (21238), ZIP e assinatura v2/v3 verificados.
+Android 0.21.2-godot.39 (21239), ZIP e assinatura v2/v3 verificados.
 Sem teste em aparelho Android físico nesta execução.
+
+## Correção de recortes e montagem da versão 39
+
+A madeira usa uma origem em coordenadas do mundo. A textura e o ritmo dos
+painéis continuam entre células, em vez de recomeçar e esticar em cada peça.
+Espelhar troca pontas/quinas e o lado da coluna, mantendo o veio da madeira
+na orientação da câmera. Topos arredondados são desenhados sobre transparência;
+as junções não recebem uma segunda moldura nem uma faixa transparente. As bases
+verticais usam as dimensões nativas do recorte e fecham a frente da coluna.
+O PNG do usuário continua com o mesmo hash registrado acima.
+
+Após a correção passaram `BancadasPiskelUI`, `CatalogoSecoesUI`,
+`DesempenhoGarcomUI`, `ApoioPanelasUI` e `TelaExpandidaUI`. A captura gráfica de
+`BancadasPiskelUI` também verifica pixels para detectar buracos nas três
+montagens horizontais, nas duas quinas e na união da vertical com sua base.
+A imagem de comparação agora inclui uma coluna vertical terminada para cada
+família. A captura anterior está em `docs/arte/bancadas-piskel-antes-correcao.png`.
