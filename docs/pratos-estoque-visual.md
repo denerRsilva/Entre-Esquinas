@@ -23,9 +23,10 @@ O cache é atualizado por quantidade e orientação, inclusive ao reutilizar nó
 O empratamento exige uma superfície com as dimensões da mesa de preparo: **2×1**
 (ou 1×2 após girar). A mesa/bancada de trabalho existente tem esse tamanho.
 As peças modulares horizontal, vertical e de quina atuais têm 1×1 e não aceitam
-empratamento. Suas novas compras estão suspensas enquanto a arte é refinada.
-Peças presentes em saves antigos continuam aceitando corte e apoio de panela
-quando vazias; elas não são apagadas nem alteradas pela pausa do catálogo.
+empratamento. As peças antigas permanecem nos salvamentos. As dezesseis peças novas editadas
+no Piskel estão disponíveis na seção Bancadas, com apoio de panela quando vazias.
+As ferramentas continuam exigindo as mesas compatíveis; os novos módulos
+individuais não viram estações de empratamento.
 A instalação, o destaque de compatibilidade, as ações de cozinha, o armazenamento
 e o validador usam a mesma regra, baseada no tamanho da base física.
 

@@ -293,7 +293,11 @@ func widget(event: Dictionary) -> void:
 		notify(result.message,not result.ok);return
 	if tools_ui.controls.actions.has(path) and modal=="management" and mode=="computer" and tab=="tools":
 		var ok := ADMIN.buy_tool(state,tools_ui.controls.actions[path].item);generation+=1;notify("Item nas mãos." if ok else "Confira o saldo e libere as mãos.",not ok);return
-	if catalog_ui.controls.actions.has(path) and construction and drawer:begin_build(catalog_ui.controls.actions[path].type)
+	if catalog_ui.controls.actions.has(path) and construction and drawer:
+		var action: Dictionary = catalog_ui.controls.actions[path]
+		if action.has("category"):
+			catalog_ui.category=action.category;generation+=1
+		else:begin_build(action.type)
 func button(title: String,action: String,disabled: bool = false,id: String = "",art: Array = []) -> Dictionary:
 	var path := "nativo:sessao:"+action
 	if not disabled:root_actions[path]=action
@@ -332,7 +336,8 @@ func ui() -> Dictionary:
 			var error = preview_error()
 			var is_kit: bool = BUILD.TABLE_KITS.has(building.type)
 			var hint := "Toque sobre uma mesa de trabalho vazia." if is_kit else "Toque em uma célula do setor indicado." if hover==null else "Posição válida. Arraste o mapa para explorar. A seta da cadeira aponta para a mesa."
-			var actions: Array = [] if is_kit else [button("Girar ↻","rotate")]
+			var mirror: bool = BUILD.CATALOG.data[building.type].has("counterPart")
+			var actions: Array = [] if is_kit else [button("Espelhar ↔" if mirror else "Girar ↻","rotate")]
 			actions.append(button("Confirmar posição","confirm",hover==null or error!=null))
 			if building.moving!=null:
 				var table = BUILD.find(state.objects,building.moving)

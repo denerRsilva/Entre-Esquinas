@@ -6,7 +6,8 @@
     "h": 1,
     "room": "restaurant",
     "area": "hall",
-    "color": "#ba8654"
+    "color": "#ba8654",
+    "category": "moveis"
   },
   "chair": {
     "name": "Cadeira",
@@ -15,7 +16,8 @@
     "h": 1,
     "room": "restaurant",
     "area": "hall",
-    "color": "#d5ad70"
+    "color": "#d5ad70",
+    "category": "moveis"
   },
   "stove": {
     "name": "Fogão",
@@ -24,7 +26,8 @@
     "h": 1,
     "room": "restaurant",
     "area": "kitchen",
-    "color": "#718d91"
+    "color": "#718d91",
+    "category": "equipamentos"
   },
   "fridge": {
     "name": "Geladeira da cozinha",
@@ -33,7 +36,8 @@
     "h": 2,
     "room": "restaurant",
     "area": "kitchen",
-    "color": "#8dbdb5"
+    "color": "#8dbdb5",
+    "category": "equipamentos"
   },
   "shelf": {
     "name": "Prateleira seca",
@@ -42,7 +46,8 @@
     "h": 1,
     "room": "restaurant",
     "area": "dryStorage",
-    "color": "#b69969"
+    "color": "#b69969",
+    "category": "moveis"
   },
   "cold": {
     "name": "Geladeira do estoque",
@@ -51,7 +56,8 @@
     "h": 2,
     "room": "restaurant",
     "area": "storage",
-    "color": "#91b6cb"
+    "color": "#91b6cb",
+    "category": "equipamentos"
   },
   "potRack": {
     "name": "Estante de panelas",
@@ -60,7 +66,8 @@
     "h": 1,
     "room": "restaurant",
     "area": "kitchen",
-    "color": "#a57b4c"
+    "color": "#a57b4c",
+    "category": "moveis"
   },
   "prep": {
     "name": "Mesa de preparo • corte",
@@ -69,7 +76,8 @@
     "h": 1,
     "room": "restaurant",
     "area": "kitchen",
-    "color": "#bc955e"
+    "color": "#bc955e",
+    "category": "equipamentos"
   },
   "kitchen": {
     "name": "Mesa de cozinha",
@@ -78,7 +86,8 @@
     "h": 1,
     "room": "restaurant",
     "area": "kitchen",
-    "color": "#d1af79"
+    "color": "#d1af79",
+    "category": "equipamentos"
   },
   "sink": {
     "name": "Pia",
@@ -87,7 +96,8 @@
     "h": 1,
     "room": "restaurant",
     "area": "kitchen",
-    "color": "#82b8bb"
+    "color": "#82b8bb",
+    "category": "equipamentos"
   },
   "bin": {
     "name": "Lixo",
@@ -96,7 +106,8 @@
     "h": 1,
     "room": "restaurant",
     "area": "dryStorage",
-    "color": "#71877a"
+    "color": "#71877a",
+    "category": "equipamentos"
   },
   "computer": {
     "name": "Computador",
@@ -105,7 +116,8 @@
     "h": 1,
     "room": "restaurant",
     "area": "utility",
-    "color": "#735b45"
+    "color": "#735b45",
+    "category": "equipamentos"
   },
   "receiving": {
     "name": "Caixas de recebimento",
@@ -114,7 +126,8 @@
     "h": 1,
     "room": "restaurant",
     "area": "utility",
-    "color": "#a27a4b"
+    "color": "#a27a4b",
+    "category": "moveis"
   },
   "counterH": {
     "name": "Bancada horizontal",
@@ -123,7 +136,8 @@
     "h": 1,
     "room": "restaurant",
     "area": "utility",
-    "color": "#bd9360"
+    "color": "#bd9360",
+    "category": "equipamentos"
   },
   "counterV": {
     "name": "Bancada vertical",
@@ -132,7 +146,8 @@
     "h": 1,
     "room": "restaurant",
     "area": "utility",
-    "color": "#bd9360"
+    "color": "#bd9360",
+    "category": "equipamentos"
   },
   "counterCorner": {
     "name": "Bancada de canto",
@@ -141,7 +156,8 @@
     "h": 1,
     "room": "restaurant",
     "area": "utility",
-    "color": "#bd9360"
+    "color": "#bd9360",
+    "category": "equipamentos"
   },
   "worktable": {
     "name": "Mesa de trabalho",
@@ -150,7 +166,8 @@
     "h": 1,
     "room": "restaurant",
     "area": "kitchen",
-    "color": "#bc955e"
+    "color": "#bc955e",
+    "category": "moveis"
   },
   "cuttingKit": {
     "name": "Kit de corte e preparo",
@@ -159,7 +176,8 @@
     "h": 1,
     "room": "restaurant",
     "area": "kitchen",
-    "color": "#bc955e"
+    "color": "#bc955e",
+    "category": "ferramentas"
   },
   "platingKit": {
     "name": "Kit de empratamento",
@@ -168,6 +186,219 @@
     "h": 1,
     "room": "restaurant",
     "area": "kitchen",
-    "color": "#bc955e"
+    "color": "#bc955e",
+    "category": "ferramentas"
+  },
+  "counterThinLeft": {
+    "name": "Fina • Ponta esquerda",
+    "price": 35,
+    "w": 1,
+    "h": 1,
+    "room": "restaurant",
+    "area": "utility",
+    "color": "#bd9360",
+    "category": "bancadas",
+    "counterFamily": "thin",
+    "counterPart": "Left"
+  },
+  "counterThinMiddle": {
+    "name": "Fina • Trecho horizontal",
+    "price": 35,
+    "w": 1,
+    "h": 1,
+    "room": "restaurant",
+    "area": "utility",
+    "color": "#bd9360",
+    "category": "bancadas",
+    "counterFamily": "thin",
+    "counterPart": "Middle"
+  },
+  "counterThinRight": {
+    "name": "Fina • Ponta direita",
+    "price": 35,
+    "w": 1,
+    "h": 1,
+    "room": "restaurant",
+    "area": "utility",
+    "color": "#bd9360",
+    "category": "bancadas",
+    "counterFamily": "thin",
+    "counterPart": "Right"
+  },
+  "counterThinTop": {
+    "name": "Fina • Topo vertical",
+    "price": 35,
+    "w": 1,
+    "h": 1,
+    "room": "restaurant",
+    "area": "utility",
+    "color": "#bd9360",
+    "category": "bancadas",
+    "counterFamily": "thin",
+    "counterPart": "Top"
+  },
+  "counterThinVertical": {
+    "name": "Fina • Prolongamento vertical",
+    "price": 35,
+    "w": 1,
+    "h": 1,
+    "room": "restaurant",
+    "area": "utility",
+    "color": "#bd9360",
+    "category": "bancadas",
+    "counterFamily": "thin",
+    "counterPart": "Vertical"
+  },
+  "counterThinBase": {
+    "name": "Fina • Base vertical",
+    "price": 35,
+    "w": 1,
+    "h": 1,
+    "room": "restaurant",
+    "area": "utility",
+    "color": "#bd9360",
+    "category": "bancadas",
+    "counterFamily": "thin",
+    "counterPart": "Base"
+  },
+  "counterThinCornerLeft": {
+    "name": "Fina • Quina esquerda",
+    "price": 35,
+    "w": 1,
+    "h": 1,
+    "room": "restaurant",
+    "area": "utility",
+    "color": "#bd9360",
+    "category": "bancadas",
+    "counterFamily": "thin",
+    "counterPart": "CornerLeft"
+  },
+  "counterThinCornerRight": {
+    "name": "Fina • Quina direita",
+    "price": 35,
+    "w": 1,
+    "h": 1,
+    "room": "restaurant",
+    "area": "utility",
+    "color": "#bd9360",
+    "category": "bancadas",
+    "counterFamily": "thin",
+    "counterPart": "CornerRight"
+  },
+  "counterWideLeft": {
+    "name": "Grossa • Ponta esquerda",
+    "price": 45,
+    "w": 1,
+    "h": 1,
+    "room": "restaurant",
+    "area": "utility",
+    "color": "#bd9360",
+    "category": "bancadas",
+    "counterFamily": "wide",
+    "counterPart": "Left"
+  },
+  "counterWideMiddle": {
+    "name": "Grossa • Trecho horizontal",
+    "price": 45,
+    "w": 1,
+    "h": 1,
+    "room": "restaurant",
+    "area": "utility",
+    "color": "#bd9360",
+    "category": "bancadas",
+    "counterFamily": "wide",
+    "counterPart": "Middle"
+  },
+  "counterWideRight": {
+    "name": "Grossa • Ponta direita",
+    "price": 45,
+    "w": 1,
+    "h": 1,
+    "room": "restaurant",
+    "area": "utility",
+    "color": "#bd9360",
+    "category": "bancadas",
+    "counterFamily": "wide",
+    "counterPart": "Right"
+  },
+  "counterWideTop": {
+    "name": "Grossa • Topo vertical",
+    "price": 45,
+    "w": 1,
+    "h": 1,
+    "room": "restaurant",
+    "area": "utility",
+    "color": "#bd9360",
+    "category": "bancadas",
+    "counterFamily": "wide",
+    "counterPart": "Top"
+  },
+  "counterWideVertical": {
+    "name": "Grossa • Prolongamento vertical",
+    "price": 45,
+    "w": 1,
+    "h": 1,
+    "room": "restaurant",
+    "area": "utility",
+    "color": "#bd9360",
+    "category": "bancadas",
+    "counterFamily": "wide",
+    "counterPart": "Vertical"
+  },
+  "counterWideBase": {
+    "name": "Grossa • Base vertical",
+    "price": 45,
+    "w": 1,
+    "h": 1,
+    "room": "restaurant",
+    "area": "utility",
+    "color": "#bd9360",
+    "category": "bancadas",
+    "counterFamily": "wide",
+    "counterPart": "Base"
+  },
+  "counterWideCornerLeft": {
+    "name": "Grossa • Quina esquerda",
+    "price": 45,
+    "w": 1,
+    "h": 1,
+    "room": "restaurant",
+    "area": "utility",
+    "color": "#bd9360",
+    "category": "bancadas",
+    "counterFamily": "wide",
+    "counterPart": "CornerLeft"
+  },
+  "counterWideCornerRight": {
+    "name": "Grossa • Quina direita",
+    "price": 45,
+    "w": 1,
+    "h": 1,
+    "room": "restaurant",
+    "area": "utility",
+    "color": "#bd9360",
+    "category": "bancadas",
+    "counterFamily": "wide",
+    "counterPart": "CornerRight"
+  },
+  "plant": {
+    "name": "Vaso de planta",
+    "price": 20,
+    "w": 1,
+    "h": 1,
+    "room": "restaurant",
+    "area": "utility",
+    "color": "#739148",
+    "category": "decoracoes"
+  },
+  "flowers": {
+    "name": "Vaso de flores",
+    "price": 25,
+    "w": 1,
+    "h": 1,
+    "room": "restaurant",
+    "area": "utility",
+    "color": "#739148",
+    "category": "decoracoes"
   }
 }

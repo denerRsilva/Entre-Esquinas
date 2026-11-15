@@ -11,7 +11,13 @@ func press(title: String) -> bool:
 		if control.is_visible_in_tree() and not control.disabled and (control.text==title or control.tooltip_text==title or control.get_meta("action_label","")==title):
 			control.emit_signal("pressed");g.tick(0);await layout();return true
 	return false
-func widget(path: String,value: Variant = null) -> void:g.events.append({"kind":"widget","path":path,"value":value});g.tick(0)
+func widget(path: String,value: Variant = null) -> void:
+	if path.begins_with("nativo:comprar:") and g.session.construction and g.session.drawer:
+		var type := path.trim_prefix("nativo:comprar:")
+		var category: String = g.session.catalog_ui.category_of(type)
+		if category!=g.session.catalog_ui.category:
+			g.events.append({"kind":"widget","path":"nativo:categoria:"+category});g.tick(0)
+	g.events.append({"kind":"widget","path":path,"value":value});g.tick(0)
 func advance(seconds: float) -> void:
 	for i in int(ceil(seconds/0.05)):g.tick(0.05)
 func click_object(type: String) -> void:

@@ -11,7 +11,7 @@ static func plating_surface(object: Dictionary) -> bool:
 	return data.get("w")==CATALOG.data.prep.w and data.get("h")==CATALOG.data.prep.h
 static func is_pot(item: String) -> bool:
 	return item=="pot" or INV.ITEMS.data.get(item,{}).get("servings",0)>0
-static func is_support_surface(object: Dictionary) -> bool:return object.get("type") in SUPPORT_SURFACES
+static func is_support_surface(object: Dictionary) -> bool:return object.get("type") in SUPPORT_SURFACES or CATALOG.data.get(object.get("type"),{}).has("counterPart")
 static func surface_empty(object: Dictionary, ignore_support: bool = false) -> bool:
 	if not is_support_surface(object) or object.get("tableKit","")!="":return false
 	if not ignore_support and object.get("support")!=null:return false

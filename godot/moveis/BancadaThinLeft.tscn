@@ -1,0 +1,6 @@
+[gd_scene format=3]
+[ext_resource type="Script" path="res://moveis/BancadaPiskel.gd" id="script"]
+[node name="BancadaThinLeft" type="Node2D"]
+script = ExtResource("script")
+grossa = false
+peca = 0

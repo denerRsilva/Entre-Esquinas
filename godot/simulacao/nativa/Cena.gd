@@ -181,8 +181,14 @@ func object(s: Dictionary,o: Dictionary,selected: bool,preview: bool = false) ->
 		if recipe!=null:food(recipe,x+w/2-14,y-50,28,24)
 	if STORE.is_support_surface(o) and o.get("support")!=null:
 		var center := Vector2(0,-44*h/40)
-		if str(o.type).begins_with("counter"):
+		if o.type in ["counterH","counterV","counterCorner"]:
 			center=preload("res://moveis/Bancada.gd").centro_kit({"counterH":0,"counterV":1,"counterCorner":2}[o.type],int(o.rot))
+		if BUILD.CATALOG.data[o.type].has("counterPart"):
+			var part: String = BUILD.CATALOG.data[o.type].counterPart
+			var thick: bool = BUILD.CATALOG.data[o.type].counterFamily=="wide"
+			center=Vector2(0,-30-(12 if thick else 7))
+			if part in ["Top","Vertical","Base"]:center=Vector2(-4 if thick else -10,-50)
+			if int(o.rot)%2:center.x=-center.x
 		pot(x+w/2+center.x,y+h+center.y,INV.ITEMS.data[o.support.item].get("servings",0)>0,false,s.time)
 	if o.type=="kitchen":
 		if o.get("support")!=null:pot(x+minf(50,w*0.625),y-7,INV.ITEMS.data.get(o.support.item,{}).get("servings",0)>0,false,s.time)

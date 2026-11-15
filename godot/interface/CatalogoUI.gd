@@ -45,6 +45,8 @@ func furniture_control(type: String, title: String) -> Control:
 	if scene:
 		var furniture: Node2D = scene.instantiate()
 		furniture.position = Vector2(60,104)
+		if preload("res://simulacao/nativa/catalogo.json").data.get(type,{}).has("counterPart"):
+			furniture.scale=Vector2.ONE*1.4
 		viewport.add_child(furniture)
 	icon.texture = viewport.get_texture()
 	return icon
@@ -84,6 +86,10 @@ func render(d: Dictionary, parent: Control) -> void:
 		if parent is HFlowContainer:
 			b.custom_minimum_size.x = clampf(24+7.3*b.text.length(),76,225)
 		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		if cls=="constructionSectionButton":
+			b.autowrap_mode=TextServer.AUTOWRAP_OFF
+			b.custom_minimum_size=Vector2(0,40)
+			b.add_theme_font_size_override("font_size",14)
 		if d.has("art"):
 			b.icon = texture(d.art)
 			b.add_theme_constant_override("icon_max_width",32)
@@ -224,6 +230,10 @@ func render(d: Dictionary, parent: Control) -> void:
 	elif cls=="hotbarSlots":
 		var grid:=GridContainer.new()
 		grid.columns=5
+		group=grid
+	elif cls=="constructionSections":
+		var grid := GridContainer.new();grid.columns=3
+		grid.add_theme_constant_override("h_separation",6);grid.add_theme_constant_override("v_separation",6)
 		group=grid
 	elif cls=="buildCards":
 		var grid := GridContainer.new()
