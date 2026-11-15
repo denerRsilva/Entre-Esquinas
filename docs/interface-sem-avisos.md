@@ -49,3 +49,6 @@ a seleção de cada móvel e o ícone da saída próximo à porta.
 A nova verificação visual mantém o cursor sobre o ícone da porta por mais de
 0,5 segundo e confirma que o texto não reaparece. Captura em
 `docs/arte/saida-sem-rotulo.png`. As 36 suítes de regressão passaram novamente.
+
+Android 0.21.2-godot.30 (21230) exportado do commit b470586. ZIP e assinatura
+v2/v3 verificados; sem teste em aparelho Android físico nesta execução.
