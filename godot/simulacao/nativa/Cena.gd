@@ -166,6 +166,11 @@ func object(s: Dictionary,o: Dictionary,selected: bool,preview: bool = false) ->
 		var recipe = RECIPES.recognized(o)
 		if recipe==null:recipe=cooking.recipe if cooking!=null else o.readyBatch.recipe if o.get("readyBatch")!=null else null
 		if recipe!=null:food(recipe,x+w/2-14,y-50,28,24)
+	if STORE.is_support_surface(o) and o.get("support")!=null:
+		var center := Vector2(0,-44*h/40)
+		if str(o.type).begins_with("counter"):
+			center=preload("res://moveis/Bancada.gd").centro_kit({"counterH":0,"counterV":1,"counterCorner":2}[o.type],int(o.rot))
+		pot(x+w/2+center.x,y+h+center.y,INV.ITEMS.data[o.support.item].get("servings",0)>0,false,s.time)
 	if o.type=="kitchen":
 		if o.get("support")!=null:pot(x+minf(50,w*0.625),y-7,INV.ITEMS.data.get(o.support.item,{}).get("servings",0)>0,false,s.time)
 		for i in mini(4,int(ceil(float(o.get("plates",0))/3))):plate(x+12,y+2-i*2)

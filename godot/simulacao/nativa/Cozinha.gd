@@ -26,7 +26,7 @@ func cancel_plate(s: Dictionary) -> Dictionary:
 func take_pan(s: Dictionary,o: Dictionary) -> Dictionary:
 	if s.player.get("hand")!=null or s.player.get("carry")!=null:return result(s,false,"Suas mãos estão ocupadas.")
 	if s.get("plating")!=null and s.plating.get("prep")==o.id:return result(s,false,"Cancele o empratamento antes de retirar.")
-	if o.type=="kitchen":
+	if o.type=="kitchen" or STORE.is_support_surface(o):
 		if o.get("support")==null:return result(s,false,"Não há panela apoiada.")
 		s.player.hand=o.support;o.support=null
 	else:
@@ -178,11 +178,15 @@ func physical(s: Dictionary,id: Variant,action: String) -> Dictionary:
 			if a.get("carry")!=null or o.type!="prep" or p==null or p.item not in ["legumes","frango"]:return result(s,false,"Traga frango cru ou legumes inteiros nas mãos.")
 			s.chopping={"hand":true,"table":id,"item":p.item,"quality":p.get("quality",0),"left":2,"total":2};return feedback(s,o,"Cortando "+name(p.item))
 		"support":
-			if o.type!="kitchen" or o.get("support")!=null or p==null or (p.item!="pot" and not INV.ITEMS.data.get(p.item,{}).get("servings",0)):return result(s,false,"Traga uma panela e libere o apoio.")
+			if a.get("carry")!=null or p==null or not STORE.is_pot(p.item) or not STORE.surface_empty(o):return result(s,false,"Traga uma panela e libere o apoio.")
 			o.support=p;a.hand=null;return feedback(s,o,"Panela apoiada")
 		"installPan":
-			if o.type!="stove" or o.get("pan")!=null or p==null or p.item!="pot":return result(s,false,"Traga uma panela vazia para um fogão livre.")
-			o.pan="pot";a.hand=null;return feedback(s,o,"Panela instalada")
+			if o.type!="stove" or a.get("carry")!=null or p==null or not STORE.is_pot(p.item) or STORE.space(o,p.item)==0:return result(s,false,"Traga uma panela para um fogão livre.")
+			STORE.put(s,o,p.item,1,p.get("quality",0))
+			for key in ["readyBatch","burned","heatStage"]:o.erase(key)
+			if INV.ITEMS.data[p.item].get("servings",0)>0:o.readyBatch={"recipe":INV.ITEMS.data[p.item].recipe,"quality":p.get("quality",0),"doneAt":s.time}
+			if p.get("burned",false):o.burned=true
+			a.hand=null;return feedback(s,o,"Panela instalada")
 		"add":
 			if o.type!="stove" or o.get("pan")!="pot":return result(s,false,"Instale uma panela vazia.")
 			if p==null or p.item not in ["arroz","legumes_cut","frango_cut"]:return result(s,false,"Traga arroz, frango cortado ou legumes cortados nas mãos.")
@@ -213,10 +217,10 @@ func physical(s: Dictionary,id: Variant,action: String) -> Dictionary:
 					STORE.take(s,o,dish,1,quality);a.hand={"item":dish,"n":1,"quality":quality};return feedback(s,o,"Prato nas mãos")
 			return result(s,false,"Não há prato pronto.")
 		"putDish":
-			if o.type!="kitchen" or p==null or not str(p.item).begins_with("dish_") or STORE.space(o,p.item)==0:return result(s,false,"Sem espaço para apoiar o prato.")
+			if o.type!="kitchen" or o.get("support")!=null or p==null or not str(p.item).begins_with("dish_") or STORE.space(o,p.item)==0:return result(s,false,"Sem espaço para apoiar o prato.")
 			STORE.put(s,o,p.item,1,p.get("quality",0));a.hand=null;return feedback(s,o,"Prato apoiado")
 		"installPlates":
-			if o.type!="kitchen" or p==null or p.item!="plate" or o.plates>=99:return result(s,false,"Traga um prato limpo; verifique o espaço na mesa.")
+			if o.type!="kitchen" or o.get("support")!=null or p==null or p.item!="plate" or o.plates>=99:return result(s,false,"Traga um prato limpo; verifique o espaço na mesa.")
 			o.plates+=1;a.hand=null;return feedback(s,o,"Prato limpo instalado")
 		"takePlates","takeUtensil":
 			if o.type!="kitchen" or p!=null or a.get("carry")!=null:return result(s,false,"Libere as mãos.")

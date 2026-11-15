@@ -1,12 +1,33 @@
 extends RefCounted
 const INV = preload("res://simulacao/nativa/Inventario.gd")
 
+const SUPPORT_SURFACES = ["worktable","counterH","counterV","counterCorner"]
+static func is_pot(item: String) -> bool:
+	return item=="pot" or INV.ITEMS.data.get(item,{}).get("servings",0)>0
+static func is_support_surface(object: Dictionary) -> bool:return object.get("type") in SUPPORT_SURFACES
+static func surface_empty(object: Dictionary, ignore_support: bool = false) -> bool:
+	if not is_support_surface(object) or object.get("tableKit","")!="":return false
+	if not ignore_support and object.get("support")!=null:return false
+	if object.get("pan")!=null or object.get("plates",0)!=0 or object.get("utensil",false)!=false:return false
+	var dishes = object.get("dishes",{})
+	if not dishes is Dictionary:return false
+	for amount in dishes.values():
+		if amount!=0:return false
+	var ingredients = object.get("ingredients",[])
+	if not ingredients is Array or not ingredients.is_empty():return false
+	var inventory = object.get("inventory",[])
+	if not inventory is Array:return false
+	for item in inventory:
+		if item!=null:return false
+	return true
+
 static func location(object: Dictionary) -> String:
 	if object.type=="shelf":return "storage" if object.y>10 else "kitchen"
 	return "storage" if object.type=="cold" else "kitchen"
 
 static func accepts(object: Dictionary, item: String) -> bool:
 	if not INV.ITEMS.data.has(item):return false
+	if is_support_surface(object):return is_pot(item)
 	match object.type:
 		"potRack":return item=="pot"
 		"stove":return item in ["pot","cookingPot"] or item.begins_with("pot_")
@@ -27,7 +48,7 @@ static func slots(object: Dictionary) -> Array:
 			var amount = object.dishes[item]
 			result.append({"item":item,"n":amount} if amount else null)
 		return result
-	return object.get("inventory",[])
+	return [object.support] if is_support_surface(object) and object.get("support")!=null else object.get("inventory",[])
 
 static func count(object: Dictionary, item: String) -> int:
 	return INV.count(slots(object),item)
@@ -38,9 +59,10 @@ static func ready_count(object: Dictionary) -> int:
 	return total
 
 static func space(object: Dictionary, item: String, quality: int = 0) -> int:
+	if is_support_surface(object):return 1 if is_pot(item) and surface_empty(object) else 0
 	match object.type:
 		"potRack":return maxi(0,3-count(object,"pot")) if item=="pot" else 0
-		"stove":return 1 if not object.get("pan") and (item in ["pot","cookingPot"] or item.begins_with("pot_")) else 0
+		"stove":return 1 if not object.get("pan") and object.get("ingredients",[]).is_empty() and (item in ["pot","cookingPot"] or item.begins_with("pot_")) else 0
 		"kitchen":
 			if item=="plate":return 99-int(object.plates)
 			if item=="spoon":return 0 if object.utensil else 1
@@ -53,7 +75,7 @@ static func quality_count(object: Dictionary, item: String, quality: int) -> int
 		if quality:return int(counts[quality])
 		return count(object,item)-int(counts[1]+counts[2]+counts[3])
 	var total := 0
-	for slot in object.get("inventory",[]):
+	for slot in (slots(object) if is_support_surface(object) else object.get("inventory",[])):
 		if slot!=null and slot.item==item and slot.get("quality",0)==quality:total+=int(slot.n)
 	return total
 
@@ -92,7 +114,9 @@ static func put(state: Dictionary, object: Dictionary, item: String, quantity: V
 					if not object.has("dishQuality"):object.dishQuality={}
 					if not object.dishQuality.has(item):object.dishQuality[item]=[0,0,0,0]
 					object.dishQuality[item][quality]+=amount
-		_:INV.add(object.inventory,item,amount,quality)
+		_:
+			if is_support_surface(object):object.support={"item":item,"n":1,"quality":quality}
+			else:INV.add(object.inventory,item,amount,quality)
 	sync(state)
 	return amount
 
@@ -117,6 +141,8 @@ static func take(state: Dictionary, object: Dictionary, item: String, quantity: 
 					if q:object.dishQuality[item][q]-=taken
 					left-=taken
 		_:
+			if is_support_surface(object):
+				object.erase("support");sync(state);return total
 			var left := total
 			for index in mini(10,object.inventory.size()):
 				if left==0:break

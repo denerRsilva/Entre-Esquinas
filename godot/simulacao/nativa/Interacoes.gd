@@ -60,11 +60,15 @@ func primary(s: Dictionary,o: Dictionary) -> Variant:
 		pending={"kind":"utility" if o.type in ["computer","receiving"] else "storage","target":o.id,"until":s.time+30};current=true;process(s);return true
 	var p = s.player.get("hand")
 	var item: String = p.item if p!=null else ""
+	if KITCHEN.STORE.is_support_surface(o):
+		if p!=null and KITCHEN.STORE.is_pot(item):return physical(s,o,"support")
+		if p==null and o.get("support")!=null:return physical(s,o,"takePan")
+		return false
 	if o.type=="prep":return physical(s,o,"chop") if item in ["frango","legumes"] and s.get("chopping")==null and s.get("plating")==null else false
 	if o.type=="stove":
 		var pan = o.get("pan")
 		var action: Variant = null
-		if pan==null or pan=="":action="installPan" if item=="pot" else null
+		if pan==null or pan=="":action="installPan" if KITCHEN.STORE.is_pot(item) else null
 		elif pan.begins_with("pot_"):action="takePan" if p==null else null
 		elif pan!="cookingPot":
 			if p!=null and item in ["arroz","legumes_cut","frango_cut"]:action="add"

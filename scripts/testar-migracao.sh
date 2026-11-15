@@ -5,7 +5,7 @@ set -eu
 project_root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 qa_run=$(mktemp -d /tmp/esquinas-migracao.XXXXXX)
 if [ "$#" -eq 0 ]; then
-  set -- PartidaNativa RegrasNativas ArmazenamentoNativo ConservacaoNativa MigracaoSaveNativa MovimentoNativo ConstrucaoNativa AtendimentoNativo AdministracaoNativa CozinhaNativa SimulacaoNativa CameraNativa InteracoesNativas CenaNativa ComidaInterfaceNativa SessaoCompletaNativa AplicacaoNativaUI FluxoCompletoNativoUI AdministracaoCompletaUI ConstrucaoCompletaUI EnquadramentoConstrucaoUI ArteBancadasUI PolimentoSalaoUI OciosidadeGarcomUI FluxoImersaoUI DesempenhoGarcomUI OtimizacaoInterfaceUI BarrasAnimadasUI TelaExpandidaUI InterfaceLimpaUI MesasModularesUI AuditoriaRegressoes NovidadesTavernaUI FluxoBancadasUI SocialNativo SalvamentoDiscoNativoUI
+  set -- PartidaNativa RegrasNativas ArmazenamentoNativo ConservacaoNativa MigracaoSaveNativa MovimentoNativo ConstrucaoNativa AtendimentoNativo AdministracaoNativa CozinhaNativa SimulacaoNativa CameraNativa InteracoesNativas CenaNativa ComidaInterfaceNativa SessaoCompletaNativa AplicacaoNativaUI FluxoCompletoNativoUI AdministracaoCompletaUI ConstrucaoCompletaUI EnquadramentoConstrucaoUI ArteBancadasUI PolimentoSalaoUI OciosidadeGarcomUI FluxoImersaoUI DesempenhoGarcomUI OtimizacaoInterfaceUI BarrasAnimadasUI TelaExpandidaUI InterfaceLimpaUI ApoioPanelasUI MesasModularesUI AuditoriaRegressoes NovidadesTavernaUI FluxoBancadasUI SocialNativo SalvamentoDiscoNativoUI
 fi
 for qa_case in "$@"; do
   qa_name=${qa_case%.gd}

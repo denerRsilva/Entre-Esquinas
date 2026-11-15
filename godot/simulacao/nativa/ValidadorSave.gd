@@ -86,7 +86,6 @@ static func valid(value: Variant,slots: int = 0) -> bool:
 		if o.type=="worktable":
 			for key in ["plates","utensil","dishes","dishQuality","inventory"]:
 				if o.has(key):return false
-			if o.get("support")!=null:return false
 		if not N.integer(o.id) or ids.has(o.id) or not N.integer(o.x) or not N.integer(o.y) or not N.integer(o.rot) or o.rot<0 or o.rot>3 or o.room!=CATALOG.data[o.type].room:return false
 		if o.has("baseType") and (o.baseType not in ["worktable","counterH","counterV","counterCorner"] or o.type not in ["prep","kitchen"] or not o.has("tableKit")):return false
 		ids[o.id]=o

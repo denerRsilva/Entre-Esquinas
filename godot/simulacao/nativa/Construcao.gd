@@ -21,6 +21,7 @@ static func kit_error(state: Dictionary, type: String, x: int, y: int) -> Varian
 	if table==null:return "Posicione o kit sobre uma mesa de trabalho vazia."
 	if not installed_kit(table).is_empty():return "Retire o kit atual antes de instalar outro."
 	if busy(state,table.id):return "Conclua o preparo antes de trocar o kit."
+	if not STORE.surface_empty(table):return "Libere a superfície antes de instalar o kit."
 	if state.cash<CATALOG.data[type].price:return "Dinheiro insuficiente."
 	return null
 static func install_kit(state: Dictionary, type: String, x: int, y: int) -> Dictionary:

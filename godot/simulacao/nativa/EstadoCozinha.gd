@@ -37,7 +37,9 @@ static func physical(state: Dictionary) -> bool:
 			if not ingredients.is_empty() and object.get("pan")!="pot":return false
 		var support = object.get("support")
 		if truthy(support):
-			if object.type!="kitchen" or not stack(support,true):return false
+			if object.type!="kitchen" and not STORAGE.is_support_surface(object):return false
+			if not stack(support,true):return false
+			if STORAGE.is_support_surface(object) and not STORAGE.surface_empty(object,true):return false
 			if support.item!="pot" and not INV.ITEMS.data[support.item].get("servings",0):return false
 	var job = state.get("chopping")
 	if truthy(job):

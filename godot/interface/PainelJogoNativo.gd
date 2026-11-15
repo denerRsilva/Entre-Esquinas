@@ -52,18 +52,22 @@ func context(s: Dictionary,model: Dictionary) -> Dictionary:
 		if o.type in ["computer","receiving"]:target.children.append(button("Usar computador" if o.type=="computer" else "Recolher ingredientes","computer" if o.type=="computer" else "box",{"kind":o.type}))
 		if o.has("inventory") and o.type not in ["stove","prep","sink","bin"]:target.children.append(button("Abrir "+KITCHEN.BUILD.CATALOG.data[o.type].name,"bag",{"kind":"inventory","id":o.id}))
 		var hand = a.get("hand")
+		if KITCHEN.STORE.is_support_surface(o):
+			if hand==null and o.get("support")!=null:add_physical(target,o,"take","Retirar panela apoiada","takePan")
+			elif hand!=null and KITCHEN.STORE.is_pot(hand.item) and KITCHEN.STORE.surface_empty(o):add_physical(target,o,"pot","Apoiar panela","support")
+			continue
 		if o.type in ["stove","prep","kitchen"]:
 			if o.type=="prep":
 				if s.get("chopping")!=null and s.chopping.table==o.id:add_physical(target,o,"bin","Cancelar corte","cancelCut")
 			elif o.type=="stove":
-				if o.get("pan")==null and hand!=null and hand.item=="pot":add_physical(target,o,"pot","Instalar panela","installPan")
+				if o.get("pan")==null and hand!=null and KITCHEN.STORE.is_pot(hand.item) and KITCHEN.STORE.space(o,hand.item)>0:add_physical(target,o,"pot","Colocar panela no fogão","installPan")
 				elif o.get("pan")=="pot":
 					if not o.get("ingredients",[]).is_empty():add_physical(target,o,"take","Retirar último ingrediente","removeIngredient")
 					if KITCHEN.RECIPES.recognized(o)!=null:add_physical(target,o,"flame","Cozinhar","cook")
 			else:
 				if hand!=null and hand.item=="plate":add_physical(target,o,"box","Instalar prato das mãos","installPlates")
 				elif hand!=null and KITCHEN.INV.ITEMS.data.get(hand.item,{}).get("servings",0)>0:add_physical(target,o,"serve","Empratar","plate")
-				elif hand!=null and (hand.item=="pot" or KITCHEN.INV.ITEMS.data.get(hand.item,{}).get("servings",0)>0 or hand.item.begins_with("dish_")):add_physical(target,o,"pot","Apoiar item carregado","putDish" if hand.item.begins_with("dish_") else "support")
+				elif hand!=null and hand.item.begins_with("dish_") and o.get("support")==null:add_physical(target,o,"pot","Apoiar prato","putDish")
 				if o.get("support")!=null:add_physical(target,o,"take","Retirar panela apoiada","takePan")
 				if o.utensil:add_physical(target,o,"take","Retirar talher preservado","takeUtensil")
 				if o.plates>0:add_physical(target,o,"take","Retirar pratos limpos","takePlates")
