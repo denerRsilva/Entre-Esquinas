@@ -36,3 +36,6 @@ livre. Após a organização visual dos pratos prontos também passaram
 Capturas feitas com o renderizador Compatibility em `docs/arte/pratos-0.png`,
 `pratos-3.png`, `pratos-20.png` e `pratos-empratados.png`. Sem teste em aparelho
 Android físico nesta execução.
+
+Android 0.21.2-godot.33 (21233), exportado do commit 2556cc9. ZIP, presença dos
+novos recursos/scripts e assinatura APK v2/v3 verificados.
