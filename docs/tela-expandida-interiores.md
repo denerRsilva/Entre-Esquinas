@@ -32,3 +32,7 @@ Godot Compatibility em 1920×1080 e 2340×1080. Capturas em
 `docs/arte/tela-expandida-pc.png` e `docs/arte/tela-expandida-celular.png`.
 As resoluções de celular foram simuladas no computador; não houve teste em
 aparelho Android físico nesta execução.
+
+Android atualizado para 0.21.2-godot.28 (versionCode 21228), exportado do
+commit f9f99e7. ZIP e assinatura APK v2/v3 verificados; os dois nomes históricos
+de APK na main contêm esta mesma versão.
