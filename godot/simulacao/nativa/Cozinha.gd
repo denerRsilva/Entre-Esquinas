@@ -220,7 +220,7 @@ func physical(s: Dictionary,id: Variant,action: String) -> Dictionary:
 			if o.type!="kitchen" or o.get("support")!=null or p==null or not str(p.item).begins_with("dish_") or STORE.space(o,p.item)==0:return result(s,false,"Sem espaço para apoiar o prato.")
 			STORE.put(s,o,p.item,1,p.get("quality",0));a.hand=null;return feedback(s,o,"Prato apoiado")
 		"installPlates":
-			if o.type!="kitchen" or o.get("support")!=null or p==null or p.item!="plate" or o.plates>=99:return result(s,false,"Traga um prato limpo; verifique o espaço na mesa.")
+			if o.type!="kitchen" or o.get("support")!=null or p==null or p.item!="plate" or o.plates>=STORE.CLEAN_PLATE_CAPACITY:return result(s,false,"Traga um prato limpo; verifique o espaço na mesa.")
 			o.plates+=1;a.hand=null;return feedback(s,o,"Prato limpo instalado")
 		"takePlates","takeUtensil":
 			if o.type!="kitchen" or p!=null or a.get("carry")!=null:return result(s,false,"Libere as mãos.")
@@ -269,8 +269,8 @@ func legacy(s: Dictionary,id: Variant,action: String,item: Variant = null) -> Di
 	if o.type=="kitchen":
 		match action:
 			"installPlates":
-				var amount := mini(INV.count(s.inventory,"plate"),99-int(o.plates))
-				if amount==0:return result(s,false,"Encaixe de pratos completo." if o.plates>=99 else "Faltam pratos limpos na mochila.")
+				var amount := mini(INV.count(s.inventory,"plate"),maxi(0,STORE.CLEAN_PLATE_CAPACITY-int(o.plates)))
+				if amount==0:return result(s,false,"Encaixe de pratos completo." if o.plates>=STORE.CLEAN_PLATE_CAPACITY else "Faltam pratos limpos na mochila.")
 				consume(s,"plate",amount);o.plates+=amount;return feedback(s,o,str(amount)+" pratos instalados")
 			"installUtensil":
 				if o.utensil:return result(s,false,"O talher já está instalado.")

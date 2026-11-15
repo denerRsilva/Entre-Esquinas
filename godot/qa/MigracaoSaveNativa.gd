@@ -2,7 +2,12 @@ extends "res://qa/BaseNativa.gd"
 func run():
 	var rules = preload("res://simulacao/nativa/Regras.gd").new()
 	var phases = load("res://qa/referencia-migracao/migracao-fases.json").data;phases+=load("res://qa/referencia-migracao/estado-cozinha.json").data
-	for test in phases:check(equivalent(JSON.parse_string(rules.execute(JSON.stringify({"name":test.name,"args":test.args},"",true,true))),test.expected),test.name)
+	for test in phases:
+		var expected: Variant = test.expected
+		if test.name=="validKitchen":
+			for object in test.args[0].objects:
+				if object.type=="kitchen" and (object.get("plates",0) is int or object.get("plates",0) is float) and object.plates>20:expected=false
+		check(equivalent(JSON.parse_string(rules.execute(JSON.stringify({"name":test.name,"args":test.args},"",true,true))),expected),test.name)
 	var tests = load("res://qa/referencia-migracao/migracao-saves.json").data
 	for test in tests:
 		var before: Dictionary = test.input.duplicate(true) if test.input is Dictionary else {};var draws: Array = [];var actual: Variant = null

@@ -117,3 +117,18 @@ static func hands(state: Dictionary) -> bool:
 			state.recovery.append(remainder)
 	STORAGE.sync(state)
 	return true
+
+# Preserve every plate from older saves whose stations could hold 99 units.
+static func plate_capacity(state: Dictionary) -> void:
+	for object in state.objects:
+		if object.type!="kitchen":continue
+		var count = object.get("plates")
+		if not (count is int or count is float) or not is_finite(count) or count!=floor(count) or count<=STORAGE.CLEAN_PLATE_CAPACITY or count>99:continue
+		var excess := int(count)-STORAGE.CLEAN_PLATE_CAPACITY
+		object.plates=STORAGE.CLEAN_PLATE_CAPACITY
+		for receiver in state.objects:
+			if not receiver.has("inventory") or not STORAGE.accepts(receiver,"plate"):continue
+			var amount := mini(excess,INV.space(receiver.inventory,"plate"))
+			if amount>0 and INV.add(receiver.inventory,"plate",amount):excess-=amount
+			if excess==0:break
+		if excess>0:state.recovery.append({"item":"plate","n":excess})

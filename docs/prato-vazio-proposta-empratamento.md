@@ -19,9 +19,9 @@ O conjunto ficaria centralizado, ocupando aproximadamente um terço da largura
 da mesa, deixando a madeira visível. A paleta creme/madeira e a perspectiva
 seguem os móveis existentes.
 
-O kit é uma proposta para avaliação do usuário: o sprite do kit no jogo e
-no catálogo de construção ainda não foi trocado. A implementação solicitada
-neste pedido abrange o prato carregado pelo jogador.
+A proposta do kit foi aplicada na atualização posterior de estoque visual,
+com pano/pegador separados e uma imagem por prato real. Veja
+`docs/pratos-estoque-visual.md` para a regra de duas pilhas de dez.
 
 Verificação: `CenaNativa`, `FluxoCompletoNativoUI`, `InterfaceLimpaUI` e
 `SalvamentoDiscoNativoUI` aprovados. O comparador de snapshots históricos

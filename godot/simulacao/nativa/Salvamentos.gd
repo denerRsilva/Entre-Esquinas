@@ -52,6 +52,7 @@ func convert(value: Variant,random_values: Array = []) -> Dictionary:
 			if not ITEMS.data.has(pan) or not s.has("time"):return {"value":null}
 			o.readyBatch={"recipe":ITEMS.data[pan].recipe,"quality":0,"doneAt":s.time}
 	MIGRATE.physical(s,source)
+	MIGRATE.plate_capacity(s)
 	if source<12:
 		if s.get("chopping")!=null and not s.chopping.get("hand",false):s.chopping=null
 		if s.inventory.size() not in [0,5,10] or not VALIDATOR.valid(s,s.inventory.size()):return {"value":null}

@@ -35,8 +35,8 @@ func star(quality: int,x: float,y: float,size: float) -> void:
 		var radius := size*(0.22 if i%2 else 0.5)
 		points.append([x+size/2+cos(angle)*radius,y+size/2+sin(angle)*radius])
 	commands.append(["poly",points,["","#c5c9cc","#ffd14c","#c286ff"][quality]])
-func plate(x: float,y: float,recipe: Variant = null,dirty: bool = false,quality: int = 0) -> void:
-	if not dirty and recipe!=null and food(recipe,x-10,y-7,20,14):star(quality,x+3,y-8,8);return
+func plate(x: float,y: float,recipe: Variant = null,dirty: bool = false,quality: int = 0,size: Vector2 = Vector2(20,14)) -> void:
+	if not dirty and recipe!=null and food(recipe,x-size.x/2,y-size.y/2,size.x,size.y):star(quality,x+3,y-8,8);return
 	box(x-7,y-3,14,6,"#aa9a76" if dirty else "#e4d5aa");box(x-5,y-5,10,10,"#cbb78b" if dirty else "#fff4d5")
 	if dirty:box(x-3,y,3,2,"#805332");box(x+2,y-2,2,2,"#9a6434")
 func pot(x: float,y: float,filled: bool,active: bool,time: float) -> void:
@@ -137,8 +137,12 @@ func object(s: Dictionary,o: Dictionary,selected: bool,preview: bool = false) ->
 	var x: float = r.position.x*40;var y: float = r.position.y*40;var w: float = r.size.x*40;var h: float = r.size.y*40
 	alpha=0.65 if preview else 1.0
 	box(x+5,y+h-7,w-7,8,"#624a343f");commands.append(["furniture",o.get("baseType",o.type) if str(o.get("baseType","")).begins_with("counter") else o.type,x,y,w,h,o.rot,preview])
+	if o.type=="kitchen" and not str(o.get("baseType","")).begins_with("counter"):
+		commands[-1].append({"plates":int(o.get("plates",0))})
 	if str(o.get("baseType","")).begins_with("counter"):
-		commands.append(["furniture",o.tableKit,x,y,w,h,o.rot,preview])
+		var kit_command: Array = ["furniture",o.tableKit,x,y,w,h,o.rot,preview]
+		if o.tableKit=="platingKit":kit_command.append({"plates":int(o.get("plates",0))})
+		commands.append(kit_command)
 	if str(o.get("baseType",o.type)).begins_with("counter"):
 		var neighbors := 0
 		for i in 4:
@@ -175,12 +179,15 @@ func object(s: Dictionary,o: Dictionary,selected: bool,preview: bool = false) ->
 		pot(x+w/2+center.x,y+h+center.y,INV.ITEMS.data[o.support.item].get("servings",0)>0,false,s.time)
 	if o.type=="kitchen":
 		if o.get("support")!=null:pot(x+minf(50,w*0.625),y-7,INV.ITEMS.data.get(o.support.item,{}).get("servings",0)>0,false,s.time)
-		for i in mini(4,int(ceil(float(o.get("plates",0))/3))):plate(x+12,y+2-i*2)
 		if o.get("utensil",false):box(x+w-15,y+3,7,11,"#7c5b37");box(x+w-13,y-3,2,10,"#dec08c");box(x+w-9,y-1,2,9,"#cfad79")
 		var index := 0
+		var counter_type: String = o.get("baseType","")
+		var counter := counter_type.begins_with("counter")
+		var serving_center := Vector2(x+w*0.8125,y+1)
+		if counter:serving_center=Vector2(x+w/2,y+h)+preload("res://moveis/Bancada.gd").centro_kit({"counterH":0,"counterV":1,"counterCorner":2}[counter_type],int(o.rot))+Vector2(0,9)
 		for dish in o.get("dishes",{}):
 			for q in 4:
-				for j in STORE.quality_count(o,dish,q):plate(x+(27+index%4*11)*(w/80),y+4+floor(float(index)/4)*8,INV.ITEMS.data[dish].recipe,false,q);index+=1
+				for j in STORE.quality_count(o,dish,q):plate(serving_center.x,serving_center.y-index*2,INV.ITEMS.data[dish].recipe,false,q,Vector2(14,8) if counter else Vector2(20,14));index+=1
 	if o.type=="table":
 		for ch in s.objects:
 			if ch.type!="chair":continue
