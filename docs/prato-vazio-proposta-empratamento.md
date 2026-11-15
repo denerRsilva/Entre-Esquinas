@@ -27,3 +27,7 @@ Verificação: `CenaNativa`, `FluxoCompletoNativoUI`, `InterfaceLimpaUI` e
 `SalvamentoDiscoNativoUI` aprovados. O comparador de snapshots históricos
 normaliza apenas o novo sprite de prato carregado para a geometria antiga;
 a arte atual foi conferida visualmente na própria cena do jogo.
+
+Android 0.21.2-godot.32 (21232), exportado do commit ddee7f5. ZIP e assinatura
+APK v2/v3 verificados; novo sprite incluído, proposta do kit fora dos recursos
+do jogo. Sem teste em aparelho Android físico nesta execução.
