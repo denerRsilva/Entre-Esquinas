@@ -11,6 +11,13 @@ func run():
 		# progress geometry/value here; BarrasAnimadasUI checks the new renderer.
 		var legacy := []
 		for command in actual:
+			# The held plate sprite replaces the old two rectangles; compare
+			# their placement against historical snapshots without retaining old art.
+			if command[0]=="img" and command[1]=="modular/prato-vazio.png":
+				var x: float = command[6]+10;var y: float = command[7]+6
+				legacy.append(["rect",x-7,y-3,14,6,"#e4d5aa",command[10]])
+				legacy.append(["rect",x-5,y-5,10,10,"#fff4d5",command[10]])
+				continue
 			if command[0]!="progress":legacy.append(command);continue
 			if str(command[1]).begins_with("patience:"):continue
 			var heat: bool = str(command[1]).begins_with("heat:")

@@ -60,7 +60,9 @@ func draw_held(s: Dictionary,p: Variant,x: float,y: float) -> void:
 	var portions: float = INV.ITEMS.data.get(item,{}).get("servings",0)
 	if item in ["pot","cookingPot"] or portions>0:pot(x,y,portions>0,false,s.time);return
 	if item.begins_with("dish_"):plate(x,y,INV.ITEMS.data[item].recipe,false,p.get("quality",0));return
-	if item in ["plate","dirtyPlate"]:plate(x,y,null,item=="dirtyPlate");return
+	if item=="plate":
+		commands.append(["img","modular/prato-vazio.png",125,166,1249,736,FOOD.pixel(x-10),FOOD.pixel(y-6),20,12,alpha]);return
+	if item=="dirtyPlate":plate(x,y,null,true);return
 	if item=="spoon":box(x-1,y-3,3,16,"#527576");box(x-4,y-9,9,8,"#d6e5d9");box(x-2,y-8,5,5,"#90aaa3");return
 	food(item,x-12,y-12,24,24);star(p.get("quality",0),x+4,y-13,9)
 func direction(a: Dictionary) -> String:
