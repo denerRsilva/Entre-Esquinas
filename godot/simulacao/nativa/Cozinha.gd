@@ -4,6 +4,7 @@ const BUILD = preload("res://simulacao/nativa/Construcao.gd")
 const STORE = preload("res://simulacao/nativa/Armazenamento.gd")
 const INV = preload("res://simulacao/nativa/Inventario.gd")
 const RECIPES = preload("res://simulacao/nativa/Receitas.gd")
+const DISHES = preload("res://simulacao/nativa/Louca.gd")
 var manual_moving := false
 func find(s: Dictionary,id: Variant) -> Variant:return BUILD.find(s.objects,id)
 func name(item: String) -> String:return INV.ITEMS.data.get(item,{}).get("name","Item desconhecido")
@@ -51,12 +52,15 @@ func storage(s: Dictionary,id: Variant,action: String,index: Variant) -> Diction
 	if action=="put":
 		var p = a.get("hand")
 		if p==null:return result(s,false,"Suas mãos estão vazias.")
+		var amount := mini(int(p.n),STORE.space(o,p.item,p.get("quality",0)))
 		var added := false
 		if STORE.accepts(o,p.item):
 			if o.type=="potRack":added=STORE.put(s,o,p.item,1,p.get("quality",0))==1
-			else:added=INV.add(o.inventory,p.item,1,p.get("quality",0),p.get("burned",false))
+			elif amount>0:added=INV.add(o.inventory,p.item,amount,p.get("quality",0),p.get("burned",false))
 		if not added:return result(s,false,"Sem espaço compatível; item preservado nas mãos.")
-		a.hand=null;STORE.sync(s);return result(s,true,"Item guardado.")
+		p.n-=amount
+		if p.n==0:a.hand=null
+		STORE.sync(s);return result(s,true,"Item guardado.")
 	return result(s,false,"Ação inválida.")
 func recover(s: Dictionary,index: Variant) -> Dictionary:
 	if s.player.get("hand")!=null or s.player.get("carry")!=null or s.get("chopping")!=null or s.get("plating")!=null:return result(s,false,"Libere as mãos.")
@@ -152,18 +156,22 @@ func wash(s: Dictionary,id: Variant) -> Dictionary:
 	var o = find(s,id)
 	if o==null or o.type!="sink" or not near(s,o):return result(s,false,"Aproxime-se da pia.")
 	var hand = s.player.get("hand")
-	if hand==null or hand.item!="dirtyPlate" or s.get("chopping")!=null or s.get("plating")!=null:return result(s,false,"Traga um prato sujo nas mãos.")
-	s.player.hand={"item":"plate","n":1};return result(s,true,"Prato limpo nas mãos.")
+	if s.player.get("carry")!=null or s.get("chopping")!=null or s.get("plating")!=null:return result(s,false,"Traga um prato sujo nas mãos.")
+	var amount := 0
+	if hand!=null and hand.item=="dirtyPlate":amount=int(hand.n)
+	elif hand==null:
+		amount=mini(INV.HAND_PLATE_CAPACITY,int(o.get("dirtyPlates",0)))
+		if amount:o.dirtyPlates-=amount
+	if amount==0:return result(s,false,"Traga um prato sujo nas mãos.")
+	s.player.hand={"item":"plate","n":amount}
+	return result(s,true,"Prato limpo nas mãos." if amount==1 else str(amount)+" pratos limpos nas mãos.")
 func collect_dirty(s: Dictionary,id: Variant) -> Dictionary:
 	var table = find(s,id)
 	if table==null or table.type!="table" or not near(s,table):return result(s,false,"Aproxime-se da mesa.")
-	if s.player.get("hand")!=null or s.player.get("carry")!=null or s.get("chopping")!=null or s.get("plating")!=null:return result(s,false,"Libere as mãos para recolher a louça.")
-	for chair in s.objects:
-		if chair.type!="chair":continue
-		var linked = BUILD.chair_table(chair,s.objects)
-		var key := str(int(chair.id))
-		if linked!=null and linked.id==id and s.dirtyTables.get(key,0)>0:
-			s.dirtyTables[key]-=1;s.player.hand={"item":"dirtyPlate","n":1};return result(s,true,"Prato sujo nas mãos. Leve à pia.")
+	var hand = s.player.get("hand")
+	if (hand!=null and (hand.item!="dirtyPlate" or hand.n>=INV.HAND_PLATE_CAPACITY)) or s.player.get("carry")!=null or s.get("chopping")!=null or s.get("plating")!=null:return result(s,false,"Libere as mãos para recolher a louça.")
+	var amount := DISHES.collect(s,s.player,table)
+	if amount:return result(s,true,"Prato sujo nas mãos. Leve à pia." if s.player.hand.n==1 else str(int(s.player.hand.n))+" pratos sujos nas mãos. Leve à pia.")
 	return result(s,false,"Não há pratos sujos nesta mesa.")
 func physical(s: Dictionary,id: Variant,action: String) -> Dictionary:
 	var o = find(s,id)
@@ -222,7 +230,10 @@ func physical(s: Dictionary,id: Variant,action: String) -> Dictionary:
 			STORE.put(s,o,p.item,1,p.get("quality",0));a.hand=null;return feedback(s,o,"Prato apoiado")
 		"installPlates":
 			if o.type!="kitchen" or not STORE.plating_surface(o) or o.get("support")!=null or p==null or p.item!="plate" or o.plates>=STORE.CLEAN_PLATE_CAPACITY:return result(s,false,"Traga um prato limpo; verifique o espaço na mesa.")
-			o.plates+=1;a.hand=null;return feedback(s,o,"Prato limpo instalado")
+			var amount := mini(int(p.n),STORE.CLEAN_PLATE_CAPACITY-int(o.plates))
+			o.plates+=amount;p.n-=amount
+			if p.n==0:a.hand=null
+			return feedback(s,o,"Prato limpo instalado" if amount==1 else str(amount)+" pratos limpos instalados")
 		"takePlates","takeUtensil":
 			if o.type!="kitchen" or p!=null or a.get("carry")!=null:return result(s,false,"Libere as mãos.")
 			if action=="takePlates":

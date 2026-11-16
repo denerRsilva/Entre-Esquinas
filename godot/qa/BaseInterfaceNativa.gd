@@ -2,9 +2,13 @@ extends "res://qa/BaseNativa.gd"
 var g
 func layout():
 	for i in 8:await process_frame
-func start_game() -> void:
+func start_game(waiter_active: bool = false) -> void:
 	root.size=Vector2i(960,700);g=load("res://mundo/Restaurante.tscn").instantiate();root.add_child(g);g.set_process(false);await layout()
 	await press("Começar na taverna")
+	# Most UI scenarios perform service manually. Pause automation explicitly
+	# in these fixtures; gameplay and dedicated waiter tests keep the default.
+	if not waiter_active:
+		for worker in g.session.state.workers:worker.task="none"
 func press(title: String) -> bool:
 	await layout()
 	for control in g.hud.find_children("*","Button",true,false):

@@ -61,6 +61,7 @@ static func valid(value: Variant,slots: int = 0) -> bool:
 	for key in ["player","inv","equipment","meals","purchased","used","prices","menu","ledger","friends","tools","dirtyTables","clock","reputation"]:
 		if not s.get(key) is Dictionary:return false
 	if s.get("singleRoom",false) and not s.get("compact",false):return false
+	if s.has("waiterDefaultApplied") and not s.waiterDefaultApplied is bool:return false
 	for key in ["compact","singleRoom"]:
 		if s.has(key) and not s[key] is bool:return false
 	if s.get("version")!=12 or not number(s.get("cash")) or not N.integer(s.get("day")) or s.day<1 or (not number(s.get("period")) or (s.period!=0 and s.period!=1)) or not number(s.get("time")):return false
@@ -152,7 +153,8 @@ static func valid(value: Variant,slots: int = 0) -> bool:
 				if not number(settled.get(key)):return false
 		var carry = a.get("carry")
 		if carry!=null:
-			if not carry is Dictionary or carry.get("kind") not in ["food","dish"]:return false
+			if not carry is Dictionary or carry.get("kind") not in ["food","dish","dirtyPlates"]:return false
+			if carry.kind=="dirtyPlates" and (not s.workers.has(a) or not N.integer(carry.get("n")) or carry.n<1 or carry.n>K.INV.HAND_PLATE_CAPACITY):return false
 			if carry.kind=="dish" and (not order_ids.has(carry.get("order")) or order_ids[carry.order].state not in ["ready","lost"]):return false
 			if carry.kind=="food" and (carry.get("food") not in ["arroz","legumes","frango"] or not N.integer(carry.get("n")) or carry.n<1):return false
 		var key: String = a.room+":"+M.key(a)

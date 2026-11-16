@@ -60,6 +60,7 @@ static func held(s: Dictionary,a: Dictionary) -> Variant:
 		for order in s.orders:
 			if order.id==carry.order:return {"item":"dish_"+order.recipe,"n":1,"quality":carry.get("quality",0)}
 	elif carry.kind=="food":return {"item":carry.food,"n":carry.n,"quality":carry.get("quality",0)}
+	elif carry.kind=="dirtyPlates":return {"item":"dirtyPlate","n":carry.n}
 	return null
 func draw_held(s: Dictionary,p: Variant,x: float,y: float) -> void:
 	if p==null:return
@@ -68,8 +69,11 @@ func draw_held(s: Dictionary,p: Variant,x: float,y: float) -> void:
 	if item in ["pot","cookingPot"] or portions>0:pot(x,y,portions>0,false,s.time);return
 	if item.begins_with("dish_"):plate(x,y,INV.ITEMS.data[item].recipe,false,p.get("quality",0));return
 	if item=="plate":
-		empty_plate(x,y);return
-	if item=="dirtyPlate":plate(x,y,null,true);return
+		for i in mini(int(p.n),INV.HAND_PLATE_CAPACITY):empty_plate(x,y-i*3)
+		return
+	if item=="dirtyPlate":
+		for i in mini(int(p.n),INV.HAND_PLATE_CAPACITY):plate(x,y-i*3,null,true)
+		return
 	if item=="spoon":box(x-1,y-3,3,16,"#527576");box(x-4,y-9,9,8,"#d6e5d9");box(x-2,y-8,5,5,"#90aaa3");return
 	ingredient(item,x,y);star(p.get("quality",0),x+4,y-13,9)
 func direction(a: Dictionary) -> String:
@@ -172,6 +176,10 @@ func object(s: Dictionary,o: Dictionary,selected: bool,preview: bool = false) ->
 	if o.type=="potRack":
 		for i in 3:
 			if o.get("inventory",[]).size()>i and o.inventory[i]!=null and o.inventory[i].item=="pot":pot(x+w/2,y-20+i*23,false,false,s.time)
+	if o.type=="sink":
+		for i in int(o.get("dirtyPlates",0)):
+			var pile := int(i/5)
+			plate(x+w/2-24+(pile%2)*25,y+h-40+int(pile/2)*14-(i%5)*2,null,true)
 	var cooking = s.get("cooking") if o.has("id") and s.get("cooking")!=null and s.cooking.stove==o.id else null
 	if o.type=="stove" and (not o.get("ingredients",[]).is_empty() or cooking!=null or o.get("readyBatch")!=null):
 		var index := 0

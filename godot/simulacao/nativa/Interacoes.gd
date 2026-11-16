@@ -84,10 +84,14 @@ func primary(s: Dictionary,o: Dictionary) -> Variant:
 		elif o.get("support")!=null:action="plate" if o.support.item.begins_with("pot_") else "takePan"
 		elif o.plates>0:action="takePlates"
 		return physical(s,o,action) if action!=null else false
-	if o.type=="sink" and item=="dirtyPlate":return queue(s,"wash",o.id)
+	if o.type=="sink" and (item=="dirtyPlate" or (p==null and o.get("dirtyPlates",0)>0)):return queue(s,"wash",o.id)
 	if o.type in ["sink","bin"] and INV.ITEMS.data.get(item,{}).has("recipe"):return physical(s,o,"discardHand")
 	var table = o if o.type=="table" else BUILD.chair_table(o,s.objects) if o.type=="chair" else null
 	if table==null:return false
+	# Hands already carrying a dirty pile keep collecting instead of trying
+	# to serve another guest at the same table.
+	if item=="dirtyPlate" and p.n<INV.HAND_PLATE_CAPACITY and kitchen.DISHES.count(s,table)>0:return queue(s,"clean",table.id)
+	if item=="dirtyPlate":return false
 	var chairs: Array = []
 	for chair in s.objects:
 		if chair.type!="chair":continue

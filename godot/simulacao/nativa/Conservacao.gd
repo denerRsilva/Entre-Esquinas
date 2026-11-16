@@ -46,6 +46,7 @@ static func equipment(state: Dictionary) -> bool:
 	for actor in actors(state):
 		var carry = actor.get("carry")
 		if carry!=null and carry.kind=="dish":sums.plate+=1
+		elif carry!=null and carry.kind=="dirtyPlates":sums.plate+=carry.n
 	for customer in state.customers:
 		if customer.state=="eating":sums.plate+=1
 	for id in state.dirtyTables:

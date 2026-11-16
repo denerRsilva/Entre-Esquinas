@@ -21,6 +21,7 @@ func restored(s: Dictionary) -> Variant:
 	return SAVE.new().load_value(JSON.parse_string(raw)) if raw is String else null
 func run():
 	var baseline := PARTIDA.furnished(true,true)
+	baseline.workers[0].task="none" # Inspect dirty-seat reactions without automatic cleaning.
 	var closed_day: Dictionary = baseline.duplicate(true)
 	closed_day.clock.ending=true
 	check(not simulation().spawn(closed_day),"Fim do dia não recebe cliente")

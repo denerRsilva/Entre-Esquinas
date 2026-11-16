@@ -6,6 +6,7 @@ const BUILD = preload("res://simulacao/nativa/Construcao.gd")
 const INV = preload("res://simulacao/nativa/Inventario.gd")
 const RECIPES = preload("res://simulacao/nativa/receitas.json")
 const CONFIG = preload("res://simulacao/nativa/clientes.json")
+const DISHES = preload("res://simulacao/nativa/Louca.gd")
 static var wander_rng := RandomNumberGenerator.new()
 var timed_orders_enabled := true
 var idle_walk_enabled := true
@@ -243,12 +244,47 @@ func notes_step(s: Dictionary,dt: float) -> void:
 		job.left=maxf(0,job.left-dt)
 		if job.left<=1e-8:take_order(s,w,c);w.erase("noteJob")
 
+func pending_service(s: Dictionary) -> bool:
+	for c in s.customers:
+		if c.state=="waiting":return true
+	for order in s.orders:
+		if order.state!="ordered":continue
+		for object in s.objects:
+			if object.type=="kitchen" and STORE.count(object,"dish_"+order.recipe)>0:return true
+	return false
+
+func cleanup(s: Dictionary,w: Dictionary) -> bool:
+	var held := DISHES.held(w)
+	if held==0:
+		var dirty := false
+		for amount in s.dirtyTables.values():
+			if amount>0:dirty=true;break
+		if not dirty:return false
+	if w.get("motion")!=null:return true
+	var sink = DISHES.target(s,w,"sink")
+	if sink==null:
+		if held:w.goal=null
+		return held>0
+	var capacity := mini(INV.HAND_PLATE_CAPACITY,DISHES.sink_space(sink.object))
+	if w.task=="waiter" and held<capacity and (held==0 or not pending_service(s)):
+		var table = DISHES.target(s,w,"table")
+		if table!=null:
+			MOVE.go(w,table.point)
+			if MOVE.arrived(w):DISHES.collect(s,w,table.object,capacity)
+			return true
+	if held:
+		MOVE.go(w,sink.point)
+		if MOVE.arrived(w):DISHES.deposit(s,w,sink.object)
+		return true
+	return false
+
 func waiter(s: Dictionary,w: Dictionary) -> void:
 	var carry = w.get("carry")
 	if w.get("noteJob")!=null:
 		var c = find(s.customers,w.noteJob.customer)
 		if w.task=="waiter" and carry==null and c!=null and c.state=="waiting" and near(w,c):w.goal=null;return
 		w.erase("noteJob")
+	if carry!=null and carry.kind=="dirtyPlates":cleanup(s,w);return
 	if w.task=="none" and carry==null:wander(s,w);return
 	if carry!=null and carry.kind=="dish":
 		if canceled(s,w):
@@ -290,7 +326,7 @@ func waiter(s: Dictionary,w: Dictionary) -> void:
 		MOVE.go(w,p)
 		if near(w,c):note_order(s,w,c)
 		return
-	wander(s,w)
+	if not cleanup(s,w):wander(s,w)
 func clients_step(s: Dictionary,dt: float) -> void:
 	for order in s.orders:
 		if order.state not in ["paid","lost"]:order.age+=dt

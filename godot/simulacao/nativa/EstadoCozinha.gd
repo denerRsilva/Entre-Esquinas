@@ -21,7 +21,7 @@ static func stack(value: Variant, hand: bool = false) -> bool:
 	if not NUM.integer(count) or count<1 or count>INV.limit(value.item):return false
 	if hand:
 		var quality = value.get("quality",0)
-		return count==1 and NUM.integer(quality) and quality>=0 and quality<=3
+		return count<=(INV.HAND_PLATE_CAPACITY if value.item in ["plate","dirtyPlate"] else 1) and NUM.integer(quality) and quality>=0 and quality<=3
 	return true
 
 static func physical(state: Dictionary) -> bool:
@@ -78,6 +78,7 @@ static func valid(state: Dictionary) -> bool:
 		if not stack(portion) or portion.item=="cookingPot":return false
 	for object in state.objects:
 		if object.type in ["sink","bin"] and object.has("inventory"):return false
+		if object.type=="sink" and (not NUM.integer(object.get("dirtyPlates",0)) or object.get("dirtyPlates",0)<0 or object.get("dirtyPlates",0)>INV.DIRTY_SINK_CAPACITY):return false
 		if object.type=="stove":
 			if object.has("inventory") or not object.has("pan"):return false
 			var pan = object.pan

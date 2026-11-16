@@ -6,6 +6,8 @@ func _initialize():
 	var failures := 0
 	for key in expected:
 		for mode in ["empty","furnished"]:
+			for worker in expected[key][mode].workers:
+				if worker.id=="worker2":worker.task="waiter"
 			for field in expected[key][mode]:
 				if expected[key][mode][field] != actual[key][mode].get(field):
 					push_error(key+" "+mode+" "+field+" esperado="+JSON.stringify(expected[key][mode][field])+" atual="+JSON.stringify(actual[key][mode].get(field)))

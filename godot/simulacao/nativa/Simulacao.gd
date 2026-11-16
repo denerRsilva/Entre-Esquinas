@@ -76,7 +76,7 @@ func choose_seat(s: Dictionary) -> Dictionary:
 	return replacement
 func worker(s: Dictionary,w: Dictionary) -> void:
 	var carry = w.get("carry")
-	if (w.task in ["none","waiter"] and carry==null) or (carry!=null and carry.kind=="dish"):service.waiter(s,w)
+	if (w.task in ["none","waiter"] and carry==null) or (carry!=null and carry.kind in ["dish","dirtyPlates"]):service.waiter(s,w)
 	else:LOGISTICS.worker(s,w)
 func simulate(s: Dictionary,dt: float) -> void:
 	service.patience(s,dt);ADMIN.deliver(s);s.tick=fmod(s.tick+dt,0.18)

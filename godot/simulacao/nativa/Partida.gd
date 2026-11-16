@@ -5,6 +5,12 @@ const MAP = preload("res://simulacao/nativa/Mapa.gd")
 const BASE = preload("res://simulacao/nativa/partida-base.json")
 const CATALOG = preload("res://simulacao/nativa/catalogo.json")
 
+static func waiter_defaults(state: Dictionary) -> void:
+	if state.get("waiterDefaultApplied",false):return
+	for worker in state.workers:
+		if worker.id=="worker2" and worker.task=="none":worker.task="waiter"
+	state.waiterDefaultApplied=true
+
 static func fresh(compact: bool = false, single_room: bool = false) -> Dictionary:
 	var state: Dictionary = BASE.data.duplicate(true)
 	state.compact = compact
@@ -13,6 +19,7 @@ static func fresh(compact: bool = false, single_room: bool = false) -> Dictionar
 		state.workers = [state.workers[1]]
 		state.workers[0].x = 12
 		state.workers[0].y = 10
+	waiter_defaults(state)
 	return state
 
 static func furnished(compact: bool = false, single_room: bool = false) -> Dictionary:

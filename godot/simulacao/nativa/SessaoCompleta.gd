@@ -72,6 +72,7 @@ func notify(message: String,bad: bool = false) -> void:
 	state.message=message;notice_until=clock+6
 	if modal=="management":menu_notice=message
 func reset_view() -> void:
+	PARTIDA.waiter_defaults(state)
 	renderer.facing.clear();played_heat.clear();pending=null;velocity=null;keyboard.clear();generation+=1
 func open_dialog(next: String) -> void:
 	if next in ["cooking","plating","inventory"]:return

@@ -24,7 +24,7 @@ func run():
 		# The old JS snapshot always reserved a whole table in fixed order.
 		# Chair selection/dirty reactions now intentionally change paths,
 		# profiles and reviews; retain the end-to-end service invariants.
-		check(state.customers.is_empty() and state.ledger.sales>=1,"Atendimento manual/garçom conclui visitas e vendas")
+		check(state.customers.all(func(c):return c.state=="leave") and state.ledger.sales>=1,"Atendimento manual/garçom conclui visitas e vendas")
 		check(state.ledger.sales+state.ledger.lost==3 and state.experience.visits.size()==3,"Cada uma das três chegadas termina em venda ou abandono registrado")
 		check(state.meals.eaten.sopa==state.ledger.sales and state.ledger.revenue==state.ledger.sales*state.prices.sopa,"Comida servida, vendas e receita permanecem consistentes")
 		check(draws[0]>=test.draws+3,"Chegadas também sorteiam cadeiras, além de perfis e avaliações")
