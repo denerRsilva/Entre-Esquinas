@@ -12,6 +12,7 @@ var layout_bounds := Rect2()
 var small_modal := false
 var modal_background: ColorRect
 var import_dialog: FileDialog
+var comandas = preload("res://interface/Comandas.gd").new()
 signal import_save(path:String)
 func _ready() -> void:
 	mouse_filter=Control.MOUSE_FILTER_IGNORE
@@ -27,6 +28,7 @@ func _ready() -> void:
 	area("build",Rect2(188,535,762,160))
 	resized.connect(func():fit_build.call_deferred())
 	get_viewport().size_changed.connect(func():fit_build.call_deferred())
+	add_child(comandas)
 	modal_background=ColorRect.new()
 	modal_background.color=Color(0.03,0.07,0.055,0.68)
 	modal_background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -126,6 +128,7 @@ func update_kitchen_bars(values: Array) -> void:
 func sync(data: Dictionary) -> void:
 	modal_background.visible = data.modal!=""
 	fit_regions(data.modal=="welcome" and not JSON.stringify(data.ui.get("modal",{})).contains("Fechar tutorial"))
+	comandas.sync(data.ui.get("comandas",[]),usable_rect())
 	for key in slots:
 		var entry:Array=slots[key]
 		var root:Control=entry[0]

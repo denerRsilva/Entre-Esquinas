@@ -113,6 +113,24 @@ func kitchen_status(s: Dictionary) -> Dictionary:
 		if job.get("heat")!="burned":parts.append({"tag":"progress","max":job.total,"value":job.total-job.left,"label":job.label,"color":{"ready":"green","over":"yellow","danger":"red"}.get(job.get("heat",""),"blue")})
 		children.append(node("label",parts,"","heat-"+job.heat if job.has("heat") else ""))
 	return node("div",children,"kitchenStatus")
+func comandas(s: Dictionary) -> Array:
+	if s.player.room!="restaurant":return []
+	# Number actual dining tables, never order IDs or chair IDs. Saves retain
+	# object order, so multiple guests at the same table share its number.
+	var tables := {}
+	for object in s.objects:
+		if object.type=="table":tables[object.id]=tables.size()+1
+	var result: Array = []
+	for order in s.orders:
+		if order.state not in ["ordered","cooking","ready"]:continue
+		var customer = service.find(s.customers,order.customer)
+		if customer==null or customer.state!="ordered":continue
+		var chair = service.find(s.objects,customer.seat)
+		var table = KITCHEN.BUILD.chair_table(chair,s.objects)
+		if table==null or not tables.has(table.id):continue
+		result.append({"id":order.id,"table":tables[table.id],"recipe":order.recipe,"ratio":float(service.ratio(customer.experience))})
+	return result
+
 func render(s: Dictionary,model: Dictionary,input: Variant) -> Dictionary:
 	controls.actions.clear()
 	kitchen.manual_moving=input!=null and input.get("moving",false)
@@ -122,7 +140,7 @@ func render(s: Dictionary,model: Dictionary,input: Variant) -> Dictionary:
 	var date := CALENDAR.date(int(s.day))
 	var summary: String = period+" • "+status+"  ★ "+str(int(s.reputation.score))+"/100 • "+CALENDAR.reputation_level(s.reputation.score)+"    "+CALENDAR.time_text(s.clock.minute)+" • "+date.weekday+" "+str(date.day)+" • "+date.season+" • Ano "+str(date.year)+"  $%.2f"%s.cash
 	if model.get("cleanView",false):
-		return {"hud":node("div",[plain(summary)],"hud"),"openBtn":null,"ordersHud":null,"kitchenStatus":null,"context":context(s,model)}
+		return {"hud":node("div",[plain(summary)],"hud"),"openBtn":null,"ordersHud":null,"comandas":comandas(s),"kitchenStatus":null,"context":context(s,model)}
 	var orders: Array = []
 	for c in s.customers:
 		if c.state!="waiting":continue
