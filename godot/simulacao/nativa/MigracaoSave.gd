@@ -69,6 +69,28 @@ static func cleaning(state: Dictionary) -> void:
 	STORAGE.sync(state)
 	state.version=12
 
+static func sink_capacity(state: Dictionary) -> bool:
+	# Before timed washing, sinks could hold twenty dirty plates. Keep ten
+	# and preserve the excess in other sinks or in the existing recovery area.
+	var overflow := 0
+	var sinks: Array = []
+	for object in state.objects:
+		if object.type!="sink":continue
+		var amount = object.get("dirtyPlates",0)
+		if not (amount is int or amount is float) or not is_finite(amount) or amount!=floor(amount) or amount<0 or amount>20:return false
+		if amount>INV.DIRTY_SINK_CAPACITY:
+			if object.has("cleanPlates") or state.get("washing")!=null:return false
+			overflow+=int(amount)-INV.DIRTY_SINK_CAPACITY;object.dirtyPlates=INV.DIRTY_SINK_CAPACITY
+		sinks.append(object)
+	for sink in sinks:
+		if overflow==0:break
+		var amount := mini(overflow,INV.DIRTY_SINK_CAPACITY-int(sink.get("dirtyPlates",0)))
+		if amount>0:sink.dirtyPlates=int(sink.get("dirtyPlates",0))+amount;overflow-=amount
+	while overflow>0:
+		var amount := mini(overflow,INV.limit("dirtyPlate"))
+		state.recovery.append({"item":"dirtyPlate","n":amount});overflow-=amount
+	return true
+
 static func physical(state: Dictionary, source_version: int) -> void:
 	if source_version<10:
 		for object in state.objects:

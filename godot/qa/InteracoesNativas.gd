@@ -6,6 +6,8 @@ func run():
 	var retired := 0
 	for test in fixtures.cases:
 		var state := patched(fixtures.base,test.input)
+		# Successful instant washing is superseded by PiaTarefasUI.
+		if patched(fixtures.base,test.expected.patch).message=="Prato limpo nas mãos.":retired+=1;continue
 		if test.operation=="primaryObjectAction" and state.player.get("hand")!=null and str(state.player.hand.item).begins_with("pot_"):
 			var target = preload("res://simulacao/nativa/Construcao.gd").find(state.objects,test.params[0])
 			# Returning a full pot to an empty stove is covered by ApoioPanelasUI.

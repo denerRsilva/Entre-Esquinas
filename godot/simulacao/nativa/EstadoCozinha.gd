@@ -28,6 +28,18 @@ static func physical(state: Dictionary) -> bool:
 	var hand = state.player.get("hand")
 	if truthy(hand) and (not stack(hand,true) or hand.item=="cookingPot"):return false
 	if truthy(hand) and truthy(state.player.get("carry")):return false
+	var washing = state.get("washing")
+	if washing!=null:
+		if not washing is Dictionary or not NUM.integer(washing.get("sink")) or not numeric(washing.get("left")) or not numeric(washing.get("total")):return false
+		if washing.total!=INV.DISH_WASH_TIME or washing.left<0 or washing.left>washing.total:return false
+		if not NUM.integer(washing.get("plate")) or washing.plate<0 or washing.plate>=INV.CLEAN_SINK_CAPACITY:return false
+		if hand!=null or state.player.get("carry")!=null or state.get("chopping")!=null or state.get("plating")!=null:return false
+		var found := false
+		for object in state.objects:
+			if object.id==washing.sink and object.type=="sink":
+				found=true
+				if object.get("dirtyPlates",0)<=0 or object.get("cleanPlates",0)>=INV.CLEAN_SINK_CAPACITY or washing.plate>object.get("cleanPlates",0):return false
+		if not found:return false
 	for object in state.objects:
 		if object.type=="stove":
 			var ingredients = object.get("ingredients")
@@ -79,6 +91,7 @@ static func valid(state: Dictionary) -> bool:
 	for object in state.objects:
 		if object.type in ["sink","bin"] and object.has("inventory"):return false
 		if object.type=="sink" and (not NUM.integer(object.get("dirtyPlates",0)) or object.get("dirtyPlates",0)<0 or object.get("dirtyPlates",0)>INV.DIRTY_SINK_CAPACITY):return false
+		if object.type=="sink" and (not NUM.integer(object.get("cleanPlates",0)) or object.get("cleanPlates",0)<0 or object.get("cleanPlates",0)>INV.CLEAN_SINK_CAPACITY):return false
 		if object.type=="stove":
 			if object.has("inventory") or not object.has("pan"):return false
 			var pan = object.pan

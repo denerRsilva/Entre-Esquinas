@@ -1,7 +1,9 @@
 extends RefCounted
 const ITEMS = preload("res://simulacao/nativa/itens.json")
 const HAND_PLATE_CAPACITY := 5
-const DIRTY_SINK_CAPACITY := 20
+const DIRTY_SINK_CAPACITY := 10
+const CLEAN_SINK_CAPACITY := 10
+const DISH_WASH_TIME := 2.0
 
 static func limit(item: String) -> int:
 	return int(ITEMS.data.get(item,{}).get("limit",99))

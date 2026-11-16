@@ -14,6 +14,8 @@ func run():
 	var retired := 0
 	for test in fixtures.cases:
 		var state := patched(fixtures.base,test.input)
+		# Instant washing was replaced by per-plate tasks in PiaTarefasUI.
+		if test.operation=="physicalAction" and test.params[1]=="wash" and test.expected.value.get("ok",false):retired+=1;continue
 		# Historical snapshots allowed pots over tools and rejected full pots on
 		# empty stoves. ApoioPanelasUI covers the replacement policy end-to-end.
 		if test.operation=="physicalAction":

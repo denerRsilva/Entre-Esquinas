@@ -32,7 +32,7 @@ static func collect(s: Dictionary,actor: Dictionary,table: Dictionary,max_total:
 	if table.type!="table" or not near(s,actor,table):return 0
 	var current := held(actor)
 	if actor.id=="player":
-		if actor.get("carry")!=null or (actor.get("hand")!=null and current==0) or s.get("chopping")!=null or s.get("plating")!=null:return 0
+		if actor.get("carry")!=null or (actor.get("hand")!=null and current==0) or s.get("chopping")!=null or s.get("plating")!=null or s.get("washing")!=null:return 0
 	elif actor.get("carry")!=null and current==0:return 0
 	var remaining := mini(INV.HAND_PLATE_CAPACITY,max_total)-current
 	var taken := 0

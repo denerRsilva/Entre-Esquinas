@@ -45,7 +45,11 @@ static func accepts(object: Dictionary, item: String) -> bool:
 	return food.get("kind")=="dry" and object.type=="shelf"
 
 static func slots(object: Dictionary) -> Array:
-	if object.type=="sink":return [{"item":"dirtyPlate","n":object.dirtyPlates}] if object.get("dirtyPlates",0)>0 else []
+	if object.type=="sink":
+		var result: Array = []
+		if object.get("dirtyPlates",0)>0:result.append({"item":"dirtyPlate","n":object.dirtyPlates})
+		if object.get("cleanPlates",0)>0:result.append({"item":"plate","n":object.cleanPlates})
+		return result
 	if object.type=="stove":
 		var result: Array = [{"item":object.pan,"n":1}] if object.get("pan") else []
 		result.append_array(object.get("ingredients",[]))

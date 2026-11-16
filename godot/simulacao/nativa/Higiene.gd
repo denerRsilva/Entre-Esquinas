@@ -5,7 +5,7 @@ const BUILD = preload("res://simulacao/nativa/Construcao.gd")
 const MOVE = preload("res://simulacao/nativa/Movimento.gd")
 
 static func free_hands(s: Dictionary,a: Dictionary) -> bool:
-	return a.get("hand")==null and a.get("carry")==null and (a.id!="player" or (s.get("chopping")==null and s.get("plating")==null))
+	return a.get("hand")==null and a.get("carry")==null and (a.id!="player" or (s.get("chopping")==null and s.get("plating")==null and s.get("washing")==null))
 
 static func floor_point(key: String) -> Variant:
 	var parts := key.split(",")

@@ -156,7 +156,7 @@ static func layout_error(state: Dictionary, objects: Array) -> Variant:
 	return null
 static func fail(message: String) -> Dictionary:return {"ok":false,"error":message}
 static func busy(state: Dictionary, id: Variant) -> bool:
-	return (state.get("chopping")!=null and state.chopping.get("table")==id) or (state.get("cooking")!=null and state.cooking.get("stove")==id) or (state.get("plating")!=null and state.plating.get("prep")==id)
+	return (state.get("chopping")!=null and state.chopping.get("table")==id) or (state.get("cooking")!=null and state.cooking.get("stove")==id) or (state.get("plating")!=null and state.plating.get("prep")==id) or (state.get("washing")!=null and state.washing.get("sink")==id)
 static func dirty_table(state: Dictionary, object: Dictionary) -> bool:
 	if object.type!="table":return false
 	for chair in state.objects:

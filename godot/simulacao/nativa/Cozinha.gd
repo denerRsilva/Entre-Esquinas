@@ -42,7 +42,7 @@ func storage(s: Dictionary,id: Variant,action: String,index: Variant) -> Diction
 	var o = find(s,id)
 	var a: Dictionary = s.player
 	if o==null or not o.get("inventory") is Array or not near(s,o):return result(s,false,"Aproxime-se do armazenamento.")
-	if s.get("chopping")!=null or s.get("plating")!=null or a.get("carry")!=null:return result(s,false,"Conclua a tarefa e libere as mãos.")
+	if s.get("chopping")!=null or s.get("plating")!=null or s.get("washing")!=null or a.get("carry")!=null:return result(s,false,"Conclua a tarefa e libere as mãos.")
 	if action=="take":
 		if a.get("hand")!=null:return result(s,false,"Suas mãos estão ocupadas. Guarde o item antes de retirar outro.")
 		if not BUILD.NUM.integer(index) or index<0 or index>=o.inventory.size():return result(s,false,"Espaço inválido.")
@@ -64,7 +64,7 @@ func storage(s: Dictionary,id: Variant,action: String,index: Variant) -> Diction
 		STORE.sync(s);return result(s,true,"Item guardado.")
 	return result(s,false,"Ação inválida.")
 func recover(s: Dictionary,index: Variant) -> Dictionary:
-	if s.player.get("hand")!=null or s.player.get("carry")!=null or s.get("chopping")!=null or s.get("plating")!=null:return result(s,false,"Libere as mãos.")
+	if s.player.get("hand")!=null or s.player.get("carry")!=null or s.get("chopping")!=null or s.get("plating")!=null or s.get("washing")!=null:return result(s,false,"Libere as mãos.")
 	if not BUILD.NUM.integer(index) or index<0 or index>=s.recovery.size():return result(s,false,"Item preservado ausente.")
 	var p = s.recovery[int(index)]
 	if p==null:return result(s,false,"Item preservado ausente.")
@@ -72,7 +72,7 @@ func recover(s: Dictionary,index: Variant) -> Dictionary:
 	return result(s,true,"Item antigo recuperado nas mãos.")
 func cook_error(s: Dictionary,o: Variant,recipe: Variant) -> Variant:
 	if o==null or o.type!="stove" or not RECIPES.RECIPES.data.has(recipe):return "Complete uma receita na panela."
-	if s.player.get("hand")!=null or s.player.get("carry")!=null or s.get("chopping")!=null or s.get("plating")!=null:return "Libere as mãos e conclua o trabalho manual antes de cozinhar."
+	if s.player.get("hand")!=null or s.player.get("carry")!=null or s.get("chopping")!=null or s.get("plating")!=null or s.get("washing")!=null:return "Libere as mãos e conclua o trabalho manual antes de cozinhar."
 	if s.get("cooking")!=null:return "Há uma panela cozinhando."
 	if o.get("pan")!="pot":return "Instale uma panela vazia."
 	return "A combinação não corresponde à receita." if RECIPES.recognized(o)!=recipe else null
@@ -108,7 +108,7 @@ func plating_plan(s: Dictionary,o: Variant) -> Dictionary:
 func plate(s: Dictionary,id: Variant) -> Dictionary:
 	var o = find(s,id)
 	if not near(s,o):return result(s,false,"Aproxime-se da mesa de cozinha.")
-	if s.get("plating")!=null or s.get("chopping")!=null:return result(s,false,"Conclua ou cancele o trabalho manual.")
+	if s.get("plating")!=null or s.get("chopping")!=null or s.get("washing")!=null:return result(s,false,"Conclua ou cancele o trabalho manual.")
 	var plan := plating_plan(s,o)
 	if plan.has("error"):return result(s,false,plan.error)
 	s.plating={"prep":id,"left":2,"total":2};s.plating.merge(plan)
@@ -152,20 +152,61 @@ func step(s: Dictionary,dt: float) -> void:
 				o.heatStage=heat.stage;o.heatEvent=o.get("heatEvent",0)+1
 				if heat.stage=="burned":o.burned=true
 				s.message=heat.label
-	chop_step(s,dt);plate_step(s,dt)
+	chop_step(s,dt);plate_step(s,dt);wash_step(s,dt)
+
+func wash_step(s: Dictionary,dt: float) -> void:
+	var job = s.get("washing")
+	if job==null:return
+	var sink = find(s,job.sink)
+	if sink==null or sink.type!="sink" or sink.get("dirtyPlates",0)<=0 or sink.get("cleanPlates",0)>=INV.CLEAN_SINK_CAPACITY:s.erase("washing");return
+	if not near(s,sink) or s.player.get("hand")!=null or s.player.get("carry")!=null:return
+	var remaining := maxf(0,dt)
+	while remaining>1e-9:
+		var used := minf(remaining,job.left)
+		job.left=maxf(0,job.left-used);remaining-=used
+		if job.left>1e-8:return
+		# A plate stays in the dirty pile until its individual task completes.
+		sink.dirtyPlates-=1;sink.cleanPlates=int(sink.get("cleanPlates",0))+1
+		job.plate+=1
+		if sink.dirtyPlates==0 or sink.cleanPlates>=INV.CLEAN_SINK_CAPACITY:s.erase("washing");return
+		job.left=INV.DISH_WASH_TIME
+
 func wash(s: Dictionary,id: Variant) -> Dictionary:
 	var o = find(s,id)
 	if o==null or o.type!="sink" or not near(s,o):return result(s,false,"Aproxime-se da pia.")
 	var hand = s.player.get("hand")
 	if s.player.get("carry")!=null or s.get("chopping")!=null or s.get("plating")!=null:return result(s,false,"Traga um prato sujo nas mãos.")
-	var amount := 0
-	if hand!=null and hand.item=="dirtyPlate":amount=int(hand.n)
-	elif hand==null:
-		amount=mini(INV.HAND_PLATE_CAPACITY,int(o.get("dirtyPlates",0)))
-		if amount:o.dirtyPlates-=amount
-	if amount==0:return result(s,false,"Traga um prato sujo nas mãos.")
-	s.player.hand={"item":"plate","n":amount}
-	return result(s,true,"Prato limpo nas mãos." if amount==1 else str(amount)+" pratos limpos nas mãos.")
+	if hand!=null and hand.item!="dirtyPlate":return result(s,false,"Traga um prato sujo nas mãos.")
+	var deposited := 0
+	if hand!=null:
+		deposited=DISHES.deposit(s,s.player,o)
+		if s.player.get("hand")!=null:return result(s,deposited>0,"A pilha suja da pia está cheia; o restante continua nas mãos.")
+	var job = s.get("washing")
+	if job!=null:return result(s,job.sink==id,"Lavagem em andamento." if job.sink==id else "Conclua ou cancele a lavagem atual.")
+	if o.get("dirtyPlates",0)<=0:return result(s,false,"Traga um prato sujo nas mãos.")
+	if o.get("cleanPlates",0)>=INV.CLEAN_SINK_CAPACITY:return result(s,deposited>0,"Retire os pratos limpos do lado direito da pia.")
+	s.washing={"sink":id,"left":INV.DISH_WASH_TIME,"total":INV.DISH_WASH_TIME,"plate":0}
+	return result(s,true,"Lavando pratos.")
+
+func cancel_wash(s: Dictionary,id: Variant) -> Dictionary:
+	var o = find(s,id)
+	if o==null or o.type!="sink" or not near(s,o):return result(s,false,"Aproxime-se da pia.")
+	if s.get("washing")!=null and s.washing.sink==id:s.erase("washing")
+	return result(s,true,"Lavagem cancelada; pratos preservados.")
+
+func take_clean(s: Dictionary,id: Variant) -> Dictionary:
+	var sink = find(s,id)
+	if sink==null or sink.type!="sink" or not near(s,sink):return result(s,false,"Aproxime-se da pia.")
+	var hand = s.player.get("hand")
+	if s.player.get("carry")!=null or s.get("chopping")!=null or s.get("plating")!=null or (hand!=null and hand.item!="plate"):return result(s,false,"Libere as mãos.")
+	var held := int(hand.n) if hand!=null else 0
+	var amount := mini(INV.HAND_PLATE_CAPACITY-held,int(sink.get("cleanPlates",0)))
+	if amount<=0:return result(s,false,"Não há espaço nas mãos ou pratos limpos na pia.")
+	if s.get("washing")!=null and s.washing.sink==id:s.erase("washing")
+	# Taking clean plates interrupts this manual task before occupying the hands.
+	if s.get("washing")!=null:return result(s,false,"Conclua ou cancele a lavagem atual.")
+	sink.cleanPlates-=amount;s.player.hand={"item":"plate","n":held+amount}
+	return result(s,true,"Pratos limpos nas mãos.")
 func wipe(s: Dictionary,id: Variant) -> Dictionary:
 	var table = find(s,id)
 	if table==null or not near(s,table) or not HYGIENE.wipe(s,s.player,table):return result(s,false,"Libere a mesa e as mãos para limpar.")
@@ -174,7 +215,7 @@ func collect_dirty(s: Dictionary,id: Variant) -> Dictionary:
 	var table = find(s,id)
 	if table==null or table.type!="table" or not near(s,table):return result(s,false,"Aproxime-se da mesa.")
 	var hand = s.player.get("hand")
-	if (hand!=null and (hand.item!="dirtyPlate" or hand.n>=INV.HAND_PLATE_CAPACITY)) or s.player.get("carry")!=null or s.get("chopping")!=null or s.get("plating")!=null:return result(s,false,"Libere as mãos para recolher a louça.")
+	if (hand!=null and (hand.item!="dirtyPlate" or hand.n>=INV.HAND_PLATE_CAPACITY)) or s.player.get("carry")!=null or s.get("chopping")!=null or s.get("plating")!=null or s.get("washing")!=null:return result(s,false,"Libere as mãos para recolher a louça.")
 	var amount := DISHES.collect(s,s.player,table)
 	if amount:return result(s,true,"Prato sujo nas mãos. Leve à pia." if s.player.hand.n==1 else str(int(s.player.hand.n))+" pratos sujos nas mãos. Leve à pia.")
 	return result(s,false,"Não há pratos sujos nesta mesa.")
@@ -184,7 +225,10 @@ func physical(s: Dictionary,id: Variant,action: String) -> Dictionary:
 	if o==null or not near(s,o):return result(s,false,"Aproxime-se do objeto.")
 	if action=="cancelCut":s.chopping=null;return result(s,true,"Corte cancelado; ingrediente permanece nas mãos.")
 	if action=="cancelPlate":return cancel_plate(s)
-	if s.get("chopping")!=null or s.get("plating")!=null:return result(s,false,"Conclua ou cancele a tarefa manual.")
+	if action=="cancelWash":return cancel_wash(s,id)
+	if action=="takeClean":return take_clean(s,id)
+	if action=="wash":return wash(s,id)
+	if s.get("chopping")!=null or s.get("plating")!=null or s.get("washing")!=null:return result(s,false,"Conclua ou cancele a tarefa manual.")
 	if action=="takePan":return take_pan(s,o)
 	var p = a.get("hand")
 	match action:
@@ -248,7 +292,6 @@ func physical(s: Dictionary,id: Variant,action: String) -> Dictionary:
 				if not o.utensil:return result(s,false,"Não há talher instalado.")
 				o.utensil=false;a.hand={"item":"spoon","n":1}
 			return feedback(s,o,"Item nas mãos")
-		"wash":return wash(s,id)
 		"discardHand":
 			var data: Dictionary = INV.ITEMS.data.get(p.item,{}) if p!=null else {}
 			if o.type not in ["sink","bin"] or not data.has("recipe"):return result(s,false,"Traga comida pronta para descartar.")

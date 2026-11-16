@@ -152,6 +152,12 @@ static func table_plate_position(table: Dictionary,chair: Dictionary) -> Vector2
 		3:x=right-9
 	return Vector2(x,y)
 
+static func sink_plate_position(sink: Dictionary,clean: bool,layer: int) -> Vector2:
+	var rect := MOVE.MAP.rect(sink)
+	var size := Vector2(rect.size)*40
+	# Keep ceramic at its shared physical size, even on a rotated sink.
+	return Vector2(rect.position)*40+Vector2(size.x*(0.75 if clean else 0.25),size.y-44*(size.y/40.0)-layer*2)
+
 func object(s: Dictionary,o: Dictionary,selected: bool,preview: bool = false) -> void:
 	var r := MOVE.MAP.rect(o)
 	var x: float = r.position.x*40;var y: float = r.position.y*40;var w: float = r.size.x*40;var h: float = r.size.y*40
@@ -187,8 +193,11 @@ func object(s: Dictionary,o: Dictionary,selected: bool,preview: bool = false) ->
 			if o.get("inventory",[]).size()>i and o.inventory[i]!=null and o.inventory[i].item=="pot":pot(x+w/2,y-20+i*23,false,false,s.time)
 	if o.type=="sink":
 		for i in int(o.get("dirtyPlates",0)):
-			var pile := int(i/5)
-			plate(x+w/2-24+(pile%2)*25,y+h-40+int(pile/2)*14-(i%5)*2,null,true)
+			var position := sink_plate_position(o,false,i)
+			plate(position.x,position.y,null,true)
+		for i in int(o.get("cleanPlates",0)):
+			var position := sink_plate_position(o,true,i)
+			empty_plate(position.x,position.y)
 	var cooking = s.get("cooking") if o.has("id") and s.get("cooking")!=null and s.cooking.stove==o.id else null
 	if o.type=="stove" and (not o.get("ingredients",[]).is_empty() or cooking!=null or o.get("readyBatch")!=null):
 		var index := 0
@@ -241,10 +250,14 @@ func overlays(s: Dictionary,o: Dictionary,selected: bool,building: bool) -> void
 	var x: float = r.position.x*40;var y: float = r.position.y*40;var w: float = r.size.x*40;var h: float = r.size.y*40
 	if selected or building:label(BUILD.CATALOG.data[o.type].name,x+w/2,y+h+11)
 	var job: Variant = null
-	for pair in [["chopping","table"],["cooking","stove"],["plating","prep"]]:
+	for pair in [["chopping","table"],["cooking","stove"],["plating","prep"],["washing","sink"]]:
 		if s.get(pair[0])!=null and s[pair[0]].get(pair[1])==o.id:job=s[pair[0]];break
 	if job!=null:
-		label(("Cortando " if job.has("table") else "Cozinhando " if job.has("stove") else "Empratando ")+str(int(ceil(job.left)))+"s",x+w/2,y-30);commands.append(["progress","task:"+str(o.id)+":"+("cut" if job.has("table") else "cook" if job.has("stove") else "plate"),x,y-19,w,8,1-job.left/job.total,"blue"])
+		var washing: bool = job.has("sink")
+		var bar_y: float = y+h-68*(h/40.0)-14 if washing else y-19
+		var kind: String = "wash:"+str(int(job.plate)) if washing else "cut" if job.has("table") else "cook" if job.has("stove") else "plate"
+		label(("Lavando prato " if washing else "Cortando " if job.has("table") else "Cozinhando " if job.has("stove") else "Empratando ")+str(int(ceil(job.left)))+"s",x+w/2,bar_y-10 if washing else y-30)
+		commands.append(["progress","task:"+str(o.id)+":"+kind,x,bar_y,w,8,1-job.left/job.total,"blue"])
 	elif o.type=="stove" and o.get("readyBatch")!=null:
 		var heat := RECIPES.heat(s,o)
 		label(heat.label,x+w/2,y-30)

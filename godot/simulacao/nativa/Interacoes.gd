@@ -61,7 +61,7 @@ func queue_floor(s: Dictionary,key: String) -> bool:
 	if target==null:return false
 	play_go(s,target.point);pending={"kind":"mop","target":key,"until":s.time+30}
 	current=true;process(s);return true
-func primary(s: Dictionary,o: Dictionary) -> Variant:
+func primary(s: Dictionary,o: Dictionary,pointer: Variant = null) -> Variant:
 	if o.type in ["computer","receiving","fridge","cold","shelf","potRack"]:
 		if not go_object(s,o):return false
 		pending={"kind":"utility" if o.type in ["computer","receiving"] else "storage","target":o.id,"until":s.time+30};current=true;process(s);return true
@@ -91,7 +91,12 @@ func primary(s: Dictionary,o: Dictionary) -> Variant:
 		elif o.get("support")!=null:action="plate" if o.support.item.begins_with("pot_") else "takePan"
 		elif o.plates>0:action="takePlates"
 		return physical(s,o,action) if action!=null else false
-	if o.type=="sink" and (item=="dirtyPlate" or (p==null and o.get("dirtyPlates",0)>0)):return queue(s,"wash",o.id)
+	if o.type=="sink":
+		if item=="dirtyPlate":return queue(s,"wash",o.id)
+		var can_take: bool = p==null or (item=="plate" and p.n<INV.HAND_PLATE_CAPACITY)
+		var right: bool = pointer!=null and float(pointer.world.x)>=float(o.x)+float(MOVE.MAP.rect(o).size.x)/2
+		if can_take and o.get("cleanPlates",0)>0 and (right or o.get("dirtyPlates",0)==0 or o.get("cleanPlates",0)>=INV.CLEAN_SINK_CAPACITY or item=="plate"):return physical(s,o,"takeClean")
+		if p==null and o.get("dirtyPlates",0)>0:return queue(s,"wash",o.id)
 	if o.type in ["sink","bin"] and INV.ITEMS.data.get(item,{}).has("recipe"):return physical(s,o,"discardHand")
 	var table = o if o.type=="table" else BUILD.chair_table(o,s.objects) if o.type=="chair" else null
 	if table==null:return false
@@ -183,7 +188,7 @@ func pointer_down(s: Dictionary,pointer: Dictionary) -> void:
 	for o in s.objects:
 		if o.room!=room or not MOVE.MAP.rect(o).has_point(Vector2i(x,y)):continue
 		selected=o.id
-		if primary(s,o):refresh();return
+		if primary(s,o,pointer):refresh();return
 		if not go_object(s,o):tell(s,"Móvel sem acesso.",true)
 		refresh();return
 	for person in MOVE.ACTORS.actors(s):

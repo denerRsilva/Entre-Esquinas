@@ -75,7 +75,11 @@ func context(s: Dictionary,model: Dictionary) -> Dictionary:
 				if KITCHEN.STORE.ready_count(o)>0:add_physical(target,o,"serve","Pegar prato nas mãos","takeDish")
 				if s.get("plating")!=null and s.plating.prep==o.id:add_physical(target,o,"bin","Cancelar empratamento","cancelPlate")
 			continue
-		if o.type=="sink" and ((hand!=null and hand.item=="dirtyPlate") or (hand==null and o.get("dirtyPlates",0)>0)):target.children.append(button("Lavar pratos","wash",{"kind":"wash","id":o.id}))
+		if o.type=="sink":
+			var washing = s.get("washing")
+			if washing!=null and washing.sink==o.id:add_physical(target,o,"bin","Cancelar lavagem de pratos","cancelWash")
+			elif (hand!=null and hand.item=="dirtyPlate") or (hand==null and o.get("dirtyPlates",0)>0 and o.get("cleanPlates",0)<KITCHEN.INV.CLEAN_SINK_CAPACITY):target.children.append(button("Lavar pratos","wash",{"kind":"wash","id":o.id}))
+			if o.get("cleanPlates",0)>0 and (hand==null or (hand.item=="plate" and hand.n<KITCHEN.INV.HAND_PLATE_CAPACITY)):add_physical(target,o,"take","Retirar pratos limpos da pia","takeClean")
 		if o.type in ["sink","bin"] and hand!=null and KITCHEN.INV.ITEMS.data.get(hand.item,{}).has("recipe"):add_physical(target,o,"bin","Descartar comida das mãos","discardHand")
 		if o.type=="table" and not KITCHEN.HYGIENE.can_wipe(s,o):target.children.append(button("Recolher pratos sujos da mesa","wash",{"kind":"clean","id":o.id}))
 		if o.type=="table" and KITCHEN.HYGIENE.can_wipe(s,o) and KITCHEN.HYGIENE.free_hands(s,a):target.children.append(button("Limpar mesa","wash",{"kind":"wipe","id":o.id}))
@@ -99,7 +103,7 @@ func context(s: Dictionary,model: Dictionary) -> Dictionary:
 	return node("div",rows.values(),"context")
 func kitchen_status(s: Dictionary) -> Dictionary:
 	var jobs: Array = []
-	for pair in [["chopping","table","Cortando ingrediente"],["cooking","stove","Cozinhando "],["plating","prep","Empratando"]]:
+	for pair in [["chopping","table","Cortando ingrediente"],["cooking","stove","Cozinhando "],["plating","prep","Empratando"],["washing","sink","Lavando prato"]]:
 		var job = s.get(pair[0])
 		if job==null:continue
 		var entry: Dictionary = job.duplicate(true)

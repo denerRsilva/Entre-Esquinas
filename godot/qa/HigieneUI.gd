@@ -70,7 +70,9 @@ func run():
 	check(kitchen.collect_dirty(s,table.id).ok and s.tableStains[seat]==1,"Recolher prato não remove a mancha")
 	check(not kitchen.wipe(s,table.id).ok,"Mãos com louça não passam pano")
 	var sink = object(s,"sink");beside(s,sink)
-	check(kitchen.wash(s,sink.id).ok,"Jogador lava o prato recolhido")
+	check(kitchen.wash(s,sink.id).ok,"Jogador inicia lavagem do prato recolhido")
+	kitchen.wash_step(s,2.1)
+	check(kitchen.take_clean(s,sink.id).ok,"Jogador retira o prato limpo da pia")
 	var station = object(s,"kitchen");beside(s,station)
 	check(kitchen.physical(s,station.id,"installPlates").ok and s.player.hand==null,"Prato limpo devolvido sem perdas")
 	advance(2.1) # Let the finished guest physically leave before construction.

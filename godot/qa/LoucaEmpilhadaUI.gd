@@ -62,7 +62,9 @@ func run():
 	var plates: Array = renderer.commands.filter(func(op):return op[0]=="img" and op[1]=="modular/prato-vazio.png")
 	check(plates.size()==5 and plates[0][9]==plates[4][9] and plates[4][7]<plates[0][7],"Cinco pratos são desenhados empilhados sem mudar tamanho")
 	var sink = object(s,"sink");beside(s,s.player,sink)
-	check(kitchen.wash(s,sink.id).ok and s.player.hand.item=="plate" and s.player.hand.n==5,"Lavagem conserva a pilha inteira")
+	check(kitchen.wash(s,sink.id).ok and s.player.hand==null,"Depósito inicia lavagem com mãos livres")
+	kitchen.wash_step(s,10.1)
+	check(kitchen.take_clean(s,sink.id).ok and s.player.hand.item=="plate" and s.player.hand.n==5,"Cinco ciclos conservam a pilha inteira")
 	var station = object(s,"kitchen")
 	s.equipment.plate+=19-int(station.plates);station.plates=19
 	beside(s,s.player,station)
@@ -77,7 +79,7 @@ func run():
 	bad_worker.workers[0].carry={"kind":"dirtyPlates","n":6};bad_worker.equipment.plate+=6
 	check(not SAVE.VALIDATOR.valid(bad_worker),"Save também rejeita seis pratos carregados por NPC")
 	var bad_sink: Dictionary = PARTIDA.furnished(true,true)
-	object(bad_sink,"sink").dirtyPlates=21;bad_sink.equipment.plate+=21
+	object(bad_sink,"sink").dirtyPlates=11;bad_sink.equipment.plate+=11
 	check(not SAVE.VALIDATOR.valid(bad_sink),"Save rejeita pia acima da capacidade")
 	# Real worker path: collect across tables, cap at five, and unload at sink.
 	var live: Dictionary = PARTIDA.furnished(true,true)
@@ -104,7 +106,9 @@ func run():
 	await snapshot(live,"pia")
 	check(worst_tick<100000,"Limpeza não bloqueia um quadro por 100ms")
 	var waiting_sink = object(live,"sink");beside(live,live.player,waiting_sink)
-	check(kitchen.wash(live,waiting_sink.id).ok and live.player.hand.n==5 and waiting_sink.dirtyPlates==2,"Jogador lava até cinco pratos deixados pelo NPC")
+	check(kitchen.wash(live,waiting_sink.id).ok,"Jogador inicia lavagem dos pratos deixados pelo NPC")
+	kitchen.wash_step(live,10)
+	check(kitchen.take_clean(live,waiting_sink.id).ok and live.player.hand.n==5 and waiting_sink.dirtyPlates==2,"Jogador pode retirar cinco pratos após cinco ciclos")
 	check(not kitchen.wash(live,waiting_sink.id).ok and waiting_sink.dirtyPlates==2,"Mãos ocupadas não apagam os pratos restantes na pia")
 	check(not SIM.BUILD.remove(live,waiting_sink.id).ok,"Pia com pratos não pode ser reembolsada e apagar conteúdo")
 	# No usable sink: keep dirty plates where they are, with bounded planning.

@@ -5,7 +5,7 @@ const ITEMS = preload("res://simulacao/nativa/itens.json")
 const STATE = preload("res://simulacao/nativa/EstadoCozinha.gd")
 static func hours(s: Dictionary) -> Array:return s.get("serviceHours",CALENDAR.hours())
 static func pending(s: Dictionary) -> bool:
-	if not s.customers.is_empty() or STATE.truthy(s.get("chopping")) or STATE.truthy(s.get("cooking")) or STATE.truthy(s.get("plating")) or not s.ready.is_empty():return true
+	if not s.customers.is_empty() or STATE.truthy(s.get("chopping")) or STATE.truthy(s.get("cooking")) or STATE.truthy(s.get("plating")) or STATE.truthy(s.get("washing")) or not s.ready.is_empty():return true
 	for order in s.orders:
 		if order.state not in ["paid","lost"]:return true
 	for actor in NUM.actors(s):
@@ -115,7 +115,7 @@ static func deliver(s: Dictionary) -> void:
 		receive(s,delivery.food,quantity,delivery.get("quality",0))
 		delivery.pending-=quantity;delivery.received+=quantity
 static func buy_tool(s: Dictionary,type: Variant) -> bool:
-	if type not in ["pot","plate"] or STATE.truthy(s.player.get("hand")) or STATE.truthy(s.player.get("carry")) or STATE.truthy(s.get("chopping")) or STATE.truthy(s.get("plating")):return false
+	if type not in ["pot","plate"] or STATE.truthy(s.player.get("hand")) or STATE.truthy(s.player.get("carry")) or STATE.truthy(s.get("chopping")) or STATE.truthy(s.get("plating")) or STATE.truthy(s.get("washing")):return false
 	var price := 25 if type=="pot" else 5
 	if s.cash<price:return false
 	s.player.hand={"item":type,"n":1};s.cash-=price;s.ledger.investment+=price;s.equipment[type]+=1

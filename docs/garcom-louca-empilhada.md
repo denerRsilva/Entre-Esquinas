@@ -1,5 +1,9 @@
 # Garçom ativo e louça em pilhas
 
+Registro da versão .43. A capacidade da pia, o desenho das pilhas e a lavagem
+instantânea descritos abaixo foram substituídos pela
+[lavagem por prato da versão .45](lavagem-pratos.md). O garçom continua só recolhendo.
+
 O garçom começa trabalhando nas partidas novas, vazias ou mobiliadas. Ao abrir
 uma partida antiga sem a marca `waiterDefaultApplied`, o funcionário parado
 também é habilitado uma vez. A marca fica no salvamento; pausar pela gestão e
