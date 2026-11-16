@@ -21,13 +21,17 @@ func run():
 		if g.session.pending==null:break
 	check(g.session.state.open,"Restaurante abre automaticamente no horário")
 	await click_object("table") # Leave the arrival cell beside the service sign.
-	var simulation = g.session.SIM.new();simulation.service.random_source=func():return 0.5
+	# This kitchen workflow clicks the first table; chair randomness is covered
+	# independently by AssentosClientesUI, so select that seat explicitly.
+	var simulation = g.session.SIM.new();simulation.service.random_source=func():return 0.0
 	check(simulation.spawn(g.session.state),"Cliente entra")
+	# Finish this one service after closing arrivals. Other guests can now
+	# share its table, and belong in the separate multi-seat scenarios.
+	g.session.ADMIN.test_clock(g.session.state,900)
 	advance(6)
 	await click_object("table");check(g.session.state.orders.size()==1,"Mesa anota um pedido")
 	await click_object("table");advance(4.1)
 	check(g.session.state.ledger.sales==1 and g.session.state.ledger.revenue==20,"Entrega e pagamento únicos")
-	g.session.ADMIN.test_clock(g.session.state,900)
 	await click_object("table");check(held()=="dirtyPlate","Louça recolhida")
 	await click_object("sink");check(held()=="plate","Prato lavado")
 	check(g.session.SAVE.VALIDATOR.valid(g.session.state),"Conservação e save válidos no fluxo completo")

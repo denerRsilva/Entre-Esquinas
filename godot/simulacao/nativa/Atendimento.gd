@@ -65,7 +65,17 @@ func finalize(s: Dictionary,c: Dictionary,outcome: String) -> bool:
 		event={"visitId":c.id,"day":s.day,"period":s.period,"time":s.time,"type":rule.type,"outcome":outcome}
 		s.experience.events.append(event)
 	var visit := {"id":c.id,"day":s.day,"period":s.period,"time":s.time,"outcome":outcome,"profile":p.profile,"limits":p.limits.duplicate(),"elapsed":p.elapsed.duplicate(),"results":p.results.duplicate(),"satisfaction":p.satisfaction.duplicate() if p.satisfaction!=null else null}
+	if p.has("arrivalIssue"):visit.arrivalIssue=p.arrivalIssue
 	s.experience.visits.append(visit);reputation(s,visit,event)
+	return true
+func reject_dirty(s: Dictionary,c: Dictionary,reason: String) -> bool:
+	var p: Dictionary = c.experience
+	if p.reviewResolved:return false
+	p.arrivalIssue=reason;p.abandoned=true;p.phase=null
+	p.satisfaction={"score":0,"classification":"unsatisfied","quality":null}
+	p.indicatorUntil=null
+	c.state="leave";MOVE.go(c,{"room":"restaurant","x":7,"y":14})
+	s.ledger.lost+=1;visual(s,c);finalize(s,c,"abandoned")
 	return true
 func abandon(s: Dictionary,c: Dictionary) -> bool:
 	var p: Dictionary = c.experience

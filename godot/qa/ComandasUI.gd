@@ -24,11 +24,17 @@ func run():
 	var entries: Array = g.frame_data.ui.comandas
 	check(entries.size()==3 and paper.visible and paper.cards.size()==3,"Três pedidos viram três comandas")
 	var identities := {}
+	var table_numbers := {}
+	for object in s.objects:
+		if object.type=="table":table_numbers[object.id]=table_numbers.size()+1
 	for i in 3:
 		var entry: Dictionary = entries[i]
 		var card = paper.cards[str(entry.id)]
 		identities[str(entry.id)]=card.get_instance_id()
-		check(entry.table==i+1 and card.table==str(i+1).pad_zeros(2),"Número identifica a mesa, sem usar ID do pedido")
+		var chair = g.session.BUILD.find(s.objects,s.customers[i].seat)
+		var table = g.session.BUILD.chair_table(chair,s.objects)
+		var number: int = table_numbers[table.id]
+		check(entry.table==number and card.table==str(number).pad_zeros(2),"Número identifica a mesa, sem usar ID do pedido")
 		check(card.dish.texture==g.session.game_ui.controls.FOOD.texture(entry.recipe),"Imagem corresponde à receita real")
 		check(card.bar.get_script()==BAR and is_equal_approx(card.bar.value,[0.9,0.4,0.1][i]),"Mesma barra animada acompanha paciência do cliente")
 		check(card.tooltip_text.is_empty() and not card.accessibility_name.is_empty(),"Sem tooltip ou texto extra; descrição acessível preservada")

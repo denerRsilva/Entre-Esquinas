@@ -21,8 +21,13 @@ func run():
 							if o.type=="kitchen":prep=o;break
 						if state.player.get("hand")==null and simulation.service.STORE.count(prep,"dish_sopa")>0:simulation.service.STORE.take(state,prep,"dish_sopa",1,2);state.player.hand={"item":"dish_sopa","n":1,"quality":2}
 					simulation.service.interact(state,customer.id)
-		check(equivalent(state,test.expected),"Atendimento manual/garçom completo")
-		check(draws[0]==test.draws,"Sorteios preservados")
+		# The old JS snapshot always reserved a whole table in fixed order.
+		# Chair selection/dirty reactions now intentionally change paths,
+		# profiles and reviews; retain the end-to-end service invariants.
+		check(state.customers.is_empty() and state.ledger.sales>=1,"Atendimento manual/garçom conclui visitas e vendas")
+		check(state.ledger.sales+state.ledger.lost==3 and state.experience.visits.size()==3,"Cada uma das três chegadas termina em venda ou abandono registrado")
+		check(state.meals.eaten.sopa==state.ledger.sales and state.ledger.revenue==state.ledger.sales*state.prices.sopa,"Comida servida, vendas e receita permanecem consistentes")
+		check(draws[0]>=test.draws+3,"Chegadas também sorteiam cadeiras, além de perfis e avaliações")
 		check(preload("res://simulacao/nativa/Salvamentos.gd").VALIDATOR.valid(state),"Estado de atendimento válido")
 	var actions = load("res://qa/referencia-migracao/atendimento-acoes.json").data
 	for test in actions:

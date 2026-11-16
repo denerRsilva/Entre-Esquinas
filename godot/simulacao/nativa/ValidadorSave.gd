@@ -22,6 +22,7 @@ static func score(v: Variant) -> bool:
 	return v.quality==null or (number(v.quality) and v.quality>=0 and v.quality<=3)
 static func experience_data(p: Variant) -> bool:
 	if not has_keys(p,["profile","limits","elapsed","results","satisfaction"]) or not CLIENTS.data.profiles.has(p.profile):return false
+	if p.has("arrivalIssue") and p.arrivalIssue not in ["dirtySeat","dirtyDiningRoom"]:return false
 	for phase in ["service","food"]:
 		if not has_keys(p.limits,[phase]) or not has_keys(p.elapsed,[phase]) or not has_keys(p.results,[phase]):return false
 		if not number(p.limits[phase]) or p.limits[phase]<=0 or not number(p.elapsed[phase]) or p.elapsed[phase]<0 or p.elapsed[phase]>p.limits[phase]:return false

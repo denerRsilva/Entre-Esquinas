@@ -16,26 +16,64 @@ func choose_recipe(s: Dictionary) -> Variant:
 func spawn(s: Dictionary) -> bool:
 	if s.clock.ending:return false
 	if not true in s.menu.values():s.ledger.lost+=1;return false
-	var seat: Variant = null
-	for id in BUILD.seats(s):
-		var candidate = BUILD.find(s.objects,id)
-		var table = BUILD.seat_table(candidate,s.objects)
-		var free := true
-		for chair in s.objects:
-			if chair.type!="chair":continue
-			var linked = BUILD.chair_table(chair,s.objects)
-			if linked==null or linked.id!=table.id:continue
-			if s.dirtyTables.get(str(int(chair.id)),0)>0:free=false
-			for c in s.customers:
-				if c.seat==chair.id and not c.get("done",false):free=false
-		if free:seat=candidate;break
-	if seat==null:s.ledger.lost+=1;return false
+	# Do not create overlapping arrivals or consume their random decisions
+	# while another person is still crossing the entrance.
+	for actor in MOVE.ACTORS.actors(s):
+		if actor.get("room")!="restaurant" or not actor.has("x") or not actor.has("y"):continue
+		for cell in MOVE.reserved(actor):
+			if cell.x==7 and cell.y==13:return false
+	var choice := choose_seat(s)
+	if choice.is_empty():s.ledger.lost+=1;return false
+	var seat: Dictionary = choice.seat
 	var id: int = s.serial;s.serial+=1
 	var customer := {"id":"client"+str(id),"room":"restaurant","x":7,"y":13,"goal":null,"wait":0,"hold":0,"state":"walk","carry":null,"seat":seat.id,"recipe":choose_recipe(s),"order":null,"timer":0,"experience":service.experience()}
-	for actor in MOVE.ACTORS.actors(s):
-		if actor.room==customer.room and actor.x==customer.x and actor.y==customer.y:return false
-	customer.goal={"room":"restaurant","x":seat.x,"y":seat.y};s.customers.append(customer)
+	s.customers.append(customer)
+	if choice.get("reject",false):
+		service.reject_dirty(s,customer,choice.reason);return true
+	if choice.get("unhappy",false):
+		# Reuse saved experience data: 20% of service patience remains and
+		# the poor first impression also lowers the final service score.
+		customer.experience.arrivalIssue="dirtySeat"
+		customer.experience.elapsed.service=customer.experience.limits.service*0.8
+	customer.goal={"room":"restaurant","x":seat.x,"y":seat.y}
 	return true
+
+func choose_seat(s: Dictionary) -> Dictionary:
+	var reserved := {}
+	for c in s.customers:
+		if not c.get("done",false) and c.get("state","walk")!="leave":reserved[c.seat]=true
+	var occupied := {}
+	for actor in MOVE.ACTORS.actors(s):
+		if actor.get("room")!="restaurant" or not actor.has("x") or not actor.has("y"):continue
+		for cell in MOVE.reserved(actor):occupied[MOVE.key(cell)]=true
+	var free: Array = []
+	var tables := {}
+	var reachable: Array = []
+	for id in BUILD.seats(s):
+		var chair = BUILD.find(s.objects,id)
+		var table = BUILD.seat_table(chair,s.objects)
+		tables[table.id]=false;reachable.append(chair)
+		if not reserved.has(id) and not occupied.has(MOVE.key(chair)):free.append({"seat":chair,"table":table.id})
+	if reachable.is_empty():return {}
+	# A plate makes its table dirty, but only its own chair unavailable.
+	# The explicit exception is a completely dirty dining room: every new
+	# arrival turns around, even when some other places at those tables are clear.
+	for chair in s.objects:
+		if chair.type!="chair" or s.dirtyTables.get(str(int(chair.id)),0)<=0:continue
+		var table = BUILD.chair_table(chair,s.objects)
+		if table!=null and tables.has(table.id):tables[table.id]=true
+	if not false in tables.values():return {"seat":reachable[0],"reject":true,"reason":"dirtyDiningRoom"}
+	if free.is_empty():return {}
+	var selected: Dictionary = free[int(service.draw()*free.size())]
+	if s.dirtyTables.get(str(int(selected.seat.id)),0)<=0:return selected
+	var alternatives: Array = []
+	for candidate in free:
+		if candidate.table==selected.table and s.dirtyTables.get(str(int(candidate.seat.id)),0)==0:alternatives.append(candidate)
+	if alternatives.is_empty() or service.draw()>=0.5:
+		return {"seat":selected.seat,"reject":true,"reason":"dirtySeat"}
+	var replacement: Dictionary = alternatives[int(service.draw()*alternatives.size())].duplicate()
+	replacement.unhappy=true
+	return replacement
 func worker(s: Dictionary,w: Dictionary) -> void:
 	var carry = w.get("carry")
 	if (w.task in ["none","waiter"] and carry==null) or (carry!=null and carry.kind=="dish"):service.waiter(s,w)
