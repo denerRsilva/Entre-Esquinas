@@ -49,6 +49,15 @@ func empty_plate(x: float,y: float) -> void:
 	var crop := FOOD.CLEAN_PLATE_SOURCE
 	var size := FOOD.CLEAN_PLATE_SIZE
 	commands.append(["img","modular/prato-vazio.png",crop.position.x,crop.position.y,crop.size.x,crop.size.y,FOOD.pixel(x-size.x/2),FOOD.pixel(y-size.y/2),size.x,size.y,alpha])
+func stain(x: float,y: float,level: int,floor_stain: bool = false) -> void:
+	# Small integer-pixel marks within a 32px cell; reuse the existing dirt
+	# palette rather than replacing any of the owner's art sheets.
+	box(x+1,y+2,9,3,"#573a28c0" if floor_stain else "#543522")
+	box(x+4,y,5,6,"#775134c0" if floor_stain else "#805332")
+	box(x+11,y+4,2,2,"#d3a56a")
+	box(x-2,y+5,2,1,"#c48f50")
+	if level>=2:box(x+1,y+8,4,2,"#805332");box(x+13,y,2,2,"#d3a56a")
+	if level>=3:box(x-3,y-2,5,2,"#9a6434");box(x+10,y+9,3,2,"#b7834c")
 func ingredient(item: String,x: float,y: float) -> void:
 	var size := FOOD.INGREDIENT_SIZE
 	food(item,x-size.x/2,y-size.y/2,size.x,size.y)
@@ -218,6 +227,8 @@ func object(s: Dictionary,o: Dictionary,selected: bool,preview: bool = false) ->
 			var linked = BUILD.chair_table(ch,s.objects)
 			if linked==null or linked.id!=o.id:continue
 			var place := table_plate_position(o,ch)
+			var stains := int(s.get("tableStains",{}).get(str(int(ch.id)),0))
+			if stains>0:stain(place.x-6,place.y-2,stains)
 			for customer in s.customers:
 				if customer.seat==ch.id and customer.state=="eating":
 					var order = service.find(s.orders,customer.order)
@@ -243,6 +254,10 @@ func overlays(s: Dictionary,o: Dictionary,selected: bool,building: bool) -> void
 func draw(s: Dictionary,ui: Dictionary,input: Variant = null) -> Array:
 	commands=[];alpha=1;clean_view=ui.get("cleanView",true);velocity=input;identities=ui.get("actorTokens",{})
 	var room: String = s.player.room
+	if room=="restaurant":
+		for key in s.get("floorDirt",{}):
+			var point = SERVICE.HYGIENE.floor_point(key)
+			if point!=null:stain(point.x*40+12,point.y*40+20,int(s.floorDirt[key]),true)
 	if room=="street":label("ENCERRANDO" if s.closing else "ABERTO" if s.open else "FECHADO",675,200,"#3b6448" if s.open else "#77503a")
 	if room=="restaurant" and not s.singleRoom:
 		var received := 0.0

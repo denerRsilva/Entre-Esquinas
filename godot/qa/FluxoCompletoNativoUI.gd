@@ -20,6 +20,7 @@ func run():
 		g.tick(0.05)
 		if g.session.pending==null:break
 	check(g.session.state.open,"Restaurante abre automaticamente no horário")
+	g.session.state.arrival=0 # Isolate the manually spawned guest from timed arrivals.
 	await click_object("table") # Leave the arrival cell beside the service sign.
 	# This kitchen workflow clicks the first table; chair randomness is covered
 	# independently by AssentosClientesUI, so select that seat explicitly.

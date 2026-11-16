@@ -9,6 +9,7 @@ const ITEMS = preload("res://simulacao/nativa/itens.json")
 const RECIPES = preload("res://simulacao/nativa/receitas.json")
 const CATALOG = preload("res://simulacao/nativa/catalogo.json")
 const CLIENTS = preload("res://simulacao/nativa/clientes.json")
+const HYGIENE = preload("res://simulacao/nativa/Higiene.gd")
 static func number(v: Variant) -> bool:return (v is int or v is float) and is_finite(v)
 static func has_keys(d: Variant,keys: Array) -> bool:
 	if not d is Dictionary:return false
@@ -184,4 +185,4 @@ static func valid(value: Variant,slots: int = 0) -> bool:
 	var cooking = s.get("cooking")
 	if cooking!=null:
 		if not cooking is Dictionary or not RECIPES.data.has(cooking.get("recipe")) or not ids.has(cooking.get("stove")) or ids[cooking.stove].type!="stove" or ids[cooking.stove].get("pan")!="cookingPot" or not number(cooking.get("left")) or cooking.left<0:return false
-	return K.valid(s) and Q.valid(s) and experience(s) and A.valid_time_reputation(s) and N.food(s) and N.equipment(s) and N.meals(s)
+	return HYGIENE.valid(s) and K.valid(s) and Q.valid(s) and experience(s) and A.valid_time_reputation(s) and N.food(s) and N.equipment(s) and N.meals(s)

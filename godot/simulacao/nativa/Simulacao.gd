@@ -59,16 +59,16 @@ func choose_seat(s: Dictionary) -> Dictionary:
 	# The explicit exception is a completely dirty dining room: every new
 	# arrival turns around, even when some other places at those tables are clear.
 	for chair in s.objects:
-		if chair.type!="chair" or s.dirtyTables.get(str(int(chair.id)),0)<=0:continue
+		if chair.type!="chair" or not BUILD.dirty(s,chair.id):continue
 		var table = BUILD.chair_table(chair,s.objects)
 		if table!=null and tables.has(table.id):tables[table.id]=true
 	if not false in tables.values():return {"seat":reachable[0],"reject":true,"reason":"dirtyDiningRoom"}
 	if free.is_empty():return {}
 	var selected: Dictionary = free[int(service.draw()*free.size())]
-	if s.dirtyTables.get(str(int(selected.seat.id)),0)<=0:return selected
+	if not BUILD.dirty(s,selected.seat.id):return selected
 	var alternatives: Array = []
 	for candidate in free:
-		if candidate.table==selected.table and s.dirtyTables.get(str(int(candidate.seat.id)),0)==0:alternatives.append(candidate)
+		if candidate.table==selected.table and not BUILD.dirty(s,candidate.seat.id):alternatives.append(candidate)
 	if alternatives.is_empty() or service.draw()>=0.5:
 		return {"seat":selected.seat,"reject":true,"reason":"dirtySeat"}
 	var replacement: Dictionary = alternatives[int(service.draw()*alternatives.size())].duplicate()

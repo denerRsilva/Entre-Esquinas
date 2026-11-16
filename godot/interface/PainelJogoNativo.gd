@@ -77,7 +77,8 @@ func context(s: Dictionary,model: Dictionary) -> Dictionary:
 			continue
 		if o.type=="sink" and ((hand!=null and hand.item=="dirtyPlate") or (hand==null and o.get("dirtyPlates",0)>0)):target.children.append(button("Lavar pratos","wash",{"kind":"wash","id":o.id}))
 		if o.type in ["sink","bin"] and hand!=null and KITCHEN.INV.ITEMS.data.get(hand.item,{}).has("recipe"):add_physical(target,o,"bin","Descartar comida das mãos","discardHand")
-		if o.type=="table":target.children.append(button("Recolher pratos sujos da mesa","wash",{"kind":"clean","id":o.id}))
+		if o.type=="table" and not KITCHEN.HYGIENE.can_wipe(s,o):target.children.append(button("Recolher pratos sujos da mesa","wash",{"kind":"clean","id":o.id}))
+		if o.type=="table" and KITCHEN.HYGIENE.can_wipe(s,o) and KITCHEN.HYGIENE.free_hands(s,a):target.children.append(button("Limpar mesa","wash",{"kind":"wipe","id":o.id}))
 	for c in s.customers:
 		if not service.near(a,c):continue
 		var chair = service.find(s.objects,c.seat)

@@ -188,6 +188,7 @@ func world_action(action: Dictionary) -> void:
 		"customer":INTERACT.SERVICE.new().interact(state,action.id);notify(state.message)
 		"wash":result=INTERACT.KITCHEN.new().wash(state,action.id)
 		"clean":result=INTERACT.KITCHEN.new().collect_dirty(state,action.id)
+		"wipe":result=INTERACT.KITCHEN.new().wipe(state,action.id)
 	if result!=null:notify(result.message,not result.ok)
 func parse_save(raw: String) -> Variant:
 	var draws: Array = []

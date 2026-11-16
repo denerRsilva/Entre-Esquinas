@@ -9,6 +9,7 @@ func start_game(waiter_active: bool = false) -> void:
 	# in these fixtures; gameplay and dedicated waiter tests keep the default.
 	if not waiter_active:
 		for worker in g.session.state.workers:worker.task="none"
+		g.session.simulation.service.idle_walk_enabled=false
 func press(title: String) -> bool:
 	await layout()
 	for control in g.hud.find_children("*","Button",true,false):

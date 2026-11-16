@@ -7,6 +7,7 @@ const INV = preload("res://simulacao/nativa/Inventario.gd")
 const RECIPES = preload("res://simulacao/nativa/receitas.json")
 const CONFIG = preload("res://simulacao/nativa/clientes.json")
 const DISHES = preload("res://simulacao/nativa/Louca.gd")
+const HYGIENE = preload("res://simulacao/nativa/Higiene.gd")
 static var wander_rng := RandomNumberGenerator.new()
 var timed_orders_enabled := true
 var idle_walk_enabled := true
@@ -259,12 +260,12 @@ func cleanup(s: Dictionary,w: Dictionary) -> bool:
 		var dirty := false
 		for amount in s.dirtyTables.values():
 			if amount>0:dirty=true;break
-		if not dirty:return false
+		if not dirty:return clean_surfaces(s,w)
 	if w.get("motion")!=null:return true
 	var sink = DISHES.target(s,w,"sink")
 	if sink==null:
 		if held:w.goal=null
-		return held>0
+		return true if held>0 else clean_surfaces(s,w)
 	var capacity := mini(INV.HAND_PLATE_CAPACITY,DISHES.sink_space(sink.object))
 	if w.task=="waiter" and held<capacity and (held==0 or not pending_service(s)):
 		var table = DISHES.target(s,w,"table")
@@ -277,6 +278,18 @@ func cleanup(s: Dictionary,w: Dictionary) -> bool:
 		if MOVE.arrived(w):DISHES.deposit(s,w,sink.object)
 		return true
 	return false
+
+func clean_surfaces(s: Dictionary,w: Dictionary) -> bool:
+	if w.task!="waiter" or not HYGIENE.free_hands(s,w):return false
+	if s.get("tableStains",{}).is_empty() and s.get("floorDirt",{}).is_empty():return false
+	if w.get("motion")!=null:return true
+	var target = HYGIENE.target(s,w)
+	if target==null:return false
+	MOVE.go(w,target.point)
+	if MOVE.arrived(w):
+		if target.kind=="wipe":HYGIENE.wipe(s,w,target.object)
+		else:HYGIENE.mop(s,w,target.key)
+	return true
 
 func waiter(s: Dictionary,w: Dictionary) -> void:
 	var carry = w.get("carry")
@@ -335,6 +348,7 @@ func clients_step(s: Dictionary,dt: float) -> void:
 		if c.state=="eating":
 			c.timer-=dt
 			if c.timer<=0:
+				HYGIENE.after_meal(s,c)
 				var order = find(s.orders,c.order)
 				order.state="paid";finalize(s,c,"completed");s.meals.eaten[order.recipe]+=1
 				var seat: String = str(int(c.seat))

@@ -54,7 +54,7 @@ static func find(objects: Array, id: Variant) -> Variant:
 	for object in objects:
 		if object.id==id:return object
 	return null
-static func dirty(state: Dictionary, id: Variant) -> bool:return state.dirtyTables.get(str(int(id)),0)!=0
+static func dirty(state: Dictionary, id: Variant) -> bool:return state.dirtyTables.get(str(int(id)),0)!=0 or state.get("tableStains",{}).get(str(int(id)),0)>0
 static func edit_error(state: Dictionary) -> Variant:
 	if state.open or not state.customers.is_empty():return "Feche o serviço e conclua os clientes antes de reorganizar."
 	for order in state.orders:
@@ -108,6 +108,7 @@ static func layout_error(state: Dictionary, objects: Array) -> Variant:
 		for y in range(r.position.y,r.end.y):
 			for x in range(r.position.x,r.end.x):
 				if MAP.wall(object.room,x,y,state) or MAP.fixed(object.room,x,y,state):return "Parede, porta ou infraestrutura reservada."
+				if object.room=="restaurant" and state.get("floorDirt",{}).has(str(x)+","+str(y)):return "Limpe o chão antes de posicionar o móvel."
 				for door in MOVE.PORTALS[object.room]:
 					if absf(door.x-x)+absf(door.y-y)<=1:return "Parede, porta ou infraestrutura reservada."
 				var area: String = CATALOG.data[object.get("baseType",object.type)].area

@@ -21,6 +21,7 @@ static func execute(s: Dictionary,operation: String,args: Array) -> Dictionary:
 				for worker in s.workers:
 					if worker.id==args[0]:worker.task=args[1];s.message="Tarefa contínua atribuída. Rotas respeitam móveis e outras pessoas.";return {"ok":true,"message":s.message}
 		"clear":
+			s.erase("tableStains");s.erase("floorDirt")
 			var clean := PARTIDA.fresh(s.compact==true,s.singleRoom==true)
 			s.erase("receivingQuality")
 			for key in ["open","closing","tick","arrival","objects","equipment","meals","dirtyTables","inventory","selectedSlot","tools","inv","purchased","used","orders","deliveries","customers","residents","player","workers","cookActive","cooking","plating","chopping","recovery","ready","priority","flowWaits"]:s[key]=clean[key]

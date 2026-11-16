@@ -5,6 +5,7 @@ const STORE = preload("res://simulacao/nativa/Armazenamento.gd")
 const INV = preload("res://simulacao/nativa/Inventario.gd")
 const RECIPES = preload("res://simulacao/nativa/Receitas.gd")
 const DISHES = preload("res://simulacao/nativa/Louca.gd")
+const HYGIENE = preload("res://simulacao/nativa/Higiene.gd")
 var manual_moving := false
 func find(s: Dictionary,id: Variant) -> Variant:return BUILD.find(s.objects,id)
 func name(item: String) -> String:return INV.ITEMS.data.get(item,{}).get("name","Item desconhecido")
@@ -165,6 +166,10 @@ func wash(s: Dictionary,id: Variant) -> Dictionary:
 	if amount==0:return result(s,false,"Traga um prato sujo nas mãos.")
 	s.player.hand={"item":"plate","n":amount}
 	return result(s,true,"Prato limpo nas mãos." if amount==1 else str(amount)+" pratos limpos nas mãos.")
+func wipe(s: Dictionary,id: Variant) -> Dictionary:
+	var table = find(s,id)
+	if table==null or not near(s,table) or not HYGIENE.wipe(s,s.player,table):return result(s,false,"Libere a mesa e as mãos para limpar.")
+	return result(s,true,"Mesa limpa.")
 func collect_dirty(s: Dictionary,id: Variant) -> Dictionary:
 	var table = find(s,id)
 	if table==null or table.type!="table" or not near(s,table):return result(s,false,"Aproxime-se da mesa.")

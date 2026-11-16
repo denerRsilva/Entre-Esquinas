@@ -7,6 +7,7 @@ const SERVICE = preload("res://simulacao/nativa/Atendimento.gd")
 const LOGISTICS = preload("res://simulacao/nativa/Logistica.gd")
 const ADMIN = preload("res://simulacao/nativa/Administracao.gd")
 const INV = preload("res://simulacao/nativa/Inventario.gd")
+const HYGIENE = preload("res://simulacao/nativa/Higiene.gd")
 var kitchen = KITCHEN.new()
 var service = SERVICE.new()
 var pending: Variant = null
@@ -54,6 +55,12 @@ func physical(s: Dictionary,o: Dictionary,action: String) -> Variant:
 	if not go_object(s,o):return tell(s,"Não há passagem.",true)
 	pending={"kind":"physical","target":o.id,"action":action,"index":s.selectedSlot,"until":s.time+30};current=true;process(s)
 	return true
+func queue_floor(s: Dictionary,key: String) -> bool:
+	if not HYGIENE.free_hands(s,s.player):return false
+	var target = HYGIENE.target(s,s.player,key)
+	if target==null:return false
+	play_go(s,target.point);pending={"kind":"mop","target":key,"until":s.time+30}
+	current=true;process(s);return true
 func primary(s: Dictionary,o: Dictionary) -> Variant:
 	if o.type in ["computer","receiving","fridge","cold","shelf","potRack"]:
 		if not go_object(s,o):return false
@@ -110,6 +117,7 @@ func primary(s: Dictionary,o: Dictionary) -> Variant:
 	if target!=null:return queue(s,"customer",target.id)
 	for id in chairs:
 		if s.dirtyTables.get(str(int(id)),0)>0:return queue(s,"clean",table.id)
+	if HYGIENE.can_wipe(s,table) and HYGIENE.free_hands(s,s.player):return queue(s,"wipe",table.id)
 	return false
 func process(s: Dictionary) -> void:
 	var job = pending
@@ -123,6 +131,10 @@ func process(s: Dictionary) -> void:
 		else:tell(s,LOGISTICS.collect(s,kitchen))
 		return
 	if not current or building or s.time>job.until:pending=null;return
+	if job.kind=="mop":
+		if not s.get("floorDirt",{}).has(job.target) or not HYGIENE.free_hands(s,s.player):pending=null;return
+		if HYGIENE.mop(s,s.player,job.target):pending=null
+		return
 	if job.kind=="serviceSign":
 		if s.player.get("motion")!=null or not service.near(s.player,job.get("door",{"room":"restaurant","x":7,"y":14})):return
 		pending=null
@@ -143,7 +155,7 @@ func process(s: Dictionary) -> void:
 		else:tell(s,LOGISTICS.collect(s,kitchen))
 	elif job.kind=="storage":effects.append({"kind":"inventory","id":o.id})
 	else:
-		var result: Dictionary = kitchen.wash(s,o.id) if job.kind=="wash" else kitchen.collect_dirty(s,o.id)
+		var result: Dictionary = kitchen.wash(s,o.id) if job.kind=="wash" else kitchen.wipe(s,o.id) if job.kind=="wipe" else kitchen.collect_dirty(s,o.id)
 		tell(s,result.message,not result.ok)
 func play_go(s: Dictionary,point: Dictionary) -> void:
 	MOVE.go(s.player,point);clear_input=true;kitchen.manual_moving=false;service.manual_moving=false
@@ -177,6 +189,10 @@ func pointer_down(s: Dictionary,pointer: Dictionary) -> void:
 	for person in MOVE.ACTORS.actors(s):
 		if person.id!=s.player.id and person.room==room and person.x==x and person.y==y:
 			selected=person.id;approach(s,person);refresh();return
+	var dirt_key := str(x)+","+str(y)
+	if room=="restaurant" and s.get("floorDirt",{}).has(dirt_key) and HYGIENE.free_hands(s,s.player):
+		selected="floor:"+dirt_key
+		if queue_floor(s,dirt_key):refresh();return
 	if not s.singleRoom and room=="restaurant" and ((x>=16 and x<=17 and y>=10 and y<=11) or (x>=20 and x<=22 and y==11)):
 		var computer: bool = x<=17
 		selected="computer" if computer else "receiving"
