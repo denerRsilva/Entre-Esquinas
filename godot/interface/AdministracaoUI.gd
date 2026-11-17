@@ -8,6 +8,7 @@ var controls = preload("res://interface/InventariosNativos.gd").new()
 var food_ui = FOOD.new()
 var stamp := ""
 var form: Dictionary = {}
+const HIRING = preload("res://simulacao/nativa/Contratacao.gd")
 var mode := ""
 var tab := ""
 func number(value: Variant) -> String:return str(int(value)) if (value is float or value is int) and value==floor(value) else str(value)
@@ -43,7 +44,7 @@ func render(s: Dictionary,model: Dictionary,override: Variant = null) -> Diction
 	controls.actions.clear();mode=model.mode;tab=model.tab
 	var current := mode+":"+tab+":"+number(model.generation)
 	if current!=stamp:
-		stamp=current;form={"hours":ADMIN.hours(s).duplicate(true),"quantities":{"arroz":10,"legumes":10,"frango":10},"qualities":{"arroz":0,"legumes":0,"frango":0},"time":660 if s.clock.minute<=660 else s.clock.minute}
+		stamp=current;form={"searchStaff":false,"hours":ADMIN.hours(s).duplicate(true),"quantities":{"arroz":10,"legumes":10,"frango":10},"qualities":{"arroz":0,"legumes":0,"frango":0},"time":660 if s.clock.minute<=660 else s.clock.minute}
 	var titles := {"computer":"Computador • restaurante","options":"Opções","recipes":"Livro de receitas","container":"Inventários • "+SERVICE.BUILD.CATALOG.data[SERVICE.new().find(s.objects,model.object).type].name if mode=="container" else ""}
 	var title: String = titles.get(mode,"Gestão da taverna" if REFUGE.active(s) else "Gestão do restaurante")
 	var tabs: Dictionary = {} if mode=="recipes" else {"container":"Transferir itens"} if mode=="container" else {"supplier":"Fornecedor","tools":"Utensílios","menu":"Cardápio e preços","deliveries":"Entregas"} if mode=="computer" else {"camera":"Câmera","save":"Salvar e carregar","test":"Testes","guide":"Primeiros passos"} if mode=="options" else {"shifts":"Turnos","build":"Modo construção","team":"Equipe","finance":"Fechamento","customers":"Clientes","calendar":"Calendário","reputation":"Reputação"}
@@ -118,12 +119,28 @@ func panel(s: Dictionary,model: Dictionary) -> Array:
 			for delivery in s.deliveries:rows.append(["#"+number(delivery.id),FOOD.icon(delivery.food,delivery.get("quality",0)),delivery.total,delivery.received,delivery.pending,number(ceil(delivery.eta-s.time))+"s" if delivery.eta>s.time else "No recebimento / aguarda espaço"])
 			result.append(table(["Pedido","Ingrediente","Total","Recebido","Pendente","Chegada"],rows))
 		"team":
+			if HIRING.active(s):
+				result.append(node("h2",[text("Equipe da taverna")]))
+				if not HIRING.occupied(s):
+					if not HIRING.unlocked(s):
+						result.append(label("A chegada de novos moradores abrirá a primeira vaga: Garçom."))
+						result.append(label("Moradores: "+number(s.refuge.residents.size())+" / "+number(HIRING.MIN_POPULATION)))
+					else:result.append(button("Procurar contratação","searchStaff"))
+				for record in s.refuge.hiring.hires:
+					var worker = SERVICE.new().find(s.workers,record.actor)
+					result.append(node("div",[node("b",[text(record.name+" · "+("Garçom" if record.role=="waiter" else "Logística"))]),select("Tarefa de "+record.name,"task",record.actor,worker.task,[["Pausado","none"],["Anotar, servir e recolher louça","waiter"]] if record.role=="waiter" else [["Pausado","none"],["Logística","logistics"]])],"","card"))
+				if form.get("searchStaff",false) and not HIRING.occupied(s):
+					for person in HIRING.candidates(s):
+						var reason := HIRING.error(s,person.id)
+						var portrait := {"tag":"canvas","art":[["img","taverna/cliente-0"+number(person.skin-11)+"-estudo-sprites.png",313.5,0,313.5,313.5,0,0,32,32,1.0]]}
+						result.append(node("div",[node("b",[portrait,text(person.name)]),label("Garçom · contratação "+money(HIRING.HIRE_COST)),button("Contratar "+person.name,"hire",number(person.id),not reason.is_empty()),label(reason) if not reason.is_empty() else label("Anota pedidos, serve e recolhe louça.")],"","card"))
+				return result
 			result.append(label("Garçom do salão. Atribua o atendimento abaixo." if s.singleRoom else "Funcionários de teste. A carga em trânsito é entregue antes da troca de função."))
 			for worker in s.workers:
 				var name: String = "Garçom" if worker.id=="worker2" else "Logística"
 				result.append(node("div",[node("b",[text(name)]),label({"restaurant":"Restaurante • salão e cozinha","street":"Rua da Praça","stock":"Estoque • recebimento e administração"}[worker.room]+" • "+("Aguardando passagem" if worker.wait>=5 else "Transportando carga" if worker.get("carry")!=null else "Em deslocamento" if worker.get("goal")!=null else "Aguardando trabalho ou ingredientes")),select("Tarefa de "+name,"task",worker.id,worker.task,[["Parado","none"],["Anotar, servir e recolher louça","waiter"]] if s.singleRoom else [["Parado","none"],["Recebimento → estoque → cozinha","logistics"],["Anotar, servir e recolher louça","waiter"]])],"","card"))
 		"finance":
-			result.append(table(["Indicador","Hoje"],[["Receita",money(s.ledger.revenue)],["Ingredientes consumidos",money(s.ledger.foodCost)],["Compras",money(s.ledger.purchases)],["Móveis e kit",money(s.ledger.investment)],["Clientes pagos",s.ledger.sales],["Clientes perdidos (inclui abandono)",s.ledger.lost],["Esperas por circulação",s.flowWaits]]))
+			result.append(table(["Indicador","Hoje"],[["Receita",money(s.ledger.revenue)],["Ingredientes consumidos",money(s.ledger.foodCost)],["Compras",money(s.ledger.purchases)],["Investimentos",money(s.ledger.investment)],["Clientes pagos",s.ledger.sales],["Clientes perdidos (inclui abandono)",s.ledger.lost],["Esperas por circulação",s.flowWaits]]))
 			if s.get("lastReport")!=null:
 				var report: Dictionary = s.lastReport
 				result.append(table(["Último fechamento • dia "+number(report.day),"Valor"],[["Receita",money(report.revenue)],["Custo dos ingredientes",money(report.foodCost)],["Despesa",money(report.expense)],["Resultado operacional",money(report.result)],["Caixa final",money(report.cash)]]))

@@ -11,7 +11,7 @@
   de substituir as sprites exportadas nesta revisão. Alterar dimensões exige
   atualizar recortes, frames e pivôs, sem alterar automaticamente os saves.
 
-- A premissa vigente é o **refúgio no apocalipse zumbi**, conforme o GDD 3.1;
+- A premissa vigente é o **refúgio no apocalipse zumbi**, conforme o GDD 3.2;
   a origem nuclear anterior foi substituída. `docs/primeiro-ciclo-refugio.md`
   registra o protótipo .46 e não prevalece sobre as regras aprovadas no GDD.
 - Alimentação, energia e moral são **três barras coletivas da cidade**, de 0 a 100.
@@ -25,3 +25,15 @@
 - Desenvolver em trechos jogáveis para avaliação de Dener antes de ampliar a
   campanha. Parâmetros do primeiro ciclo são provisórios; preservar partidas
   antigas e os três slots de salvamento.
+
+- Na campanha de refúgio, começar **sem funcionário**. Contratação é conquistada
+  pelo crescimento da cidade; garçom é a primeira função. A .48 implementa busca
+  em Gestão → Equipe, população 4 e custo 100 como parâmetros de teste. Preservar
+  equipe antiga, pausa e carga ao migrar. Ver `docs/contratacao-primeiro-garcom.md`.
+- Direção atual: **sem computador**, ingredientes pelo mercador de estoque
+  limitado e viajantes; peças essenciais também vêm de viajantes. Carpinteiro,
+  artesão e vendedor de decoração fornecem melhorias. O GDD distingue essa
+  direção aprovada das compras antigas ainda presentes no protótipo.
+- O kit de início de 200, novas receitas e ícones de nutrição (1–10 coxas de
+  frango) e tempo (mini relógios) estão aprovados para próxima etapa, não
+  implementados na .48. Não reduzir recursos sem prover abastecimento jogável.

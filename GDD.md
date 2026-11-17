@@ -1,12 +1,14 @@
 # Entre Esquinas
 
-## GDD 3.1 — Refúgio no apocalipse zumbi
+## GDD 3.2 — Refúgio no apocalipse zumbi
 
 **Revisão documental:** 17 de novembro de 2026. **Responsável pelas decisões:** Dener Silva.
 
 Esta versão consolida a proposta aprovada pelo proprietário em 17/11/2026 e suas
-retificações: **três barras coletivas** e **derrotas consecutivas, reiniciadas
-por uma vitória**. O histórico Git preserva o GDD 3.0 e as versões anteriores.
+retificações: **três barras coletivas**, **derrotas consecutivas, reiniciadas
+por uma vitória**, início sem funcionário e contratação conquistada pelo crescimento.
+Registra também o início aprovado para teste, abastecimento limitado e mundo sem
+computador. O histórico Git preserva as versões anteriores.
 
 > **A taverna é onde a cidade recupera as forças para sobreviver à próxima horda.**
 
@@ -38,6 +40,12 @@ cidade. O cenário não exibe barras ou painel permanente. Vitórias reiniciam a
 sequência de derrotas; duas derrotas seguidas causam game over. Ver
 [comportamento, migração e parâmetros da versão .47](docs/cidade-menu-coletivo.md).
 A versão .46 anterior é preservada como registro histórico.
+
+**Implementado na versão .48:** novas campanhas de refúgio começam sem funcionário.
+O crescimento libera a busca de candidatos em **Gestão → Equipe**; garçom é a
+primeira função contratável. Saves antigos conservam sua equipe. Ver
+[contratação, parâmetros e limites atuais](docs/contratacao-primeiro-garcom.md).
+O kit inicial, comércio e receitas aprovados abaixo ainda aguardam implementação.
 
 O [registro do primeiro protótipo](docs/primeiro-ciclo-refugio.md) documenta o que
 foi implementado na versão .46. Números de moradores, tempos, ganhos, perdas,
@@ -182,6 +190,7 @@ A unidade artística aprovada é **32 × 32 pixels**, com móveis maiores em mú
 
 **Diretriz reafirmada pelo proprietário em 16/11/2026:** produzir sprites individuais e cada quadro de personagem em **32 × 32 pixels reais**; pisos, paredes e objetos maiores são compostos na mesma unidade. Pranchas ampliadas e o redimensionamento em tempo de execução não substituem esse acabamento. A preparação manual dos arquivos atuais será feita pelo proprietário no Aseprite antes de sua reintegração. Ver [diretrizes de produção da arte](docs/DIRETRIZES-ARTE.md). A exportação para edição não altera o gameplay ou a grade lógica atual.
 
+**Registro visual e de montagem das versões .7–.9, anterior ao novo início:**
 O cenário inicial deve buscar a composição e as proporções da taverna da prancha aprovada. A prancha não fornece uma planta medida nem peças prontas: dimensões em tiles, circulação e encaixes devem ser conferidos durante a montagem. A produção foi dividida pelo proprietário nesta ordem: **cozinheira → alimentos → tilesets do cenário e objetos**. A sprite sheet inicial da cozinheira é um estudo gerado em resolução ampliada; foi integrada à personagem jogável com quatro direções e quatro poses por direção, mas ainda não é um atlas nativo final de 32 × 32. A opção principal “Começar na taverna” abre três mesas, 12 cadeiras e cozinha equipada. Piso em TileMapLayer, paredes, móveis, alimentos e decoração usam as pranchas aprovadas. Na versão .9, novas partidas usam uma planta de 20 × 10 células (200 células com paredes), aproximadamente 29% menor que a planta .8 de 20 × 14 e 48% menor que a original de 24 × 16. O cômodo inferior de estoque foi removido. Permanecem três mesas, 12 cadeiras e a cozinha; o único funcionário inicial é o garçom, no salão. Prateleira, computador e caixas de recebimento são opcionais no catálogo de construção. A geladeira do estoque e o NPC de logística não fazem parte da nova partida. Computador e recebimento podem ser posicionados e movidos; ingredientes só podem ser comprados depois de instalar o recebimento, e caixas com conteúdo ou entregas pendentes não podem ser guardadas. Saves anteriores conservam a planta e os equipamentos existentes para evitar perda de progresso. A câmera enquadra o espaço menor. A composição aproxima as proporções do concept, sem prometer equivalência exata.
 
 ### Regras de legibilidade
@@ -193,6 +202,59 @@ A resolução-base artística foi aprovada em 32 × 32; escala de exibição e p
 <!-- page -->
 
 ## 3 Ciclo, defesa, crescimento e recompensas
+
+### Início aprovado para teste e progressão de funcionários
+
+**Direção aprovada em 17/11/2026, com a retificação de começar sem garçom.**
+A proposta de início é: caixa 200; duas mesas e oito cadeiras; fogão, geladeira,
+mesa de corte/preparo, mesa de empratamento, pia, estante de panelas e lixeira;
+duas panelas e oito pratos limpos; arroz 12, batata 8 e cenoura 8. Receitas
+iniciais: caldo de batata e arroz com cenoura; canja desbloqueada posteriormente
+por viajante. Esses valores são um ponto de partida aprovado para playtest.
+
+**Alcance atual:** a versão .48 entrega a contratação; ainda conserva caixa
+1500, três mesas, estoque e três receitas do protótipo anterior. O kit de 200,
+os novos ingredientes e receitas devem entrar junto de abastecimento utilizável,
+sem deixar o jogador sem recursos para continuar. Não apresentar esses alvos
+como já existentes no executável.
+
+Funcionários são uma conquista, não parte do kit inicial. Conforme chegam
+novos moradores, o jogador pode procurar contratação, consultar pessoas
+disponíveis e escolher quem contratar. A taverna terá diferentes funções;
+**garçom é a primeira a desbloquear**. As demais funções e seus marcos ainda
+serão detalhados. Cada contratação deve liberar tempo para novas decisões e
+ser uma recompensa perceptível na operação.
+
+**Parâmetros provisórios implementados na .48:** população quatro libera uma
+vaga de garçom; custo único 100. A primeira chegada abre a primeira opção;
+chegadas posteriores ampliam as escolhas entre moradores novos ainda não
+contratados. Não há funcionário concedido automaticamente. Os três fundadores
+mantêm seus papéis atuais na cidade. O contratado começa atendendo e pode ser
+pausado pela gestão; não lava pratos. Não foi acrescentado salário nesta etapa.
+Preservar funcionários de partidas antigas, inclusive sua tarefa e carga.
+
+### Abastecimento e receitas legíveis
+
+**Direção aprovada:** a tecnologia entrou em colapso; **não há computador**.
+A decisão anterior de mantê-lo para administração foi substituída. Gestão
+continua acessível por menu; remover catálogo e compras do computador faz
+parte da próxima adaptação do comércio, preservando equipamentos em saves antigos.
+Ingredientes vêm do mercador da cidade e de viajantes. **O estoque do mercador
+é limitado**; quantidades e reposição ainda precisam de balanceamento.
+
+O carpinteiro fabrica móveis; o ferro-velho fornece parte dos componentes de
+equipamentos como geladeira e fogão. Certas peças só são obtidas com viajantes,
+fazendo sua chegada essencial para desbloqueios. Artesão fabrica equipamentos
+e a entrega ocorre após a conclusão. Um vendedor de decoração fornece peças
+decorativas. Estoques, custos, prazos e detalhes de transporte são pendentes.
+
+O livro destaca a comida pronta e instruções visuais simples. Nutrição deve ser
+representada por **1 a 10 pequenas coxas de frango em pixel art**; tempo estimado
+por mini relógios, com quantidade visual no mesmo estilo. Mostrar os mesmos
+indicadores ao selecionar as receitas do dia. O tempo considera corte, cozimento
+e empratamento, e a nutrição deve corresponder à contribuição alimentar real.
+Escala temporal de cada relógio e valores por receita ainda serão definidos.
+Esses indicadores e o comércio presencial **não estão implementados na .48**.
 
 ### Dia comum
 
@@ -626,14 +688,14 @@ Valores e ritmo continuam sujeitos aos playtests do proprietário.
 
 A direção vigente é a taverna do refúgio no apocalipse zumbi. A ambientação nuclear anterior foi substituída. A operação existente deve ser preservada enquanto o universo é incorporado. A aprovação abaixo é de conceito. Detalhes e parâmetros são desenvolvidos em trechos jogáveis com avaliação de Dener; esta revisão documental não implementa novas regras no executável.
 
-- Manter o computador exclusivamente para funções administrativas da taverna; retirar dele as funções de compra.
-- Oferecer frango, legumes e arroz por meio de um NPC comerciante na cidade, próximo à taverna, com deslocamento do jogador até ele.
-- Comprar peças no ferro-velho para fabricar equipamentos como geladeiras. A fabricação é realizada por um artesão; o equipamento é entregue após ele concluir o trabalho. Não há fabricação desses equipamentos pelo jogador nesta direção aprovada.
+- Retirar o computador: a tecnologia entrou em colapso. Administração por menu; compras presenciais, conforme a seção 3.
+- Obter ingredientes pelo mercador da cidade com estoque limitado e por viajantes; revisar ingredientes e receitas conforme o início aprovado na seção 3.
+- Comprar peças no ferro-velho e obter componentes essenciais com viajantes para fabricar equipamentos como geladeiras. A fabricação é realizada por um artesão; o equipamento é entregue após ele concluir o trabalho. Não há fabricação desses equipamentos pelo jogador nesta direção aprovada.
 - Ampliar obtenção por produtores locais, feiras de caravanas, trocas com clientes, coleta em áreas recuperadas e expedições encomendadas.
 - Usar tipos de clientes ligados às ocupações do mundo, além dos perfis técnicos de paciência.
 - Exigir frigideira e óleo para frituras e caldeirão para sopas.
 - Permitir substituições controladas de ingredientes em receitas como sopas.
-- Encomendar móveis de madeira ao marceneiro e equipamentos a especialistas; filtro de água habilita bebidas e recuperação de ruas abre oportunidades.
+- Encomendar móveis de madeira ao carpinteiro e equipamentos a especialistas; decoração por NPC vendedor. Filtro de água habilita bebidas e recuperação de ruas abre oportunidades.
 - Incorporar indisponibilidade temporária de ingredientes, mais movimento previsto no jantar, abundância de um vegetal e encomendas de refeições, com informação antes da consequência.
 - Testar fornecedor local, comerciante itinerante, dois perfis de cliente e um acontecimento anunciado que afete o cardápio.
 - Desenvolver dinheiro com identidade própria e escambo com determinados comerciantes. O objeto e nome não foram escolhidos.
@@ -649,7 +711,7 @@ A direção vigente é a taverna do refúgio no apocalipse zumbi. A ambientaçã
 | P05 | Colheita abundante de legumes como primeiro evento, com aviso, preço temporário e fim anunciado. |
 | P06 | Detalhes ainda não aprovados: apresentar custo e prazo conhecidos na encomenda e instalar o equipamento entregue pelo modo construção. Fabricação pelo artesão e entrega após conclusão já são direção aprovada; não fazem parte da pendência. |
 | P07 | Óleo consumido uma vez por preparo e água potável como base de determinadas receitas; sem tarefas repetitivas de despejo. |
-| P08 | Vendedor provisório de utensílios (panelas e pratos). A parte antiga sobre retirar o computador e migrar a administração para Gestão ou livro físico foi substituída pela manutenção do computador administrativo. |
+| P08 | Vendedor provisório de utensílios (panelas e pratos). A retirada do computador é direção vigente; detalhes do vendedor de utensílios permanecem pendentes. |
 | P09 | Famílias de ingredientes e prioridade de receitas específicas sobre genéricas, evitando resultados ambíguos. |
 
 Os detalhes remanescentes dessas propostas continuam não aprovados; os conceitos já aprovados estão identificados separadamente acima. Detalhes de receitas, hospedagem, água e fornecedores continuam pendentes. Energia é uma das três barras coletivas aprovadas em 17/11/2026 e implementadas na .47; a hospedagem e outras formas de descanso ainda precisam de detalhamento.
@@ -664,7 +726,8 @@ Esta seção guarda decisões antigas para rastreabilidade. Não define o jogo a
 | --- | --- |
 | Status individuais com médias no painel | Substituídos como direção em 17/11/2026 por três barras coletivas de alimentação, energia e moral. A versão .47 implementa a substituição. |
 | Duas derrotas acumuladas ao longo da campanha | Substituídas por duas derrotas consecutivas; uma vitória reinicia a sequência e o estado normal. A versão .47 implementa a substituição. |
-| Retirar o computador e migrar suas funções administrativas para Gestão ou livro físico | Substituído em 12/11/2026: manter o computador exclusivamente administrativo, com compras fora dele. |
+| Manter o computador exclusivamente administrativo | Substituído em 17/11/2026: mundo sem computador; administração pelo menu e compras por NPCs. |
+| Garçom gratuito ao começar | Substituído por início solo e contratação conquistada com a chegada de moradores. Saves antigos preservados. |
 | Mercearia como atividade principal | Projeto anterior arquivado. A existência de um HTML histórico não cria uma loja integrada à vila. |
 | Ambientação brasileira e origem nuclear | Substituídas pelo refúgio no apocalipse zumbi; pratos de diferentes tradições permanecem possíveis. |
 | Tom exclusivamente sombrio e melancólico | Perigo exterior combinado com acolhimento, reconstrução e esperança; recompensa visual aprovada em 17/11/2026. |
@@ -685,7 +748,7 @@ Esta seção guarda decisões antigas para rastreabilidade. Não define o jogo a
 
 IP01: tocar em alerta para deslocar a câmera ao fogão permanece não aprovado. A regra vigente é avisar sem mover a câmera. Big Ambitions foi retirado das referências. Carrinhos, pallets e logística da antiga mercearia não são automaticamente requisitos da taverna. Uma segunda unidade e sistemas amplos de romance ou concorrência não integram o escopo atual de implementação.
 
-O computador permanece como direção aprovada, agora exclusivamente administrativa. O código ainda inclui compras; a seção 10 preserva esse registro até a migração das compras para os serviços presenciais. A retirada do computador deixou de orientar o projeto. Frigideira, caldeirão e comércio presencial são futuros; não são ideias descartadas.
+O computador foi retirado da direção vigente. O código antigo ainda inclui catálogo e compras; a seção 10 preserva esse registro até a migração para os serviços presenciais. Frigideira, caldeirão e comércio presencial são futuros; não são ideias descartadas.
 
 <!-- page -->
 
@@ -748,6 +811,7 @@ O teste avulso `qa/rua-horario.test.cjs` falhou ao preparar ingredientes buscand
 
 ### Fontes de manutenção
 
+- [Contratação e início aprovado, implementação .48](docs/contratacao-primeiro-garcom.md).
 - [Consulta da cidade e implementação .47](docs/cidade-menu-coletivo.md).
 - [Registro histórico do protótipo .46](docs/primeiro-ciclo-refugio.md).
 - Código atual: [Refugio.gd](godot/simulacao/nativa/Refugio.gd),
@@ -759,8 +823,8 @@ O teste avulso `qa/rua-horario.test.cjs` falhou ao preparar ingredientes buscand
 
 O executável atual usa GDScript. Referências a JavaScript/Node na inspeção
 histórica acima não descrevem o runtime presente. Os testes do protótipo .46
-foram registrados na entrega correspondente; esta revisão documental não
-executa nem comprova as novas regras no jogo. Testes automatizados também não
+foram registrados na entrega correspondente; as implementações .47 e .48 têm
+verificações próprias registradas nos guias correspondentes. Testes automatizados não
 comprovam diversão ou balanceamento final.
 
 ### Histórico de revisões
@@ -769,9 +833,10 @@ comprovam diversão ou balanceamento final.
 | --- | --- |
 | 2.1 — 12/11/2026 | Comércio presencial, ferro-velho, fabricação por artesão, entrega e computador administrativo. |
 | 3.0 — 17/11/2026 | Nova premissa zumbi e primeiro protótipo jogável, com parâmetros provisórios. |
-| **3.1 — 17/11/2026** | Proposta consolidada aprovada: cidade de esperança, três barras coletivas, hordas de 3 a 5 dias, defesa animada, derrotas consecutivas com reset por vitória, retomada, crescimento, recompensas visuais e funcionais e desenvolvimento por playtests. |
+| 3.1 — 17/11/2026 | Proposta consolidada aprovada: cidade de esperança, três barras coletivas, hordas de 3 a 5 dias, defesa animada, derrotas consecutivas com reset por vitória, retomada, crescimento, recompensas visuais e funcionais e desenvolvimento por playtests. |
+| **3.2 — 17/11/2026** | Início aprovado sem funcionário, contratação ligada ao crescimento (garçom primeiro), comércio limitado por NPCs, peças de viajantes, mundo sem computador e indicadores visuais de nutrição e tempo. Implementação .48 entrega contratação; kit, receitas e comércio permanecem pendentes. |
 
-A aprovação de Dener desta revisão resolve as duas definições pendentes.
+A aprovação de Dener da revisão 3.1 resolve as duas definições pendentes.
 A implementação .47 incorpora essas regras e a consulta em Gestão → Cidade,
 aprovada em seguida; o registro .46 permanece histórico.
 O Git preserva as versões anteriores. Alterações no GDD devem atualizar a seção

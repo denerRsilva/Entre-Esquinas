@@ -4,6 +4,10 @@ Registro da versão .43. A capacidade da pia, o desenho das pilhas e a lavagem
 instantânea descritos abaixo foram substituídos pela
 [lavagem por prato da versão .45](lavagem-pratos.md). O garçom continua só recolhendo.
 
+**Atualização .48:** novas campanhas de refúgio começam sem funcionário; a
+[contratação](contratacao-primeiro-garcom.md) substitui o garçom gratuito. O
+contratado começa ativo; modos livres antigos mantêm os padrões abaixo.
+
 O garçom começa trabalhando nas partidas novas, vazias ou mobiliadas. Ao abrir
 uma partida antiga sem a marca `waiterDefaultApplied`, o funcionário parado
 também é habilitado uma vez. A marca fica no salvamento; pausar pela gestão e

@@ -66,7 +66,10 @@ static func valid(value: Variant,slots: int = 0) -> bool:
 	for key in ["compact","singleRoom"]:
 		if s.has(key) and not s[key] is bool:return false
 	if s.get("version")!=12 or not number(s.get("cash")) or not N.integer(s.get("day")) or s.day<1 or (not number(s.get("period")) or (s.period!=0 and s.period!=1)) or not number(s.get("time")):return false
-	if s.objects.size()>180 or s.orders.size()>5000 or s.customers.size()>50 or s.workers.size()!=(1 if s.get("singleRoom",false) else 2):return false
+	var hiring = preload("res://simulacao/nativa/Contratacao.gd")
+	if not hiring.valid(s):return false
+	var expected_workers: int = s.refuge.hiring.hires.size() if hiring.active(s) else 1 if s.get("singleRoom",false) else 2
+	if s.objects.size()>180 or s.orders.size()>5000 or s.customers.size()>50 or s.workers.size()!=expected_workers:return false
 	if s.residents.size()!=3 or not N.integer(s.get("serial")) or s.serial<1 or not s.get("open") is bool or not s.get("closing") is bool or not number(s.get("tick")) or not number(s.get("arrival")):return false
 	if not s.tools.get("pot") is bool or not s.tools.get("spoon") is bool:return false
 	for v in s.ledger.values():

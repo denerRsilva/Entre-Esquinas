@@ -6,6 +6,7 @@ const BASE = preload("res://simulacao/nativa/partida-base.json")
 const CATALOG = preload("res://simulacao/nativa/catalogo.json")
 
 static func waiter_defaults(state: Dictionary) -> void:
+	if state.get("refuge") is Dictionary and state.refuge.has("hiring"):return
 	if state.get("waiterDefaultApplied",false):return
 	for worker in state.workers:
 		if worker.id=="worker2" and worker.task=="none":worker.task="waiter"

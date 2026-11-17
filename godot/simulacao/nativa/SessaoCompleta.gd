@@ -229,6 +229,10 @@ func admin_action(action: Dictionary,value: Variant) -> void:
 		"zoom":set_zoom(1 if k=="reset" else camera_level+(-0.1 if k=="out" else 0.1));generation+=1;menu_notice=""
 		"applyHours":result=ADMIN.set_hours(state,admin_ui.form.hours);generation+=int(result.ok)
 		"advance":result=ADMIN.test_clock(state,admin_ui.form.time);generation+=1
+		"searchStaff":admin_ui.form.searchStaff=true
+		"hire":
+			result=preload("res://simulacao/nativa/Contratacao.gd").hire(state,int(k))
+			if result.ok:generation+=1
 		"menu","price","task":result=UI_COMMAND.execute(state,action.kind,[k,value])
 		"clear":result=UI_COMMAND.execute(state,"clear",[]);building=null;hover=null;selected=null;dialog_object=null;reset_view()
 		"purchase":

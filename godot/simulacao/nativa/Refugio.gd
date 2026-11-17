@@ -1,5 +1,6 @@
 extends RefCounted
 ## First playable refuge. Optional state keeps existing restaurants compatible.
+const HIRING = preload("res://simulacao/nativa/Contratacao.gd")
 const STATS = ["food","energy","morale"]
 const BATTLE_SECONDS := 8.0
 const INTERVALS = [4,5,3]
@@ -8,6 +9,7 @@ static func resident(id: int) -> Dictionary:
 	return {"id":id,"name":["Lia","Beto","Nina","Íris","Rui","Cora"][id-1],"skin":12+(id-1)%3}
 static func start(s: Dictionary) -> void:
 	s.refuge={"version":2,"stats":{"food":65.0,"energy":70.0,"morale":65.0},"victories":0,"losses":0,"residents":[resident(1),resident(2),resident(3)],"nextHorde":3,"wave":0,"defeats":0,"defense":65.0,"level":0,"phase":"day","battle":null,"visits":[],"closed":[],"lastAttack":0}
+	HIRING.initialize(s)
 	s.clock={"minute":600,"remainder":0,"ending":false}
 static func blocked(s: Dictionary) -> bool:return active(s) and s.refuge.phase!="day"
 static func attack_day(s: Dictionary) -> bool:return active(s) and (s.day>=s.refuge.nextHorde or s.refuge.lastAttack==s.day)
@@ -22,7 +24,7 @@ static func visit_key(s: Dictionary,id: int) -> String:return str(int(s.day))+":
 static func next_resident(s: Dictionary) -> Variant:
 	if not active(s):return null
 	for person in s.refuge.residents:
-		if not visit_key(s,person.id) in s.refuge.visits:return person
+		if not HIRING.employed(s,person.id) and not visit_key(s,person.id) in s.refuge.visits:return person
 	return null
 static func bind_visit(s: Dictionary,c: Dictionary,person: Dictionary) -> void:
 	c.refugeResident=person.id;c.skin=person.skin
