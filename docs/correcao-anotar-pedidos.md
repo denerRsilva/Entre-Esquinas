@@ -23,6 +23,10 @@ Não foram alteradas sprites, resolução artística, navegação ou salvamentos
 
 ## Verificação
 
+As **54 suítes padrão passaram**, incluindo cozinha, atendimento, mercador e
+salvamentos. O teste específico foi repetido após verificar os pontos de toque
+dentro da tela nos diferentes zooms.
+
 `AnotarPedidosUI` reproduziu o erro antes da mudança e passou depois. Percorre
 as oito cadeiras do novo início, clicando no rosto de cada cliente, verifica
 comanda do cliente correto, salvamento válido e clique repetido sem duplicação.
