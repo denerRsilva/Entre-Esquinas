@@ -87,7 +87,7 @@ static func resolve(s: Dictionary) -> void:
 		r.level=mini(3,r.level+1)
 		if r.residents.size()<6:r.residents.append(resident(r.residents.size()+1))
 	for person in r.residents:person.energy=maxf(0,person.energy-12)
-	r.nextHorde=s.day+INTERVALS[(r.wave-1)%INTERVALS.size()]
+	r.nextHorde=s.day+INTERVALS[(int(r.wave)-1)%INTERVALS.size()]
 	r.phase="gameover" if r.defeats>=2 else "aftermath"
 static func continue_day(s: Dictionary) -> bool:
 	if not active(s) or s.refuge.phase!="aftermath":return false
@@ -111,11 +111,11 @@ static func valid(s: Dictionary) -> bool:
 	if not r.get("residents") is Array or r.residents.size()!=3+r.level:return false
 	var ids := {}
 	for person in r.residents:
-		if not person is Dictionary or not integer(person.get("id")) or person.id<1 or person.id>6 or ids.has(person.id) or not person.get("name") is String or person.name.length()>32:return false
+		if not person is Dictionary or not integer(person.get("id")) or person.id<1 or person.id>6 or ids.has(int(person.id)) or not person.get("name") is String or person.name.length()>32:return false
 		if not integer(person.get("skin")) or person.skin<12 or person.skin>14:return false
 		for key in STATS:
 			if not percent(person.get(key)):return false
-		ids[person.id]=true
+		ids[int(person.id)]=true
 	for key in ["visits","closed"]:
 		if not r.get(key) is Array or r[key].size()>12:return false
 		var seen := {}
@@ -126,7 +126,7 @@ static func valid(s: Dictionary) -> bool:
 			if key=="visits" and (not parts[2].is_valid_int() or not ids.has(int(parts[2]))):return false
 			seen[entry]=true
 	for c in s.customers:
-		if not ids.has(c.get("refugeResident")) or c.get("skin")!=find_resident(s,c.refugeResident).skin:return false
+		if not integer(c.get("refugeResident")) or not ids.has(int(c.refugeResident)) or c.get("skin")!=find_resident(s,c.refugeResident).skin:return false
 	if r.phase!="day" and (s.open or s.closing or not s.customers.is_empty()):return false
 	if (r.phase=="gameover")!=(r.defeats==2):return false
 	var b = r.get("battle")

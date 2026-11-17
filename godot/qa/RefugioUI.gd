@@ -45,6 +45,9 @@ func run():
 	await click_object("table");await click_object("table");advance(4.1)
 	check(s.ledger.sales==1 and person.food>old_food and person.morale>65,"Refeição concluída alimenta e anima o morador real")
 	check(g.session.SAVE.VALIDATOR.valid(s),"Serviço mantém conservação e estado do refúgio válidos")
+	var served_raw = g.session.SAVE.serialize(s)
+	var served_copy = g.session.SAVE.new().load_value(JSON.parse_string(served_raw)) if served_raw is String else null
+	check(served_copy!=null and served_copy.refuge.visits==s.refuge.visits,"Morador alimentado e registros do turno carregam juntos")
 	await capture("alimentado")
 	# Ordinary dinners remain available. There is no hidden daily attack.
 	var ordinary := clone_campaign();ordinary.clock.minute=1080;g.session.ADMIN.auto_open(ordinary)
@@ -66,6 +69,9 @@ func run():
 	var raw = g.session.SAVE.serialize(horde)
 	var restored = g.session.SAVE.new().load_value(JSON.parse_string(raw)) if raw is String else null
 	check(restored!=null and restored.refuge.battle.elapsed==horde.refuge.battle.elapsed,"Save retoma a animação e seu resultado calculado")
+	if restored!=null:
+		REF.battle_step(restored,8)
+		check(restored.refuge.phase=="aftermath" and restored.refuge.nextHorde==7 and g.session.SAVE.VALIDATOR.valid(restored),"Batalha carregada conclui e agenda o próximo ataque sem erro de tipo")
 	g.events.append({"kind":"refuge","action":"skip"});g.tick(0)
 	check(horde.refuge.phase=="aftermath" and horde.refuge.level==1 and horde.refuge.residents.size()==4,"Vitória reconstrói oficina e acolhe um sobrevivente")
 	check(REF.cut_time(horde)==1.6 and REF.cut_time(clone_campaign())==2,"Melhoria reduz o corte em vinte por cento")
