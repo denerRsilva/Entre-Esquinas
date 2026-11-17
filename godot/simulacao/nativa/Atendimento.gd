@@ -1,4 +1,5 @@
 extends RefCounted
+const REFUGE = preload("res://simulacao/nativa/Refugio.gd")
 const ADMIN = preload("res://simulacao/nativa/Administracao.gd")
 const MOVE = preload("res://simulacao/nativa/Movimento.gd")
 const STORE = preload("res://simulacao/nativa/Armazenamento.gd")
@@ -69,6 +70,7 @@ func finalize(s: Dictionary,c: Dictionary,outcome: String) -> bool:
 	var visit := {"id":c.id,"day":s.day,"period":s.period,"time":s.time,"outcome":outcome,"profile":p.profile,"limits":p.limits.duplicate(),"elapsed":p.elapsed.duplicate(),"results":p.results.duplicate(),"satisfaction":p.satisfaction.duplicate() if p.satisfaction!=null else null}
 	if p.has("arrivalIssue"):visit.arrivalIssue=p.arrivalIssue
 	s.experience.visits.append(visit);reputation(s,visit,event)
+	REFUGE.completed(s,c,outcome)
 	return true
 func reject_dirty(s: Dictionary,c: Dictionary,reason: String) -> bool:
 	var p: Dictionary = c.experience

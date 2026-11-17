@@ -1,7 +1,7 @@
 config_version=5
 [application]
 config/name="Entre Esquinas — Restaurante"
-config/version="0.21.2-godot.45"
+config/version="0.21.2-godot.46"
 run/main_scene="res://mundo/Restaurante.tscn"
 run/max_fps=60
 config/features=PackedStringArray("4.6", "GL Compatibility")

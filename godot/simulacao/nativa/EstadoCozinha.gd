@@ -66,7 +66,7 @@ static func physical(state: Dictionary) -> bool:
 			var index = job.get("index")
 			if NUM.integer(index) and index>=0 and index<state.inventory.size():portion=state.inventory[int(index)]
 		if not portion is Dictionary or portion.get("item")!=job.item:return false
-		if not numeric(job.get("left")) or job.left<0 or not numeric(job.get("total")) or job.left>job.total or job.total!=2:return false
+		if not numeric(job.get("left")) or job.left<0 or not numeric(job.get("total")) or job.left>job.total or job.total!=preload("res://simulacao/nativa/Refugio.gd").cut_time(state):return false
 	var plating = state.get("plating")
 	if truthy(plating):
 		if not plating is Dictionary:return false

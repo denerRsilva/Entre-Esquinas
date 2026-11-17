@@ -107,7 +107,7 @@ func actor(s: Dictionary,a: Dictionary,selected: Variant,construction: bool) -> 
 	for ch in str(a.id):
 		if ch>="0" and ch<="9":digits+=ch
 	var number := int(digits) if not digits.is_empty() else 0
-	var skin: int = 8 if a.id=="player" else 9 if a.id=="worker2" else 10 if a.id=="worker1" else 12+number%3 if a.id.begins_with("client") else 11 if a.id in ["lia","nina"] else 10+number%2
+	var skin: int = int(a.skin) if s.get("refuge") is Dictionary and a.has("refugeResident") else 8 if a.id=="player" else 9 if a.id=="worker2" else 10 if a.id=="worker1" else 12+number%3 if a.id.begins_with("client") else 11 if a.id in ["lia","nina"] else 10+number%2
 	var dir := direction(a)
 	# Seated customers face their table, not their last walking direction.
 	if a.get("state","") in ["waiting","ordered","eating"] and a.get("motion")==null:
@@ -267,6 +267,12 @@ func overlays(s: Dictionary,o: Dictionary,selected: bool,building: bool) -> void
 func draw(s: Dictionary,ui: Dictionary,input: Variant = null) -> Array:
 	commands=[];alpha=1;clean_view=ui.get("cleanView",true);velocity=input;identities=ui.get("actorTokens",{})
 	var room: String = s.player.room
+	if room=="street" and s.get("refuge") is Dictionary:
+		for i in 3:
+			var x := 24+i*36
+			box(x,402,28,6,"#916843");box(x+4,392,6,24,"#62482f")
+			if s.refuge.level>i:box(x+10,395,8,12,"#e9ba63");box(x+12,397,4,6,"#fff0ae")
+			else:box(x+10,410,14,5,"#685a49")
 	if room=="restaurant":
 		for key in s.get("floorDirt",{}):
 			var point = SERVICE.HYGIENE.floor_point(key)

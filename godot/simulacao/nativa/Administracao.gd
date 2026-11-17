@@ -1,4 +1,5 @@
 extends RefCounted
+const REFUGE = preload("res://simulacao/nativa/Refugio.gd")
 const CALENDAR = preload("res://simulacao/nativa/Calendario.gd")
 const NUM = preload("res://simulacao/nativa/Conservacao.gd")
 const ITEMS = preload("res://simulacao/nativa/itens.json")
@@ -22,7 +23,7 @@ static func sync(s: Dictionary) -> void:
 	if s.open and not s.closing and now>=times[int(s.period)].end:s.closing=true;s.message="Horário encerrado. Novas entradas suspensas; conclua os clientes presentes."
 	if not s.open and not s.closing:s.period=1 if now>=times[0].end else 0
 static func auto_open(s: Dictionary) -> void:
-	if s.open or s.closing or s.clock.ending:return
+	if s.open or s.closing or s.clock.ending or REFUGE.blocked(s) or REFUGE.dinner_blocked(s):return
 	sync(s)
 	var h: Dictionary = hours(s)[int(s.period)]
 	if s.clock.minute>=h.start and s.clock.minute<h.end:
@@ -30,6 +31,7 @@ static func auto_open(s: Dictionary) -> void:
 		s.message=("Almoço" if s.period==0 else "Jantar")+" aberto."
 
 static func open_error(s: Dictionary) -> String:
+	if REFUGE.blocked(s) or REFUGE.dinner_blocked(s):return "A cidade está mobilizada para a horda."
 	var h: Dictionary = hours(s)[int(s.period)]
 	if s.clock.minute<h.start:return "Este turno começa às "+CALENDAR.time_text(h.start)+"."
 	if s.clock.minute>=h.end:return "O horário deste turno já terminou."
@@ -40,6 +42,7 @@ static func set_hours(s: Dictionary,value: Variant) -> Dictionary:
 	s.serviceHours=value.duplicate(true);sync(s)
 	return {"ok":true,"message":"Horários atualizados. O restaurante abre automaticamente no horário escolhido."}
 static func finish_period(s: Dictionary) -> void:
+	REFUGE.end_shift(s,int(s.period))
 	s.open=false;s.closing=false;s.cookActive=false;sync(s)
 	s.message="Restaurante fechado. O próximo turno abre automaticamente no horário marcado."
 static func toggle(s: Dictionary) -> bool:
@@ -64,13 +67,15 @@ static func advance_clock(s: Dictionary,dt: float) -> void:
 		if s.open or pending(s):s.closing=true
 		s.message="02:00: entrada encerrada. Conclua clientes e preparos para começar o próximo dia."
 static func finish_day(s: Dictionary) -> bool:
-	if not s.clock.ending or pending(s):return false
+	if not s.clock.ending or pending(s) or REFUGE.blocked(s) or (REFUGE.active(s) and s.day>=s.refuge.nextHorde):return false
+	REFUGE.end_shift(s,0);REFUGE.end_shift(s,1)
 	var report: Dictionary = s.ledger.duplicate(true)
 	report.merge({"day":s.day,"expense":12,"result":s.ledger.revenue-s.ledger.foodCost-12,"cash":s.cash-12},true)
 	s.cash-=12;s.reports.append(report);s.lastReport=report
 	s.ledger={"revenue":0,"foodCost":0,"purchases":0,"investment":0,"lost":0,"sales":0}
 	preload("res://simulacao/nativa/HistoricoPedidos.gd").compact(s)
 	s.day+=1;s.period=0;s.open=false;s.closing=false;s.clock={"minute":360,"remainder":0,"ending":false}
+	REFUGE.dawn(s)
 	s.message="Novo dia às 06:00. Relatório diário disponível na Gestão."
 	return true
 static func test_clock(s: Dictionary,minute: Variant) -> Dictionary:

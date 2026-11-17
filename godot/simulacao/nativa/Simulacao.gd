@@ -1,4 +1,5 @@
 extends RefCounted
+const REFUGE = preload("res://simulacao/nativa/Refugio.gd")
 const SERVICE = preload("res://simulacao/nativa/Atendimento.gd")
 const KITCHEN = preload("res://simulacao/nativa/Cozinha.gd")
 const LOGISTICS = preload("res://simulacao/nativa/Logistica.gd")
@@ -14,7 +15,9 @@ func choose_recipe(s: Dictionary) -> Variant:
 		if s.menu[id]:available.append(id)
 	return available[int(s.serial)%available.size()] if not available.is_empty() else null
 func spawn(s: Dictionary) -> bool:
-	if s.clock.ending:return false
+	if s.clock.ending or REFUGE.blocked(s) or REFUGE.dinner_blocked(s):return false
+	var person = REFUGE.next_resident(s)
+	if REFUGE.active(s) and person==null:return false
 	if not true in s.menu.values():s.ledger.lost+=1;return false
 	# Do not create overlapping arrivals or consume their random decisions
 	# while another person is still crossing the entrance.
@@ -27,6 +30,7 @@ func spawn(s: Dictionary) -> bool:
 	var seat: Dictionary = choice.seat
 	var id: int = s.serial;s.serial+=1
 	var customer := {"id":"client"+str(id),"room":"restaurant","x":7,"y":13,"goal":null,"wait":0,"hold":0,"state":"walk","carry":null,"seat":seat.id,"recipe":choose_recipe(s),"order":null,"timer":0,"experience":service.experience()}
+	if person!=null:REFUGE.bind_visit(s,customer,person)
 	s.customers.append(customer)
 	if choice.get("reject",false):
 		service.reject_dirty(s,customer,choice.reason);return true
@@ -96,7 +100,10 @@ func simulate(s: Dictionary,dt: float) -> void:
 		if not carried:ADMIN.finish_period(s)
 func step(s: Dictionary,dt: Variant) -> void:
 	if not ADMIN.numeric(dt) or dt<=0:return
+	if REFUGE.blocked(s):REFUGE.battle_step(s,dt);return
+	if REFUGE.due(s) and not ADMIN.pending(s):REFUGE.begin_attack(s);return
 	var remaining: float = dt
 	while remaining>1e-9:
 		var slice: float = remaining if s.clock.ending else minf(remaining,7-s.clock.remainder)
 		s.time+=slice;ADMIN.advance_clock(s,slice);ADMIN.sync(s);simulate(s,slice);remaining=maxf(0,remaining-slice);ADMIN.finish_day(s)
+		if REFUGE.due(s) and not ADMIN.pending(s):REFUGE.begin_attack(s);return

@@ -1,5 +1,6 @@
 extends RefCounted
 ## Native application state and input controller; no script evaluator or DOM.
+const REFUGE = preload("res://simulacao/nativa/Refugio.gd")
 const PARTIDA = preload("res://simulacao/nativa/Partida.gd")
 const SIM = preload("res://simulacao/nativa/Simulacao.gd")
 const MOVE = preload("res://simulacao/nativa/Movimento.gd")
@@ -13,6 +14,7 @@ const FOOD_UI = preload("res://interface/ComidaInterface.gd")
 var simulation = SIM.new()
 var rng: Callable = randf
 var state: Dictionary = PARTIDA.fresh(true,true)
+var checkpoint_cache := {"slot":0,"day":0,"raw":""}
 var active_slot := 1
 var kitchen_sound_stamp := ""
 var values: Dictionary = {}
@@ -246,16 +248,61 @@ func choose_slot(slot: int) -> void:
 	active_slot=slot;values["entre-slot-ativo"]=str(slot);writes["entre-slot-ativo"]=str(slot)
 	if next!=null:load_state(next);close_dialog();notify("Partida "+str(slot)+" carregada.")
 	else:load_state(PARTIDA.fresh(true,true));modal="welcome"
+func checkpoint_key() -> String:return "entre-refugio-preparo-"+str(active_slot)
+func checkpoint(force: bool = false) -> void:
+	if not REFUGE.active(state) or REFUGE.blocked(state):return
+	if not force and state.day!=state.refuge.nextHorde:return
+	var previous_raw: String = str(values.get(checkpoint_key(),""))
+	if not force and checkpoint_cache.slot==active_slot and checkpoint_cache.day==state.day and checkpoint_cache.raw==previous_raw:return
+	var old = parse_save(previous_raw) if not previous_raw.is_empty() else null
+	if not force and old is Dictionary and old.get("day")==state.day:
+		checkpoint_cache={"slot":active_slot,"day":state.day,"raw":previous_raw};return
+	var raw = SAVE.serialize(state)
+	if raw==null:return
+	values[checkpoint_key()]=raw;writes[checkpoint_key()]=raw
+	checkpoint_cache={"slot":active_slot,"day":state.day,"raw":raw}
+func refuge_action(action: String) -> void:
+	if not REFUGE.active(state):return
+	match action:
+		"status":
+			if not REFUGE.blocked(state) and modal.is_empty() and not construction:modal="refuge";release_keyboard()
+		"skip":
+			if REFUGE.active(state) and state.refuge.phase=="battle":REFUGE.battle_step(state,REFUGE.BATTLE_SECONDS)
+		"continue":
+			if REFUGE.continue_day(state):ADMIN.finish_day(state);save_game();checkpoint();generation+=1
+		"retry":
+			if not REFUGE.active(state) or state.refuge.phase!="gameover":return
+			var previous = parse_save(str(values.get(checkpoint_key(),"")))
+			if previous!=null and REFUGE.active(previous) and not REFUGE.blocked(previous):load_state(previous);close_dialog();save_game()
+			else:
+				var saved = parse_save(str(values.get(slot_key(active_slot),"")))
+				if saved!=null and not REFUGE.blocked(saved):load_state(saved);close_dialog()
+				else:load_state(PARTIDA.fresh(true,true));modal="welcome"
 func sleep_day() -> void:
 	if ADMIN.pending(state) or state.open or state.closing:notify("Conclua o serviço e os preparos antes de dormir.",true);return
 	state.clock={"minute":1560,"remainder":0,"ending":true}
-	if ADMIN.finish_day(state):save_game();generation+=1
+	if ADMIN.finish_day(state):save_game();checkpoint();generation+=1
+func start_refuge(slot: int) -> void:
+	active_slot=slot;values["entre-slot-ativo"]=str(slot);writes["entre-slot-ativo"]=str(slot)
+	state=PARTIDA.furnished(true,true);REFUGE.start(state);building=null;hover=null;selected=null;construction=false;drawer=false;reset_view();modal="";set_zoom(camera_level);save_game();checkpoint(true)
 func root_action(kind: String) -> void:
+	if kind.begins_with("refugeSlot:"):
+		var slot := int(kind.trim_prefix("refugeSlot:"))
+		if modal=="refugeSlots" and slot>=1 and slot<=3:start_refuge(slot)
+		return
 	if kind.begins_with("slot:"):choose_slot(int(kind.trim_prefix("slot:")));return
 	if kind=="sleep":sleep_day();return
 	if kind=="manualSave":save_game();return
 	if kind=="manualLoad":load_game();return
 	match kind:
+		"refuge":
+			var free_slot := 0
+			for slot in range(1,4):
+				if not values.has(slot_key(slot)) and not (slot==1 and values.has("entre-restaurante-12")):free_slot=slot;break
+			if free_slot>0:start_refuge(free_slot)
+			else:modal="refugeSlots"
+		"welcome":modal="welcome"
+		"closeRefuge":close_dialog()
 		"furnished":state=PARTIDA.furnished(true,true);building=null;hover=null;selected=null;reset_view();modal="";set_zoom(camera_level)
 		"empty":close_dialog()
 		"tutorial":tutorial=not tutorial
@@ -309,8 +356,25 @@ func text(value: String) -> Dictionary:return {"tag":"text","text":value}
 func label(value: String) -> Dictionary:return node("p",[text(value)])
 func ui() -> Dictionary:
 	root_actions.clear();game_ui.controls.actions.clear();admin_ui.controls.actions.clear();inventory_ui.actions.clear();tools_ui.controls.actions.clear();catalog_ui.controls.actions.clear()
+	if modal=="refugeSlots":
+		var entries: Array = [node("h1",[text("As três partidas estão ocupadas")]),label("Escolha qual partida substituir pelo novo refúgio.")]
+		for slot in range(1,4):entries.append(button("Substituir partida "+str(slot),"refugeSlot:"+str(slot)))
+		entries.append(button("Voltar","welcome"))
+		return {"modal":node("dialog",entries,"refugeSlots")}
+	if modal=="refuge":
+		var entries: Array = [node("h1",[text("Nosso refúgio")])]
+		for person in state.refuge.residents:
+			var portrait: Array = [["img","taverna/cliente-0"+str(int(person.skin)-11)+"-estudo-sprites.png",313.5,0,313.5,313.5,0,0,32,32,1.0]]
+			var row: Array = [node("b",[{"tag":"canvas","art":portrait},text(person.name)])]
+			for pair in [["food","Alimentação"],["energy","Energia"],["morale","Moral"]]:
+				row.append(label(pair[1]+"  "+str(int(person[pair[0]]))+" / 100"))
+				row.append({"tag":"progress","max":100,"value":person[pair[0]],"color":"patience"})
+			entries.append(node("div",row,"","card"))
+		entries.append(label("Defesa "+str(int(state.refuge.defense))+" / 100 · "+str(2-state.refuge.defeats)+" chances"))
+		entries.append(button("Voltar à taverna","closeRefuge"))
+		return {"modal":node("dialog",entries,"refuge")}
 	if modal=="welcome":
-		var items: Array = [node("h1",[text("Uma nova esquina.")]),label("Você está jogando a versão 0.21.2"),label("Sua taverna está pronta. Vamos cozinhar?")]
+		var items: Array = [node("h1",[text("Uma nova esperança.")]),label("Alimente quem protege o refúgio."),button("Começar no refúgio","refuge")]
 		if tutorial:items.append(label("Retire um ingrediente da geladeira para as mãos. Corte frango ou legumes na mesa de preparo e leve à panela. Cozinhe, apoie a panela na mesa de cozinha, emprate e sirva. Você só pode carregar uma unidade nas mãos; não há mochila."))
 		for slot in range(1,4):
 			if values.has(slot_key(slot)) or (slot==1 and values.has("entre-restaurante-12")):items.append(button("Continuar partida "+str(slot),"slot:"+str(slot)))
@@ -354,13 +418,17 @@ func ui() -> Dictionary:
 	result.actions=node("div",[button("−","zoomOut",camera_level<=0.7),button("+","zoomIn",camera_level>=2)],"actions")
 	return result
 func step(dt: float,events: Array) -> Dictionary:
+	var previous_phase: String = state.refuge.phase if REFUGE.active(state) else ""
 	for event in events:
+		if event.get("kind")=="refuge":refuge_action(str(event.get("action","")));continue
+		if REFUGE.blocked(state):continue
 		match event.get("kind",""):
 			"widget":widget(event)
 			"pointer":pointer(event)
 			"key":key(event)
 			"blur":release_keyboard()
 	clock+=dt
+	checkpoint()
 	if not hidden and (modal.is_empty() or (modal=="management" and mode=="container")) and not construction:
 		var old_day: int = state.day
 		var old_message: String = state.message;var remaining := maxf(0,dt)
@@ -369,9 +437,10 @@ func step(dt: float,events: Array) -> Dictionary:
 			if modal.is_empty():keyboard_move()
 			simulation.velocity=velocity;simulation.service.random_source=rng
 			simulation.step(state,slice);ADMIN.auto_open(state);velocity=simulation.velocity
-			if pending!=null:interact("process")
+			if REFUGE.blocked(state):pending=null;release_keyboard()
+			elif pending!=null:interact("process")
 			remaining=maxf(0,remaining-slice)
-		if state.day!=old_day:save_game()
+		if state.day!=old_day:save_game();checkpoint()
 		if state.message!=old_message:notice_until=clock+4.5
 		var chop = state.get("chopping")
 		var cook = state.get("cooking")
@@ -383,9 +452,12 @@ func step(dt: float,events: Array) -> Dictionary:
 			var tone: String = str(object.readyBatch.doneAt)+":"+str(object.get("heatStage"))
 			if played_heat.get(object.id)==tone:continue
 			played_heat[object.id]=tone;sounds.append(660 if object.get("heatStage")=="ready" else 440 if object.get("heatStage")=="over" else 220)
+	if REFUGE.active(state) and previous_phase!=state.refuge.phase:
+		if state.refuge.phase=="battle":sounds.append(330)
+		elif state.refuge.phase in ["aftermath","gameover"]:sounds.append(660 if state.refuge.battle.result in ["calm","held"] else 220)
 	update_camera()
 	var scene := renderer.draw(state,{"selectedObject":selected,"constructionMode":construction,"building":building,"hover":hover,"feedback":true,"cleanView":true},velocity)
 	var door := CAMERA.door(state,camera,viewport,rect,construction,not modal.is_empty(),modal=="welcome")
-	var packet := {"singleRoom":state.singleRoom,"compact":state.compact,"room":state.player.room,"camera":[camera.x,camera.y,camera.zoom],"scene":scene,"ui":ui(),"modal":modal,"liveInventory":modal=="management" and mode=="container","construction":construction,"door":[door.left,door.top],"writes":writes.duplicate(true),"sounds":sounds.duplicate()}
+	var packet := {"singleRoom":state.singleRoom,"compact":state.compact,"room":state.player.room,"camera":[camera.x,camera.y,camera.zoom],"scene":scene,"ui":ui(),"modal":modal,"liveInventory":modal=="management" and mode=="container","refuge":REFUGE.view(state) if modal!="welcome" else null,"construction":construction,"door":[door.left,door.top],"writes":writes.duplicate(true),"sounds":sounds.duplicate()}
 	writes.clear();sounds.clear()
 	return packet

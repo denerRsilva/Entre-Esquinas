@@ -12,6 +12,7 @@ var layout_bounds := Rect2()
 var small_modal := false
 var modal_background: ColorRect
 var import_dialog: FileDialog
+var refuge = preload("res://interface/RefugioHUD.gd").new()
 var comandas = preload("res://interface/Comandas.gd").new()
 signal import_save(path:String)
 func _ready() -> void:
@@ -40,6 +41,7 @@ func _ready() -> void:
 	import_dialog.filters=PackedStringArray(["*.json ; Salvamento do restaurante"])
 	import_dialog.file_selected.connect(func(path):import_save.emit(path))
 	add_child(import_dialog)
+	add_child(refuge);refuge.action.connect(func(value):command.emit({"kind":"refuge","action":value}))
 
 func area(key:String,rect:Rect2,scrollable:=true,boxed:=true) -> void:
 	var overlay := key in ["hint","notice"]
@@ -107,7 +109,7 @@ func fit_regions(welcome_small: bool) -> void:
 	region("actions",Rect2(w-244,h-59,234,54))
 	region("catalog",Rect2(10,h-51,168,44))
 	region("drawer",Rect2(7,7,minf(440,w-20),h-70))
-	var dialog_size := Vector2(minf(604 if welcome_small else 844,w-32),minf(234 if welcome_small else 612,h-32))
+	var dialog_size := Vector2(minf(604 if welcome_small else 844,w-32),minf(300 if welcome_small else 612,h-32))
 	region("modal",Rect2((screen-dialog_size)/2,dialog_size))
 	region("context",Rect2(10,64,minf(500,w-20),110))
 	if slots.build[0].visible:fit_build.call_deferred()
@@ -126,6 +128,7 @@ func update_kitchen_bars(values: Array) -> void:
 		kitchen_bars[i].value=values[i]
 
 func sync(data: Dictionary) -> void:
+	refuge.sync(data.get("refuge"),usable_rect(),data.modal.is_empty() and not data.construction)
 	modal_background.visible = data.modal!=""
 	fit_regions(data.modal=="welcome" and not JSON.stringify(data.ui.get("modal",{})).contains("Fechar tutorial"))
 	comandas.sync(data.ui.get("comandas",[]),usable_rect())

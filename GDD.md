@@ -1,14 +1,46 @@
 # Entre Esquinas
 
-## GDD 2.1 consolidado
+## GDD 3.0 — Refúgio no apocalipse zumbi
 
-**Revisão documental:** 12 de novembro de 2026. **Responsável pelas decisões:** Dener Silva.
+**Revisão documental:** 17 de novembro de 2026. **Responsável pelas decisões:** Dener Silva.
 
 Este GDD reúne a direção aprovada da taverna e o funcionamento implementado na Godot em uma referência única. Substitui a organização do GDD 1.4 do repositório e do adendo 1.5, preservando a distinção entre o jogo existente e o desenvolvimento futuro. Não é necessário consultar os documentos antigos para entender as regras atuais aqui descritas.
 
-**Base de implementação inspecionada:** branch `main`, commit `89f1bfe8ee49aec52c2ecf2765208fbf28563bd1`. A aprovação desta revisão autoriza a reformulação documental. Não transforma propostas em requisitos aprovados nem executa mudanças de gameplay.
+**Base histórica da revisão 2.1:** commit `89f1bfe8ee49aec52c2ecf2765208fbf28563bd1`. A revisão 3.0 incorpora a direção aprovada em 17/11/2026 e o escopo jogável documentado abaixo; descrições operacionais anteriores permanecem identificadas como histórico.
 
 A revisão 2.1 incorpora as decisões de Dener de 12/11/2026 sobre comércio, computador administrativo, ferro-velho, fabricação por artesão e entrega de equipamentos. A base técnica inspecionada continua a mesma; essas decisões são direção aprovada ainda não implementada.
+
+### Revisão vigente — 17/11/2026
+
+Esta revisão substitui a premissa nuclear por um **apocalipse zumbi**. A cidade
+é um refúgio precário em reconstrução e um ponto de esperança para sobreviventes.
+Mais moradores significam novas habilidades, necessidades e demanda por refeições.
+A taverna recupera as forças da comunidade para a próxima horda.
+
+- **Alimentação, energia e moral são status de 0 a 100**, mantidos pelo jogador.
+  Diversão é uma das formas futuras de recuperar moral; os pilares não são bônus.
+- Dias comuns têm almoço e jantar. Hordas ocorrem a cada **3 a 5 dias** e
+  substituem o jantar daquela noite, sem penalidade pela refeição suspensa.
+- Não há combate controlável. O estado dos moradores e das defesas determina
+  o resultado apresentado numa sequência curta e pulável, com pessoas reconhecíveis.
+- Primeira derrota causa recuo e consequências recuperáveis; a segunda causa
+  game over. O jogador pode retomar um salvamento anterior à preparação.
+- Reconstrução e chegada de sobreviventes recompensam visualmente o progresso.
+  Melhorias também precisam ser sentidas na operação da taverna, com tempo de adaptação.
+- Produzir trechos jogáveis; Dener testa o ritmo antes de definirmos o próximo trecho.
+
+**Primeira implementação, parâmetros ajustáveis:** entrada “Começar no refúgio”,
+três moradores recorrentes, primeira horda no dia 3, status individuais e médias,
+recompensa inicial de corte 20% mais rápido, crescimento até seis moradores,
+duas derrotas e backup de preparação no próprio slot. Ver
+[escopo, valores e roteiro do primeiro ciclo](docs/primeiro-ciclo-refugio.md).
+Hospedagem, cerveja, NPCs pilares definitivos, cidade completa e escalas de
+trabalho ainda não foram implementados. A arte existente permanece provisória
+para edição do proprietário, obedecendo à diretriz de produção 32 × 32.
+
+As seções operacionais herdadas registram a base da revisão 2.1. Em divergências
+de premissa, ciclo ou progressão, esta revisão e o escopo do primeiro ciclo
+prevalecem. As decisões técnicas e parâmetros antigos não são balanceamento final.
 
 ### Estados usados no documento
 
@@ -29,7 +61,7 @@ A revisão 2.1 incorpora as decisões de Dener de 12/11/2026 sobre comércio, co
 - Seção 13: ideias substituídas e histórico fora do escopo vigente.
 - Seção 14: pendências, critérios de qualidade e rastreabilidade.
 
-O termo **taverna** descreve o destino de design. O código e a interface atuais ainda usam **restaurante**; hospedagem, ambientação nuclear e comércio presencial não são funcionalidades já entregues.
+O termo **taverna** descreve o destino de design. O código e a interface atuais ainda usam **restaurante**; hospedagem e comércio presencial não são funcionalidades já entregues.
 
 <!-- page -->
 
@@ -37,7 +69,7 @@ O termo **taverna** descreve o destino de design. O código e a interface atuais
 
 ### Descrição do jogo
 
-Administre uma taverna em uma pequena vila que se reconstrói após uma catástrofe nuclear. Prepare refeições, desenvolva seu estabelecimento e conheça moradores e viajantes. A direção de desenvolvimento conecta a cozinha à obtenção de ingredientes, às rotas comerciais e à recuperação da vila, em um mundo fictício sombrio e melancólico com elementos de fantasia.
+Administre uma taverna numa cidade que se reconstrói durante um apocalipse zumbi. Alimente e acolha os sobreviventes que defendem esse ponto de esperança. A expansão da comunidade aumenta a demanda e as possibilidades de operação, enquanto hordas periódicas põem o preparo à prova.
 
 **Direção aprovada.** A taverna será um ponto de encontro e poderá oferecer descanso a viajantes. Comida, convivência e relações com o entorno sustentam a experiência. A hospedagem ainda não possui regras finais e não faz parte do funcionamento atual.
 
@@ -69,9 +101,9 @@ O foco imediato de produção continua sendo um serviço completo compreensível
 
 ## 2 Universo e direção artística
 
-**Direção aprovada.** O jogo se passa em um mundo fictício após um desastre nuclear. A vila é pequena e está em reconstrução, cercada por ruínas, pequenos produtores e rotas comerciais. Tecnologia funcional é rara. A ambientação não representa o Brasil nem outro país real.
+**Direção aprovada em 17/11/2026.** O jogo se passa durante um apocalipse zumbi. A cidade é um refúgio em reconstrução, com estrutura inicialmente precária, que atrai sobreviventes por sua promessa de segurança. O crescimento traz esperança, novos moradores e maior responsabilidade de alimentar a comunidade. A origem do apocalipse permanece em aberto.
 
-O tom principal é sombrio e melancólico. A fantasia pode coexistir com objetos e atividades reconhecíveis. Seu alcance permanece em aberto: a escolha de desastre nuclear não aprova automaticamente magia, monstros, mutações ou radiação como sistema jogável.
+O perigo exterior convive com acolhimento, reconstrução e esperança. A cidade deve ganhar vida visivelmente e oferecer melhorias concretas na taverna. Não há combate controlável, sistema de radiação ou magia aprovado por esta premissa.
 
 ### Pessoas e alimentação
 
@@ -413,7 +445,7 @@ O projeto ainda declara 0.21.2-godot.1 em sua configuração, enquanto o APK dec
 
 ### Direções aprovadas ainda não implementadas
 
-A direção da taverna nuclear fictícia substitui a ambientação brasileira acolhedora como objetivo. A operação existente deve ser preservada enquanto o universo é incorporado. A aprovação abaixo é de conceito; regras detalhadas e tarefas de código precisam de escopo explícito.
+A direção vigente é a taverna do refúgio no apocalipse zumbi. A ambientação nuclear anterior foi substituída. A operação existente deve ser preservada enquanto o universo é incorporado. A aprovação abaixo é de conceito; regras detalhadas e tarefas de código precisam de escopo explícito.
 
 - Manter o computador exclusivamente para funções administrativas da taverna; retirar dele as funções de compra.
 - Oferecer frango, legumes e arroz por meio de um NPC comerciante na cidade, próximo à taverna, com deslocamento do jogador até ele.
@@ -441,7 +473,7 @@ A direção da taverna nuclear fictícia substitui a ambientação brasileira ac
 | P08 | Vendedor provisório de utensílios (panelas e pratos). A parte antiga sobre retirar o computador e migrar a administração para Gestão ou livro físico foi substituída pela manutenção do computador administrativo. |
 | P09 | Famílias de ingredientes e prioridade de receitas específicas sobre genéricas, evitando resultados ambíguos. |
 
-Os detalhes remanescentes dessas propostas continuam não aprovados; os conceitos já aprovados estão identificados separadamente acima. Progresso de receitas, hospedagem, energia, água e fornecedores não pode ser presumido a partir de exemplos.
+Os detalhes remanescentes dessas propostas continuam não aprovados; os conceitos já aprovados estão identificados separadamente acima. Detalhes de receitas, hospedagem, água e fornecedores continuam pendentes. Energia é um dos três status aprovados em 17/11/2026; seu primeiro funcionamento está no escopo do refúgio.
 
 <!-- page -->
 
@@ -453,8 +485,8 @@ Esta seção guarda decisões antigas para rastreabilidade. Não define o jogo a
 | --- | --- |
 | Retirar o computador e migrar suas funções administrativas para Gestão ou livro físico | Substituído em 12/11/2026: manter o computador exclusivamente administrativo, com compras fora dele. |
 | Mercearia como atividade principal | Projeto anterior arquivado. A existência de um HTML histórico não cria uma loja integrada à vila. |
-| Ambientação brasileira e culinária exclusivamente brasileira | Substituídas por mundo fictício nuclear e variedade de pratos de diferentes tradições. |
-| Tom predominantemente cozy obrigatório | Substituído por tom sombrio e melancólico. Acolhimento por escolha de progressão segue em aberto. |
+| Ambientação brasileira e origem nuclear | Substituídas pelo refúgio no apocalipse zumbi; pratos de diferentes tradições permanecem possíveis. |
+| Tom exclusivamente sombrio e melancólico | Perigo exterior combinado com acolhimento, reconstrução e esperança; recompensa visual aprovada em 17/11/2026. |
 | Estabelecimento definido apenas como restaurante | Substituído pela direção de taverna. Hospedagem ainda requer desenho e implementação. |
 | Mochila com dez espaços | Substituída pelo transporte de uma unidade nas mãos. |
 | Barra permanente de cinco slots e teclas de seleção | Etapa intermediária removida; não deixar interface substituta nessa área. |
@@ -514,3 +546,5 @@ Base: [commit 89f1bfe](https://github.com/denerRsilva/Entre-Esquinas/commit/89f1
 A revisão 2.1 registra as decisões expressas de Dener em 12/11/2026: NPC próximo à taverna para ingredientes; ferro-velho para peças; artesão para fabricar equipamentos; entrega após conclusão; computador mantido exclusivamente administrativo. Não houve nova execução de testes de gameplay nesta revisão documental.
 
 O histórico Git preserva o GDD anterior e suas revisões. As decisões desta conversa, o GDD 1.4 e o adendo 1.5 foram reconciliados nesta versão. A atualização altera documentação; nenhum comportamento de jogo foi modificado. Futuras revisões devem atualizar a seção correspondente e seu estado, evitando anexar regras conflitantes ao fim do arquivo.
+
+A revisão 3.0 registra as decisões de 17/11/2026 e o primeiro trecho jogável do refúgio. O documento específico distingue as regras aprovadas dos parâmetros provisórios e dos sistemas que ficam para os próximos playtests.
