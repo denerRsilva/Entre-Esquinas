@@ -7,6 +7,7 @@ const INGREDIENT_SIZE := Vector2(24,24)
 const CLEAN_PLATE_SOURCE := Rect2(125,166,1249,736)
 const EARLY_ATLAS = preload("res://arte/inicio-32.png")
 const EARLY_KEYS = ["batata","batata_cut","cenoura","cenoura_cut","caldoBatata","arrozCenoura","canja","nutricao","tempo"]
+const EARLY_DISHES = ["caldoBatata","arrozCenoura","canja"]
 const ATLAS = preload("res://arte/taverna/alimentos.png")
 const KEYS = ["arroz","legumes","frango","arrozLegumes","sopa","frangoArroz","legumes_cut","frango_cut"]
 const CROPS = [Rect2(154,44,310,306),Rect2(594,35,344,323),Rect2(1054,103,361,244),Rect2(83,714,440,280),Rect2(588,714,350,280),Rect2(1004,714,448,280),Rect2(586,425,361,212),Rect2(1067,428,327,208)]
@@ -41,6 +42,9 @@ static func image_command(op: Array) -> Array:
 	var early := EARLY_KEYS.find(key)
 	if index<0 and early<0:return []
 	var crop: Rect2 = Rect2(early*32,0,32,32) if early>=0 else CROPS[index]
+	# World dishes fit the plate bounds, not the transparent 32px UI canvas.
+	# Keep texture() at 32px for the book and preserve the source artwork.
+	if key in EARLY_DISHES:crop=Rect2(early*32+2,9,28,15)
 	var ratio := minf(float(op[4])/crop.size.x,float(op[5])/crop.size.y)
 	var width := crop.size.x*ratio
 	var height := crop.size.y*ratio

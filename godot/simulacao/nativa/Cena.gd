@@ -25,7 +25,8 @@ func label(value: String,x: float,y: float,color: String = "#25473d") -> void:
 	var width := (value.to_utf16_buffer().size()/2)*10*0.60+12
 	box(x-width/2,y-10,width,16,color);text(value,x,y+2,10,"#fff0ce")
 func food(item: String,x: float,y: float,w: float,h: float) -> bool:
-	if FOOD.food_key(item) not in FOOD.KEYS:return false
+	# Use the same catalog as menus and the drawing backend, including new recipes.
+	if FOOD.texture(item)==null:return false
 	commands.append(["food",item,x,y,w,h,1,1,0,0,alpha]);return true
 func star(quality: int,x: float,y: float,size: float) -> void:
 	if quality==0:return

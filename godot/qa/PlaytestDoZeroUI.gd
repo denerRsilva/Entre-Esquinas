@@ -108,6 +108,7 @@ func run():
 		await use("kitchen");check(s.player.hand.item=="dish_caldoBatata","Prato pedido vai à mão")
 		await world(Vector2(c.x*40+20,c.y*40-12))
 		check(c.state=="eating","Clique único entrega o prato ao cliente correto")
+		if visit==0:await capture("servido")
 		var count_before: int = s.orders.size()
 		await world(Vector2(c.x*40+20,c.y*40-12))
 		check(s.orders.size()==count_before and g.session.pending==null,"Clique em cliente comendo não atende outra pessoa nem abre opções")

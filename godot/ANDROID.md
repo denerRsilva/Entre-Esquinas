@@ -1,8 +1,8 @@
 # APK Android em GDScript
 
-A compilação nativa fica em `../build/Android/EntreEsquinas-gdscript.apk`; a anterior permanece em `EntreEsquinas.apk`. O SHA-256 está em `SHA256SUMS-gdscript`. No GitHub, baixe o arquivo completo pelo botão **Download raw file**.
+A compilação nativa fica em `../build/Android/EntreEsquinas-gdscript.apk`; `EntreEsquinas.apk` é um nome alternativo do mesmo arquivo atualizado. O SHA-256 está em `SHA256SUMS-gdscript`. No GitHub, baixe o arquivo completo pelo botão **Download raw file**.
 
-Pacote, versão e configurações anteriores foram mantidos: `com.entreesquinas.restaurante`, `0.21.2-godot.18` (21218), Android 7.0+, orientação horizontal e toque emulando mouse. A assinatura de depuração é a mesma do APK anterior. Não é necessário recompilar extensões C/C++ ou QuickJS.
+Versão atual: `com.entreesquinas.restaurante`, `0.21.2-godot.53` (21253), Android 7.0+, orientação horizontal e toque emulando mouse. A assinatura de depuração é a mesma do APK anterior. Não é necessário recompilar extensões C/C++ ou QuickJS.
 
 ## Exportar
 
@@ -59,3 +59,12 @@ Substitui o livro textual da versão .5: três cartões com arte ampliada do pra
 e ícones de panela, fogo com tempo e prato. Sem parágrafos de instrução.
 Conferido em captura renderizada na Godot; fluxo MaosUI passou sem falhas.
 A diretriz de priorizar contexto visual está registrada no GDD.
+
+
+## Auditoria 0.21.2-godot.53
+
+Corrige alimentos e receitas novas invisíveis no cenário e ajusta o recorte de
+exibição dos pratos para manter a largura da louça, sem editar os atlas.
+Relatório de playtest, evidências e propostas de balanceamento em
+[Auditoria .53](../docs/auditoria-playtest-53.md). Janela compacta verificada no
+Linux; teste Android físico continua pendente.
