@@ -260,6 +260,16 @@ de simulação no Linux, não FPS do jogo completo ou garantia de desempenho no
 Android. Medir renderização, alocação e temperatura num aparelho continua pendente.
 Não houve motivo para uma reescrita geral ou otimização especulativa nesta entrega.
 
+## Entrega e compilação
+
+Código da correção: `b2712db`. Android **0.21.2-godot.53 / 21253**, assinatura
+verificada e igual à .52. Integridade ZIP conferida; os dois scripts corrigidos
+estão recompilados. **Todas as 35 texturas importadas têm exatamente os mesmos
+bytes da .52**, sem substituição dos atlas. APK sem JavaScript ou QA, tamanho
+99,507MiB; os dois nomes de APK apontam para conteúdo idêntico. Resultado das
+**56 suítes padrão: aprovado**, além dos percursos gráficos PC/compacto e menus.
+[Metadados e hash do Android](auditoria53/android.json). Não testado em aparelho.
+
 ## Próximas etapas recomendadas
 
 1. **Primeiro ciclo balanceado:** preços, contribuição/consumo coletivo,

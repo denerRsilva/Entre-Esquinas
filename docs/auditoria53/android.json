@@ -1,0 +1,16 @@
+{
+  "version": "0.21.2-godot.53",
+  "versionCode": 21253,
+  "sourceCommit": "b2712dbb807433f6258e4f7071d4bee0b8d0ee38",
+  "apkBytes": 104340766,
+  "sha256": "7051952781d2a3c27dffc5c32cae452fed65df6f6c080244202f606b7f9297b6",
+  "certificateSha256": "b66cc994c1e0440b0b17facf6484bcd3dac90b63ed61c977ccc9606a523b3dbe",
+  "unchangedTextureCount": 35,
+  "verifiedRecompiledScripts": [
+    "assets/simulacao/nativa/Alimentos.gdc",
+    "assets/simulacao/nativa/Cena.gdc"
+  ],
+  "zipIntegrity": true,
+  "noJavaScriptOrQA": true,
+  "testedOnPhysicalAndroid": false
+}
