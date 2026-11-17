@@ -86,6 +86,10 @@ func render(d: Dictionary, parent: Control) -> void:
 		if parent is HFlowContainer:
 			b.custom_minimum_size.x = clampf(24+7.3*b.text.length(),76,225)
 		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		if cls.contains("cityNavButton"):
+			b.autowrap_mode=TextServer.AUTOWRAP_OFF
+			b.custom_minimum_size=Vector2(0,40)
+			b.size_flags_horizontal=Control.SIZE_SHRINK_BEGIN
 		if cls=="constructionSectionButton":
 			b.autowrap_mode=TextServer.AUTOWRAP_OFF
 			b.custom_minimum_size=Vector2(0,40)

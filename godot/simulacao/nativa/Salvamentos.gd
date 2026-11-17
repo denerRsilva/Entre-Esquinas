@@ -56,6 +56,7 @@ func convert(value: Variant,random_values: Array = []) -> Dictionary:
 	if not MIGRATE.ready_capacity(s):return {"value":null}
 	if not MIGRATE.plating_surfaces(s):return {"value":null}
 	if not MIGRATE.sink_capacity(s):return {"value":null}
+	if not preload("res://simulacao/nativa/Refugio.gd").migrate(s):return {"value":null}
 	if source<12:
 		if s.get("chopping")!=null and not s.chopping.get("hand",false):s.chopping=null
 		if s.inventory.size() not in [0,5,10] or not VALIDATOR.valid(s,s.inventory.size()):return {"value":null}

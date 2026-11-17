@@ -83,7 +83,7 @@ func open_dialog(next: String) -> void:
 	pending=null;release_keyboard()
 	var kitchen = INTERACT.KITCHEN.new()
 	if next=="computer" and not INTERACT.LOGISTICS.utility_near(state,"computer",kitchen):notify("Aproxime-se do computador.",true);return
-	mode=next;tab="container" if next=="container" else "supplier" if next=="computer" else "camera" if next=="options" else "recipes" if next=="recipes" else "shifts"
+	mode=next;tab="container" if next=="container" else "supplier" if next=="computer" else "camera" if next=="options" else "recipes" if next=="recipes" else "city" if next=="general" and REFUGE.active(state) else "shifts"
 	modal="management";menu_notice="";generation+=1
 func close_dialog() -> void:modal="";release_keyboard()
 func open_inventory(id: Variant) -> void:
@@ -264,8 +264,6 @@ func checkpoint(force: bool = false) -> void:
 func refuge_action(action: String) -> void:
 	if not REFUGE.active(state):return
 	match action:
-		"status":
-			if not REFUGE.blocked(state) and modal.is_empty() and not construction:modal="refuge";release_keyboard()
 		"skip":
 			if REFUGE.active(state) and state.refuge.phase=="battle":REFUGE.battle_step(state,REFUGE.BATTLE_SECONDS)
 		"continue":
@@ -302,7 +300,6 @@ func root_action(kind: String) -> void:
 			if free_slot>0:start_refuge(free_slot)
 			else:modal="refugeSlots"
 		"welcome":modal="welcome"
-		"closeRefuge":close_dialog()
 		"furnished":state=PARTIDA.furnished(true,true);building=null;hover=null;selected=null;reset_view();modal="";set_zoom(camera_level)
 		"empty":close_dialog()
 		"tutorial":tutorial=not tutorial
@@ -361,18 +358,6 @@ func ui() -> Dictionary:
 		for slot in range(1,4):entries.append(button("Substituir partida "+str(slot),"refugeSlot:"+str(slot)))
 		entries.append(button("Voltar","welcome"))
 		return {"modal":node("dialog",entries,"refugeSlots")}
-	if modal=="refuge":
-		var entries: Array = [node("h1",[text("Nosso refúgio")])]
-		for person in state.refuge.residents:
-			var portrait: Array = [["img","taverna/cliente-0"+str(int(person.skin)-11)+"-estudo-sprites.png",313.5,0,313.5,313.5,0,0,32,32,1.0]]
-			var row: Array = [node("b",[{"tag":"canvas","art":portrait},text(person.name)])]
-			for pair in [["food","Alimentação"],["energy","Energia"],["morale","Moral"]]:
-				row.append(label(pair[1]+"  "+str(int(person[pair[0]]))+" / 100"))
-				row.append({"tag":"progress","max":100,"value":person[pair[0]],"color":"patience"})
-			entries.append(node("div",row,"","card"))
-		entries.append(label("Defesa "+str(int(state.refuge.defense))+" / 100 · "+str(2-state.refuge.defeats)+" chances"))
-		entries.append(button("Voltar à taverna","closeRefuge"))
-		return {"modal":node("dialog",entries,"refuge")}
 	if modal=="welcome":
 		var items: Array = [node("h1",[text("Uma nova esperança.")]),label("Alimente quem protege o refúgio."),button("Começar no refúgio","refuge")]
 		if tutorial:items.append(label("Retire um ingrediente da geladeira para as mãos. Corte frango ou legumes na mesa de preparo e leve à panela. Cozinhe, apoie a panela na mesa de cozinha, emprate e sirva. Você só pode carregar uma unidade nas mãos; não há mochila."))
@@ -458,6 +443,6 @@ func step(dt: float,events: Array) -> Dictionary:
 	update_camera()
 	var scene := renderer.draw(state,{"selectedObject":selected,"constructionMode":construction,"building":building,"hover":hover,"feedback":true,"cleanView":true},velocity)
 	var door := CAMERA.door(state,camera,viewport,rect,construction,not modal.is_empty(),modal=="welcome")
-	var packet := {"singleRoom":state.singleRoom,"compact":state.compact,"room":state.player.room,"camera":[camera.x,camera.y,camera.zoom],"scene":scene,"ui":ui(),"modal":modal,"liveInventory":modal=="management" and mode=="container","refuge":REFUGE.view(state) if modal!="welcome" else null,"construction":construction,"door":[door.left,door.top],"writes":writes.duplicate(true),"sounds":sounds.duplicate()}
+	var packet := {"singleRoom":state.singleRoom,"compact":state.compact,"room":state.player.room,"camera":[camera.x,camera.y,camera.zoom],"scene":scene,"ui":ui(),"modal":modal,"liveInventory":modal=="management" and mode=="container","refuge":REFUGE.view(state) if REFUGE.blocked(state) and modal!="welcome" else null,"construction":construction,"door":[door.left,door.top],"writes":writes.duplicate(true),"sounds":sounds.duplicate()}
 	writes.clear();sounds.clear()
 	return packet

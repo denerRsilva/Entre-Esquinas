@@ -128,7 +128,7 @@ func update_kitchen_bars(values: Array) -> void:
 		kitchen_bars[i].value=values[i]
 
 func sync(data: Dictionary) -> void:
-	refuge.sync(data.get("refuge"),usable_rect(),data.modal.is_empty() and not data.construction)
+	refuge.sync(data.get("refuge"),usable_rect())
 	modal_background.visible = data.modal!=""
 	fit_regions(data.modal=="welcome" and not JSON.stringify(data.ui.get("modal",{})).contains("Fechar tutorial"))
 	comandas.sync(data.ui.get("comandas",[]),usable_rect())

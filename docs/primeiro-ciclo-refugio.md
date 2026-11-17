@@ -4,9 +4,9 @@
 [GDD 3.1](../GDD.md), aprovada por Dener em 17/11/2026, determina **três barras
 coletivas** e **duas derrotas consecutivas, com reset da sequência por vitória**.
 A versão .46 descrita abaixo ainda usa status individuais/médias e derrotas
-acumuladas. Esses comportamentos estão substituídos como direção e precisam
-ser adaptados no código e nos salvamentos em outra tarefa. Os parâmetros abaixo
-continuam documentando o executável .46; não foram alterados nesta revisão.
+acumuladas. Esses comportamentos foram substituídos na versão .47, com
+consulta em **Gestão → Cidade**; ver [o guia atual](cidade-menu-coletivo.md).
+Os parâmetros abaixo continuam documentando o executável .46; não foram alterados nesta revisão.
 
 A premissa do refúgio foi aprovada por Dener em 17/11/2026. A cidade é um ponto
 de esperança em reconstrução no apocalipse zumbi. A taverna alimenta as pessoas que a defendem.

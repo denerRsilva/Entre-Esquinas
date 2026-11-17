@@ -32,12 +32,12 @@ a origem dos zumbis permanece em aberto.
 - O desenvolvimento acontece em trechos jogáveis; Dener avalia o ritmo antes de
   ampliarmos a campanha.
 
-**Estado do executável, separado do design:** a versão `0.21.2-godot.46`,
-publicada no [commit 9f7fd4a](https://github.com/denerRsilva/Entre-Esquinas/commit/9f7fd4a48464fa8750699e2ef99a0200fe158bd1),
-ainda usa status individuais com médias e derrotas acumuladas. Esses dois
-comportamentos são **substituídos como direção de design nesta revisão**, mas
-sua adaptação no código e nos salvamentos é uma tarefa posterior. Esta entrega
-atualiza documentação; não altera o jogo nem gera um APK novo.
+**Implementado na versão .47:** os status são coletivos e consultados em
+**Gestão → Cidade**, junto de população, defesas, próxima horda e situação da
+cidade. O cenário não exibe barras ou painel permanente. Vitórias reiniciam a
+sequência de derrotas; duas derrotas seguidas causam game over. Ver
+[comportamento, migração e parâmetros da versão .47](docs/cidade-menu-coletivo.md).
+A versão .46 anterior é preservada como registro histórico.
 
 O [registro do primeiro protótipo](docs/primeiro-ciclo-refugio.md) documenta o que
 foi implementado na versão .46. Números de moradores, tempos, ganhos, perdas,
@@ -100,12 +100,24 @@ entre pessoas, refeições, descanso e ganhos ainda será balanceada.
 As barras são **status mantidos ao longo do tempo**. A unidade de design é a
 cidade; os moradores continuam reconhecíveis nas histórias e na defesa, sem
 exigir três barras independentes por personagem. As médias de status pessoais
-presentes na versão .46 são uma solução provisória a substituir.
+da versão .46 foram substituídas na .47 por valores coletivos próprios e persistidos.
 
 Moral pode influenciar cooperação, disposição para defender e atratividade
 para novos moradores. Intensidades, limites e formas de recuperar cada barra
 permanecem parâmetros de balanceamento. Receitas, bebidas e descanso devem ter
 funções compreensíveis; uma refeição não substitui automaticamente o descanso.
+
+### Consulta em Gestão → Cidade
+
+**Direção aprovada e implementada na versão .47.** As três barras aparecem
+somente no menu **Gestão → Cidade**, junto da população, condições das defesas,
+próxima horda e situação (normal, preparação ou recuo). A consulta pausa o jogo.
+As barras e seu antigo painel não ficam permanentemente sobre o cenário.
+
+A condição da comunidade também deve ser percebida por sinais do ambiente e
+pela preparação, defesa e pós-horda, seguindo o desenvolvimento visual de cada
+trecho. Não reintroduzir janelas automáticas de feedback nem nomes flutuantes
+para substituir as barras retiradas do cenário.
 
 ### Sistemas que sustentam os pilares
 
@@ -599,14 +611,16 @@ O projeto ainda declara 0.21.2-godot.1 em sua configuração, enquanto o APK dec
 
 ## 12 Desenvolvimento futuro e propostas
 
-### Direção vigente a adaptar no protótipo
+### Direção integrada ao protótipo .47
 
-O próximo ajuste do ciclo existente deve substituir os status individuais por
-três valores coletivos e o total de derrotas pela sequência consecutiva. É
-necessário preservar moradores, histórias, crescimento, recursos e os três
-salvamentos. Regras de conversão dos saves e valores iniciais coletivos ainda
-precisam ser definidos na tarefa de implementação. Uma vitória deve reiniciar
-a sequência sem apagar conquistas da cidade.
+Os status individuais deram lugar a três valores coletivos e a derrota passou
+a ser uma sequência reiniciada por vitória. A reconstrução tem contadores
+históricos próprios; resetar a sequência não apaga melhorias ou moradores.
+Gestão → Cidade reúne a consulta, sem painel permanente no cenário.
+
+Os três slots, recursos e identidades são preservados. Saves .46 válidos têm
+migração específica descrita no [guia da versão .47](docs/cidade-menu-coletivo.md).
+Valores e ritmo continuam sujeitos aos playtests do proprietário.
 
 ### Direções aprovadas ainda não implementadas
 
@@ -638,7 +652,7 @@ A direção vigente é a taverna do refúgio no apocalipse zumbi. A ambientaçã
 | P08 | Vendedor provisório de utensílios (panelas e pratos). A parte antiga sobre retirar o computador e migrar a administração para Gestão ou livro físico foi substituída pela manutenção do computador administrativo. |
 | P09 | Famílias de ingredientes e prioridade de receitas específicas sobre genéricas, evitando resultados ambíguos. |
 
-Os detalhes remanescentes dessas propostas continuam não aprovados; os conceitos já aprovados estão identificados separadamente acima. Detalhes de receitas, hospedagem, água e fornecedores continuam pendentes. Energia é uma das três barras coletivas aprovadas em 17/11/2026; o descanso automático e os valores individuais da versão .46 são um registro de protótipo, a adaptar.
+Os detalhes remanescentes dessas propostas continuam não aprovados; os conceitos já aprovados estão identificados separadamente acima. Detalhes de receitas, hospedagem, água e fornecedores continuam pendentes. Energia é uma das três barras coletivas aprovadas em 17/11/2026 e implementadas na .47; a hospedagem e outras formas de descanso ainda precisam de detalhamento.
 
 <!-- page -->
 
@@ -648,8 +662,8 @@ Esta seção guarda decisões antigas para rastreabilidade. Não define o jogo a
 
 | Ideia ou regra anterior | Estado e substituição |
 | --- | --- |
-| Status individuais com médias no painel | Substituídos como direção em 17/11/2026 por três barras coletivas de alimentação, energia e moral. O código .46 ainda precisa da adaptação. |
-| Duas derrotas acumuladas ao longo da campanha | Substituídas por duas derrotas consecutivas; uma vitória reinicia a sequência e o estado normal. O código .46 ainda precisa da adaptação. |
+| Status individuais com médias no painel | Substituídos como direção em 17/11/2026 por três barras coletivas de alimentação, energia e moral. A versão .47 implementa a substituição. |
+| Duas derrotas acumuladas ao longo da campanha | Substituídas por duas derrotas consecutivas; uma vitória reinicia a sequência e o estado normal. A versão .47 implementa a substituição. |
 | Retirar o computador e migrar suas funções administrativas para Gestão ou livro físico | Substituído em 12/11/2026: manter o computador exclusivamente administrativo, com compras fora dele. |
 | Mercearia como atividade principal | Projeto anterior arquivado. A existência de um HTML histórico não cria uma loja integrada à vila. |
 | Ambientação brasileira e origem nuclear | Substituídas pelo refúgio no apocalipse zumbi; pratos de diferentes tradições permanecem possíveis. |
@@ -705,9 +719,9 @@ existente; mochila, caixas ou carrinhos não são respostas automáticas.
 3. Ajustar os parâmetros a partir dessa experiência, mantendo os ganhos das melhorias perceptíveis.
 4. Ampliar o próximo trecho com base no retorno, preservando recursos e salvamentos.
 
-O início já está prototipado na versão .46; o próximo trabalho no executável
-precisa contemplar as duas retificações desta revisão antes de considerar seu
-balanceamento representativo da direção aprovada. Comércio presencial, artesão,
+O início foi prototipado na versão .46 e alinhado às retificações na .47, com
+status coletivos, derrotas consecutivas e consulta em Gestão → Cidade. O
+balanceamento continua em avaliação pelo proprietário. Comércio presencial, artesão,
 hospedagem e novas bebidas entram conforme o escopo de cada trecho for definido.
 
 ### Critérios de qualidade
@@ -734,7 +748,8 @@ O teste avulso `qa/rua-horario.test.cjs` falhou ao preparar ingredientes buscand
 
 ### Fontes de manutenção
 
-- [Registro do protótipo .46 e seus parâmetros](docs/primeiro-ciclo-refugio.md).
+- [Consulta da cidade e implementação .47](docs/cidade-menu-coletivo.md).
+- [Registro histórico do protótipo .46](docs/primeiro-ciclo-refugio.md).
 - Código atual: [Refugio.gd](godot/simulacao/nativa/Refugio.gd),
   [Simulacao.gd](godot/simulacao/nativa/Simulacao.gd),
   [Cozinha.gd](godot/simulacao/nativa/Cozinha.gd) e
@@ -757,6 +772,8 @@ comprovam diversão ou balanceamento final.
 | **3.1 — 17/11/2026** | Proposta consolidada aprovada: cidade de esperança, três barras coletivas, hordas de 3 a 5 dias, defesa animada, derrotas consecutivas com reset por vitória, retomada, crescimento, recompensas visuais e funcionais e desenvolvimento por playtests. |
 
 A aprovação de Dener desta revisão resolve as duas definições pendentes.
+A implementação .47 incorpora essas regras e a consulta em Gestão → Cidade,
+aprovada em seguida; o registro .46 permanece histórico.
 O Git preserva as versões anteriores. Alterações no GDD devem atualizar a seção
 correspondente, mantendo separadas direção aprovada, comportamento existente,
 parâmetro de teste e implementação ainda pendente.

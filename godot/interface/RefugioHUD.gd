@@ -1,35 +1,27 @@
 extends Control
-## Compact status strip and a skippable, noninteractive defense vignette.
+## Skippable defense vignette. City status lives in Gestão → Cidade.
 signal action(value: String)
-const BARS = preload("res://interface/ArteBarras.gd")
 const FRAMES = [preload("res://personagens/Cliente1.tres"),preload("res://personagens/Cliente2.tres"),preload("res://personagens/Cliente3.tres")]
 var model: Dictionary = {}
 var bounds := Rect2()
-var summary := Button.new()
 var proceed := Button.new()
-var status_rect := Rect2()
 var battle_rect := Rect2()
 func _ready() -> void:
 	texture_filter=CanvasItem.TEXTURE_FILTER_NEAREST
 	mouse_filter=Control.MOUSE_FILTER_IGNORE
-	summary.text="Moradores";summary.pressed.connect(func():action.emit("status"));add_child(summary)
 	proceed.pressed.connect(func():action.emit("skip" if model.get("phase")=="battle" else "retry" if model.get("phase")=="gameover" else "continue"));add_child(proceed)
-func sync(data: Variant,area: Rect2,show_day: bool) -> void:
-	visible=data!=null
-	if data==null:return
+func sync(data: Variant,area: Rect2) -> void:
+	visible=data!=null and data.get("phase") in ["battle","aftermath","gameover"]
+	if not visible:
+		model={};return
 	model=data;bounds=area
 	position=Vector2.ZERO;size=get_viewport_rect().size
 	var event: bool = model.phase!="day"
 	mouse_filter=Control.MOUSE_FILTER_STOP if event else Control.MOUSE_FILTER_IGNORE
-	status_rect=Rect2(area.position+Vector2(12,54),Vector2(minf(294,area.size.x-24),102))
-	summary.visible=not event and show_day
-	summary.position=status_rect.position;summary.size=Vector2(status_rect.size.x,30)
-	summary.text=str(model.population)+" moradores · "+("Horda hoje" if model.days==0 else "Horda em "+str(model.days)+" dias")
 	battle_rect=Rect2(area.position+Vector2(12,maxf(12,(area.size.y-520)/2)),Vector2(area.size.x-24,minf(520,area.size.y-24)))
 	proceed.visible=event
 	proceed.text="Pular animação" if model.phase=="battle" else "Retomar preparação" if model.phase=="gameover" else "Amanhecer"
 	proceed.position=Vector2(area.get_center().x-116,battle_rect.end.y-52);proceed.size=Vector2(232,42)
-	set_meta("show_day",show_day)
 	queue_redraw()
 func text(value: String,p: Vector2,font_size: int=16,col: Color=Color("fff0cf"),center: bool=false) -> void:
 	var font := ThemeDB.fallback_font
@@ -65,7 +57,7 @@ func battlefield() -> void:
 		if not failure or elapsed<5:block(fence_x-3,y+14,14,4,"b18951")
 	for i in mini(4,int(model.battle.population)):
 		var person: Dictionary = model.residents[i]
-		var tired: bool = person.energy<40
+		var tired: bool = model.battle.stats.energy<40
 		var y: float = 48+i*23
 		var retreat: float = late*45 if failure else 0.0
 		character(person,183-retreat+(0 if tired else sin(elapsed*5+i)*2),y,1 if tired else frame)
@@ -79,17 +71,6 @@ func battlefield() -> void:
 	draw_set_transform(Vector2.ZERO,0,Vector2.ONE)
 func _draw() -> void:
 	if model.is_empty():return
-	if model.phase=="day":
-		if not get_meta("show_day",false):return
-		draw_rect(status_rect,Color(0.05,0.1,0.08,0.88))
-		var names := ["Alimentação","Energia","Moral"]
-		for i in 3:
-			var key: String = ["food","energy","morale"][i]
-			var y: float = status_rect.position.y+34+i*21
-			text(names[i],Vector2(status_rect.position.x+8,y+13),13)
-			BARS.paint(self,Rect2(status_rect.position.x+100,y+2,status_rect.size.x-143,12),model.stats[key]/100,"patience")
-			text(str(int(model.stats[key])),Vector2(status_rect.end.x-32,y+13),13)
-		return
 	draw_rect(Rect2(Vector2.ZERO,size),Color(0.015,0.025,0.03,0.96))
 	var center: float = bounds.get_center().x
 	var titles := {"calm":"A cidade resistiu","held":"Defesa sofrida","retreat":"Recuo para a última defesa","fallen":"O refúgio caiu"}

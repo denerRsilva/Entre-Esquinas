@@ -4,8 +4,7 @@ func clone_campaign() -> Dictionary:
 	var s: Dictionary = g.session.PARTIDA.furnished(true,true);REF.start(s)
 	return s
 func stats(s: Dictionary,value: float) -> void:
-	for person in s.refuge.residents:
-		for key in REF.STATS:person[key]=value
+	for key in REF.STATS:s.refuge.stats[key]=value
 func capture(name: String) -> void:
 	if not "--capture" in OS.get_cmdline_user_args():return
 	root.mode=Window.MODE_WINDOWED;root.size=Vector2i(1280,720);g.tick(0);await layout();await RenderingServer.frame_post_draw
@@ -24,10 +23,11 @@ func run():
 	for worker in s.workers:worker.task="none"
 	g.session.simulation.service.idle_walk_enabled=false
 	await capture("inicio")
-	g.events.append({"kind":"refuge","action":"status"});g.tick(0)
-	check(g.frame_data.modal=="refuge","Consulta dos status individuais sem nomes flutuantes")
+	check(not g.hud.refuge.visible and g.frame_data.refuge==null,"Status não aparecem durante a partida")
+	check(await press("Gestão") and await press("Cidade"),"Acesso por Gestão → Cidade")
+	check(g.frame_data.modal=="management" and g.session.tab=="city","Consulta das barras coletivas no menu")
 	var time: float = s.time;g.tick(1);check(s.time==time,"Consulta pausa o preparo")
-	check(await press("Voltar à taverna"),"Retorno da consulta")
+	check(await press("Voltar ao jogo"),"Retorno da consulta")
 	# Real cooking and service: the same survivor later appears in defense.
 	await take("frango");await click_object("prep");advance(2.1)
 	await click_object("stove");await take("arroz");await click_object("stove");await click_object("stove");advance(8.1)
@@ -39,11 +39,10 @@ func run():
 	g.tick(0.05);s.arrival=0;await click_object("table")
 	var sim = g.session.SIM.new();sim.service.random_source=func():return 0.0
 	check(sim.spawn(s),"Morador entra na taverna")
-	var person = REF.find_resident(s,s.customers[0].refugeResident)
-	var old_food: float = person.food
+	var old_food: float = s.refuge.stats.food
 	g.session.ADMIN.test_clock(s,900);advance(6)
 	await click_object("table");await click_object("table");advance(4.1)
-	check(s.ledger.sales==1 and person.food>old_food and person.morale>65,"Refeição concluída alimenta e anima o morador real")
+	check(s.ledger.sales==1 and s.refuge.stats.food>old_food and s.refuge.stats.morale>65,"Refeição concluída alimenta e anima a comunidade")
 	check(g.session.SAVE.VALIDATOR.valid(s),"Serviço mantém conservação e estado do refúgio válidos")
 	var served_raw = g.session.SAVE.serialize(s)
 	var served_copy = g.session.SAVE.new().load_value(JSON.parse_string(served_raw)) if served_raw is String else null
@@ -54,11 +53,11 @@ func run():
 	check(ordinary.open and ordinary.period==1 and not REF.due(ordinary),"Primeiro dia mantém jantar")
 	# No canceled-dinner drain; routine and sleep have bounded status effects.
 	var horde := clone_campaign();horde.day=3;horde.clock.minute=1080
-	var before: Dictionary = REF.averages(horde)
+	var before: Dictionary = REF.collective(horde)
 	REF.end_shift(horde,1);g.session.ADMIN.auto_open(horde)
-	check(not horde.open and REF.averages(horde)==before,"Dia de horda suspende jantar sem penalizar status")
-	REF.end_shift(horde,0);var once: Dictionary = REF.averages(horde);REF.end_shift(horde,0)
-	check(REF.averages(horde)==once,"Fechar turno repetidamente não duplica perda de status")
+	check(not horde.open and REF.collective(horde)==before,"Dia de horda suspende jantar sem penalizar status")
+	REF.end_shift(horde,0);var once: Dictionary = REF.collective(horde);REF.end_shift(horde,0)
+	check(REF.collective(horde)==once,"Fechar turno repetidamente não duplica perda de status")
 	check(not g.session.ADMIN.finish_day(horde),"Não pula o ataque dormindo")
 	# Victory unlocks a tangible kitchen improvement and one new resident.
 	stats(horde,90);g.session.load_state(horde);g.tick(0.1)
@@ -103,7 +102,7 @@ func run():
 	check(g.session.state.day==7 and g.session.state.clock.minute==360 and g.session.state.refuge.defeats==1 and g.session.state.refuge.phase=="day","Retomada recupera a manhã anterior ao segundo ataque")
 	check(g.session.values[g.session.checkpoint_key()]!=checkpoint_raw,"Backup acompanha a próxima fase de preparação")
 	for patch in [{"food":101},{"morale":-1},{"energy":"alto"}]:
-		var invalid := clone_campaign();invalid.refuge.residents[0].merge(patch,true)
+		var invalid := clone_campaign();invalid.refuge.stats.merge(patch,true)
 		check(g.session.SAVE.serialize(invalid)==null,"Save rejeita status inválidos")
 	var unattended := clone_campaign()
 	for i in 2:

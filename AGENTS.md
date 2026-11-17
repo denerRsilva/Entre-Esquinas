@@ -19,9 +19,9 @@
   controlável; a defesa tem apresentação animada. **Duas derrotas consecutivas**
   levam ao game over. **Uma vitória zera a sequência de derrotas e restaura o
   estado normal**. A retomada deve permitir refazer a preparação pelo salvamento.
-- O código .46 ainda tem status individuais/médias e derrotas acumuladas. Essas
-  soluções foram substituídas como direção; a adaptação do jogo e dos saves é
-  trabalho separado da revisão documental 3.1.
+- A versão .47 implementa valores coletivos e derrotas consecutivas, com
+  migração dos saves .46. As barras ficam somente em **Gestão → Cidade**,
+  sem painel permanente no cenário. Ver `docs/cidade-menu-coletivo.md`.
 - Desenvolver em trechos jogáveis para avaliação de Dener antes de ampliar a
   campanha. Parâmetros do primeiro ciclo são provisórios; preservar partidas
   antigas e os três slots de salvamento.

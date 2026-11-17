@@ -1,4 +1,5 @@
 extends RefCounted
+const REFUGE = preload("res://simulacao/nativa/Refugio.gd")
 const ADMIN = preload("res://simulacao/nativa/Administracao.gd")
 const SERVICE = preload("res://simulacao/nativa/Atendimento.gd")
 const FOOD = preload("res://interface/ComidaInterface.gd")
@@ -44,17 +45,37 @@ func render(s: Dictionary,model: Dictionary,override: Variant = null) -> Diction
 	if current!=stamp:
 		stamp=current;form={"hours":ADMIN.hours(s).duplicate(true),"quantities":{"arroz":10,"legumes":10,"frango":10},"qualities":{"arroz":0,"legumes":0,"frango":0},"time":660 if s.clock.minute<=660 else s.clock.minute}
 	var titles := {"computer":"Computador • restaurante","options":"Opções","recipes":"Livro de receitas","container":"Inventários • "+SERVICE.BUILD.CATALOG.data[SERVICE.new().find(s.objects,model.object).type].name if mode=="container" else ""}
-	var title: String = titles.get(mode,"Gestão do restaurante")
+	var title: String = titles.get(mode,"Gestão da taverna" if REFUGE.active(s) else "Gestão do restaurante")
 	var tabs: Dictionary = {} if mode=="recipes" else {"container":"Transferir itens"} if mode=="container" else {"supplier":"Fornecedor","tools":"Utensílios","menu":"Cardápio e preços","deliveries":"Entregas"} if mode=="computer" else {"camera":"Câmera","save":"Salvar e carregar","test":"Testes","guide":"Primeiros passos"} if mode=="options" else {"shifts":"Turnos","build":"Modo construção","team":"Equipe","finance":"Fechamento","customers":"Clientes","calendar":"Calendário","reputation":"Reputação"}
+	if mode=="general" and REFUGE.active(s):
+		var city_tabs := {"city":"Cidade"};city_tabs.merge(tabs);tabs=city_tabs
 	var navigation: Array = []
 	for key in tabs:
-		var item := button(tabs[key],"tab",key);item.cls="active" if tab==key else "";navigation.append(item)
+		var item := button(tabs[key],"tab",key);item.cls="active" if tab==key else ""
+		if mode=="general" and REFUGE.active(s):item.cls+=" cityNavButton"
+		navigation.append(item)
 	var panel: Dictionary = override if override!=null else node("div",panel(s,model),"panel")
 	return food_ui.decorate(node("dialog",[node("div",[node("b",[text(title)]),node("small",[text("Jogo pausado")]),button("Voltar ao jogo","close")],"","dialogHead"),node("nav",navigation,"tabs"),panel,node("p",[text(model.notice)] if not model.notice.is_empty() else [],"menuNotice")],"management"))
 func panel(s: Dictionary,model: Dictionary) -> Array:
 	var result: Array = []
 	if TEXTS.data.has(tab):result.append(label(TEXTS.data[tab]))
 	match tab:
+		"city":
+			if not REFUGE.active(s):return [label("Comece no refúgio para acompanhar a cidade.")]
+			var city: Dictionary = s.refuge
+			var days: int = maxi(0,int(city.nextHorde-s.day))
+			var situation: String = "Recuo" if city.defeats>0 else "Preparação para a horda" if days<=1 else "Normal"
+			result.append(node("h2",[text("Cidade")]))
+			result.append(label("Situação: "+situation+" · População: "+number(city.residents.size())))
+			var statuses: Array = []
+			for pair in [["food","Alimentação"],["energy","Energia"],["morale","Moral"]]:
+				statuses.append(node("b",[text(pair[1]+"  "+number(round(city.stats[pair[0]]))+" / 100")]))
+				statuses.append({"tag":"progress","label":pair[1],"max":100,"value":city.stats[pair[0]],"color":"patience"})
+			result.append(node("div",statuses,"","card"))
+			var condition: String = "Boas condições" if city.defense>=75 else "Estáveis" if city.defense>=50 else "Precisam de reparos"
+			result.append(label("Defesas: "+condition+" · "+number(city.defense)+" / 100"))
+			result.append(label("Próxima horda: hoje" if days==0 else "Próxima horda: em "+number(days)+(" dia" if days==1 else " dias")))
+			result.append(label("Derrotas seguidas: "+number(city.defeats)+" / 2 · Uma vitória reinicia a sequência."))
 		"camera":
 			result.append(node("div",[button("− Afastar","zoom","out",model.camera<=0.7),node("output",[text(number(round(model.camera*100))+"%")]),button("+ Aproximar","zoom","in",model.camera>=2)],"","cameraControls"))
 			result.append(button("Restaurar zoom padrão (100%)","zoom","reset"));var fullscreen := button("Alternar tela cheia","fullscreen");fullscreen.id="fullscreenBtn";result.append(fullscreen)
