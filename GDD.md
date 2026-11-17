@@ -1,6 +1,6 @@
 # Entre Esquinas
 
-## GDD 3.3 — Refúgio no apocalipse zumbi
+## GDD 3.4 — Refúgio no apocalipse zumbi
 
 **Revisão documental:** 17 de novembro de 2026. **Responsável pelas decisões:** Dener Silva.
 
@@ -46,13 +46,22 @@ A versão .46 anterior é preservada como registro histórico.
 O crescimento libera a busca de candidatos em **Gestão → Equipe**; garçom é a
 primeira função contratável. Saves antigos conservam sua equipe. Ver
 [contratação, parâmetros e limites atuais](docs/contratacao-primeiro-garcom.md).
-O kit inicial, comércio e receitas aprovados abaixo ainda aguardam implementação.
+O kit inicial, mercador e receitas foram implementados na .50, conforme abaixo.
 
 **Implementado na versão .49:** tela inicial somente com **Novo jogo** e
 **Carregar jogo**; uma partida salva. Novo jogo abre a campanha do refúgio e
 pede confirmação caso exista progresso. A partida antiga ativa é migrada
 para o espaço único; arquivos anteriores são preservados sem seleção de slots.
 [Fluxo, migração e testes](docs/menu-inicial-save-unico.md).
+
+**Implementado na versão .50:** novas campanhas recebem caixa 200, duas mesas e
+oito cadeiras, cozinha equipada, duas panelas e oito pratos, arroz 12/batata 8/
+cenoura 8. Começam com caldo de batata e arroz com cenoura, sem funcionário.
+Beto vende ingredientes na cidade, com estoque diário limitado e entrega na
+geladeira; computador não participa do fluxo. Cardápio está em Gestão.
+Nutrição e tempo aparecem por ícones no livro e no cardápio. A primeira
+caravana, intermediada por Nina, oferece frango e aprendizado de canja.
+[Parâmetros e validação do começo jogável](docs/inicio-mercador.md).
 
 O [registro do primeiro protótipo](docs/primeiro-ciclo-refugio.md) documenta o que
 foi implementado na versão .46. Números de moradores, tempos, ganhos, perdas,
@@ -219,11 +228,11 @@ duas panelas e oito pratos limpos; arroz 12, batata 8 e cenoura 8. Receitas
 iniciais: caldo de batata e arroz com cenoura; canja desbloqueada posteriormente
 por viajante. Esses valores são um ponto de partida aprovado para playtest.
 
-**Alcance atual:** a versão .48 entrega a contratação; ainda conserva caixa
-1500, três mesas, estoque e três receitas do protótipo anterior. O kit de 200,
-os novos ingredientes e receitas devem entrar junto de abastecimento utilizável,
-sem deixar o jogador sem recursos para continuar. Não apresentar esses alvos
-como já existentes no executável.
+**Alcance atual (.50):** o kit e as duas receitas são aplicados somente em
+novas campanhas. Saves anteriores preservam caixa, planta, utensílios,
+estoque e cardápio, recebendo acesso ao mercador com ingredientes compatíveis.
+A produção por carpinteiro/artesão, sucata e peças especiais de viajantes
+ainda será implementada; compras de móveis continuam provisórias no modo construção.
 
 Funcionários são uma conquista, não parte do kit inicial. Conforme chegam
 novos moradores, o jogador pode procurar contratação, consultar pessoas
@@ -244,10 +253,12 @@ Preservar funcionários de partidas antigas, inclusive sua tarefa e carga.
 
 **Direção aprovada:** a tecnologia entrou em colapso; **não há computador**.
 A decisão anterior de mantê-lo para administração foi substituída. Gestão
-continua acessível por menu; remover catálogo e compras do computador faz
-parte da próxima adaptação do comércio, preservando equipamentos em saves antigos.
+continua acessível por menu; a versão .50 remove o computador do catálogo e das interações no refúgio,
+preservando equipamentos legados em saves antigos.
 Ingredientes vêm do mercador da cidade e de viajantes. **O estoque do mercador
-é limitado**; quantidades e reposição ainda precisam de balanceamento.
+é limitado**. O teste .50 repõe 12 arroz, 12 batatas e 12 cenouras ao amanhecer,
+sem acumular sobras. Cada unidade custa 2. A compra é presencial e a entrega
+na geladeira está incluída; falta de espaço, saldo ou estoque não cobra.
 
 O carpinteiro fabrica móveis; o ferro-velho fornece parte dos componentes de
 equipamentos como geladeira e fogão. Certas peças só são obtidas com viajantes,
@@ -260,8 +271,13 @@ representada por **1 a 10 pequenas coxas de frango em pixel art**; tempo estimad
 por mini relógios, com quantidade visual no mesmo estilo. Mostrar os mesmos
 indicadores ao selecionar as receitas do dia. O tempo considera corte, cozimento
 e empratamento, e a nutrição deve corresponder à contribuição alimentar real.
-Escala temporal de cada relógio e valores por receita ainda serão definidos.
-Esses indicadores e o comércio presencial **não estão implementados na .48**.
+Na .50, cada relógio representa aproximadamente 2 segundos, arredondando para
+cima; é uma escala de teste. Nutrição: caldo 4, arroz com cenoura 6 e canja 8.
+Cada refeição contribui com nutrição × 5,2 / população para a alimentação coletiva.
+O preço inicial é 10/14/20; tempos de cozimento 5/6/8s, respectivamente.
+A caravana chega nos dias 4, 8, 12 etc.; Nina intermedeia o teste, com seis
+frangos a 4 cada e aprendizado único de canja por 30. Agenda, quantidades,
+preços e contribuição são parâmetros provisórios a avaliar em partidas.
 
 ### Dia comum
 
@@ -698,8 +714,8 @@ Valores e ritmo continuam sujeitos aos playtests do proprietário.
 
 A direção vigente é a taverna do refúgio no apocalipse zumbi. A ambientação nuclear anterior foi substituída. A operação existente deve ser preservada enquanto o universo é incorporado. A aprovação abaixo é de conceito. Detalhes e parâmetros são desenvolvidos em trechos jogáveis com avaliação de Dener; esta revisão documental não implementa novas regras no executável.
 
-- Retirar o computador: a tecnologia entrou em colapso. Administração por menu; compras presenciais, conforme a seção 3.
-- Obter ingredientes pelo mercador da cidade com estoque limitado e por viajantes; revisar ingredientes e receitas conforme o início aprovado na seção 3.
+- Computador retirado do fluxo do refúgio na .50. Expandir serviços presenciais para móveis, equipamentos e decoração, conforme a seção 3.
+- Expandir o primeiro mercador e a caravana implementados na .50, com estoques limitados e novas possibilidades de desbloqueio.
 - Comprar peças no ferro-velho e obter componentes essenciais com viajantes para fabricar equipamentos como geladeiras. A fabricação é realizada por um artesão; o equipamento é entregue após ele concluir o trabalho. Não há fabricação desses equipamentos pelo jogador nesta direção aprovada.
 - Ampliar obtenção por produtores locais, feiras de caravanas, trocas com clientes, coleta em áreas recuperadas e expedições encomendadas.
 - Usar tipos de clientes ligados às ocupações do mundo, além dos perfis técnicos de paciência.
@@ -821,6 +837,7 @@ O teste avulso `qa/rua-horario.test.cjs` falhou ao preparar ingredientes buscand
 
 ### Fontes de manutenção
 
+- [Kit inicial, mercador e receitas, implementação .50](docs/inicio-mercador.md).
 - [Menu inicial e salvamento único, implementação .49](docs/menu-inicial-save-unico.md).
 - [Contratação e início aprovado, implementação .48](docs/contratacao-primeiro-garcom.md).
 - [Consulta da cidade e implementação .47](docs/cidade-menu-coletivo.md).
@@ -846,7 +863,8 @@ comprovam diversão ou balanceamento final.
 | 3.0 — 17/11/2026 | Nova premissa zumbi e primeiro protótipo jogável, com parâmetros provisórios. |
 | 3.1 — 17/11/2026 | Proposta consolidada aprovada: cidade de esperança, três barras coletivas, hordas de 3 a 5 dias, defesa animada, derrotas consecutivas com reset por vitória, retomada, crescimento, recompensas visuais e funcionais e desenvolvimento por playtests. |
 | 3.2 — 17/11/2026 | Início aprovado sem funcionário, contratação ligada ao crescimento (garçom primeiro), comércio limitado por NPCs, peças de viajantes, mundo sem computador e indicadores visuais de nutrição e tempo. Implementação .48 entrega contratação; kit, receitas e comércio permanecem pendentes. |
-| **3.3 — 17/11/2026** | Tela inicial com Novo jogo e Carregar jogo, somente um slot. Três slots adiados. Migração da partida antiga ativa, preservação de arquivos anteriores e confirmação antes de novo jogo substituir progresso. |
+| 3.3 — 17/11/2026 | Tela inicial com Novo jogo e Carregar jogo, somente um slot. Três slots adiados. Migração da partida antiga ativa, preservação de arquivos anteriores e confirmação antes de novo jogo substituir progresso. |
+| **3.4 — 17/11/2026** | Kit inicial aprovado implementado; duas receitas iniciais; reposição por mercador limitado com entrega na geladeira; caravana e canja; ícones de nutrição e tempo; preservação das campanhas anteriores. |
 
 A aprovação de Dener da revisão 3.1 resolve as duas definições pendentes.
 A implementação .47 incorpora essas regras e a consulta em Gestão → Cidade,

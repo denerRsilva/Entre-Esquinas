@@ -28,6 +28,8 @@ func run():
 	check(g.frame_data.modal=="management" and g.session.tab=="city","Consulta das barras coletivas no menu")
 	var time: float = s.time;g.tick(1);check(s.time==time,"Consulta pausa o preparo")
 	check(await press("Voltar ao jogo"),"Retorno da consulta")
+	# Keep the prior service regression on a legacy campaign; InicioUI covers the new menu.
+	s=clone_campaign();g.session.load_state(s);g.tick(0)
 	# Real cooking and service: the same survivor later appears in defense.
 	await take("frango");await click_object("prep");advance(2.1)
 	await click_object("stove");await take("arroz");await click_object("stove");await click_object("stove");advance(8.1)
@@ -91,7 +93,7 @@ func run():
 	loss.clock.minute=1080;g.tick(0.1);g.tick(8.1)
 	check(loss.refuge.phase=="aftermath" and loss.refuge.defeats==1 and loss.refuge.defense==45,"Primeira derrota recua e mantém uma chance")
 	g.events.append({"kind":"refuge","action":"continue"});g.tick(0)
-	loss.day=7;loss.clock.minute=360;g.session.checkpoint(true);loss.clock.minute=1080;g.tick(0.1);g.tick(8.1)
+	loss.day=7;preload("res://simulacao/nativa/Mercado.gd").restock(loss);loss.clock.minute=360;g.session.checkpoint(true);loss.clock.minute=1080;g.tick(0.1);g.tick(8.1)
 	check(loss.refuge.phase=="gameover" and loss.refuge.defeats==2,"Segunda derrota encerra a campanha")
 	var day: int = loss.day;g.tick(100)
 	check(loss.day==day and loss.refuge.defeats==2,"Game over não simula nem cobra novas consequências")

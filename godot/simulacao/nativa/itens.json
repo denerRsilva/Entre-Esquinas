@@ -121,5 +121,107 @@
     "recipe": "frangoArroz",
     "servings": 4,
     "limit": 1
+  },
+  "batata": {
+    "name": "Batata",
+    "cost": 2,
+    "kind": "cold"
+  },
+  "batata_cut": {
+    "name": "Batata cortada",
+    "raw": "batata"
+  },
+  "cenoura": {
+    "name": "Cenoura",
+    "cost": 2,
+    "kind": "cold"
+  },
+  "cenoura_cut": {
+    "name": "Cenoura cortada",
+    "raw": "cenoura"
+  },
+  "dish_caldoBatata": {
+    "name": "Caldo de batata",
+    "recipe": "caldoBatata"
+  },
+  "pot_caldoBatata_1": {
+    "name": "Panela: Caldo de batata (1 porções)",
+    "recipe": "caldoBatata",
+    "servings": 1,
+    "limit": 1
+  },
+  "pot_caldoBatata_2": {
+    "name": "Panela: Caldo de batata (2 porções)",
+    "recipe": "caldoBatata",
+    "servings": 2,
+    "limit": 1
+  },
+  "pot_caldoBatata_3": {
+    "name": "Panela: Caldo de batata (3 porções)",
+    "recipe": "caldoBatata",
+    "servings": 3,
+    "limit": 1
+  },
+  "pot_caldoBatata_4": {
+    "name": "Panela: Caldo de batata (4 porções)",
+    "recipe": "caldoBatata",
+    "servings": 4,
+    "limit": 1
+  },
+  "dish_arrozCenoura": {
+    "name": "Arroz com cenoura",
+    "recipe": "arrozCenoura"
+  },
+  "pot_arrozCenoura_1": {
+    "name": "Panela: Arroz com cenoura (1 porções)",
+    "recipe": "arrozCenoura",
+    "servings": 1,
+    "limit": 1
+  },
+  "pot_arrozCenoura_2": {
+    "name": "Panela: Arroz com cenoura (2 porções)",
+    "recipe": "arrozCenoura",
+    "servings": 2,
+    "limit": 1
+  },
+  "pot_arrozCenoura_3": {
+    "name": "Panela: Arroz com cenoura (3 porções)",
+    "recipe": "arrozCenoura",
+    "servings": 3,
+    "limit": 1
+  },
+  "pot_arrozCenoura_4": {
+    "name": "Panela: Arroz com cenoura (4 porções)",
+    "recipe": "arrozCenoura",
+    "servings": 4,
+    "limit": 1
+  },
+  "dish_canja": {
+    "name": "Canja",
+    "recipe": "canja"
+  },
+  "pot_canja_1": {
+    "name": "Panela: Canja (1 porções)",
+    "recipe": "canja",
+    "servings": 1,
+    "limit": 1
+  },
+  "pot_canja_2": {
+    "name": "Panela: Canja (2 porções)",
+    "recipe": "canja",
+    "servings": 2,
+    "limit": 1
+  },
+  "pot_canja_3": {
+    "name": "Panela: Canja (3 porções)",
+    "recipe": "canja",
+    "servings": 3,
+    "limit": 1
+  },
+  "pot_canja_4": {
+    "name": "Panela: Canja (4 porções)",
+    "recipe": "canja",
+    "servings": 4,
+    "limit": 1
   }
 }

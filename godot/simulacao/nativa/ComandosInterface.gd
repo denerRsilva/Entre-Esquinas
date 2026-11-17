@@ -8,9 +8,9 @@ static func execute(s: Dictionary,operation: String,args: Array) -> Dictionary:
 			for order in s.orders:
 				if order.id==args[0] and order.state=="ordered":s.priority=order.id;return {"ok":true,"message":null}
 		"menu":
-			if RECIPES.RECIPES.data.has(args[0]) and args[1] is bool:s.menu[args[0]]=args[1];return {"ok":true,"message":null}
+			if args[0] in RECIPES.available(s) and args[1] is bool:s.menu[args[0]]=args[1];return {"ok":true,"message":null}
 		"price":
-			if RECIPES.RECIPES.data.has(args[0]) and ADMIN.numeric(args[1]) and args[1]>=1 and args[1]<=100:
+			if args[0] in RECIPES.available(s) and ADMIN.numeric(args[1]) and args[1]>=1 and args[1]<=100:
 				s.prices[args[0]]=args[1]
 				var cost := 0.0
 				for food in RECIPES.RECIPES.data[args[0]].foods:cost+=RECIPES.RECIPES.data[args[0]].foods[food]*RECIPES.ITEMS.data[food].cost
@@ -32,6 +32,12 @@ static func execute(s: Dictionary,operation: String,args: Array) -> Dictionary:
 					worker.merge({"room":"restaurant","x":12 if worker.id=="worker2" else 13,"y":10,"goal":null,"motion":null,"carry":null,"wait":0,"hold":0},true)
 					worker.erase("settled");worker.erase("noteJob");worker.erase("idleUntil")
 				s.workers=hired
+			if s.has("startKit"):
+				for raw in preload("res://simulacao/nativa/Inventario.gd").RAWS:
+					s.purchased[raw]=s.purchased.get(raw,0);s.used[raw]=s.used.get(raw,0)
+					for loc in s.inv:s.inv[loc][raw]=s.inv[loc].get(raw,0)
+				for id in RECIPES.RECIPES.data:
+					for kind in ["made","eaten","wasted"]:s.meals[kind][id]=s.meals[kind].get(id,0)
 			s.message="Teste limpo: móveis e itens removidos. Serviço, entregas e preparos cancelados; dinheiro e dia preservados."
 			return {"ok":true,"message":s.message}
 	return {"ok":false,"message":null}

@@ -52,6 +52,10 @@ func furniture_control(type: String, title: String) -> Control:
 	return icon
 
 func art_control(d: Dictionary) -> Control:
+	if d.get("cls","")=="recipeRating":
+		var rating := preload("res://interface/IndicadorReceita.gd").new()
+		rating.item=d.art[0][1];rating.count=d.art.size();rating.custom_minimum_size=Vector2(rating.count*20,22)
+		rating.tooltip_text=d.get("label","");rating.add_to_group("recipeRatings");return rating
 	if not d.art.is_empty() and d.art[0][0]=="furniture_icon":
 		return furniture_control(str(d.art[0][1]),d.get("label",""))
 	var n := TextureRect.new()
@@ -62,7 +66,7 @@ func art_control(d: Dictionary) -> Control:
 	n.material=mat
 	n.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	n.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	n.custom_minimum_size = Vector2(180,130) if d.get("cls","")=="recipeHero" else Vector2(52,42)
+	n.custom_minimum_size = Vector2(160,88) if d.get("cls","")=="recipeHeroSmall" else Vector2(28,24) if d.get("cls","")=="controlIcon" else Vector2(180,130) if d.get("cls","")=="recipeHero" else Vector2(52,42)
 	n.tooltip_text = d.get("label","")
 	return n
 

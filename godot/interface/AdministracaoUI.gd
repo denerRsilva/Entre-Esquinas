@@ -49,7 +49,7 @@ func render(s: Dictionary,model: Dictionary,override: Variant = null) -> Diction
 	var title: String = titles.get(mode,"Gestão da taverna" if REFUGE.active(s) else "Gestão do restaurante")
 	var tabs: Dictionary = {} if mode=="recipes" else {"container":"Transferir itens"} if mode=="container" else {"supplier":"Fornecedor","tools":"Utensílios","menu":"Cardápio e preços","deliveries":"Entregas"} if mode=="computer" else {"camera":"Câmera","save":"Salvar e carregar","test":"Testes","guide":"Primeiros passos"} if mode=="options" else {"shifts":"Turnos","build":"Modo construção","team":"Equipe","finance":"Fechamento","customers":"Clientes","calendar":"Calendário","reputation":"Reputação"}
 	if mode=="general" and REFUGE.active(s):
-		var city_tabs := {"city":"Cidade"};city_tabs.merge(tabs);tabs=city_tabs
+		var city_tabs := {"city":"Cidade","menu":"Cardápio"};city_tabs.merge(tabs);tabs=city_tabs
 	var navigation: Array = []
 	for key in tabs:
 		var item := button(tabs[key],"tab",key);item.cls="active" if tab==key else ""
@@ -64,6 +64,9 @@ func panel(s: Dictionary,model: Dictionary) -> Array:
 		"city":
 			if not REFUGE.active(s):return [label("Comece no refúgio para acompanhar a cidade.")]
 			var city: Dictionary = s.refuge
+			if s.has("market"):
+				result.append(label("Beto vende ingredientes na rua; reposição ao amanhecer."))
+				result.append(label("Caravana com Nina: hoje." if preload("res://simulacao/nativa/Mercado.gd").visiting(s) else "Próxima caravana: dia "+str((int(s.day)/4+1)*4)+"."))
 			var days: int = maxi(0,int(city.nextHorde-s.day))
 			var situation: String = "Recuo" if city.defeats>0 else "Preparação para a horda" if days<=1 else "Normal"
 			result.append(node("h2",[text("Cidade")]))
@@ -109,10 +112,10 @@ func panel(s: Dictionary,model: Dictionary) -> Array:
 			result.append(node("div",cards,"","cards"));result.append(table(["Ingrediente","Recebimento","Estoque","Cozinha"],rows))
 		"menu":
 			result.append(label("Escolha os pratos oferecidos e ajuste os preços. Receitas e custos são hipóteses de teste. Pedidos já anotados mantêm o preço combinado."));var cards: Array = []
-			for id in SERVICE.RECIPES.data:
+			for id in preload("res://simulacao/nativa/Receitas.gd").available(s):
 				var recipe: Dictionary = SERVICE.RECIPES.data[id];var cost := 0.0;var ingredients: PackedStringArray = []
 				for food in recipe.foods:cost+=recipe.foods[food]*SERVICE.INV.ITEMS.data[food].cost;ingredients.append(number(recipe.foods[food])+" "+SERVICE.INV.ITEMS.data[food].name)
-				cards.append(node("div",[node("b",[text(recipe.name)]),label(" + ".join(ingredients)+" • custo "+money(cost)+" • preparo "+number(recipe.time)+"s por porção"),{"tag":"input","type":"checkbox","checked":s.menu[id],"value":s.menu[id],"label":"Oferecer no cardápio","path":register("menu",id),"disabled":false},input("Preço de "+recipe.name,"price",id,s.prices[id],1,100,0.25)],"","card"))
+				cards.append(node("div",[node("b",[text(recipe.name)]),FOOD.icon(id),preload("res://interface/LivroReceitasNativo.gd").ratings(s,id),label(" + ".join(ingredients)+" • custo "+money(cost)+" • preparo "+number(recipe.time)+"s por porção"),{"tag":"input","type":"checkbox","checked":s.menu[id],"value":s.menu[id],"label":"Oferecer no cardápio","path":register("menu",id),"disabled":false},input("Preço de "+recipe.name,"price",id,s.prices[id],1,100,0.25)],"","card"))
 			result.append(node("div",cards,"","cards"))
 		"deliveries":
 			var rows: Array = []

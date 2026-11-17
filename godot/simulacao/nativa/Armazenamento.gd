@@ -99,11 +99,11 @@ static func first_quality(object: Dictionary, item: String) -> int:
 
 static func sync(state: Dictionary) -> void:
 	for loc in ["storage","kitchen"]:
-		for food in ["arroz","legumes","frango"]:
+		for food in INV.RAWS:
 			var total := 0
 			for object in state.objects:
 				if object.has("inventory") and location(object)==loc:total+=count(object,food)
-			state.inv[loc][food]=total
+			if total>0 or state.inv[loc].has(food):state.inv[loc][food]=total
 
 static func put(state: Dictionary, object: Dictionary, item: String, quantity: Variant, quality: int = 0) -> int:
 	if not (quantity is int or quantity is float) or not is_finite(quantity) or quantity!=floor(quantity) or quantity<1 or not INV.ITEMS.data.has(item):return 0

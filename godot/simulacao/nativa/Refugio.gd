@@ -36,7 +36,8 @@ static func completed(s: Dictionary,c: Dictionary,outcome: String) -> void:
 	# Every meal contributes to the city; demand scales with its population.
 	var population: int = s.refuge.residents.size()
 	if outcome=="completed":
-		change(s,"food",26.0/population)
+		var nutrition: float = preload("res://simulacao/nativa/receitas.json").data.get(c.get("recipe"),{}).get("nutrition",5)
+		change(s,"food",nutrition*5.2/population)
 		var satisfaction = c.experience.get("satisfaction")
 		change(s,"morale",(2+6*(float(satisfaction.score)/100 if satisfaction!=null else 0.5))/population)
 	else:change(s,"morale",-3.0/population)

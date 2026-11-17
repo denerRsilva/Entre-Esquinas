@@ -76,6 +76,7 @@ static func finish_day(s: Dictionary) -> bool:
 	preload("res://simulacao/nativa/HistoricoPedidos.gd").compact(s)
 	s.day+=1;s.period=0;s.open=false;s.closing=false;s.clock={"minute":360,"remainder":0,"ending":false}
 	REFUGE.dawn(s)
+	preload("res://simulacao/nativa/Mercado.gd").restock(s)
 	s.message="Novo dia às 06:00. Relatório diário disponível na Gestão."
 	return true
 static func test_clock(s: Dictionary,minute: Variant) -> Dictionary:
@@ -100,6 +101,7 @@ static func receiving_count(s: Dictionary,food: String,quality: int) -> float:
 	var counts: Array = s.get("receivingQuality",{}).get(food,[0,0,0,0])
 	return counts[quality] if quality else s.inv.receiving[food]-counts[1]-counts[2]-counts[3]
 static func purchase(s: Dictionary,food: Variant,quantity: Variant,quality: Variant = 0) -> bool:
+	if REFUGE.active(s):return false
 	if s.get("singleRoom",false):
 		var found := false
 		for object in s.objects:

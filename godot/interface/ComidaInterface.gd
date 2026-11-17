@@ -8,7 +8,7 @@ static func icon(item: String,quality: int = 0) -> Dictionary:
 	var key := FOOD.food_key(item)
 	var index := FOOD.KEYS.find(key)
 	var art: Array = []
-	if index>=0:art.append(["food",item,0,0,64,64,1,1,0,0,1])
+	if index>=0 or key in FOOD.EARLY_KEYS:art.append(["food",item,0,0,64,64,1,1,0,0,1])
 	if quality>0 and not item.begins_with("pot_"):
 		var points: Array = []
 		for i in 10:
@@ -16,7 +16,7 @@ static func icon(item: String,quality: int = 0) -> Dictionary:
 			var radius := 18*(0.22 if i%2 else 0.5)
 			points.append([53+cos(angle)*radius,53+sin(angle)*radius])
 		art.append(["poly",points,["","#c5c9cc","#ffd14c","#c286ff"][quality]])
-	return {"tag":"canvas","cls":"foodArt","label":(NAMES[index] if index>=0 else "Comida")+" • "+["Comum","Prata","Ouro","Roxa"][quality],"art":art}
+	return {"tag":"canvas","cls":"foodArt","label":(NAMES[index] if index>=0 else preload("res://simulacao/nativa/itens.json").data.get(item,preload("res://simulacao/nativa/receitas.json").data.get(item,{})).get("name","Comida"))+" • "+["Comum","Prata","Ouro","Roxa"][quality],"art":art}
 func parts(value: String) -> Array:
 	var result: Array = []
 	var offset := 0

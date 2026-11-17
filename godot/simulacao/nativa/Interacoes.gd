@@ -62,6 +62,7 @@ func queue_floor(s: Dictionary,key: String) -> bool:
 	play_go(s,target.point);pending={"kind":"mop","target":key,"until":s.time+30}
 	current=true;process(s);return true
 func primary(s: Dictionary,o: Dictionary,pointer: Variant = null) -> Variant:
+	if o.type=="computer" and s.get("refuge") is Dictionary:return false
 	if o.type in ["computer","receiving","fridge","cold","shelf","potRack"]:
 		if not go_object(s,o):return false
 		pending={"kind":"utility" if o.type in ["computer","receiving"] else "storage","target":o.id,"until":s.time+30};current=true;process(s);return true
@@ -71,14 +72,14 @@ func primary(s: Dictionary,o: Dictionary,pointer: Variant = null) -> Variant:
 		if p!=null and KITCHEN.STORE.is_pot(item):return physical(s,o,"support")
 		if p==null and o.get("support")!=null:return physical(s,o,"takePan")
 		return false
-	if o.type=="prep":return physical(s,o,"chop") if item in ["frango","legumes"] and s.get("chopping")==null and s.get("plating")==null else false
+	if o.type=="prep":return physical(s,o,"chop") if item in INV.CUTTABLE and s.get("chopping")==null and s.get("plating")==null else false
 	if o.type=="stove":
 		var pan = o.get("pan")
 		var action: Variant = null
 		if pan==null or pan=="":action="installPan" if KITCHEN.STORE.is_pot(item) else null
 		elif pan.begins_with("pot_"):action="takePan" if p==null else null
 		elif pan!="cookingPot":
-			if p!=null and item in ["arroz","legumes_cut","frango_cut"]:action="add"
+			if p!=null and item in INV.COOKABLE:action="add"
 			elif p==null and kitchen.RECIPES.recognized(o)!=null:action="cook"
 			elif p==null and o.get("ingredients",[]).is_empty():action="takePan"
 		return physical(s,o,action) if action!=null else false
@@ -127,6 +128,12 @@ func primary(s: Dictionary,o: Dictionary,pointer: Variant = null) -> Variant:
 func process(s: Dictionary) -> void:
 	var job = pending
 	if job==null:return
+	if job.kind=="merchant":
+		var person = service.find(s.residents,job.target)
+		if not current or person==null or s.time>job.until:pending=null;return
+		if s.player.get("motion")==null and service.near(s.player,person):
+			pending=null;effects.append({"kind":"dialog","mode":"merchant" if person.id=="beto" else "traveler"})
+		return
 	if job.kind in ["computer","receiving"]:
 		if not current or s.time>job.until:pending=null;return
 		var point := {"room":"restaurant","x":16 if job.kind=="computer" else 21,"y":12}
@@ -193,7 +200,10 @@ func pointer_down(s: Dictionary,pointer: Dictionary) -> void:
 		refresh();return
 	for person in MOVE.ACTORS.actors(s):
 		if person.id!=s.player.id and person.room==room and person.x==x and person.y==y:
-			selected=person.id;approach(s,person);refresh();return
+			selected=person.id
+			if approach(s,person) and s.get("refuge") is Dictionary and (person.id=="beto" or (person.id=="nina" and preload("res://simulacao/nativa/Mercado.gd").visiting(s))):
+				pending={"kind":"merchant","target":person.id,"until":s.time+30};current=true;process(s)
+			refresh();return
 	var dirt_key := str(x)+","+str(y)
 	if room=="restaurant" and s.get("floorDirt",{}).has(dirt_key) and HYGIENE.free_hands(s,s.player):
 		selected="floor:"+dirt_key

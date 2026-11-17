@@ -72,7 +72,7 @@ func recover(s: Dictionary,index: Variant) -> Dictionary:
 	s.player.hand=p.duplicate(true);s.player.hand.n=1;p.n-=1;s.recovery=s.recovery.filter(func(v):return v.n>0)
 	return result(s,true,"Item antigo recuperado nas mãos.")
 func cook_error(s: Dictionary,o: Variant,recipe: Variant) -> Variant:
-	if o==null or o.type!="stove" or not RECIPES.RECIPES.data.has(recipe):return "Complete uma receita na panela."
+	if o==null or o.type!="stove" or recipe not in RECIPES.available(s):return "Complete uma receita na panela."
 	if s.player.get("hand")!=null or s.player.get("carry")!=null or s.get("chopping")!=null or s.get("plating")!=null or s.get("washing")!=null:return "Libere as mãos e conclua o trabalho manual antes de cozinhar."
 	if s.get("cooking")!=null:return "Há uma panela cozinhando."
 	if o.get("pan")!="pot":return "Instale uma panela vazia."
@@ -234,7 +234,7 @@ func physical(s: Dictionary,id: Variant,action: String) -> Dictionary:
 	var p = a.get("hand")
 	match action:
 		"chop":
-			if a.get("carry")!=null or o.type!="prep" or p==null or p.item not in ["legumes","frango"]:return result(s,false,"Traga frango cru ou legumes inteiros nas mãos.")
+			if a.get("carry")!=null or o.type!="prep" or p==null or p.item not in INV.CUTTABLE:return result(s,false,"Traga frango cru ou legumes inteiros nas mãos.")
 			s.chopping={"hand":true,"table":id,"item":p.item,"quality":p.get("quality",0),"left":REFUGE.cut_time(s),"total":REFUGE.cut_time(s)};return feedback(s,o,"Cortando "+name(p.item))
 		"support":
 			if a.get("carry")!=null or p==null or not STORE.is_pot(p.item) or not STORE.surface_empty(o):return result(s,false,"Traga uma panela e libere o apoio.")
@@ -248,11 +248,12 @@ func physical(s: Dictionary,id: Variant,action: String) -> Dictionary:
 			a.hand=null;return feedback(s,o,"Panela instalada")
 		"add":
 			if o.type!="stove" or o.get("pan")!="pot":return result(s,false,"Instale uma panela vazia.")
-			if p==null or p.item not in ["arroz","legumes_cut","frango_cut"]:return result(s,false,"Traga arroz, frango cortado ou legumes cortados nas mãos.")
+			if p==null or p.item not in INV.COOKABLE:return result(s,false,"Traga arroz, frango cortado ou legumes cortados nas mãos.")
 			var next: Array = o.get("ingredients",[]).duplicate(true)
 			var portion: Dictionary = p.duplicate(true);portion.n=1;next.append(portion)
 			var possible := false
-			for recipe in RECIPES.RECIPES.data.values():
+			for recipe_id in RECIPES.available(s):
+				var recipe: Dictionary = RECIPES.RECIPES.data[recipe_id]
 				var matches := true
 				for part in next:
 					var count := 0.0

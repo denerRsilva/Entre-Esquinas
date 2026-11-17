@@ -1,6 +1,7 @@
 extends RefCounted
 ## Native application state and input controller; no script evaluator or DOM.
 const REFUGE = preload("res://simulacao/nativa/Refugio.gd")
+const MARKET = preload("res://simulacao/nativa/Mercado.gd")
 const PARTIDA = preload("res://simulacao/nativa/Partida.gd")
 const SIM = preload("res://simulacao/nativa/Simulacao.gd")
 const MOVE = preload("res://simulacao/nativa/Movimento.gd")
@@ -101,7 +102,7 @@ func set_zoom(value: float) -> void:
 	camera_level=CAMERA.level(value);values["entre-camera-zoom"]=str(camera_level);writes["entre-camera-zoom"]=str(camera_level);update_camera()
 func notify(message: String,bad: bool = false) -> void:
 	state.message=message;notice_until=clock+6
-	if modal in ["management","welcome","confirmNew"]:menu_notice=message
+	if modal in ["management","market","welcome","confirmNew"]:menu_notice=message
 func reset_view() -> void:
 	PARTIDA.waiter_defaults(state)
 	renderer.facing.clear();played_heat.clear();pending=null;velocity=null;keyboard.clear();generation+=1
@@ -111,6 +112,10 @@ func open_dialog(next: String) -> void:
 	if construction:return
 	pending=null;release_keyboard()
 	var kitchen = INTERACT.KITCHEN.new()
+	if next=="computer" and REFUGE.active(state):return
+	if next in ["merchant","traveler"]:
+		if MARKET.near(state,next=="traveler"):mode=next;modal="market";menu_notice="";state.player.goal=null
+		return
 	if next=="computer" and not INTERACT.LOGISTICS.utility_near(state,"computer",kitchen):notify("Aproxime-se do computador.",true);return
 	mode=next;tab="container" if next=="container" else "supplier" if next=="computer" else "camera" if next=="options" else "recipes" if next=="recipes" else "city" if next=="general" and REFUGE.active(state) else "shifts"
 	modal="management";menu_notice="";generation+=1
@@ -187,7 +192,7 @@ func pointer(event: Dictionary) -> void:
 func key(event: Dictionary) -> void:
 	var name: String = event.key;var down: bool = event.down
 	if name=="escape" and down and modal=="confirmNew":modal="welcome";return
-	if name=="escape" and down and modal=="management":close_dialog();return
+	if name=="escape" and down and modal in ["management","market"]:close_dialog();return
 	if not modal.is_empty():return
 	var movement: bool = name in ["arrowup","arrowdown","arrowleft","arrowright","w","a","s","d"]
 	if construction:
@@ -305,8 +310,16 @@ func sleep_day() -> void:
 func start_refuge() -> void:
 	archive_save()
 	values[CHECKPOINT_KEY]="";writes[CHECKPOINT_KEY]="";checkpoint_cache={"day":0,"raw":""};menu_notice=""
-	state=PARTIDA.furnished(true,true);REFUGE.start(state);building=null;hover=null;selected=null;construction=false;drawer=false;reset_view();modal="";set_zoom(camera_level);save_game();checkpoint(true)
+	state=PARTIDA.furnished(true,true);REFUGE.start(state);preload("res://simulacao/nativa/Inicio.gd").apply(state);MARKET.initialize(state);building=null;hover=null;selected=null;construction=false;drawer=false;reset_view();modal="";set_zoom(camera_level);save_game();checkpoint(true)
 func root_action(kind: String) -> void:
+	if kind.begins_with("marketBuy:") and modal=="market":
+		var parts := kind.split(":")
+		if parts.size()==3:
+			var result := MARKET.buy(state,parts[1],int(parts[2]),mode=="traveler");notify(result.message,not result.ok)
+		return
+	if kind=="learnCanja" and modal=="market":
+		if MARKET.learn(state):notify("Canja aprendida. Disponível no livro e no cardápio.")
+		return
 	if kind=="sleep":sleep_day();return
 	if kind=="manualSave":save_game();return
 	if kind=="manualLoad":load_game();return
@@ -318,6 +331,7 @@ func root_action(kind: String) -> void:
 			if modal=="confirmNew":start_refuge()
 		"loadStart":
 			if load_game():close_dialog()
+		"closeMarket":close_dialog()
 		"welcome":modal="welcome";menu_notice="";release_keyboard()
 		"furnished":state=PARTIDA.furnished(true,true);building=null;hover=null;selected=null;reset_view();modal="";set_zoom(camera_level)
 		"empty":close_dialog()
@@ -378,10 +392,25 @@ func ui() -> Dictionary:
 		var items: Array = [node("h1",[text("Entre Esquinas")]),button("Novo jogo","newGame"),button("Carregar jogo","loadStart",not has_saved_game())]
 		if not menu_notice.is_empty():items.append(label(menu_notice))
 		return {"modal":node("dialog",items,"welcome")}
+	if modal=="market":
+		var traveler: bool = mode=="traveler"
+		var items: Array = [node("h1",[text("Nina · Caravana" if traveler else "Beto · Mercador")]),label("Disponível: $%.2f"%state.cash),label("Entrega incluída na geladeira. Estoque limitado; reposição ao amanhecer."),button("Voltar ao jogo","closeMarket")]
+		if traveler and state.has("startKit") and "canja" not in state.startKit.recipes:items.append(button("Aprender canja · $30","learnCanja",state.cash<MARKET.RECIPE_COST))
+		var stock: Dictionary = {"frango":state.market.travelStock} if traveler else state.market.stock
+		var cards: Array = []
+		for food in stock:
+			var card: Array = [node("b",[text(INTERACT.INV.ITEMS.data[food].name)]),FOOD_UI.icon(food),label("Estoque: "+str(int(stock[food])))]
+			for amount in [1,5]:card.append(button("Comprar "+str(amount)+" "+INTERACT.INV.ITEMS.data[food].name+" · $"+str(int(amount*INTERACT.INV.ITEMS.data[food].cost)),"marketBuy:"+food+":"+str(amount),not MARKET.error(state,food,amount,traveler).is_empty()))
+			var reason := MARKET.error(state,food,1,traveler)
+			if not reason.is_empty():card.append(label(reason))
+			cards.append(node("div",card,"","inventoryPane"))
+		items.append(node("div",cards,"","splitInventories"))
+		if not menu_notice.is_empty():items.append(label(menu_notice))
+		return {"modal":node("dialog",items,"market")}
 	if modal=="management":
 		var panel: Variant = null
 		if mode=="container":panel=inventory_ui.render(state,dialog_object)
-		elif mode=="recipes":panel=recipe_ui.render()
+		elif mode=="recipes":panel=recipe_ui.render(state)
 		elif mode=="computer" and tab=="tools":panel=tools_ui.render(state)
 		if mode=="options" and tab=="save":
 			var raw := str(values.get(SAVE_KEY,""))

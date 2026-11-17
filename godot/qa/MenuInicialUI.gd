@@ -29,9 +29,9 @@ func run():
 	var restarted = SESSION.new();restarted.initialize(g.read_values());restarted.root_action("loadStart")
 	check(restarted.modal=="" and restarted.state.cash==321,"Reabrir sessão carrega progresso gravado no disco")
 	g.session.root_action("welcome");g.tick(0);await press("Novo jogo");await press("Começar novo jogo")
-	check(g.session.state.day==1 and g.session.state.cash==1500 and g.values["entre-partida-anterior"]==saved,"Confirmação substitui a partida e conserva cópia de segurança")
+	check(g.session.state.day==1 and g.session.state.cash==200 and g.values["entre-partida-anterior"]==saved,"Confirmação substitui a partida e conserva cópia de segurança")
 	var checkpoint: String = g.values[SESSION.CHECKPOINT_KEY]
-	check(JSON.parse_string(checkpoint).cash==1500,"Novo jogo não reutiliza preparação da campanha anterior")
+	check(JSON.parse_string(checkpoint).cash==200,"Novo jogo não reutiliza preparação da campanha anterior")
 	g.session.root_action("welcome");g.tick(0)
 	check(buttons().map(func(b):return b.text)==["Novo jogo","Carregar jogo"] and not buttons()[1].disabled,"Tela com progresso continua mostrando só duas opções")
 	# Legacy migration: active slot wins, all historical bytes remain untouched.

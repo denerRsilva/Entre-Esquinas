@@ -79,11 +79,11 @@ static func valid(value: Variant,slots: int = 0) -> bool:
 	for key in ["pot","plate","spoon"]:
 		if not N.integer(s.equipment.get(key)) or s.equipment[key]<0:return false
 	for name in ["made","eaten","wasted"]:
-		if not has_keys(s.meals.get(name),RECIPES.data.keys()):return false
+		if not has_keys(s.meals.get(name),["arrozLegumes","sopa","frangoArroz"]):return false
 	for loc in ["receiving","storage","kitchen"]:
 		if not has_keys(s.inv.get(loc),["arroz","legumes","frango"]):return false
-		for food in ["arroz","legumes","frango"]:
-			if not N.integer(s.inv[loc][food]) or s.inv[loc][food]<0:return false
+		for food in K.INV.RAWS:
+			if not N.integer(s.inv[loc].get(food,0)) or s.inv[loc].get(food,0)<0:return false
 	var ids := {};var occupied := {}
 	for o in s.objects:
 		if not has_keys(o,["id","type","room","x","y","rot"]) or not CATALOG.data.has(o.type):return false
@@ -160,7 +160,7 @@ static func valid(value: Variant,slots: int = 0) -> bool:
 			if not carry is Dictionary or carry.get("kind") not in ["food","dish","dirtyPlates"]:return false
 			if carry.kind=="dirtyPlates" and (not s.workers.has(a) or not N.integer(carry.get("n")) or carry.n<1 or carry.n>K.INV.HAND_PLATE_CAPACITY):return false
 			if carry.kind=="dish" and (not order_ids.has(carry.get("order")) or order_ids[carry.order].state not in ["ready","lost"]):return false
-			if carry.kind=="food" and (carry.get("food") not in ["arroz","legumes","frango"] or not N.integer(carry.get("n")) or carry.n<1):return false
+			if carry.kind=="food" and (carry.get("food") not in K.INV.RAWS or not N.integer(carry.get("n")) or carry.n<1):return false
 		var key: String = a.room+":"+M.key(a)
 		if persons.has(key):return false
 		persons[key]=true
@@ -170,22 +170,23 @@ static func valid(value: Variant,slots: int = 0) -> bool:
 			reservations[key]=a.id
 	if s.player.get("hand")!=null and not K.stack(s.player.hand,true):return false
 	for d in s.deliveries:
-		if not has_keys(d,["food","total","pending","received","eta"]) or d.food not in ["arroz","legumes","frango"] or not N.integer(d.total) or d.total<1:return false
+		if not has_keys(d,["food","total","pending","received","eta"]) or d.food not in K.INV.RAWS or not N.integer(d.total) or d.total<1:return false
 		if not number(d.pending) or not number(d.received) or d.pending<0 or d.received<0 or d.total!=d.pending+d.received or not number(d.eta):return false
-	for food in ["arroz","legumes","frango"]:
-		if not N.integer(s.purchased.get(food)) or not N.integer(s.used.get(food)) or s.purchased[food]<0 or s.used[food]<0:return false
+	for food in K.INV.RAWS:
+		if not N.integer(s.purchased.get(food,0)) or not N.integer(s.used.get(food,0)) or s.purchased.get(food,0)<0 or s.used.get(food,0)<0:return false
 	for recipe in RECIPES.data:
+		if RECIPES.data[recipe].get("early",false) and not s.has("startKit") and not s.menu.has(recipe) and not s.prices.has(recipe):continue
 		if not number(s.prices.get(recipe)) or s.prices[recipe]<1 or s.prices[recipe]>100 or not s.menu.get(recipe) is bool:return false
 	for loc in ["storage","kitchen"]:
-		for food in ["arroz","legumes","frango"]:
+		for food in K.INV.RAWS:
 			var count := 0
 			for o in s.objects:
 				if o.has("inventory") and S.location(o)==loc:count+=S.count(o,food)
-			if s.inv[loc][food]!=count:return false
+			if s.inv[loc].get(food,0)!=count:return false
 	for loc in s.inv:
-		for food in ["arroz","legumes","frango"]:
+		for food in K.INV.RAWS:
 			if S.amount(s,loc,food)>S.capacity(s,loc,food):return false
 	var cooking = s.get("cooking")
 	if cooking!=null:
 		if not cooking is Dictionary or not RECIPES.data.has(cooking.get("recipe")) or not ids.has(cooking.get("stove")) or ids[cooking.stove].type!="stove" or ids[cooking.stove].get("pan")!="cookingPot" or not number(cooking.get("left")) or cooking.left<0:return false
-	return preload("res://simulacao/nativa/Refugio.gd").valid(s) and HYGIENE.valid(s) and K.valid(s) and Q.valid(s) and experience(s) and A.valid_time_reputation(s) and N.food(s) and N.equipment(s) and N.meals(s)
+	return preload("res://simulacao/nativa/Inicio.gd").valid(s) and preload("res://simulacao/nativa/Mercado.gd").valid(s) and preload("res://simulacao/nativa/Refugio.gd").valid(s) and HYGIENE.valid(s) and K.valid(s) and Q.valid(s) and experience(s) and A.valid_time_reputation(s) and N.food(s) and N.equipment(s) and N.meals(s)

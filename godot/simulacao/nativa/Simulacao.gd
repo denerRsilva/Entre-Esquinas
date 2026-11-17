@@ -11,8 +11,8 @@ var kitchen = KITCHEN.new()
 var velocity: Variant = null
 func choose_recipe(s: Dictionary) -> Variant:
 	var available: Array = []
-	for id in SERVICE.RECIPES.data:
-		if s.menu[id]:available.append(id)
+	for id in preload("res://simulacao/nativa/Receitas.gd").available(s):
+		if s.menu.get(id,false):available.append(id)
 	return available[int(s.serial)%available.size()] if not available.is_empty() else null
 func spawn(s: Dictionary) -> bool:
 	if s.clock.ending or REFUGE.blocked(s) or REFUGE.dinner_blocked(s):return false

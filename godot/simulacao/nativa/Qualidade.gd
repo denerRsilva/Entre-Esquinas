@@ -30,7 +30,7 @@ static func valid(state: Dictionary) -> bool:
 		if not quality_valid(delivery):return false
 	for food in state.get("receivingQuality",{}):
 		var counts = state.receivingQuality[food]
-		if food not in ["arroz","legumes","frango"] or not counts_valid(counts):return false
+		if food not in preload("res://simulacao/nativa/Inventario.gd").RAWS or not counts_valid(counts):return false
 		if counts[1]+counts[2]+counts[3]>state.inv.receiving[food]:return false
 	for object in state.objects:
 		for item in object.get("dishQuality",{}):

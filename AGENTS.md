@@ -11,7 +11,7 @@
   de substituir as sprites exportadas nesta revisão. Alterar dimensões exige
   atualizar recortes, frames e pivôs, sem alterar automaticamente os saves.
 
-- A premissa vigente é o **refúgio no apocalipse zumbi**, conforme o GDD 3.3;
+- A premissa vigente é o **refúgio no apocalipse zumbi**, conforme o GDD 3.4;
   a origem nuclear anterior foi substituída. `docs/primeiro-ciclo-refugio.md`
   registra o protótipo .46 e não prevalece sobre as regras aprovadas no GDD.
 - Alimentação, energia e moral são **três barras coletivas da cidade**, de 0 a 100.
@@ -36,6 +36,13 @@
   limitado e viajantes; peças essenciais também vêm de viajantes. Carpinteiro,
   artesão e vendedor de decoração fornecem melhorias. O GDD distingue essa
   direção aprovada das compras antigas ainda presentes no protótipo.
-- O kit de início de 200, novas receitas e ícones de nutrição (1–10 coxas de
-  frango) e tempo (mini relógios) estão aprovados para próxima etapa, não
-  implementados na .48. Não reduzir recursos sem prover abastecimento jogável.
+- A .50 implementa o kit de 200 para **novas campanhas**: duas mesas/oito
+  cadeiras, duas panelas/oito pratos, arroz 12/batata 8/cenoura 8 e duas receitas
+  iniciais. Não aplicar esse kit ao carregar saves anteriores.
+- Reposição presencial com Beto, estoque diário limitado e entrega direta na
+  geladeira, sem computador/recebimento. Nina intermedeia a caravana a partir
+  do dia 4; frango e aprendizado de canja são o primeiro teste desse comércio.
+- Nutrição de 1–10 coxas afeta a barra coletiva; mini relógios representam
+  aproximadamente 2s cada de corte + cozimento + empratamento. Novas células
+  em `arte/inicio-32.png` são nativas 32px; preservar os atlas antigos.
+  Ver `docs/inicio-mercador.md` para parâmetros, compatibilidade e limites.

@@ -21,8 +21,8 @@ static func locations(state: Dictionary) -> Array:
 
 static func food(state: Dictionary) -> bool:
 	var all_locations := locations(state)
-	for raw in ["arroz","legumes","frango"]:
-		var total: float = state.inv.receiving[raw]+state.used[raw]
+	for raw in preload("res://simulacao/nativa/Inventario.gd").RAWS:
+		var total: float = state.inv.receiving.get(raw,0)+state.used.get(raw,0)
 		for delivery in state.deliveries:
 			if delivery.food==raw:total+=delivery.pending
 		for container in all_locations:
@@ -31,7 +31,7 @@ static func food(state: Dictionary) -> bool:
 		for actor in actors(state):
 			var carry = actor.get("carry")
 			if carry!=null and carry.kind=="food" and carry.food==raw:total+=carry.n
-		if total!=state.purchased[raw]:return false
+		if total!=state.purchased.get(raw,0):return false
 	return true
 
 static func equipment(state: Dictionary) -> bool:
@@ -81,9 +81,9 @@ static func meals(state: Dictionary) -> bool:
 		for customer in state.customers:
 			if customer.state=="eating" and customer.recipe==recipe:total+=1
 		for name in ["made","eaten","wasted"]:
-			var amount = state.meals[name][recipe]
+			var amount = state.meals[name].get(recipe,0)
 			if not integer(amount) or amount<0:return false
-		if total+state.meals.eaten[recipe]+state.meals.wasted[recipe]!=state.meals.made[recipe]:return false
+		if total+state.meals.eaten.get(recipe,0)+state.meals.wasted.get(recipe,0)!=state.meals.made.get(recipe,0):return false
 	var busy := 0.0
 	for object in state.objects:
 		for portion in STORAGE.slots(object):

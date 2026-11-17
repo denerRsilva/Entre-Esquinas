@@ -7,7 +7,7 @@ func progress_nodes(node: Variant) -> Array:
 	return result
 func attack(s: Dictionary,value: float) -> void:
 	if s.refuge.phase=="aftermath":REF.continue_day(s);g.session.ADMIN.finish_day(s)
-	s.day=s.refuge.nextHorde;s.clock={"minute":1080,"remainder":0,"ending":false}
+	s.day=s.refuge.nextHorde;preload("res://simulacao/nativa/Mercado.gd").restock(s);s.clock={"minute":1080,"remainder":0,"ending":false}
 	s.refuge.closed=[];s.refuge.visits=[];stats(s,value)
 	REF.begin_attack(s);REF.battle_step(s,8)
 func reload(s: Dictionary) -> Variant:

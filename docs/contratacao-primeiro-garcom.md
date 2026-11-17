@@ -40,7 +40,10 @@ salvar não reativa a pessoa ao carregar. Modos livres antigos preservam seu
 comportamento de teste. O comando de limpar cenário conserva contratações,
 sem criar garçom gratuito nem perder a identidade contratada.
 
-## O que permanece para o próximo trecho
+## Registro das pendências da .48
+
+A [versão .50](inicio-mercador.md) implementa o kit, as receitas, os indicadores
+e o primeiro comércio. O texto abaixo registra o alcance anterior.
 
 O início aprovado de caixa 200, duas mesas/oito cadeiras, duas panelas/oito
 pratos, arroz/batata/cenoura e duas receitas iniciais está no GDD. **Ainda não

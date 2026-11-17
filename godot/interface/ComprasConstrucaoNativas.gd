@@ -13,6 +13,7 @@ func render(state: Dictionary) -> Dictionary:
 	var cards: Array = []
 	var thin: Array = [];var wide: Array = []
 	for id in CATALOG.data:
+		if id in ["computer","receiving"] and state.get("refuge") is Dictionary:continue
 		# Original generated counters remain loadable, but only edited art is sold.
 		if id in ["prep","kitchen","counterH","counterV","counterCorner"]:continue
 		if state.get("singleRoom",false) and id=="cold":continue

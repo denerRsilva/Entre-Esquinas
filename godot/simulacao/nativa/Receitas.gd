@@ -1,6 +1,14 @@
 extends RefCounted
 const RECIPES = preload("res://simulacao/nativa/receitas.json")
 const ITEMS = preload("res://simulacao/nativa/itens.json")
+static func available(s: Dictionary) -> Array:
+	if s.get("startKit") is Dictionary:return s.startKit.recipes.duplicate()
+	return RECIPES.data.keys().filter(func(id):return not RECIPES.data[id].get("early",false))
+static func total_time(s: Dictionary,id: String) -> float:
+	var total: float = RECIPES.data[id].time+2.0
+	for item in RECIPES.data[id].foods:
+		if item!="arroz":total+=RECIPES.data[id].foods[item]*preload("res://simulacao/nativa/Refugio.gd").cut_time(s)
+	return total
 static func recognized(object: Dictionary) -> Variant:
 	var got := {}
 	for portion in object.get("ingredients",[]):got[portion.item]=got.get(portion.item,0)+portion.n

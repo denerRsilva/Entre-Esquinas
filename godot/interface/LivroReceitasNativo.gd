@@ -11,20 +11,29 @@ const PATHS = {
 func node(tag: String,children: Array,cls: String = "") -> Dictionary:return {"tag":tag,"cls":cls,"children":children}
 func caption(value: String,tag: String = "small") -> Dictionary:return node(tag,[{"tag":"text","text":value}])
 func food(item: String,hero: bool = false) -> Dictionary:
-	return {"tag":"canvas","cls":"recipeHero" if hero else "foodArt","label":ITEMS.data.get(item,RECIPES.RECIPES.data.get(item,{})).get("name","Comida"),"art":[["food",item,0,0,64,64,1,1,0,0,1]]}
+	return {"tag":"canvas","cls":"recipeHeroSmall" if hero and item in ["caldoBatata","arrozCenoura","canja"] else "recipeHero" if hero else "foodArt","label":ITEMS.data.get(item,RECIPES.RECIPES.data.get(item,{})).get("name","Comida"),"art":[["food",item,0,0,64,64,1,1,0,0,1]]}
 func icon(kind: String) -> Dictionary:
 	return {"tag":"span","cls":"controlIcon","art":[["svg",'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="'+PATHS[kind]+'"/></svg>']]}
-func render() -> Dictionary:
+static func rating(item: String,count: int) -> Dictionary:
+	var art: Array = []
+	for i in count:art.append(["food",item,i*18,0,16,16,1,1,0,0,1])
+	return {"tag":"canvas","cls":"recipeRating","label":("Nutrição" if item=="nutricao" else "Tempo estimado")+": "+str(count),"art":art,"meterWidth":count*18}
+static func ratings(s: Dictionary,id: String) -> Dictionary:
+	var nutrition: int = int(RECIPES.RECIPES.data[id].get("nutrition",5))
+	# Each clock stands for about two seconds of active preparation, rounded up.
+	var seconds := RECIPES.total_time(s,id)
+	return {"tag":"div","children":[rating("nutricao",clampi(nutrition,1,10)),rating("tempo",clampi(int(ceil(seconds/2.0)),1,10))]}
+func render(s: Dictionary = {}) -> Dictionary:
 	var pages: Array = []
-	for id in RECIPES.RECIPES.data:
+	for id in RECIPES.available(s):
 		var recipe: Dictionary = RECIPES.RECIPES.data[id]
 		var ingredients: Array = []
 		for item in recipe.foods:
 			var symbols: Array = [food(item),caption(str(int(recipe.foods[item]))+" ×")]
 			if item!="arroz":symbols.append(icon("cut"))
-			symbols.append(caption("Cortar" if item!="arroz" else "Direto"))
+			if not recipe.get("early",false):symbols.append(caption("Cortar" if item!="arroz" else "Direto"))
 			ingredients.append(node("div",symbols,"recipeIngredient"))
 		var flow: Array = []
 		for step in [["pot","Panela"],["flame",str(int(recipe.time))+" s"],["serve","Prato"]]:flow.append(node("div",[icon(step[0]),caption(step[1])]))
-		pages.append(node("div",[food(id,true),caption(recipe.name,"b"),caption("1 porção"),node("div",ingredients,"recipeIngredients"),node("div",flow,"recipeFlow")],"card"))
+		pages.append(node("div",[food(id,true),caption(recipe.name,"b"),caption("1 porção"),ratings(s,id),node("div",ingredients,"recipeIngredients"),node("div",flow,"recipeFlow")],"card"))
 	return {"tag":"div","id":"panel","children":[node("div",pages,"recipeBook")]}

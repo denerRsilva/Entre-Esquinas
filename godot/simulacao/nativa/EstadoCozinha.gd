@@ -45,7 +45,7 @@ static func physical(state: Dictionary) -> bool:
 			var ingredients = object.get("ingredients")
 			if not ingredients is Array:return false
 			for portion in ingredients:
-				if not stack(portion,true) or portion.item not in ["arroz","legumes_cut","frango_cut"]:return false
+				if not stack(portion,true) or portion.item not in INV.COOKABLE:return false
 			if not ingredients.is_empty() and object.get("pan")!="pot":return false
 		var support = object.get("support")
 		if truthy(support):
@@ -59,7 +59,7 @@ static func physical(state: Dictionary) -> bool:
 		var found := false
 		for object in state.objects:
 			if object.id==job.get("table") and object.type=="prep":found=true
-		if not found or job.get("item") not in ["frango","legumes"]:return false
+		if not found or job.get("item") not in INV.CUTTABLE:return false
 		var portion: Variant = null
 		if truthy(job.get("hand")):portion=hand
 		else:

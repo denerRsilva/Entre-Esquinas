@@ -170,6 +170,7 @@ static func place(state: Dictionary, type: Variant, x: Variant, y: Variant, rota
 	if not CATALOG.data.has(type):return fail("Objeto desconhecido.")
 	var data: Dictionary = CATALOG.data[type]
 	if state.get("singleRoom",false) and type=="cold":return fail("Esta planta não possui estoque separado.")
+	if type=="computer" and state.get("refuge") is Dictionary and moving==null:return fail("Computadores não estão disponíveis no refúgio.")
 	if type in ["computer","receiving"]:
 		for object in state.objects:
 			if object.type==type and object.id!=moving:return fail("Este equipamento já está instalado.")

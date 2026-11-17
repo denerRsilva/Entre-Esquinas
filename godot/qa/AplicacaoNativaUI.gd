@@ -20,7 +20,7 @@ func press(title: String) -> bool:
 func run():
 	root.size=Vector2i(960,700);g=load("res://mundo/Restaurante.tscn").instantiate();root.add_child(g);g.set_process(false);await layout()
 	check(g.active and g.frame_data.modal=="welcome","Aplicação inicia sem avaliador de scripts")
-	check(await press("Novo jogo") and g.session.state.objects.size()==22,"Partida mobiliada")
+	check(await press("Novo jogo") and g.session.state.objects.size()==17,"Partida mobiliada")
 	check(await press("Gestão"),"Gestão nativa")
 	for entry in [["Turnos","shifts"],["Equipe","team"],["Fechamento","finance"],["Clientes","customers"],["Calendário","calendar"],["Reputação","reputation"]]:check(await press(entry[0]) and g.session.tab==entry[1],"Aba "+entry[0])
 	check(await press("Modo construção") and g.session.construction and g.session.drawer,"Construção e catálogo automático")

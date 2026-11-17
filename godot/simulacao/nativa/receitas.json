@@ -24,5 +24,38 @@
     },
     "price": 20,
     "time": 8
+  },
+  "caldoBatata": {
+    "name": "Caldo de batata",
+    "foods": {
+      "batata": 1
+    },
+    "price": 10,
+    "time": 5,
+    "nutrition": 4,
+    "early": true
+  },
+  "arrozCenoura": {
+    "name": "Arroz com cenoura",
+    "foods": {
+      "arroz": 1,
+      "cenoura": 1
+    },
+    "price": 14,
+    "time": 6,
+    "nutrition": 6,
+    "early": true
+  },
+  "canja": {
+    "name": "Canja",
+    "foods": {
+      "arroz": 1,
+      "cenoura": 1,
+      "frango": 1
+    },
+    "price": 20,
+    "time": 8,
+    "nutrition": 8,
+    "early": true
   }
 }

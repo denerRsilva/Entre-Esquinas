@@ -1,5 +1,8 @@
 extends RefCounted
 const ITEMS = preload("res://simulacao/nativa/itens.json")
+const RAWS = ["arroz","legumes","frango","batata","cenoura"]
+const CUTTABLE = ["legumes","frango","batata","cenoura"]
+const COOKABLE = ["arroz","legumes_cut","frango_cut","batata_cut","cenoura_cut"]
 const HAND_PLATE_CAPACITY := 5
 const DIRTY_SINK_CAPACITY := 10
 const CLEAN_SINK_CAPACITY := 10

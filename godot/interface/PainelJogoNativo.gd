@@ -45,8 +45,9 @@ func context(s: Dictionary,model: Dictionary) -> Dictionary:
 			row(s,rows,p).children.append(button(p.name,"door",{"kind":"portal","room":portal.to,"x":portal.spawn[0],"y":portal.spawn[1]}))
 	for type in ["computer","receiving"]:
 		var x := 16 if type=="computer" else 21
-		if SCENE.same(selected,type) and service.near(a,{"room":"restaurant","x":x,"y":12}):row(s,rows,{"x":x,"y":11}).children.append(button("Usar computador" if type=="computer" else "Recolher ingredientes","computer" if type=="computer" else "box",{"kind":type}))
+		if not (type=="computer" and s.get("refuge") is Dictionary) and SCENE.same(selected,type) and service.near(a,{"room":"restaurant","x":x,"y":12}):row(s,rows,{"x":x,"y":11}).children.append(button("Usar computador" if type=="computer" else "Recolher ingredientes","computer" if type=="computer" else "box",{"kind":type}))
 	for o in s.objects:
+		if o.type=="computer" and s.get("refuge") is Dictionary:continue
 		if not SCENE.same(o.id,selected) or not kitchen.near(s,o):continue
 		var target := row(s,rows,o)
 		if o.type in ["computer","receiving"]:target.children.append(button("Usar computador" if o.type=="computer" else "Recolher ingredientes","computer" if o.type=="computer" else "box",{"kind":o.type}))
