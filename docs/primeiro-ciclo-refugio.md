@@ -1,7 +1,15 @@
-# Primeiro trecho jogável: o refúgio
+# Registro do primeiro protótipo: o refúgio (.46)
 
-Direção aprovada por Dener em 17/11/2026. A cidade é um ponto de esperança em
-reconstrução no apocalipse zumbi. A taverna alimenta as pessoas que a defendem.
+**Registro histórico de implementação; não define as regras finais.** A revisão
+[GDD 3.1](../GDD.md), aprovada por Dener em 17/11/2026, determina **três barras
+coletivas** e **duas derrotas consecutivas, com reset da sequência por vitória**.
+A versão .46 descrita abaixo ainda usa status individuais/médias e derrotas
+acumuladas. Esses comportamentos estão substituídos como direção e precisam
+ser adaptados no código e nos salvamentos em outra tarefa. Os parâmetros abaixo
+continuam documentando o executável .46; não foram alterados nesta revisão.
+
+A premissa do refúgio foi aprovada por Dener em 17/11/2026. A cidade é um ponto
+de esperança em reconstrução no apocalipse zumbi. A taverna alimenta as pessoas que a defendem.
 O desenvolvimento avança em trechos jogáveis, com o proprietário avaliando o
 ritmo antes de ampliar a campanha. A origem nuclear anterior foi substituída;
 a origem dos zumbis e os NPCs pilares da história permanecem em aberto.

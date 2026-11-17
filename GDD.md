@@ -1,46 +1,55 @@
 # Entre Esquinas
 
-## GDD 3.0 — Refúgio no apocalipse zumbi
+## GDD 3.1 — Refúgio no apocalipse zumbi
 
 **Revisão documental:** 17 de novembro de 2026. **Responsável pelas decisões:** Dener Silva.
 
-Este GDD reúne a direção aprovada da taverna e o funcionamento implementado na Godot em uma referência única. Substitui a organização do GDD 1.4 do repositório e do adendo 1.5, preservando a distinção entre o jogo existente e o desenvolvimento futuro. Não é necessário consultar os documentos antigos para entender as regras atuais aqui descritas.
+Esta versão consolida a proposta aprovada pelo proprietário em 17/11/2026 e suas
+retificações: **três barras coletivas** e **derrotas consecutivas, reiniciadas
+por uma vitória**. O histórico Git preserva o GDD 3.0 e as versões anteriores.
 
-**Base histórica da revisão 2.1:** commit `89f1bfe8ee49aec52c2ecf2765208fbf28563bd1`. A revisão 3.0 incorpora a direção aprovada em 17/11/2026 e o escopo jogável documentado abaixo; descrições operacionais anteriores permanecem identificadas como histórico.
+> **A taverna é onde a cidade recupera as forças para sobreviver à próxima horda.**
 
-A revisão 2.1 incorpora as decisões de Dener de 12/11/2026 sobre comércio, computador administrativo, ferro-velho, fabricação por artesão e entrega de equipamentos. A base técnica inspecionada continua a mesma; essas decisões são direção aprovada ainda não implementada.
+### Direção vigente e alcance desta revisão
 
-### Revisão vigente — 17/11/2026
+A cidade é um refúgio em reconstrução no apocalipse zumbi, inicialmente precário,
+que representa segurança e o último ponto de esperança para os sobreviventes.
+Sua recuperação atrai mais pessoas; elas trazem habilidades e histórias, além
+de maior necessidade de refeições e estrutura. A origem nuclear foi substituída;
+a origem dos zumbis permanece em aberto.
 
-Esta revisão substitui a premissa nuclear por um **apocalipse zumbi**. A cidade
-é um refúgio precário em reconstrução e um ponto de esperança para sobreviventes.
-Mais moradores significam novas habilidades, necessidades e demanda por refeições.
-A taverna recupera as forças da comunidade para a próxima horda.
+- **Alimentação, energia e moral são três barras coletivas da cidade, de 0 a 100.**
+  O jogador procura mantê-las altas. Diversão é uma das formas de recuperar moral.
+- Dias comuns têm almoço e jantar. Hordas a cada **3 a 5 dias** substituem o
+  jantar daquela noite, sem penalidade pela refeição suspensa.
+- Não há combate controlável. A preparação e as condições das defesas determinam
+  um resultado apresentado numa animação curta e pulável, com moradores reconhecíveis.
+- A primeira derrota inicia um estado de recuo. **Uma vitória seguinte zera a
+  sequência e devolve a cidade ao estado normal. Duas derrotas seguidas causam
+  game over**, com possibilidade de retomar a preparação por um salvamento.
+- Reconstrução e novos moradores recompensam visualmente o progresso. Melhorias
+  também precisam ser sentidas no trabalho da taverna, com tempo para aproveitá-las.
+- O desenvolvimento acontece em trechos jogáveis; Dener avalia o ritmo antes de
+  ampliarmos a campanha.
 
-- **Alimentação, energia e moral são status de 0 a 100**, mantidos pelo jogador.
-  Diversão é uma das formas futuras de recuperar moral; os pilares não são bônus.
-- Dias comuns têm almoço e jantar. Hordas ocorrem a cada **3 a 5 dias** e
-  substituem o jantar daquela noite, sem penalidade pela refeição suspensa.
-- Não há combate controlável. O estado dos moradores e das defesas determina
-  o resultado apresentado numa sequência curta e pulável, com pessoas reconhecíveis.
-- Primeira derrota causa recuo e consequências recuperáveis; a segunda causa
-  game over. O jogador pode retomar um salvamento anterior à preparação.
-- Reconstrução e chegada de sobreviventes recompensam visualmente o progresso.
-  Melhorias também precisam ser sentidas na operação da taverna, com tempo de adaptação.
-- Produzir trechos jogáveis; Dener testa o ritmo antes de definirmos o próximo trecho.
+**Estado do executável, separado do design:** a versão `0.21.2-godot.46`,
+publicada no [commit 9f7fd4a](https://github.com/denerRsilva/Entre-Esquinas/commit/9f7fd4a48464fa8750699e2ef99a0200fe158bd1),
+ainda usa status individuais com médias e derrotas acumuladas. Esses dois
+comportamentos são **substituídos como direção de design nesta revisão**, mas
+sua adaptação no código e nos salvamentos é uma tarefa posterior. Esta entrega
+atualiza documentação; não altera o jogo nem gera um APK novo.
 
-**Primeira implementação, parâmetros ajustáveis:** entrada “Começar no refúgio”,
-três moradores recorrentes, primeira horda no dia 3, status individuais e médias,
-recompensa inicial de corte 20% mais rápido, crescimento até seis moradores,
-duas derrotas e backup de preparação no próprio slot. Ver
-[escopo, valores e roteiro do primeiro ciclo](docs/primeiro-ciclo-refugio.md).
-Hospedagem, cerveja, NPCs pilares definitivos, cidade completa e escalas de
-trabalho ainda não foram implementados. A arte existente permanece provisória
-para edição do proprietário, obedecendo à diretriz de produção 32 × 32.
+O [registro do primeiro protótipo](docs/primeiro-ciclo-refugio.md) documenta o que
+foi implementado na versão .46. Números de moradores, tempos, ganhos, perdas,
+pesos do cálculo e recompensas numéricas são **parâmetros provisórios**, não
+regras finais. Hospedagem, cerveja, NPCs pilares definitivos e cidade completa
+continuam em desenvolvimento futuro. A produção artística mantém 32 × 32.
 
-As seções operacionais herdadas registram a base da revisão 2.1. Em divergências
-de premissa, ciclo ou progressão, esta revisão e o escopo do primeiro ciclo
-prevalecem. As decisões técnicas e parâmetros antigos não são balanceamento final.
+As seções 1 a 3 e 12 a 14 registram a direção atual e suas pendências. As
+seções técnicas 4 a 11 preservam o registro herdado da base anterior; o termo
+“implementado” nessas passagens refere-se à inspeção histórica, não certifica
+que todos os valores ainda correspondam ao executável .46. Descrições antigas
+não prevalecem sobre as decisões aprovadas nesta versão.
 
 ### Estados usados no documento
 
@@ -56,7 +65,8 @@ prevalecem. As decisões técnicas e parâmetros antigos não são balanceamento
 ### Organização
 
 - Seções 1 e 2: visão, universo e princípios aprovados.
-- Seções 3 a 11: regras atuais da Godot, interface, parâmetros e estado técnico.
+- Seção 3: ciclo, defesa, crescimento e recompensas aprovados.
+- Seções 4 a 11: registro técnico histórico da operação; valores sujeitos à revisão.
 - Seção 12: direções futuras aprovadas e propostas não aprovadas, identificadas separadamente.
 - Seção 13: ideias substituídas e histórico fora do escopo vigente.
 - Seção 14: pendências, critérios de qualidade e rastreabilidade.
@@ -65,7 +75,7 @@ O termo **taverna** descreve o destino de design. O código e a interface atuais
 
 <!-- page -->
 
-## 1 Visão e pilares
+## 1 Visão, três pilares e sistemas
 
 ### Descrição do jogo
 
@@ -73,12 +83,41 @@ Administre uma taverna numa cidade que se reconstrói durante um apocalipse zumb
 
 **Direção aprovada.** A taverna será um ponto de encontro e poderá oferecer descanso a viajantes. Comida, convivência e relações com o entorno sustentam a experiência. A hospedagem ainda não possui regras finais e não faz parte do funcionamento atual.
 
-| Pilar | Papel na experiência | Estado |
+### Três barras coletivas da cidade
+
+**Direção aprovada em 17/11/2026.** Há uma barra de alimentação, uma de energia e
+uma de moral, cada uma de **0 a 100**. Representam as condições da comunidade.
+Os três valores coletivos orientam preparação, feedback e resolução da defesa.
+A população altera a demanda necessária para sustentá-los; a relação numérica
+entre pessoas, refeições, descanso e ganhos ainda será balanceada.
+
+| Pilar coletivo | Representa | Contribuições da taverna e da cidade |
 | --- | --- | --- |
-| Operação | Preparar, cozinhar, servir e coordenar prioridades no espaço físico. | Ciclo básico implementado. |
-| Gestão | Escolher cardápio, preços, compras e disposição dos equipamentos. | Sistemas básicos implementados; economia final em aberto. |
-| Vila e exploração | Conhecer pessoas, obter ingredientes e aproveitar oportunidades externas. | Direção aprovada; rua e conversas atuais são demonstrações. |
-| Progressão | Melhorar o espaço e ampliar possibilidades por relações e equipamentos. | Construção implementada; artesãos e projetos locais ainda futuros. |
+| Alimentação | Comunidade nutrida e fisicamente preparada. | Refeições suficientes e nutritivas. |
+| Energia | Descanso e resistência para sustentar a defesa. | Recuperação e organização do descanso; hospedagem poderá contribuir quando especificada. |
+| Moral | Esperança, confiança e disposição para cooperar. | Convívio, diversão, amizade, acolhimento e acontecimentos da comunidade. |
+
+As barras são **status mantidos ao longo do tempo**. A unidade de design é a
+cidade; os moradores continuam reconhecíveis nas histórias e na defesa, sem
+exigir três barras independentes por personagem. As médias de status pessoais
+presentes na versão .46 são uma solução provisória a substituir.
+
+Moral pode influenciar cooperação, disposição para defender e atratividade
+para novos moradores. Intensidades, limites e formas de recuperar cada barra
+permanecem parâmetros de balanceamento. Receitas, bebidas e descanso devem ter
+funções compreensíveis; uma refeição não substitui automaticamente o descanso.
+
+### Sistemas que sustentam os pilares
+
+Operação, gestão, vila e progressão são sistemas do jogo, separados dos três
+pilares de status:
+
+| Sistema | Papel na experiência |
+| --- | --- |
+| Operação | Preparar, cozinhar, servir e coordenar prioridades no espaço físico. |
+| Gestão | Escolher cardápio, preços, compras, ajuda e disposição dos equipamentos. |
+| Vila e relações | Conhecer moradores, obter recursos e reconhecer os efeitos do cuidado. |
+| Progressão | Reconstruir a cidade, ampliar a taverna e abrir novas possibilidades. |
 
 ### Princípios de design
 
@@ -90,6 +129,10 @@ Administre uma taverna numa cidade que se reconstrói durante um apocalipse zumb
 - Permitir que automação libere o jogador para novas escolhas.
 - Informar acontecimentos antes de aplicar consequências que exijam planejamento.
 - Desenvolver a vila de forma conectada à taverna, sem transformar a rua em decoração sem função.
+- Conectar desafios a recompensas perceptíveis no cenário e na operação.
+- Dar tempo para aproveitar uma melhoria antes do próximo aumento de responsabilidade.
+- Manter informação suficiente para compreender a preparação e as consequências das hordas.
+- Usar playtests do proprietário para ajustar espera, repetição, ritmo e dificuldade.
 
 ### Referências por função
 
@@ -117,7 +160,7 @@ Pixel art continua sendo a linguagem aprovada. Fachadas reparadas, móveis resta
 
 A versão 0.21.2-godot.7 integra uma primeira montagem jogável do interior baseada na direção aprovada abaixo. Rua, moradores e algumas interfaces ainda usam a arte anterior; a nova ambientação não está concluída.
 
-**Proposta não aprovada.** Exteriores frios e pouco saturados, reboco gasto, metal oxidado e luz localizada podem reforçar melancolia e contraste. A paleta exata, a iluminação e a intensidade do desgaste ainda aguardam avaliação. Tornar a taverna progressivamente cozy por escolhas de decoração permanece em aberto.
+**Direção aprovada em 17/11/2026.** A reconstrução deve produzir acolhimento e esperança visíveis: casas reparadas, ruas iluminadas, oficinas funcionando e moradores ocupando espaços antes abandonados. O perigo exterior convive com uma taverna que recupera a comunidade. Paleta e perspectiva seguem a direção visual aprovada; novas peças e o acabamento do cenário serão avaliados em arte real.
 
 ### Direção visual aprovada — vida entre ruínas
 
@@ -137,11 +180,108 @@ A resolução-base artística foi aprovada em 32 × 32; escala de exibição e p
 
 <!-- page -->
 
-## 3 Ciclo diário, espaços e movimento
+## 3 Ciclo, defesa, crescimento e recompensas
 
-**Implementado.** O ciclo atual combina organização, compra, serviço, limpeza e fechamento. Existem almoço e jantar. A abertura é voluntária e depende do horário; não há montagem mínima obrigatória para clicar em abrir. Receber clientes exige assentos acessíveis e cardápio utilizável; produzir exige recursos e estações compatíveis.
+### Dia comum
 
-### Sequência atual
+**Direção aprovada.** Preparação pela manhã → almoço → atividades da tarde →
+jantar → descanso. Cozinhar, servir, comprar, organizar e limpar participam do
+ciclo. O jogador desenvolve a taverna para sustentar os três status coletivos.
+
+### Noite de horda
+
+Hordas acontecem a cada **três a cinco dias**. No dia do ataque, o alarme mobiliza
+os moradores e a defesa substitui o jantar. **Não há penalidade pela refeição
+suspensa**. A preparação nos dias anteriores participa do resultado.
+
+O intervalo e o horário exatos, a forma de anunciar o risco e a antecedência
+dos sinais serão testados. A primeira horda no terceiro dia e a sequência
+fixa 4/5/3 do protótipo são parâmetros, não uma agenda final obrigatória.
+
+### Resultado e apresentação da defesa
+
+Não há combate controlável. O resultado considera alimentação, energia e
+moral **coletivas**, junto das condições das estruturas de defesa. Fórmulas e
+pesos ainda serão balanceados. A animação apresenta o resultado calculado;
+pular sua apresentação não altera consequências ou recompensas.
+
+Uma sequência curta mostra moradores nos postos, com variações de vitória
+tranquila, defesa sofrida, recuo/invasão parcial e queda da cidade. NPCs
+importantes da história devem ser reconhecíveis. Seus nomes, funções e enredos
+finais serão definidos pelo proprietário.
+
+Os sinais visuais acompanham preparação, ataque e pós-horda. Devem permitir
+perceber a condição da cidade e compreender o efeito do trabalho da taverna.
+O jogador pode reconhecer na defesa a pessoa que alimentou durante o dia.
+
+### Derrotas consecutivas e retomada
+
+**Regra aprovada:** o limite é de **duas derrotas consecutivas**. Uma vitória
+interrompe a sequência, zera o contador de derrotas seguidas e devolve a cidade
+ao estado normal de defesa. Uma derrota antiga não continua consumindo uma chance
+após essa vitória.
+
+| Estado antes do ataque | Resultado | Estado depois |
+| --- | --- | --- |
+| Normal, 0 derrotas seguidas | Vitória | Normal, 0 derrotas seguidas. |
+| Normal, 0 derrotas seguidas | Derrota | Recuo, 1 derrota seguida; há outra chance. |
+| Recuo, 1 derrota seguida | Vitória | Normal, contador reiniciado em 0. |
+| Recuo, 1 derrota seguida | Derrota | Queda da cidade e game over. |
+
+Exemplos: **derrota → vitória → derrota** deixa a cidade em recuo com uma derrota
+na sequência atual. **Derrota → derrota** encerra a campanha. Vitórias tranquilas
+e defesas sofridas que tenham sido vencidas reiniciam a sequência igualmente.
+
+O reset refere-se ao estado de risco e à sequência de derrotas. A recuperação
+numérica das barras e estruturas será balanceada separadamente. Danos às
+barricadas, ferimentos e perdas limitadas de suprimentos são possibilidades
+para a primeira derrota; valores e efeitos exatos permanecem em aberto.
+As consequências devem permitir uma recuperação viável antes do próximo ataque.
+
+No game over, é possível carregar um salvamento anterior com tempo suficiente
+para refazer a preparação. A retomada precisa evitar uma derrota inevitável
+salva segundos antes do resultado. Preservar os **três slots** de partidas e
+seus dados existentes.
+
+### Cidade em reconstrução e novos moradores
+
+A cidade começa precária e representa segurança e esperança. Conforme resiste
+e se reconstrói, atrai sobreviventes: mais pessoas trazem necessidades de comida
+e estrutura, além de trabalho, habilidades, histórias e possibilidades de defesa.
+
+O aumento da demanda acompanha o desenvolvimento da taverna. As hordas também
+crescem ao longo da progressão; sua curva e a relação exata com população,
+atividade da cidade ou passagem do tempo ainda serão definidas nos playtests.
+O crescimento deve oferecer tempo de adaptação e não anular imediatamente o
+benefício de uma melhoria recém-conquistada.
+
+### Desafios e recompensas
+
+O trabalho cotidiano participa de objetivos maiores da comunidade. Preparar
+refeições, cuidar das condições da cidade e concluir desafios deve aproximar
+o jogador de melhorias desejadas. A progressão combina retorno imediato do
+atendimento com conquistas ao longo de turnos e etapas de reconstrução.
+
+| Conquista ou progresso | Recompensa visual | Efeito possível na operação |
+| --- | --- | --- |
+| Recuperar a oficina | Artesão trabalhando e espaço iluminado. | Equipamentos e ferramentas melhores. |
+| Melhorar o abastecimento | Entregas e depósitos organizados. | Mais possibilidades de planejar ingredientes. |
+| Acolher trabalhadores | Casas ocupadas e ruas movimentadas. | Ajuda e divisão de tarefas. |
+| Ampliar a taverna | Salão reconstruído e equipado. | Mais capacidade e opções de organização. |
+
+Esses pares orientam o design aprovado; missões, custos, ordem de desbloqueio
+e números específicos ainda precisam de detalhamento. Uma melhoria deve ser
+sentida também em capacidade, tempo, conservação ou novas escolhas de trabalho.
+O jogador precisa experimentar o benefício antes da próxima ampliação da demanda.
+
+### Base operacional histórica
+
+O registro abaixo e as seções 4 a 11 preservam a descrição de uma inspeção
+anterior. A versão .46 tem alterações posteriores documentadas nos guias; não
+interpretar valores antigos como regras aprovadas de balanceamento desta revisão.
+A operação física existente deve ser preservada ao adaptar os status e as hordas.
+
+### Sequência da base histórica
 
 1. Organizar móveis e obter ingredientes e utensílios.
 2. Preparar a cozinha e abrir pela placa da entrada.
@@ -151,13 +291,13 @@ A resolução-base artística foi aprovada em 32 × 32; escala de exibição e p
 6. Recolher a louça, lavar e repor os pratos.
 7. Suspender novas entradas, concluir pendências e acompanhar o fechamento diário.
 
-### Ambientes
+### Ambientes da base histórica
 
 O restaurante reúne salão, cozinha e estoque no mesmo cenário. O estoque tem acesso pela cozinha; equipá-lo é opcional para abrir. Geladeiras e prateleiras ampliam armazenamento. O computador e o recebimento ainda estão presentes na área administrativa. Estabelecimentos vizinhos não são lojas jogáveis.
 
 A rua possui fachada, toldo, calçada, jardins, bancos e faixa de pedestres. A porta permite entrar e sair por clique ou teclado. A transição aguarda um destino livre e não deve colocar personagens sobrepostos ou provocar retorno em loop. A fachada permite abrir e encerrar o serviço; clientes e funcionários continuam simulados no interior enquanto o jogador está fora.
 
-### Movimento e câmera
+### Movimento e câmera da base histórica
 
 WASD ou setas controlam deslocamento contínuo, com parada e inversão imediatas. O jogador pode parar entre células. Diagonais são normalizadas; contato com uma parede permite deslizar pelo eixo livre. Quadros lentos não devem atravessar colisões. O corpo tem raio atual de 0,20 célula e velocidade de 4,5 células por segundo, ambos parâmetros de teste.
 
@@ -170,6 +310,8 @@ O zoom atual vai de 70% a 200%, em passos de 10%. Tela cheia fica em Opções e 
 <!-- page -->
 
 ## 4 Construção e organização do espaço
+
+**Registro técnico histórico.** Descrição da base anterior; consultar a direção vigente nas seções 1 a 3 e o registro do protótipo .46 para diferenças.
 
 **Implementado.** Gestão e Modo construção dão acesso à edição dos móveis. A simulação congela, a HUD operacional desaparece e o catálogo lateral pode ser recolhido. Alterações exigem serviço concluído, sem clientes ou pedidos ativos. Não há reposicionamento pelo menu operacional normal dos objetos.
 
@@ -209,6 +351,8 @@ Cadeiras isoladas podem ser móveis, mas não recebem clientes. Saves antigos pr
 
 ## 5 Transporte, armazenamento e cenário de teste
 
+**Registro técnico histórico.** Descrição da base anterior; consultar a direção vigente nas seções 1 a 3 e o registro do protótipo .46 para diferenças.
+
 **Implementado.** O jogador não tem mochila, barra de inventário ou seleção por slots. Transporta uma unidade de ingrediente, panela, prato ou louça por vez nas mãos. O desenho acompanha a carga real. Não pode receber outro item enquanto as mãos estiverem ocupadas.
 
 ### Armazenamentos
@@ -246,6 +390,8 @@ Começar vazio permite montar do zero. O cenário mobiliado e a ferramenta de li
 
 ## 6 Cozinha física e receitas atuais
 
+**Registro técnico histórico.** Descrição da base anterior; consultar a direção vigente nas seções 1 a 3 e o registro do protótipo .46 para diferenças.
+
 **Implementado.** A mesa de preparo corta; a mesa de cozinha recebe a panela e emprata. Fogão, bancadas, pia e lixo não abrem janelas genéricas de trabalho. Um clique inicia a ação principal válida após a aproximação; ações alternativas ainda podem aparecer junto ao objeto.
 
 ### Fluxo de uma refeição
@@ -276,6 +422,8 @@ Corte pode ser cancelado sem consumir o ingrediente. Afastar-se pausa corte e em
 <!-- page -->
 
 ## 7 Qualidade, calor e limpeza
+
+**Registro técnico histórico.** Descrição da base anterior; consultar a direção vigente nas seções 1 a 3 e o registro do protótipo .46 para diferenças.
 
 **Implementado.** Ingredientes e refeições usam quatro níveis de qualidade. O preparo calcula a média dos níveis dos ingredientes efetivamente consumidos, ponderada pelas quantidades e arredondada para baixo. Cortar, transportar e salvar preservam a qualidade; deixar comida pronta no fogo pode reduzi-la.
 
@@ -311,6 +459,8 @@ Validade de ingredientes, contaminação, refrigeração por temperatura e desga
 
 ## 8 Clientes, atendimento e equipe
 
+**Registro técnico histórico.** Descrição da base anterior; consultar a direção vigente nas seções 1 a 3 e o registro do protótipo .46 para diferenças.
+
 **Implementado.** Clientes chegam individualmente. Reservam uma mesa inteira até terminar a visita e retirar a louça; grupos e compartilhamento entre desconhecidos não estão implementados. A primeira chegada ocorre após oito segundos ativos e as seguintes são espaçadas por 25 segundos, quando houver condições, como parâmetros de teste.
 
 O prato desejado permanece oculto até o pedido ser anotado pelo jogador ou garçom. Antes disso, personagem, ação e fila de pedidos indicam espera sem antecipar o prato. Depois da anotação, a receita aparece e pode ser priorizada no painel de pedidos.
@@ -338,6 +488,8 @@ Mudanças de tarefa respeitam cargas em trânsito. Salários, contratação come
 <!-- page -->
 
 ## 9 Relógio, calendário e reputação
+
+**Registro técnico histórico.** Descrição da base anterior; consultar a direção vigente nas seções 1 a 3 e o registro do protótipo .46 para diferenças.
 
 **Implementado.** O dia começa às 06:00 e termina às 02:00 da madrugada seguinte. Meia-noite não avança a data jogável. Cada dez minutos do relógio correspondem atualmente a sete segundos de simulação ativa.
 
@@ -373,6 +525,8 @@ Construção, livro de receitas, menus administrativos e perda de foco suspendem
 <!-- page -->
 
 ## 10 Economia, compras e interface
+
+**Registro técnico histórico.** Descrição da base anterior; consultar a direção vigente nas seções 1 a 3 e o registro do protótipo .46 para diferenças.
 
 **Implementado.** A economia atual usa dinheiro genérico representado por $. Caixa inicial de $1.500 e despesa diária de $12 são parâmetros do protótipo. Elos e escambo não substituíram esse dinheiro no código.
 
@@ -413,6 +567,8 @@ A interface usa o tema visual anterior com molduras, ícones e artes de itens. O
 
 ## 11 Salvamentos, ferramentas de teste e plataformas
 
+**Registro técnico histórico.** Descrição da base anterior; consultar a direção vigente nas seções 1 a 3 e o registro do protótipo .46 para diferenças.
+
 **Implementado.** O formato atual de salvamento é 12, com chave `entre-restaurante-12` e arquivo Godot `user://restaurante.json`. Inclui mãos, conteúdo dos móveis, corte, cozimento, panela apoiada, refeições, compras, posição fracionária, relógio, calendário, reputação e horários. Teclas pressionadas não persistem.
 
 ### Migração e segurança
@@ -443,9 +599,18 @@ O projeto ainda declara 0.21.2-godot.1 em sua configuração, enquanto o APK dec
 
 ## 12 Desenvolvimento futuro e propostas
 
+### Direção vigente a adaptar no protótipo
+
+O próximo ajuste do ciclo existente deve substituir os status individuais por
+três valores coletivos e o total de derrotas pela sequência consecutiva. É
+necessário preservar moradores, histórias, crescimento, recursos e os três
+salvamentos. Regras de conversão dos saves e valores iniciais coletivos ainda
+precisam ser definidos na tarefa de implementação. Uma vitória deve reiniciar
+a sequência sem apagar conquistas da cidade.
+
 ### Direções aprovadas ainda não implementadas
 
-A direção vigente é a taverna do refúgio no apocalipse zumbi. A ambientação nuclear anterior foi substituída. A operação existente deve ser preservada enquanto o universo é incorporado. A aprovação abaixo é de conceito; regras detalhadas e tarefas de código precisam de escopo explícito.
+A direção vigente é a taverna do refúgio no apocalipse zumbi. A ambientação nuclear anterior foi substituída. A operação existente deve ser preservada enquanto o universo é incorporado. A aprovação abaixo é de conceito. Detalhes e parâmetros são desenvolvidos em trechos jogáveis com avaliação de Dener; esta revisão documental não implementa novas regras no executável.
 
 - Manter o computador exclusivamente para funções administrativas da taverna; retirar dele as funções de compra.
 - Oferecer frango, legumes e arroz por meio de um NPC comerciante na cidade, próximo à taverna, com deslocamento do jogador até ele.
@@ -473,7 +638,7 @@ A direção vigente é a taverna do refúgio no apocalipse zumbi. A ambientaçã
 | P08 | Vendedor provisório de utensílios (panelas e pratos). A parte antiga sobre retirar o computador e migrar a administração para Gestão ou livro físico foi substituída pela manutenção do computador administrativo. |
 | P09 | Famílias de ingredientes e prioridade de receitas específicas sobre genéricas, evitando resultados ambíguos. |
 
-Os detalhes remanescentes dessas propostas continuam não aprovados; os conceitos já aprovados estão identificados separadamente acima. Detalhes de receitas, hospedagem, água e fornecedores continuam pendentes. Energia é um dos três status aprovados em 17/11/2026; seu primeiro funcionamento está no escopo do refúgio.
+Os detalhes remanescentes dessas propostas continuam não aprovados; os conceitos já aprovados estão identificados separadamente acima. Detalhes de receitas, hospedagem, água e fornecedores continuam pendentes. Energia é uma das três barras coletivas aprovadas em 17/11/2026; o descanso automático e os valores individuais da versão .46 são um registro de protótipo, a adaptar.
 
 <!-- page -->
 
@@ -483,6 +648,8 @@ Esta seção guarda decisões antigas para rastreabilidade. Não define o jogo a
 
 | Ideia ou regra anterior | Estado e substituição |
 | --- | --- |
+| Status individuais com médias no painel | Substituídos como direção em 17/11/2026 por três barras coletivas de alimentação, energia e moral. O código .46 ainda precisa da adaptação. |
+| Duas derrotas acumuladas ao longo da campanha | Substituídas por duas derrotas consecutivas; uma vitória reinicia a sequência e o estado normal. O código .46 ainda precisa da adaptação. |
 | Retirar o computador e migrar suas funções administrativas para Gestão ou livro físico | Substituído em 12/11/2026: manter o computador exclusivamente administrativo, com compras fora dele. |
 | Mercearia como atividade principal | Projeto anterior arquivado. A existência de um HTML histórico não cria uma loja integrada à vila. |
 | Ambientação brasileira e origem nuclear | Substituídas pelo refúgio no apocalipse zumbi; pratos de diferentes tradições permanecem possíveis. |
@@ -512,18 +679,44 @@ O computador permanece como direção aprovada, agora exclusivamente administrat
 
 ### Questões em aberto
 
-Nome da vila, origem do protagonista, tempo desde o desastre e intensidade da fantasia. Funcionamento de hospedagem, energia e refrigeração. Água como ingrediente e limites do filtro. Catálogo de novas receitas, preços finais e renda dos artesãos. Forma de transportar compras maiores mantendo uma unidade nas mãos. Não introduzir mochila, caixas ou carrinhos como resposta automática a essa última questão.
+Nome da cidade, origem do protagonista, origem dos zumbis e tempo desde o
+apocalipse. Identidade, funções e histórias dos NPCs pilares. Fórmulas de
+alimentação, descanso e moral coletivas; curva de crescimento da população e
+das hordas; antecedência dos avisos; penalidades exatas do recuo. Valores do
+primeiro protótipo permanecem ajustáveis. As escolhas entre barras individuais
+ou coletivas e entre derrotas acumuladas ou consecutivas estão **resolvidas**:
+valem as coletivas e as consecutivas com reset por vitória.
 
-Também permanecem em aberto: lista e quantidade de peças por equipamento, preços do ferro-velho, remuneração e tempo de fabricação do artesão, transporte e repasse das peças, forma e local de recebimento do equipamento, instalação, encomendas simultâneas e cancelamentos. A entrega após conclusão está aprovada; não há aprovação de prazo instantâneo, frete gratuito ou instalação automática. O ponto de compra de panelas e pratos e a organização final das funções administrativas no computador ainda precisam ser definidos.
+Hospedagem, cerveja, refrigeração, água, novas receitas e preços ainda precisam
+de detalhamento. A cerveja é a direção inicial para bebidas; servir, abastecer
+e lavar canecas serão desenvolvidos em etapa própria. Não há ordem definitiva
+que obrigue desbloquear cerveja como primeira grande conquista.
 
-### Proposta de próximas etapas não aprovada
+Lista e quantidade de peças por equipamento, preços do ferro-velho, remuneração
+e tempo de fabricação do artesão, transporte de peças, recebimento e instalação
+ainda serão especificados. Fabricação pelo artesão e entrega após conclusão
+permanecem aprovadas. Transporte de compras deve respeitar a operação física
+existente; mochila, caixas ou carrinhos não são respostas automáticas.
 
-1. Especificar o NPC de ingredientes, o ferro-velho e a encomenda ao artesão com entrega após conclusão; delimitar os acessos administrativos do computador, conservando compras pagas e acesso a utensílios.
-2. Resolver os detalhes ainda pendentes de P01 a P09, respeitando as decisões já aprovadas, e definir transporte de ingredientes e peças sem contrariar o sistema de mãos.
-3. Delimitar o primeiro teste aprovado como direção e implementar somente após escopo confirmado.
-4. Jogar um dia completo, observar repetição, espera, clareza e decisões; ajustar com evidência.
+### Método aprovado de desenvolvimento
+
+1. Delimitar e entregar um trecho jogável do começo do jogo.
+2. Dener joga e relata espera, repetição, clareza dos status, decisões, desafio e satisfação.
+3. Ajustar os parâmetros a partir dessa experiência, mantendo os ganhos das melhorias perceptíveis.
+4. Ampliar o próximo trecho com base no retorno, preservando recursos e salvamentos.
+
+O início já está prototipado na versão .46; o próximo trabalho no executável
+precisa contemplar as duas retificações desta revisão antes de considerar seu
+balanceamento representativo da direção aprovada. Comércio presencial, artesão,
+hospedagem e novas bebidas entram conforme o escopo de cada trecho for definido.
 
 ### Critérios de qualidade
+
+- Manter três barras coletivas finitas entre 0 e 100, com feedback compreensível.
+- Zerar a sequência de derrotas após qualquer defesa vencida; derrota/vitória/derrota não causa game over.
+- Aplicar game over após derrota/derrota e permitir refazer a preparação.
+- Suspender jantar de horda sem penalizar a refeição indisponível.
+- Preservar vínculos com moradores, recompensas de reconstrução e melhorias perceptíveis na operação.
 
 - Conservar ingredientes, panelas, pratos, refeições e dinheiro nas ações, falhas e migrações.
 - Impedir pagamento duplicado e revelar pedido somente após anotação.
@@ -533,7 +726,7 @@ Também permanecem em aberto: lista e quantidade de peças por equipamento, pre�
 - Recusar save inválido e manter backup utilizável após recuperação.
 - Conferir interface e exportação nas plataformas reais; teste Linux não comprova funcionamento físico Android ou Windows.
 
-### Evidência da inspeção e limites
+### Evidência histórica da inspeção e limites
 
 Na inspeção que antecedeu esta revisão, passaram o executor atual `godot/qa/Regras.cjs` e verificações adicionais de movimento, prévia de fogão, cache e layouts em Node.js. Uma consulta simulada confirmou livro com três receitas, pausa na consulta e tempo ativo no armazenamento. Não houve novo playtest gráfico nem execução do APK nessa inspeção.
 
@@ -541,10 +734,29 @@ O teste avulso `qa/rua-horario.test.cjs` falhou ao preparar ingredientes buscand
 
 ### Fontes de manutenção
 
-Base: [commit 89f1bfe](https://github.com/denerRsilva/Entre-Esquinas/commit/89f1bfe8ee49aec52c2ecf2765208fbf28563bd1). Regras e ações: [restaurant-core.js](godot/simulacao/restaurant-core.js) e [acoes.js](godot/simulacao/acoes.js). Guias: [cozinha física](godot/COZINHA-FISICA.md), [Android](godot/ANDROID.md), [QA atual](godot/qa/LEIA-ME.md) e [validação 4.7.2](godot/qa/VALIDACAO_4_7_2.md).
+- [Registro do protótipo .46 e seus parâmetros](docs/primeiro-ciclo-refugio.md).
+- Código atual: [Refugio.gd](godot/simulacao/nativa/Refugio.gd),
+  [Simulacao.gd](godot/simulacao/nativa/Simulacao.gd),
+  [Cozinha.gd](godot/simulacao/nativa/Cozinha.gd) e
+  [Salvamentos.gd](godot/simulacao/nativa/Salvamentos.gd).
+- [Diretriz de produção da arte](docs/DIRETRIZES-ARTE.md),
+  [compilação Android](godot/ANDROID.md) e [QA](godot/qa/LEIA-ME.md).
 
-A revisão 2.1 registra as decisões expressas de Dener em 12/11/2026: NPC próximo à taverna para ingredientes; ferro-velho para peças; artesão para fabricar equipamentos; entrega após conclusão; computador mantido exclusivamente administrativo. Não houve nova execução de testes de gameplay nesta revisão documental.
+O executável atual usa GDScript. Referências a JavaScript/Node na inspeção
+histórica acima não descrevem o runtime presente. Os testes do protótipo .46
+foram registrados na entrega correspondente; esta revisão documental não
+executa nem comprova as novas regras no jogo. Testes automatizados também não
+comprovam diversão ou balanceamento final.
 
-O histórico Git preserva o GDD anterior e suas revisões. As decisões desta conversa, o GDD 1.4 e o adendo 1.5 foram reconciliados nesta versão. A atualização altera documentação; nenhum comportamento de jogo foi modificado. Futuras revisões devem atualizar a seção correspondente e seu estado, evitando anexar regras conflitantes ao fim do arquivo.
+### Histórico de revisões
 
-A revisão 3.0 registra as decisões de 17/11/2026 e o primeiro trecho jogável do refúgio. O documento específico distingue as regras aprovadas dos parâmetros provisórios e dos sistemas que ficam para os próximos playtests.
+| Revisão | Conteúdo |
+| --- | --- |
+| 2.1 — 12/11/2026 | Comércio presencial, ferro-velho, fabricação por artesão, entrega e computador administrativo. |
+| 3.0 — 17/11/2026 | Nova premissa zumbi e primeiro protótipo jogável, com parâmetros provisórios. |
+| **3.1 — 17/11/2026** | Proposta consolidada aprovada: cidade de esperança, três barras coletivas, hordas de 3 a 5 dias, defesa animada, derrotas consecutivas com reset por vitória, retomada, crescimento, recompensas visuais e funcionais e desenvolvimento por playtests. |
+
+A aprovação de Dener desta revisão resolve as duas definições pendentes.
+O Git preserva as versões anteriores. Alterações no GDD devem atualizar a seção
+correspondente, mantendo separadas direção aprovada, comportamento existente,
+parâmetro de teste e implementação ainda pendente.

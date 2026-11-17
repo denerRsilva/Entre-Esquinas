@@ -11,12 +11,17 @@
   de substituir as sprites exportadas nesta revisão. Alterar dimensões exige
   atualizar recortes, frames e pivôs, sem alterar automaticamente os saves.
 
-- A premissa vigente é o **refúgio no apocalipse zumbi**, conforme o GDD 3.0 e
-  `docs/primeiro-ciclo-refugio.md`; a origem nuclear anterior foi substituída.
-- Alimentação, energia e moral são status de 0 a 100. Hordas substituem o jantar
-  a cada 3 a 5 dias sem penalidade pela refeição suspensa. Não há combate
-  controlável; a defesa tem apresentação animada. Duas derrotas levam ao game
-  over, com retomada da preparação pelo salvamento.
+- A premissa vigente é o **refúgio no apocalipse zumbi**, conforme o GDD 3.1;
+  a origem nuclear anterior foi substituída. `docs/primeiro-ciclo-refugio.md`
+  registra o protótipo .46 e não prevalece sobre as regras aprovadas no GDD.
+- Alimentação, energia e moral são **três barras coletivas da cidade**, de 0 a 100.
+  Hordas substituem o jantar a cada 3 a 5 dias sem penalidade pela refeição suspensa. Não há combate
+  controlável; a defesa tem apresentação animada. **Duas derrotas consecutivas**
+  levam ao game over. **Uma vitória zera a sequência de derrotas e restaura o
+  estado normal**. A retomada deve permitir refazer a preparação pelo salvamento.
+- O código .46 ainda tem status individuais/médias e derrotas acumuladas. Essas
+  soluções foram substituídas como direção; a adaptação do jogo e dos saves é
+  trabalho separado da revisão documental 3.1.
 - Desenvolver em trechos jogáveis para avaliação de Dener antes de ampliar a
   campanha. Parâmetros do primeiro ciclo são provisórios; preservar partidas
   antigas e os três slots de salvamento.
