@@ -207,6 +207,9 @@ func key(event: Dictionary) -> void:
 	if name=="escape" and down:stop_build();return
 	if name=="e" and down:
 		if game_ui.controls.actions.has(game_ui.first_context):world_action(game_ui.controls.actions[game_ui.first_context])
+		else:
+			var customer = INTERACT.SERVICE.new().find(state.customers,selected)
+			if customer!=null:world_action({"kind":"customer","id":customer.id})
 		return
 	if movement:
 		if down:keyboard[name]=true

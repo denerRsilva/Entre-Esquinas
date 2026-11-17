@@ -169,7 +169,7 @@ func interact(s: Dictionary,id: Variant) -> bool:
 	var c = find(s.customers,id)
 	if c==null or not near(a,c):s.message="Aproxime-se da mesa.";return false
 	if expired(s,c):return false
-	if c.state=="waiting":return take_order(s,a,c)
+	if c.state=="waiting":return note_order(s,a,c) if timed_orders_enabled else take_order(s,a,c)
 	if c.state=="ordered":
 		for actor in MOVE.ACTORS.actors(s):
 			var delivery = actor.get("carry")
@@ -232,18 +232,26 @@ func wander(s: Dictionary,w: Dictionary) -> void:
 			MOVE.go(w,{"room":"restaurant","x":point.x,"y":point.y,"idleWalk":true});w.wait=0;return
 	idle_pause(s,w)
 
-func note_order(s: Dictionary,w: Dictionary,c: Dictionary) -> void:
-	if not timed_orders_enabled:take_order(s,w,c);return
-	if w.get("motion")!=null:return
+func note_claimed(s: Dictionary,c: Dictionary,actor: Dictionary) -> bool:
+	for other in [s.player]+s.workers:
+		var job = other.get("noteJob")
+		if other.id!=actor.id and job!=null and job.customer==c.id:return true
+	return false
+func note_order(s: Dictionary,w: Dictionary,c: Dictionary) -> bool:
+	if not timed_orders_enabled:return take_order(s,w,c)
+	if w.get("motion")!=null or c.state!="waiting" or not near(w,c) or expired(s,c) or note_claimed(s,c,w):return false
+	if w.id==s.player.id and manual_moving:return false
 	w.goal=null
-	if not w.has("noteJob"):w.noteJob={"customer":c.id,"left":1.2,"total":1.2}
+	if w.get("noteJob",{}).get("customer")!=c.id:w.noteJob={"customer":c.id,"left":1.2,"total":1.2}
+	return true
 
 func notes_step(s: Dictionary,dt: float) -> void:
-	for w in s.workers:
+	for w in [s.player]+s.workers:
 		var job = w.get("noteJob")
 		if job==null:continue
 		var c = find(s.customers,job.customer)
-		if w.task!="waiter" or w.get("carry")!=null or w.get("motion")!=null or c==null or c.state!="waiting" or not near(w,c):w.erase("noteJob");continue
+		var allowed: bool = not manual_moving if w.id==s.player.id else w.task=="waiter" and w.get("carry")==null
+		if not allowed or w.get("motion")!=null or c==null or c.state!="waiting" or not near(w,c):w.erase("noteJob");continue
 		job.left=maxf(0,job.left-dt)
 		if job.left<=1e-8:take_order(s,w,c);w.erase("noteJob")
 
@@ -327,7 +335,7 @@ func waiter(s: Dictionary,w: Dictionary) -> void:
 		return
 	var waiting: Array = []
 	for c in s.customers:
-		if c.state=="waiting":waiting.append(c)
+		if c.state=="waiting" and not note_claimed(s,c,w):waiting.append(c)
 	# Insertion sorting keeps equal-priority clients in their original order.
 	for i in range(1,waiting.size()):
 		var current = waiting[i]

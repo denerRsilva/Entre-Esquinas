@@ -20,6 +20,7 @@ func tell(s: Dictionary,message: String,bad: bool = false) -> Variant:
 	s.message=message;effects.append({"kind":"tell","message":message,"bad":bad})
 	return null
 func go_object(s: Dictionary,o: Dictionary) -> bool:
+	s.player.erase("noteJob")
 	var point = MOVE.closest(s,s.player,o)
 	if point==null:return false
 	s.player.goal=point;clear_input=true;kitchen.manual_moving=false;service.manual_moving=false
@@ -42,8 +43,13 @@ func approach(s: Dictionary,c: Dictionary) -> bool:
 func queue(s: Dictionary,kind: String,target: Variant) -> bool:
 	var c = service.find(s.customers,target) if kind=="customer" else null
 	var o = BUILD.find(s.objects,target) if kind!="customer" else null
-	if c!=null and c.state not in ["waiting","ordered"]:return false
+	if c!=null and c.state not in ["walk","waiting","ordered"]:return false
 	if c==null and o==null:return false
+	if c!=null and c.state=="walk":
+		# Wait for the guest to sit before occupying a service position.
+		# Approaching the future chair early can block its only access cell.
+		s.player.goal=null;clear_input=true
+		pending={"kind":kind,"target":target,"until":s.time+30,"phase":"walk"};current=true;return true
 	if not (approach(s,c) if c!=null else go_object(s,o)):
 		tell(s,"Não há passagem até o alvo.",true);return true
 	pending={"kind":kind,"target":target,"until":s.time+30}
@@ -101,6 +107,8 @@ func primary(s: Dictionary,o: Dictionary,pointer: Variant = null) -> Variant:
 	if o.type in ["sink","bin"] and INV.ITEMS.data.get(item,{}).has("recipe"):return physical(s,o,"discardHand")
 	var table = o if o.type=="table" else BUILD.chair_table(o,s.objects) if o.type=="chair" else null
 	if table==null:return false
+	if o.type=="table" and (kitchen.DISHES.count(s,table)>0 or HYGIENE.stained(s,table)):
+		return go_object(s,table)
 	# Hands already carrying a dirty pile keep collecting instead of trying
 	# to serve another guest at the same table.
 	if item=="dirtyPlate" and p.n<INV.HAND_PLATE_CAPACITY and kitchen.DISHES.count(s,table)>0:return queue(s,"clean",table.id)
@@ -154,6 +162,11 @@ func process(s: Dictionary) -> void:
 		ADMIN.toggle(s);tell(s,s.message,not s.open and not s.closing);return
 	var c = service.find(s.customers,job.target) if job.kind=="customer" else null
 	var o = BUILD.find(s.objects,job.target) if job.kind!="customer" else null
+	if c!=null and job.get("phase")=="walk":
+		if c.state=="walk":return
+		if c.state=="waiting":
+			if not approach(s,c):pending=null;tell(s,"Não há passagem até o cliente.",true);return
+			job.phase="waiting"
 	if (job.kind=="customer" and (c==null or c.state!=job.get("phase"))) or (job.kind!="customer" and o==null):pending=null;return
 	if s.player.get("motion")!=null:return
 	if not (service.near(s.player,c) if c!=null else kitchen.near(s,o)):return
@@ -170,6 +183,7 @@ func process(s: Dictionary) -> void:
 		var result: Dictionary = kitchen.wash(s,o.id) if job.kind=="wash" else kitchen.wipe(s,o.id) if job.kind=="wipe" else kitchen.collect_dirty(s,o.id)
 		tell(s,result.message,not result.ok)
 func play_go(s: Dictionary,point: Dictionary) -> void:
+	s.player.erase("noteJob")
 	MOVE.go(s.player,point);clear_input=true;kitchen.manual_moving=false;service.manual_moving=false
 func refresh() -> void:effects.append({"kind":"refresh"})
 func visible_customer(s: Dictionary,world: Dictionary) -> Variant:
@@ -181,7 +195,7 @@ func visible_customer(s: Dictionary,world: Dictionary) -> Variant:
 	var depth := -INF
 	var distance := INF
 	for c in s.customers:
-		if c.room!=s.player.room or c.state not in ["waiting","ordered"]:continue
+		if c.room!=s.player.room or c.state not in ["walk","waiting","ordered","eating"]:continue
 		var pose := MOVE.position(c)
 		var feet := Vector2(pose.x*40+20,pose.y*40+38)
 		if not Rect2(feet-Vector2(32,64),Vector2(64,64)).has_point(point):continue
@@ -207,7 +221,9 @@ func pointer_down(s: Dictionary,pointer: Dictionary) -> void:
 			play_go(s,{"room":portal.to,"x":portal.spawn[0],"y":portal.spawn[1]});refresh();return
 	var customer = visible_customer(s,pointer.world)
 	if customer!=null:
-		selected=customer.id;queue(s,"customer",customer.id);refresh();return
+		selected=customer.id
+		if customer.state!="eating":queue(s,"customer",customer.id)
+		refresh();return
 	for c in s.customers:
 		if c.room==room and c.x==x and c.y==y and c.state in ["waiting","ordered"]:
 			selected=c.id;queue(s,"customer",c.id);refresh();return

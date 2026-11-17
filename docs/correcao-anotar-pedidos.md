@@ -2,6 +2,9 @@
 
 Correção **0.21.2-godot.51**, Android **21251**.
 
+A [.52](playtest-atendimento-direto.md) complementa esta correção com barra de
+anotação para o jogador, atendimento sem ícones e playtest por mouse nativo.
+
 ## Causa reproduzida
 
 Na .50, clicar no rosto do cliente da cadeira superior deixava o cliente em

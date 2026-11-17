@@ -126,7 +126,7 @@ func actor(s: Dictionary,a: Dictionary,selected: Variant,construction: bool) -> 
 	elif a.id.begins_with("worker"):label("Logística" if a.id=="worker1" else "Garçom",x,bottom+11)
 	elif a.get("recipe")!=null and a.get("order")!=null and a.state in ["ordered","eating"]:
 		if not clean_view:box(x-17,bottom-82,34,28,"#25473df2")
-		food(a.recipe,x-15,bottom-82,30,26)
+		if not clean_view:food(a.recipe,x-15,bottom-82,30,26)
 	elif same(selected,a.id):label({"lia":"Lia","beto":"Beto","nina":"Nina"}.get(a.id,"Cliente"),x,bottom+11)
 	if a.wait>=5:label("Aguardando passagem",x,bottom-68,"#78503a")
 	if a.get("experience")!=null:

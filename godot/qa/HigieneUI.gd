@@ -89,8 +89,8 @@ func run():
 	check(not s.tableStains.has(seat),"Tecla E executa a limpeza da mesa")
 	# Restore one mark to exercise the independent pointer path as well.
 	s.tableStains[seat]=1;g.tick(0)
-	await click_cell(table.x,table.y)
-	check(not s.tableStains.has(seat) and s.dirtyTables[seat]==0,"Clique na mesa livre limpa a superfície")
+	await click_cell(table.x,table.y);await press("Limpar mesa")
+	check(not s.tableStains.has(seat) and s.dirtyTables[seat]==0,"Opção da mesa livre limpa a superfície")
 	await click_cell(floor.x,floor.y)
 	check(not s.floorDirt.has(key),"Clique na sujeira aproxima jogador e limpa o chão")
 	check(SAVE.VALIDATOR.valid(s) and s.equipment.plate==12 and s.meals.eaten[c.recipe]==1,"Limpeza não cria ou apaga pratos e refeições")

@@ -45,6 +45,7 @@ func execute(json: String) -> String:
 			controller.pending=context.pending;controller.current=context.current
 			controller.selected=context.selected;controller.building=context.building
 			controller.kitchen.manual_moving=context.moving;controller.service.manual_moving=context.moving
+			controller.service.timed_orders_enabled=timed_orders_enabled
 			match args[0]:
 				"approachCustomer":value=controller.approach(state,controller.service.find(state.customers,params[0]))
 				"queueInteraction":value=controller.queue(state,params[0],params[1])

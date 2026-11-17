@@ -2,6 +2,7 @@ extends "res://qa/CozinhaNativa.gd"
 func run():
 	var fixtures = load("res://qa/referencia-migracao/interacoes.json").data
 	var rules = preload("res://simulacao/nativa/Regras.gd").new()
+	rules.timed_orders_enabled=false # Historical instant notes; PlaytestDoZeroUI covers player progress.
 	var count := 0
 	var retired := 0
 	for test in fixtures.cases:

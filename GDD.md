@@ -1,6 +1,6 @@
 # Entre Esquinas
 
-## GDD 3.4 — Refúgio no apocalipse zumbi
+## GDD 3.5 — Refúgio no apocalipse zumbi
 
 **Revisão documental:** 17 de novembro de 2026. **Responsável pelas decisões:** Dener Silva.
 
@@ -62,6 +62,14 @@ geladeira; computador não participa do fluxo. Cardápio está em Gestão.
 Nutrição e tempo aparecem por ícones no livro e no cardápio. A primeira
 caravana, intermediada por Nina, oferece frango e aprendizado de canja.
 [Parâmetros e validação do começo jogável](docs/inicio-mercador.md).
+
+**Implementado na versão .52, conforme pedido do proprietário:** um clique no
+cliente aproxima o jogador e inicia anotação de 1,2s com barra de progresso.
+O pedido só nasce ao concluir; não abrir ícones de anotar, servir ou priorizar.
+Pedido permanece identificado na comanda, sem arte flutuante duplicada sobre
+o cliente. Clique no cliente com prato pronto realiza a entrega diretamente.
+Mesas sujas mantêm as opções de recolher pratos e limpar; limpar exige louça
+retirada, mesa livre e mãos livres. [Playtest e correções](docs/playtest-atendimento-direto.md).
 
 O [registro do primeiro protótipo](docs/primeiro-ciclo-refugio.md) documenta o que
 foi implementado na versão .46. Números de moradores, tempos, ganhos, perdas,
@@ -864,7 +872,8 @@ comprovam diversão ou balanceamento final.
 | 3.1 — 17/11/2026 | Proposta consolidada aprovada: cidade de esperança, três barras coletivas, hordas de 3 a 5 dias, defesa animada, derrotas consecutivas com reset por vitória, retomada, crescimento, recompensas visuais e funcionais e desenvolvimento por playtests. |
 | 3.2 — 17/11/2026 | Início aprovado sem funcionário, contratação ligada ao crescimento (garçom primeiro), comércio limitado por NPCs, peças de viajantes, mundo sem computador e indicadores visuais de nutrição e tempo. Implementação .48 entrega contratação; kit, receitas e comércio permanecem pendentes. |
 | 3.3 — 17/11/2026 | Tela inicial com Novo jogo e Carregar jogo, somente um slot. Três slots adiados. Migração da partida antiga ativa, preservação de arquivos anteriores e confirmação antes de novo jogo substituir progresso. |
-| **3.4 — 17/11/2026** | Kit inicial aprovado implementado; duas receitas iniciais; reposição por mercador limitado com entrega na geladeira; caravana e canja; ícones de nutrição e tempo; preservação das campanhas anteriores. |
+| 3.4 — 17/11/2026 | Kit inicial aprovado implementado; duas receitas iniciais; reposição por mercador limitado com entrega na geladeira; caravana e canja; ícones de nutrição e tempo; preservação das campanhas anteriores. |
+| **3.5 — 17/11/2026** | Atendimento direto ao cliente com um clique e barra no jogador, sem ícones contextuais ou pedido flutuante duplicado; escolhas de recolher e limpar na mesa; playtest nativo desde Novo jogo. |
 
 A aprovação de Dener da revisão 3.1 resolve as duas definições pendentes.
 A implementação .47 incorpora essas regras e a consulta em Gestão → Cidade,

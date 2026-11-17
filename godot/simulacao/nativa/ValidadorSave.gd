@@ -135,7 +135,8 @@ static func valid(value: Variant,slots: int = 0) -> bool:
 		if s.workers.has(a) and a.get("task") not in ["none","logistics","waiter"]:return false
 		if a.has("noteJob"):
 			var note = a.noteJob
-			if not s.workers.has(a) or not has_keys(note,["customer","left","total"]) or not note.customer is String or not number(note.left) or not number(note.total) or note.total!=1.2 or note.left<0 or note.left>note.total:return false
+			if (not s.workers.has(a) and a!=s.player) or not has_keys(note,["customer","left","total"]) or not note.customer is String or not number(note.left) or not number(note.total) or note.total!=1.2 or note.left<0 or note.left>note.total:return false
+			if a==s.player and not s.customers.any(func(c):return c.id==note.customer and c.state=="waiting"):return false
 		var goal = a.get("goal")
 		if goal!=null:
 			if goal is Dictionary and goal.has("idleWalk") and not goal.idleWalk is bool:return false

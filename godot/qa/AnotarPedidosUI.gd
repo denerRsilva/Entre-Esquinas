@@ -18,6 +18,12 @@ func snapshot() -> void:
 func run():
 	root.size=Vector2i(1280,720);g=load("res://mundo/Restaurante.tscn").instantiate();root.add_child(g);g.set_process(false);await layout();await press("Novo jogo")
 	var initial: Dictionary = g.session.state.duplicate(true)
+	g.session.ADMIN.test_clock(g.session.state,660);g.tick(0.01);g.session.state.arrival=0
+	var arriving = g.session.SIM.new();arriving.service.random_source=func():return 0.0
+	check(arriving.spawn(g.session.state),"Cliente em chegada para testar clique antecipado")
+	var guest: Dictionary = g.session.state.customers[0]
+	await click_world(Vector2(guest.x*40+20,guest.y*40-12))
+	check(guest.state=="ordered" and g.session.state.orders.size()==1,"Um clique durante a chegada aguarda sentar e anota sem segundo clique")
 	var seats := {}
 	for index in 8:
 		var c: Dictionary = await visitor(initial,index)

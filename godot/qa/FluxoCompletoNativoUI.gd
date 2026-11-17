@@ -33,7 +33,7 @@ func run():
 	await click_object("table");check(g.session.state.orders.size()==1,"Mesa anota um pedido")
 	await click_object("table");advance(4.1)
 	check(g.session.state.ledger.sales==1 and g.session.state.ledger.revenue==20,"Entrega e pagamento únicos")
-	await click_object("table");check(held()=="dirtyPlate","Louça recolhida")
+	await click_object("table");await press("Recolher pratos sujos da mesa");check(held()=="dirtyPlate","Louça recolhida")
 	await click_object("sink");advance(2.1)
 	await click_object("sink");check(held()=="plate","Prato lavado e retirado da pia")
 	check(g.session.SAVE.VALIDATOR.valid(g.session.state),"Conservação e save válidos no fluxo completo")

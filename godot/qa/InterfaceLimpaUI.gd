@@ -71,12 +71,12 @@ func run():
 	s.player.x=chair.x;s.player.y=chair.y+1;s.player.motion=null;s.player.goal=null
 	sim.service.begin(s,customer,"service");sim.service.take_order(s,s.player,customer)
 	g.session.selected=customer.id;g.tick(0);await layout()
-	check(await press("Priorizar pedido") and s.priority==customer.order,"Prioridade continua acessível ao interagir com cliente")
+	check(not g.hud.slots.context[0].visible and not await press("Priorizar pedido"),"Cliente não abre ícones de pedido ou prioridade")
 	packet=clean("Cliente com pedido")
 	for button in g.hud.slots.context[1].find_children("*","Button",true,false):
 		check(button.text.is_empty() and button.tooltip_text.is_empty(),"Interação não revela nome por texto ou tooltip")
 		check(not button.accessibility_name.is_empty(),"Interação preserva descrição acessível")
-	check(packet.scene.any(func(op):return op[0]=="food" and op[1]==customer.recipe),"Pedido continua identificado por ícone de comida")
+	check(packet.ui.comandas.any(func(ticket):return ticket.recipe==customer.recipe),"Pedido permanece identificado na comanda, sem comida flutuante sobre cliente")
 	if "--capture" in OS.get_cmdline_user_args():
 		root.mode=Window.MODE_WINDOWED;root.size=Vector2i(1920,1080);await layout();g.tick(0);await layout();await RenderingServer.frame_post_draw
 		root.get_texture().get_image().save_png("/tmp/esquinas-interface-limpa.png")

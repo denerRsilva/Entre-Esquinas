@@ -49,9 +49,9 @@ func run():
 	var s: Dictionary = g.session.state
 	var tables: Array = s.objects.filter(func(o):return o.type=="table")
 	add_dirty(s,tables[0],4);add_dirty(s,tables[1],3)
-	# Actual click-to-walk collection fills one hand across multiple tables.
-	await click_object("table")
-	check(s.player.hand!=null and s.player.hand.item=="dirtyPlate" and s.player.hand.n==4,"Um clique recolhe os quatro pratos disponíveis")
+	# A table click opens the two cleanup choices; collection fills one hand.
+	await click_object("table");await press("Recolher pratos sujos da mesa")
+	check(s.player.hand!=null and s.player.hand.item=="dirtyPlate" and s.player.hand.n==4,"A opção da mesa recolhe os quatro pratos disponíveis")
 	beside(s,s.player,tables[1])
 	var kitchen := COOK.new()
 	check(kitchen.collect_dirty(s,tables[1].id).ok and s.player.hand.n==5,"Outra mesa completa pilha até cinco")

@@ -11,7 +11,7 @@
   de substituir as sprites exportadas nesta revisão. Alterar dimensões exige
   atualizar recortes, frames e pivôs, sem alterar automaticamente os saves.
 
-- A premissa vigente é o **refúgio no apocalipse zumbi**, conforme o GDD 3.4;
+- A premissa vigente é o **refúgio no apocalipse zumbi**, conforme o GDD 3.5;
   a origem nuclear anterior foi substituída. `docs/primeiro-ciclo-refugio.md`
   registra o protótipo .46 e não prevalece sobre as regras aprovadas no GDD.
 - Alimentação, energia e moral são **três barras coletivas da cidade**, de 0 a 100.
@@ -46,3 +46,12 @@
   aproximadamente 2s cada de corte + cozimento + empratamento. Novas células
   em `arte/inicio-32.png` são nativas 32px; preservar os atlas antigos.
   Ver `docs/inicio-mercador.md` para parâmetros, compatibilidade e limites.
+
+- Atendimento direto (.52): um clique no cliente agenda aproximação e anotação
+  de 1,2s com barra no jogador, sem ícones contextuais de anotar/servir/priorizar.
+  Cliques repetidos não reiniciam a tarefa; movimento cancela. Cliente chegando
+  é atendido após sentar, sem ocupar antecipadamente seu acesso.
+- Comida do pedido permanece na comanda e no prato real, sem ícone flutuante
+  duplicado sobre o cliente. Mesas sujas apresentam recolher pratos e limpar;
+  passar pano exige retirar a louça, liberar a mesa e as mãos. Não renderizar
+  contextos vazios que possam interceptar cliques no mapa.

@@ -34,7 +34,7 @@ func click_object(type: String) -> void:
 	g.events.append({"kind":"pointer","phase":"down","x":point.x,"y":point.y});g.events.append({"kind":"pointer","phase":"up","x":point.x,"y":point.y});g.tick(0)
 	for i in 300:
 		g.tick(0.05)
-		if g.session.pending==null and g.session.state.player.get("motion")==null and (g.session.state.player.get("goal")==null or g.session.MOVE.arrived(g.session.state.player)):break
+		if g.session.pending==null and g.session.state.player.get("noteJob")==null and g.session.state.player.get("motion")==null and (g.session.state.player.get("goal")==null or g.session.MOVE.arrived(g.session.state.player)):break
 	await layout()
 func take(food: String) -> void:
 	await click_object("fridge")

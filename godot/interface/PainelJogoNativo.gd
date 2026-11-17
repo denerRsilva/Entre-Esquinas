@@ -12,10 +12,10 @@ var first_context := ""
 func node(tag: String,children: Array,id: String = "",cls: String = "") -> Dictionary:return {"tag":tag,"id":id,"cls":cls,"children":children}
 func plain(value: String) -> Dictionary:return controls.text(value)
 func icon(kind: String) -> Array:return [["svg",'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="'+ICONS.data[kind]+'"/></svg>']]
-func button(title: String,kind: String,action: Dictionary) -> Dictionary:
+func button(title: String,kind: String,action: Dictionary,disabled: bool = false) -> Dictionary:
 	var path := "nativo:jogo:"+str(action.kind)+":"+str(action.get("id",action.get("room","")))+":"+str(action.get("command",action.get("x","")))
 	if first_context.is_empty():first_context=path
-	return controls.button(title,path,action,false,"objectAction",controls.item_art(action.recipe) if action.has("recipe") else icon(kind))
+	return controls.button(title,path,action,disabled,"objectAction",controls.item_art(action.recipe) if action.has("recipe") else icon(kind))
 func anchor(s: Dictionary,o: Dictionary) -> Dictionary:
 	var lift := 0
 	for c in s.customers:
@@ -82,9 +82,14 @@ func context(s: Dictionary,model: Dictionary) -> Dictionary:
 			elif (hand!=null and hand.item=="dirtyPlate") or (hand==null and o.get("dirtyPlates",0)>0 and o.get("cleanPlates",0)<KITCHEN.INV.CLEAN_SINK_CAPACITY):target.children.append(button("Lavar pratos","wash",{"kind":"wash","id":o.id}))
 			if o.get("cleanPlates",0)>0 and (hand==null or (hand.item=="plate" and hand.n<KITCHEN.INV.HAND_PLATE_CAPACITY)):add_physical(target,o,"take","Retirar pratos limpos da pia","takeClean")
 		if o.type in ["sink","bin"] and hand!=null and KITCHEN.INV.ITEMS.data.get(hand.item,{}).has("recipe"):add_physical(target,o,"bin","Descartar comida das mãos","discardHand")
-		if o.type=="table" and not KITCHEN.HYGIENE.can_wipe(s,o):target.children.append(button("Recolher pratos sujos da mesa","wash",{"kind":"clean","id":o.id}))
-		if o.type=="table" and KITCHEN.HYGIENE.can_wipe(s,o) and KITCHEN.HYGIENE.free_hands(s,a):target.children.append(button("Limpar mesa","wash",{"kind":"wipe","id":o.id}))
-	for c in s.customers:
+		if o.type=="table":
+			var dirty: int = KITCHEN.DISHES.count(s,o)
+			if dirty>0:
+				var can_collect: bool = a.get("carry")==null and (hand==null or (hand.item=="dirtyPlate" and hand.n<KITCHEN.INV.HAND_PLATE_CAPACITY)) and s.get("chopping")==null and s.get("plating")==null and s.get("washing")==null
+				target.children.append(button("Recolher pratos sujos da mesa","wash",{"kind":"clean","id":o.id},not can_collect))
+			if KITCHEN.HYGIENE.stained(s,o):target.children.append(button("Limpar mesa","wash",{"kind":"wipe","id":o.id},not KITCHEN.HYGIENE.can_wipe(s,o) or not KITCHEN.HYGIENE.free_hands(s,a)))
+
+	for c in ([] if model.get("cleanView",false) else s.customers):
 		if not service.near(a,c):continue
 		var chair = service.find(s.objects,c.seat)
 		var selected_object = service.find(s.objects,selected)
@@ -101,7 +106,7 @@ func context(s: Dictionary,model: Dictionary) -> Dictionary:
 			var order = service.find(s.orders,c.order)
 			if model.get("cleanView",false) and order!=null and order.state=="ordered":
 				target.children.append(button("Pedido prioritário" if s.priority==order.id else "Priorizar pedido","note",{"kind":"priority","id":order.id}))
-	return node("div",rows.values(),"context")
+	return node("div",rows.values().filter(func(r):return not r.children.is_empty()) if model.get("cleanView",false) else rows.values(),"context")
 func kitchen_status(s: Dictionary) -> Dictionary:
 	var jobs: Array = []
 	for pair in [["chopping","table","Cortando ingrediente"],["cooking","stove","Cozinhando "],["plating","prep","Empratando"],["washing","sink","Lavando prato"]]:
