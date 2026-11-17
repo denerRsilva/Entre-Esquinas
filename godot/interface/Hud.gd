@@ -180,7 +180,7 @@ func sync(data: Dictionary) -> void:
 			builder.render(item,content)
 		if key=="kitchenStatus":kitchen_bars=content.find_children("*","ProgressBar",true,false)
 		elif key=="ordersHud":order_bars=content.find_children("*","ProgressBar",true,false)
-		if key=="modal" and signature.contains("Salvar restaurante") and signature.contains("Carregar restaurante"):
+		if key=="modal" and signature.contains("Salvar jogo") and signature.contains("Carregar jogo"):
 			var b:=Button.new();b.text="Importar salvamento (.json)"
 			b.pressed.connect(func():import_dialog.popup_centered_ratio(0.72))
 			content.add_child(b)

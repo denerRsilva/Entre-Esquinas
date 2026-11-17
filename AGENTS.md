@@ -11,7 +11,7 @@
   de substituir as sprites exportadas nesta revisão. Alterar dimensões exige
   atualizar recortes, frames e pivôs, sem alterar automaticamente os saves.
 
-- A premissa vigente é o **refúgio no apocalipse zumbi**, conforme o GDD 3.2;
+- A premissa vigente é o **refúgio no apocalipse zumbi**, conforme o GDD 3.3;
   a origem nuclear anterior foi substituída. `docs/primeiro-ciclo-refugio.md`
   registra o protótipo .46 e não prevalece sobre as regras aprovadas no GDD.
 - Alimentação, energia e moral são **três barras coletivas da cidade**, de 0 a 100.
@@ -24,7 +24,9 @@
   sem painel permanente no cenário. Ver `docs/cidade-menu-coletivo.md`.
 - Desenvolver em trechos jogáveis para avaliação de Dener antes de ampliar a
   campanha. Parâmetros do primeiro ciclo são provisórios; preservar partidas
-  antigas e os três slots de salvamento.
+  antigas. A direção .49 usa um único slot de salvamento; três slots ficam
+  para o futuro. Preservar arquivos legados e backups internos sem expô-los como
+  partidas extras. Ver `docs/menu-inicial-save-unico.md`.
 
 - Na campanha de refúgio, começar **sem funcionário**. Contratação é conquistada
   pelo crescimento da cidade; garçom é a primeira função. A .48 implementa busca

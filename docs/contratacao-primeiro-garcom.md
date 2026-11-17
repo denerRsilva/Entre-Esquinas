@@ -30,7 +30,9 @@ para as próximas etapas.
 
 ## Salvamentos e compatibilidade
 
-Os três slots e formato externo 12 permanecem. O estado do refúgio recebe
+Registro da .48: havia três slots e formato externo 12. A
+[versão .49](menu-inicial-save-unico.md) passa a um slot, preservando os arquivos
+legados. O formato externo 12 permanece. O estado do refúgio recebe
 `hiring.version = 1`, com vínculos entre trabalhador, morador e profissão.
 Novas campanhas têm lista vazia. Saves anteriores conservam seus funcionários
 como vínculos legados, sem cobrança, remoção ou troca de carga/tarefa. Pausar e

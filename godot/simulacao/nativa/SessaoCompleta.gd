@@ -14,8 +14,9 @@ const FOOD_UI = preload("res://interface/ComidaInterface.gd")
 var simulation = SIM.new()
 var rng: Callable = randf
 var state: Dictionary = PARTIDA.fresh(true,true)
-var checkpoint_cache := {"slot":0,"day":0,"raw":""}
-var active_slot := 1
+const SAVE_KEY := "entre-partida-unica"
+const CHECKPOINT_KEY := "entre-refugio-preparo-unico"
+var checkpoint_cache := {"day":0,"raw":""}
 var kitchen_sound_stamp := ""
 var values: Dictionary = {}
 var writes: Dictionary = {}
@@ -56,10 +57,38 @@ var food_ui = FOOD_UI.new()
 var root_actions: Dictionary = {}
 func initialize(saved: Dictionary) -> void:
 	values=saved.duplicate(true)
-	active_slot=clampi(int(values.get("entre-slot-ativo",1)),1,3)
+	migrate_single_save()
 	var level: float = str(values.get("entre-camera-zoom","1")).to_float()
 	if level>=0.7 and level<=2:camera_level=level
 	update_camera()
+func migrate_single_save() -> void:
+	if values.has(SAVE_KEY):return
+	# Import the previously active valid game; retain all historical keys.
+	var preferred := clampi(str(values.get("entre-slot-ativo","1")).to_int(),1,3)
+	var sources: Array = []
+	for slot in [preferred,1,2,3]:
+		var source := "entre-partida-"+str(slot)
+		if not sources.has(source):sources.append(source)
+	for version in ["12","11","10","09","07","06","05","04"]:sources.append("entre-restaurante-"+version)
+	var fallback := ""
+	for source in sources:
+		var raw := str(values.get(source,""))
+		if raw.is_empty():continue
+		if fallback.is_empty():fallback=raw
+		if parse_save(raw)==null:continue
+		values[SAVE_KEY]=raw;writes[SAVE_KEY]=raw
+		var slot := int(source.trim_prefix("entre-partida-")) if source.begins_with("entre-partida-") else 1
+		var backup := str(values.get("entre-refugio-preparo-"+str(slot),""))
+		values[CHECKPOINT_KEY]=backup;writes[CHECKPOINT_KEY]=backup
+		return
+	# Keep a corrupt game's presence visible rather than silently replacing it.
+	if not fallback.is_empty():values[SAVE_KEY]=fallback;writes[SAVE_KEY]=fallback
+func has_saved_game() -> bool:return not str(values.get(SAVE_KEY,"")).is_empty()
+func archive_save() -> void:
+	if not has_saved_game():return
+	for pair in [[SAVE_KEY,"entre-partida-anterior"],[CHECKPOINT_KEY,"entre-refugio-preparo-anterior"]]:
+		var raw := str(values.get(pair[0],""))
+		values[pair[1]]=raw;writes[pair[1]]=raw
 func release_keyboard() -> void:keyboard.clear();velocity=null
 func focus(value: bool) -> void:hidden=not value;release_keyboard()
 func resize_view(width: float,height: float) -> void:
@@ -72,7 +101,7 @@ func set_zoom(value: float) -> void:
 	camera_level=CAMERA.level(value);values["entre-camera-zoom"]=str(camera_level);writes["entre-camera-zoom"]=str(camera_level);update_camera()
 func notify(message: String,bad: bool = false) -> void:
 	state.message=message;notice_until=clock+6
-	if modal=="management":menu_notice=message
+	if modal in ["management","welcome","confirmNew"]:menu_notice=message
 func reset_view() -> void:
 	PARTIDA.waiter_defaults(state)
 	renderer.facing.clear();played_heat.clear();pending=null;velocity=null;keyboard.clear();generation+=1
@@ -157,6 +186,7 @@ func pointer(event: Dictionary) -> void:
 				var world := CAMERA.world_pointer(point,rect,viewport,camera);hover={"x":floor(world.x),"y":floor(world.y)}
 func key(event: Dictionary) -> void:
 	var name: String = event.key;var down: bool = event.down
+	if name=="escape" and down and modal=="confirmNew":modal="welcome";return
 	if name=="escape" and down and modal=="management":close_dialog();return
 	if not modal.is_empty():return
 	var movement: bool = name in ["arrowup","arrowdown","arrowleft","arrowright","w","a","s","d"]
@@ -204,16 +234,13 @@ func load_state(next: Dictionary) -> void:
 func save_game() -> void:
 	var raw = SAVE.serialize(state)
 	if raw==null:notify("Não foi possível salvar: Estado inválido",true);return
-	values[slot_key(active_slot)]=raw;writes[slot_key(active_slot)]=raw
-	if active_slot==1:values["entre-restaurante-12"]=raw;writes["entre-restaurante-12"]=raw
-	notify("Partida "+str(active_slot)+" salva.")
-func load_game() -> void:
-	var raw: String = str(values.get(slot_key(active_slot),""))
-	for version in ["12","11","10","09","07","06","05","04"]:
-		if raw.is_empty() and active_slot==1 and not str(values.get("entre-restaurante-"+version,"")).is_empty():raw=values["entre-restaurante-"+version];break
-	var next = parse_save(raw)
-	if next==null:notify("Não foi possível carregar: salvamento ausente ou inválido. Estado atual preservado.",true);return
-	load_state(next);notify("Progresso carregado. Preparos em andamento continuam; empratamento exige proximidade da bancada.")
+	values[SAVE_KEY]=raw;writes[SAVE_KEY]=raw
+	notify("Jogo salvo.")
+func load_game() -> bool:
+	var next = parse_save(str(values.get(SAVE_KEY,"")))
+	if next==null:
+		notify("Não foi possível carregar: salvamento ausente ou inválido. Estado atual preservado.",true);return false
+	load_state(next);notify("Jogo carregado.");return true
 func admin_action(action: Dictionary,value: Variant) -> void:
 	if modal!="management" or mode!=action.mode or tab!=action.tab:return
 	var k: String = action.key;var result: Variant = null
@@ -243,28 +270,19 @@ func admin_action(action: Dictionary,value: Variant) -> void:
 		"save":save_game()
 		"load":load_game()
 	if result!=null and result.get("message")!=null:notify(result.message,not result.ok)
-func slot_key(slot: int) -> String:return "entre-partida-"+str(slot)
-func choose_slot(slot: int) -> void:
-	if slot<1 or slot>3:return
-	var raw: String = str(values.get(slot_key(slot),values.get("entre-restaurante-12","") if slot==1 else ""))
-	var next: Variant = parse_save(raw) if not raw.is_empty() else null
-	if not raw.is_empty() and next==null:notify("Não foi possível carregar esta partida.",true);return
-	active_slot=slot;values["entre-slot-ativo"]=str(slot);writes["entre-slot-ativo"]=str(slot)
-	if next!=null:load_state(next);close_dialog();notify("Partida "+str(slot)+" carregada.")
-	else:load_state(PARTIDA.fresh(true,true));modal="welcome"
-func checkpoint_key() -> String:return "entre-refugio-preparo-"+str(active_slot)
+func checkpoint_key() -> String:return CHECKPOINT_KEY
 func checkpoint(force: bool = false) -> void:
 	if not REFUGE.active(state) or REFUGE.blocked(state):return
 	if not force and state.day!=state.refuge.nextHorde:return
 	var previous_raw: String = str(values.get(checkpoint_key(),""))
-	if not force and checkpoint_cache.slot==active_slot and checkpoint_cache.day==state.day and checkpoint_cache.raw==previous_raw:return
+	if not force and checkpoint_cache.day==state.day and checkpoint_cache.raw==previous_raw:return
 	var old = parse_save(previous_raw) if not previous_raw.is_empty() else null
 	if not force and old is Dictionary and old.get("day")==state.day:
-		checkpoint_cache={"slot":active_slot,"day":state.day,"raw":previous_raw};return
+		checkpoint_cache={"day":state.day,"raw":previous_raw};return
 	var raw = SAVE.serialize(state)
 	if raw==null:return
 	values[checkpoint_key()]=raw;writes[checkpoint_key()]=raw
-	checkpoint_cache={"slot":active_slot,"day":state.day,"raw":raw}
+	checkpoint_cache={"day":state.day,"raw":raw}
 func refuge_action(action: String) -> void:
 	if not REFUGE.active(state):return
 	match action:
@@ -277,33 +295,30 @@ func refuge_action(action: String) -> void:
 			var previous = parse_save(str(values.get(checkpoint_key(),"")))
 			if previous!=null and REFUGE.active(previous) and not REFUGE.blocked(previous):load_state(previous);close_dialog();save_game()
 			else:
-				var saved = parse_save(str(values.get(slot_key(active_slot),"")))
+				var saved = parse_save(str(values.get(SAVE_KEY,"")))
 				if saved!=null and not REFUGE.blocked(saved):load_state(saved);close_dialog()
 				else:load_state(PARTIDA.fresh(true,true));modal="welcome"
 func sleep_day() -> void:
 	if ADMIN.pending(state) or state.open or state.closing:notify("Conclua o serviço e os preparos antes de dormir.",true);return
 	state.clock={"minute":1560,"remainder":0,"ending":true}
 	if ADMIN.finish_day(state):save_game();checkpoint();generation+=1
-func start_refuge(slot: int) -> void:
-	active_slot=slot;values["entre-slot-ativo"]=str(slot);writes["entre-slot-ativo"]=str(slot)
+func start_refuge() -> void:
+	archive_save()
+	values[CHECKPOINT_KEY]="";writes[CHECKPOINT_KEY]="";checkpoint_cache={"day":0,"raw":""};menu_notice=""
 	state=PARTIDA.furnished(true,true);REFUGE.start(state);building=null;hover=null;selected=null;construction=false;drawer=false;reset_view();modal="";set_zoom(camera_level);save_game();checkpoint(true)
 func root_action(kind: String) -> void:
-	if kind.begins_with("refugeSlot:"):
-		var slot := int(kind.trim_prefix("refugeSlot:"))
-		if modal=="refugeSlots" and slot>=1 and slot<=3:start_refuge(slot)
-		return
-	if kind.begins_with("slot:"):choose_slot(int(kind.trim_prefix("slot:")));return
 	if kind=="sleep":sleep_day();return
 	if kind=="manualSave":save_game();return
 	if kind=="manualLoad":load_game();return
 	match kind:
-		"refuge":
-			var free_slot := 0
-			for slot in range(1,4):
-				if not values.has(slot_key(slot)) and not (slot==1 and values.has("entre-restaurante-12")):free_slot=slot;break
-			if free_slot>0:start_refuge(free_slot)
-			else:modal="refugeSlots"
-		"welcome":modal="welcome"
+		"newGame","refuge":
+			if has_saved_game():modal="confirmNew";menu_notice="";release_keyboard()
+			else:start_refuge()
+		"confirmNew":
+			if modal=="confirmNew":start_refuge()
+		"loadStart":
+			if load_game():close_dialog()
+		"welcome":modal="welcome";menu_notice="";release_keyboard()
 		"furnished":state=PARTIDA.furnished(true,true);building=null;hover=null;selected=null;reset_view();modal="";set_zoom(camera_level)
 		"empty":close_dialog()
 		"tutorial":tutorial=not tutorial
@@ -357,32 +372,24 @@ func text(value: String) -> Dictionary:return {"tag":"text","text":value}
 func label(value: String) -> Dictionary:return node("p",[text(value)])
 func ui() -> Dictionary:
 	root_actions.clear();game_ui.controls.actions.clear();admin_ui.controls.actions.clear();inventory_ui.actions.clear();tools_ui.controls.actions.clear();catalog_ui.controls.actions.clear()
-	if modal=="refugeSlots":
-		var entries: Array = [node("h1",[text("As três partidas estão ocupadas")]),label("Escolha qual partida substituir pelo novo refúgio.")]
-		for slot in range(1,4):entries.append(button("Substituir partida "+str(slot),"refugeSlot:"+str(slot)))
-		entries.append(button("Voltar","welcome"))
-		return {"modal":node("dialog",entries,"refugeSlots")}
+	if modal=="confirmNew":
+		return {"modal":node("dialog",[node("h1",[text("Começar um novo jogo?")]),label("O progresso salvo será substituído."),button("Começar novo jogo","confirmNew"),button("Voltar","welcome")],"confirmNew")}
 	if modal=="welcome":
-		var items: Array = [node("h1",[text("Uma nova esperança.")]),label("Alimente quem protege o refúgio."),button("Começar no refúgio","refuge")]
-		if tutorial:items.append(label("Retire um ingrediente da geladeira para as mãos. Corte frango ou legumes na mesa de preparo e leve à panela. Cozinhe, apoie a panela na mesa de cozinha, emprate e sirva. Você só pode carregar uma unidade nas mãos; não há mochila."))
-		for slot in range(1,4):
-			if values.has(slot_key(slot)) or (slot==1 and values.has("entre-restaurante-12")):items.append(button("Continuar partida "+str(slot),"slot:"+str(slot)))
-		items.append(node("div",[button("Começar na taverna","furnished"),button("Começar vazio","empty"),button("Fechar tutorial" if tutorial else "Tutorial","tutorial")],"","welcomeActions"))
-		return {"modal":food_ui.decorate(node("dialog",items,"welcome"))}
+		var items: Array = [node("h1",[text("Entre Esquinas")]),button("Novo jogo","newGame"),button("Carregar jogo","loadStart",not has_saved_game())]
+		if not menu_notice.is_empty():items.append(label(menu_notice))
+		return {"modal":node("dialog",items,"welcome")}
 	if modal=="management":
 		var panel: Variant = null
 		if mode=="container":panel=inventory_ui.render(state,dialog_object)
 		elif mode=="recipes":panel=recipe_ui.render()
 		elif mode=="computer" and tab=="tools":panel=tools_ui.render(state)
 		if mode=="options" and tab=="save":
-			var slots: Array = [label("Partida atual: "+str(active_slot)),button("Dormir e salvar","sleep",ADMIN.pending(state) or state.open or state.closing)]
-			for slot in range(1,4):
-				var raw: String = str(values.get(slot_key(slot),values.get("entre-restaurante-12","") if slot==1 else ""))
-				var saved: Variant = JSON.parse_string(raw) if not raw.is_empty() else null
-				var title := "Partida "+str(slot)+" • "+("Dia "+str(int(saved.get("day",1))) if saved is Dictionary else "Vazia")
-				slots.append(node("div",[label(title),button("Continuar partida "+str(slot) if not raw.is_empty() else "Nova partida "+str(slot),"slot:"+str(slot))],"","card"))
-			slots.append(button("Salvar restaurante","manualSave"));slots.append(button("Carregar restaurante","manualLoad"))
-			panel=node("div",slots,"panel")
+			var raw := str(values.get(SAVE_KEY,""))
+			var saved: Variant = JSON.parse_string(raw) if not raw.is_empty() else null
+			var day: Variant = saved.get("day") if saved is Dictionary else null
+			var valid_day: bool = (day is int or day is float) and is_finite(day) and day>=1 and day==floor(day)
+			var title := "Jogo salvo • Dia "+str(int(day)) if valid_day else "Nenhum jogo salvo" if raw.is_empty() else "Salvamento inválido"
+			panel=node("div",[label(title),button("Dormir e salvar","sleep",ADMIN.pending(state) or state.open or state.closing),button("Salvar jogo","manualSave"),button("Carregar jogo","manualLoad",not has_saved_game())],"panel")
 		return {"modal":admin_ui.render(state,{"mode":mode,"tab":tab,"object":dialog_object,"camera":camera_level,"generation":generation,"notice":menu_notice},panel)}
 	if construction:
 		var result := {"catalog":node("div",[button("Construção","toggleCatalog")],"constructionControls")}

@@ -20,7 +20,7 @@ func press(title: String) -> bool:
 func run():
 	root.size=Vector2i(960,700);g=load("res://mundo/Restaurante.tscn").instantiate();root.add_child(g);g.set_process(false);await layout()
 	check(g.active and g.frame_data.modal=="welcome","Aplicação inicia sem avaliador de scripts")
-	check(await press("Começar na taverna") and g.session.state.objects.size()==22,"Partida mobiliada")
+	check(await press("Novo jogo") and g.session.state.objects.size()==22,"Partida mobiliada")
 	check(await press("Gestão"),"Gestão nativa")
 	for entry in [["Turnos","shifts"],["Equipe","team"],["Fechamento","finance"],["Clientes","customers"],["Calendário","calendar"],["Reputação","reputation"]]:check(await press(entry[0]) and g.session.tab==entry[1],"Aba "+entry[0])
 	check(await press("Modo construção") and g.session.construction and g.session.drawer,"Construção e catálogo automático")
@@ -30,7 +30,7 @@ func run():
 	check(await press("Opções"),"Opções nativas")
 	for entry in [["Câmera","camera"],["Testes","test"],["Primeiros passos","guide"],["Salvar e carregar","save"]]:check(await press(entry[0]) and g.session.tab==entry[1],"Aba "+entry[0])
 	var cash: float = g.session.state.cash
-	check(await press("Salvar restaurante"),"Salvar pelo controle Godot")
-	g.session.state.cash=1;check(await press("Carregar restaurante") and g.session.state.cash==cash,"Carregar pelo controle Godot")
+	check(await press("Salvar jogo"),"Salvar pelo controle Godot")
+	g.session.state.cash=1;check(await press("Carregar jogo") and g.session.state.cash==cash,"Carregar pelo controle Godot")
 	check(g.session.SAVE.VALIDATOR.valid(g.session.state),"Partida válida após interface completa")
 	print("FALHAS: ",failures);g.queue_free();await process_frame;quit(1 if failures else 0)

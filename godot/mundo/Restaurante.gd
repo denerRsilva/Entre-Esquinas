@@ -66,12 +66,14 @@ func import_save(path:String) -> void:
 		tick(0)
 		return
 	var next=values.duplicate()
-	next[session.slot_key(session.active_slot)]=raw
-	if session.active_slot==1:next["entre-restaurante-12"]=raw
+	next["entre-partida-anterior"]=str(values.get(session.SAVE_KEY,""))
+	next["entre-refugio-preparo-anterior"]=str(values.get(session.CHECKPOINT_KEY,""))
+	next[session.SAVE_KEY]=raw
+	next[session.CHECKPOINT_KEY]=""
 	if persist(next):
 		values=next
 		session.values=values.duplicate(true)
-		session.notify("Arquivo importado. Use Carregar restaurante para continuar.")
+		session.notify("Arquivo importado. Use Carregar jogo para continuar.")
 	else: session.notify("Falha ao gravar o arquivo importado.",true)
 	tick(0)
 

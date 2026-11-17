@@ -1,6 +1,6 @@
 # Entre Esquinas
 
-## GDD 3.2 — Refúgio no apocalipse zumbi
+## GDD 3.3 — Refúgio no apocalipse zumbi
 
 **Revisão documental:** 17 de novembro de 2026. **Responsável pelas decisões:** Dener Silva.
 
@@ -8,7 +8,8 @@ Esta versão consolida a proposta aprovada pelo proprietário em 17/11/2026 e su
 retificações: **três barras coletivas**, **derrotas consecutivas, reiniciadas
 por uma vitória**, início sem funcionário e contratação conquistada pelo crescimento.
 Registra também o início aprovado para teste, abastecimento limitado e mundo sem
-computador. O histórico Git preserva as versões anteriores.
+computador. A revisão 3.3 simplifica a entrada para Novo jogo e Carregar jogo,
+com um único slot; três partidas ficam para uma etapa futura. O histórico Git preserva as versões anteriores.
 
 > **A taverna é onde a cidade recupera as forças para sobreviver à próxima horda.**
 
@@ -46,6 +47,12 @@ O crescimento libera a busca de candidatos em **Gestão → Equipe**; garçom é
 primeira função contratável. Saves antigos conservam sua equipe. Ver
 [contratação, parâmetros e limites atuais](docs/contratacao-primeiro-garcom.md).
 O kit inicial, comércio e receitas aprovados abaixo ainda aguardam implementação.
+
+**Implementado na versão .49:** tela inicial somente com **Novo jogo** e
+**Carregar jogo**; uma partida salva. Novo jogo abre a campanha do refúgio e
+pede confirmação caso exista progresso. A partida antiga ativa é migrada
+para o espaço único; arquivos anteriores são preservados sem seleção de slots.
+[Fluxo, migração e testes](docs/menu-inicial-save-unico.md).
 
 O [registro do primeiro protótipo](docs/primeiro-ciclo-refugio.md) documenta o que
 foi implementado na versão .46. Números de moradores, tempos, ganhos, perdas,
@@ -314,8 +321,9 @@ As consequências devem permitir uma recuperação viável antes do próximo ata
 
 No game over, é possível carregar um salvamento anterior com tempo suficiente
 para refazer a preparação. A retomada precisa evitar uma derrota inevitável
-salva segundos antes do resultado. Preservar os **três slots** de partidas e
-seus dados existentes.
+salva segundos antes do resultado. Há **um único slot de salvamento**. Três slots ficam para o futuro. Preservar
+os dados anteriores como segurança interna, sem mostrar seleção de partidas
+extras. Backups de preparação continuam internos e não são novos slots.
 
 ### Cidade em reconstrução e novos moradores
 
@@ -680,7 +688,9 @@ a ser uma sequência reiniciada por vitória. A reconstrução tem contadores
 históricos próprios; resetar a sequência não apaga melhorias ou moradores.
 Gestão → Cidade reúne a consulta, sem painel permanente no cenário.
 
-Os três slots, recursos e identidades são preservados. Saves .46 válidos têm
+Recursos, identidades e arquivos antigos são preservados. Na .49, a partida
+ativa anterior é migrada para o espaço único; três slots ficam para o futuro.
+Saves .46 válidos têm
 migração específica descrita no [guia da versão .47](docs/cidade-menu-coletivo.md).
 Valores e ritmo continuam sujeitos aos playtests do proprietário.
 
@@ -811,6 +821,7 @@ O teste avulso `qa/rua-horario.test.cjs` falhou ao preparar ingredientes buscand
 
 ### Fontes de manutenção
 
+- [Menu inicial e salvamento único, implementação .49](docs/menu-inicial-save-unico.md).
 - [Contratação e início aprovado, implementação .48](docs/contratacao-primeiro-garcom.md).
 - [Consulta da cidade e implementação .47](docs/cidade-menu-coletivo.md).
 - [Registro histórico do protótipo .46](docs/primeiro-ciclo-refugio.md).
@@ -834,7 +845,8 @@ comprovam diversão ou balanceamento final.
 | 2.1 — 12/11/2026 | Comércio presencial, ferro-velho, fabricação por artesão, entrega e computador administrativo. |
 | 3.0 — 17/11/2026 | Nova premissa zumbi e primeiro protótipo jogável, com parâmetros provisórios. |
 | 3.1 — 17/11/2026 | Proposta consolidada aprovada: cidade de esperança, três barras coletivas, hordas de 3 a 5 dias, defesa animada, derrotas consecutivas com reset por vitória, retomada, crescimento, recompensas visuais e funcionais e desenvolvimento por playtests. |
-| **3.2 — 17/11/2026** | Início aprovado sem funcionário, contratação ligada ao crescimento (garçom primeiro), comércio limitado por NPCs, peças de viajantes, mundo sem computador e indicadores visuais de nutrição e tempo. Implementação .48 entrega contratação; kit, receitas e comércio permanecem pendentes. |
+| 3.2 — 17/11/2026 | Início aprovado sem funcionário, contratação ligada ao crescimento (garçom primeiro), comércio limitado por NPCs, peças de viajantes, mundo sem computador e indicadores visuais de nutrição e tempo. Implementação .48 entrega contratação; kit, receitas e comércio permanecem pendentes. |
+| **3.3 — 17/11/2026** | Tela inicial com Novo jogo e Carregar jogo, somente um slot. Três slots adiados. Migração da partida antiga ativa, preservação de arquivos anteriores e confirmação antes de novo jogo substituir progresso. |
 
 A aprovação de Dener da revisão 3.1 resolve as duas definições pendentes.
 A implementação .47 incorpora essas regras e a consulta em Gestão → Cidade,

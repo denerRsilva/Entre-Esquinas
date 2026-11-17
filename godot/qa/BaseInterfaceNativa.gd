@@ -4,7 +4,7 @@ func layout():
 	for i in 8:await process_frame
 func start_game(waiter_active: bool = false) -> void:
 	root.size=Vector2i(960,700);g=load("res://mundo/Restaurante.tscn").instantiate();root.add_child(g);g.set_process(false);await layout()
-	await press("Começar na taverna")
+	g.session.root_action("furnished");g.tick(0);await layout()
 	# Most UI scenarios perform service manually. Pause automation explicitly
 	# in these fixtures; gameplay and dedicated waiter tests keep the default.
 	if not waiter_active:

@@ -42,14 +42,11 @@ func run():
 	check(east_join and west_join,"Conexões removem as bordas internas dos dois módulos")
 	g.session.root_action("exitConstruction")
 	g.session.save_game();var cash: float = s.cash
-	g.session.choose_slot(2);g.session.root_action("furnished");g.session.state.cash=123;g.session.save_game()
-	g.session.choose_slot(1)
-	check(g.session.state.cash==cash,"Três espaços mantêm partidas independentes")
+	g.session.state.cash=123;g.session.load_game()
+	check(g.session.state.cash==cash,"Carregamento restaura a única partida")
 	var day: int = g.session.state.day
 	g.session.sleep_day()
-	check(g.session.state.day==day+1 and JSON.parse_string(g.session.values[g.session.slot_key(1)]).day==day+1,"Dormir inicia novo dia e salva automaticamente")
-	g.session.choose_slot(2);check(g.session.state.cash==123,"Dormir não sobrescreve outra partida")
-	g.session.choose_slot(4);check(g.session.active_slot==2,"Apenas três espaços são aceitos")
+	check(g.session.state.day==day+1 and JSON.parse_string(g.session.values[g.session.SAVE_KEY]).day==day+1,"Dormir inicia novo dia e salva no espaço único")
 	await take("frango");await click_object("prep")
 	packet=g.session.step(0.3,[])
 	check(packet.sounds.has(180),"Corte produz sinal sonoro")
