@@ -172,6 +172,22 @@ func process(s: Dictionary) -> void:
 func play_go(s: Dictionary,point: Dictionary) -> void:
 	MOVE.go(s.player,point);clear_input=true;kitchen.manual_moving=false;service.manual_moving=false
 func refresh() -> void:effects.append({"kind":"refresh"})
+func visible_customer(s: Dictionary,world: Dictionary) -> Variant:
+	# Client frames are drawn 64px tall, anchored at the feet (cell y*40+38).
+	# Their face extends into the row above the navigation cell. Hit the visible
+	# body before resolving furniture/walls; retain cell clicks as a fallback.
+	var point := Vector2(world.x*40,world.y*40)
+	var hit: Variant = null
+	var depth := -INF
+	var distance := INF
+	for c in s.customers:
+		if c.room!=s.player.room or c.state not in ["waiting","ordered"]:continue
+		var pose := MOVE.position(c)
+		var feet := Vector2(pose.x*40+20,pose.y*40+38)
+		if not Rect2(feet-Vector2(32,64),Vector2(64,64)).has_point(point):continue
+		var dx := absf(point.x-feet.x)
+		if feet.y>depth or (feet.y==depth and dx<distance):hit=c;depth=feet.y;distance=dx
+	return hit
 func pointer_down(s: Dictionary,pointer: Dictionary) -> void:
 	var x := int(floor(pointer.world.x))
 	var y := int(floor(pointer.world.y))
@@ -189,6 +205,9 @@ func pointer_down(s: Dictionary,pointer: Dictionary) -> void:
 		if portal.x==x and portal.y==y:
 			selected="portal:"+room+":"+str(x)+":"+str(y)
 			play_go(s,{"room":portal.to,"x":portal.spawn[0],"y":portal.spawn[1]});refresh();return
+	var customer = visible_customer(s,pointer.world)
+	if customer!=null:
+		selected=customer.id;queue(s,"customer",customer.id);refresh();return
 	for c in s.customers:
 		if c.room==room and c.x==x and c.y==y and c.state in ["waiting","ordered"]:
 			selected=c.id;queue(s,"customer",c.id);refresh();return
