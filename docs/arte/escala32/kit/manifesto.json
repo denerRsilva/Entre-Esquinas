@@ -1,0 +1,194 @@
+{
+	"atlas": {
+		"cell_height": 32,
+		"cell_width": 32,
+		"file": "tileset.png",
+		"height": 128,
+		"width": 128
+	},
+	"objects": [
+		{
+			"file": "mesa_trabalho.png",
+			"footprint_cells": [
+				2,
+				1
+			],
+			"height": 64,
+			"pivot_px": [
+				32,
+				64
+			],
+			"width": 64
+		},
+		{
+			"file": "mesa_jantar.png",
+			"footprint_cells": [
+				2,
+				1
+			],
+			"height": 64,
+			"pivot_px": [
+				32,
+				64
+			],
+			"width": 64
+		},
+		{
+			"file": "cadeira_frente.png",
+			"footprint_cells": [
+				1,
+				1
+			],
+			"height": 32,
+			"pivot_px": [
+				16,
+				32
+			],
+			"width": 32
+		},
+		{
+			"file": "cadeira_costas.png",
+			"footprint_cells": [
+				1,
+				1
+			],
+			"height": 32,
+			"pivot_px": [
+				16,
+				32
+			],
+			"width": 32
+		},
+		{
+			"file": "geladeira.png",
+			"footprint_cells": [
+				1,
+				1
+			],
+			"height": 64,
+			"pivot_px": [
+				16,
+				64
+			],
+			"width": 32
+		},
+		{
+			"file": "fogao.png",
+			"footprint_cells": [
+				2,
+				1
+			],
+			"height": 64,
+			"pivot_px": [
+				32,
+				64
+			],
+			"width": 64
+		},
+		{
+			"file": "pia.png",
+			"footprint_cells": [
+				2,
+				1
+			],
+			"height": 64,
+			"pivot_px": [
+				32,
+				64
+			],
+			"width": 64
+		},
+		{
+			"file": "tabua_corte.png",
+			"footprint_cells": [
+				0,
+				0
+			],
+			"height": 32,
+			"pivot_px": [
+				16,
+				32
+			],
+			"width": 32
+		}
+	],
+	"original_artwork": true,
+	"placements": [
+		[
+			"geladeira",
+			272,
+			40
+		],
+		[
+			"fogao",
+			304,
+			40
+		],
+		[
+			"pia",
+			368,
+			40
+		],
+		[
+			"cadeira_costas",
+			64,
+			72
+		],
+		[
+			"cadeira_costas",
+			96,
+			72
+		],
+		[
+			"mesa_jantar",
+			64,
+			104
+		],
+		[
+			"cadeira_frente",
+			64,
+			168
+		],
+		[
+			"cadeira_frente",
+			96,
+			168
+		],
+		[
+			"cadeira_costas",
+			144,
+			160
+		],
+		[
+			"cadeira_costas",
+			176,
+			160
+		],
+		[
+			"mesa_jantar",
+			144,
+			192
+		],
+		[
+			"cadeira_frente",
+			144,
+			256
+		],
+		[
+			"cadeira_frente",
+			176,
+			256
+		],
+		[
+			"mesa_trabalho",
+			304,
+			176
+		],
+		[
+			"tabua_corte",
+			320,
+			184
+		]
+	],
+	"unit": 32
+}

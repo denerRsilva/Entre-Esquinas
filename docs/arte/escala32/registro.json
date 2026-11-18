@@ -1,0 +1,208 @@
+{
+  "unit": 32,
+  "note": "Dimension checks are a guard, not proof of native pixel density. Author and review each asset at 1x. Historical files remain explicit exceptions.",
+  "native": [
+    {
+      "path": "godot/arte/inicio-32.png",
+      "width": 288,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "godot/arte/ui/modern-ui-32.png",
+      "width": 1952,
+      "height": 1376,
+      "cell": 32
+    },
+    {
+      "path": "docs/arte/escala32/kit/cadeira_costas.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "docs/arte/escala32/kit/cadeira_frente.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "docs/arte/escala32/kit/fogao.png",
+      "width": 64,
+      "height": 64,
+      "cell": 32
+    },
+    {
+      "path": "docs/arte/escala32/kit/geladeira.png",
+      "width": 32,
+      "height": 64,
+      "cell": 32
+    },
+    {
+      "path": "docs/arte/escala32/kit/mesa_jantar.png",
+      "width": 64,
+      "height": 64,
+      "cell": 32
+    },
+    {
+      "path": "docs/arte/escala32/kit/mesa_trabalho.png",
+      "width": 64,
+      "height": 64,
+      "cell": 32
+    },
+    {
+      "path": "docs/arte/escala32/kit/pia.png",
+      "width": 64,
+      "height": 64,
+      "cell": 32
+    },
+    {
+      "path": "docs/arte/escala32/kit/tabua_corte.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "docs/arte/escala32/kit/tile_00.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "docs/arte/escala32/kit/tile_01.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "docs/arte/escala32/kit/tile_02.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "docs/arte/escala32/kit/tile_03.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "docs/arte/escala32/kit/tile_04.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "docs/arte/escala32/kit/tile_05.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "docs/arte/escala32/kit/tile_06.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "docs/arte/escala32/kit/tile_07.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "docs/arte/escala32/kit/tile_08.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "docs/arte/escala32/kit/tile_09.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "docs/arte/escala32/kit/tile_10.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "docs/arte/escala32/kit/tile_11.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "docs/arte/escala32/kit/tile_12.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "docs/arte/escala32/kit/tile_13.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "docs/arte/escala32/kit/tile_14.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "docs/arte/escala32/kit/tile_15.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "docs/arte/escala32/kit/tileset.png",
+      "width": 128,
+      "height": 128,
+      "cell": 32
+    },
+    {
+      "path": "godot/arte/ui/barras-compactas-32.png",
+      "width": 128,
+      "height": 32,
+      "cell": 32
+    }
+  ],
+  "legacy": [
+    "godot/arte/cozinheira-12-poses-64.png",
+    "godot/arte/cozinheira-12-poses.png",
+    "godot/arte/cozinheira-grade.png",
+    "godot/arte/esquina-atlas.png",
+    "godot/arte/esquina-cook-source.png",
+    "godot/arte/esquina-food.png",
+    "godot/arte/esquina-frame.png",
+    "godot/arte/esquina-tools.png",
+    "godot/arte/esquina-walk.png",
+    "godot/arte/modular/bancadas-modulares-revisadas.png",
+    "godot/arte/modular/bancadas-piskel.png",
+    "godot/arte/modular/kit-empratamento-utensilios.png",
+    "godot/arte/modular/kits-mesa.png",
+    "godot/arte/modular/mesa-trabalho.png",
+    "godot/arte/modular/mesas-bancadas-base-comum-concept.png",
+    "godot/arte/modular/prato-vazio.png",
+    "godot/arte/taverna/alimentos.png",
+    "godot/arte/taverna/arquitetura.png",
+    "godot/arte/taverna/cliente-01-estudo-sprites.png",
+    "godot/arte/taverna/cliente-02-estudo-sprites.png",
+    "godot/arte/taverna/cliente-03-estudo-sprites.png",
+    "godot/arte/taverna/cozinheira.png",
+    "godot/arte/taverna/decoracao.png",
+    "godot/arte/taverna/garcom-estudo-sprites.png",
+    "godot/arte/taverna/moveis.png",
+    "godot/arte/ui/comanda-aprovada.png",
+    "godot/mundo/restaurant.png",
+    "godot/mundo/stock.png",
+    "godot/mundo/street.png",
+    "godot/personagens/Garcom.png",
+    "godot/personagens/Logistica.png",
+    "godot/personagens/Moradora.png"
+  ]
+}

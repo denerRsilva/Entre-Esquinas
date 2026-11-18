@@ -67,3 +67,13 @@
   além do corte 20% mais rápido. Não conceder comida/utensílios gratuitamente.
 - Avanço ao próximo turno usa a simulação e exige ausência de pendências e
   comida no fogão; nunca sobrescrever o checkpoint de preparação da horda.
+
+- Reformulação visual .55: usar grade de 32px e múltiplos para objetos maiores,
+  conforme `docs/DIRETRIZES-ARTE.md` e `docs/arte/escala32/kit`. O pack Village
+  Interiors é referência estrutural, não arte autorizada a copiar para o jogo.
+- Rodar `python3 scripts/verificar-arte.py` ao adicionar arte. Não registrar
+  estudos ampliados como nativos só porque suas dimensões são múltiplas de 32.
+- Dez pranchas antigas/completas ficam preservadas, porém excluídas das exportações.
+  Reintroduzir uma dependência exige rever `excluidos-exportacao.json` e presets.
+- Android universal permanece disponível. `Android ARM64` é uma opção menor;
+  não remover silenciosamente suporte a ARM32/x86_64 do preset universal.

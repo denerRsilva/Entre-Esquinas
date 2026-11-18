@@ -1,0 +1,15 @@
+{
+  "reason": "Historical concepts/source sheets without runtime references. Preserve originals and exclude only from exports.",
+  "files": [
+    "arte/cozinheira-12-poses.png",
+    "arte/cozinheira-grade.png",
+    "arte/esquina-atlas.png",
+    "arte/esquina-cook-source.png",
+    "arte/esquina-food.png",
+    "arte/esquina-walk.png",
+    "arte/modular/bancadas-modulares-revisadas.png",
+    "arte/modular/kit-empratamento-utensilios.png",
+    "arte/modular/mesas-bancadas-base-comum-concept.png",
+    "arte/ui/modern-ui-32.png"
+  ]
+}

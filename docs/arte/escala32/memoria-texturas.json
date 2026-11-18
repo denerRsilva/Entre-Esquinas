@@ -1,0 +1,13 @@
+{
+  "monitor": "Performance.RENDER_TEXTURE_MEM_USED",
+  "before_bytes": 154852076.0,
+  "after_bytes": 140549060.0,
+  "saved_bytes": 14303016.0,
+  "window": [
+    1280,
+    720
+  ],
+  "renderer": "Godot 4.6.3 Compatibility, Mesa llvmpipe, Linux/Xorg",
+  "scenario": "New refuge loaded, simulation paused, 25 frames of warmup. Separate processes and isolated user data.",
+  "note": "Engine texture allocation monitor; not process RSS, not physical Android measurement. Source geometry unchanged; bars atlas only."
+}

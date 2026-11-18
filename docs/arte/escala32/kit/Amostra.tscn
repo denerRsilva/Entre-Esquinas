@@ -1,0 +1,113 @@
+[gd_scene format=4]
+
+[ext_resource type="TileSet" path="res://PisosParedes.tres" id="1_ck3gs"]
+[ext_resource type="Texture2D" path="res://geladeira.png" id="2_36elk"]
+[ext_resource type="Texture2D" path="res://fogao.png" id="3_h6mts"]
+[ext_resource type="Texture2D" path="res://pia.png" id="4_f4qk5"]
+[ext_resource type="Texture2D" path="res://cadeira_costas.png" id="5_pxyky"]
+[ext_resource type="Texture2D" path="res://mesa_jantar.png" id="6_0nydv"]
+[ext_resource type="Texture2D" path="res://cadeira_frente.png" id="7_r2316"]
+[ext_resource type="Texture2D" path="res://mesa_trabalho.png" id="8_orcuw"]
+[ext_resource type="Texture2D" path="res://tabua_corte.png" id="9_r157p"]
+
+[node name="Amostra32px" type="Node2D" unique_id=284138225]
+texture_filter = 1
+
+[node name="Piso32" type="TileMapLayer" parent="." unique_id=293076912]
+tile_map_data = PackedByteArray("AAABAAIAAAABAAAAAAACAAIAAAAAAAAAAAADAAIAAAABAAAAAAAEAAIAAAAAAAAAAAAFAAIAAAABAAAAAAAGAAIAAAAAAAAAAAAHAAIAAAABAAAAAAAIAAIAAAACAAAAAAAJAAIAAAACAAAAAAAKAAIAAAACAAAAAAALAAIAAAACAAAAAAAMAAIAAAACAAAAAAABAAMAAAAAAAAAAAACAAMAAAABAAAAAAADAAMAAAAAAAAAAAAEAAMAAAABAAAAAAAFAAMAAAAAAAAAAAAGAAMAAAABAAAAAAAHAAMAAAAAAAAAAAAIAAMAAAACAAAAAAAJAAMAAAACAAAAAAAKAAMAAAACAAAAAAALAAMAAAACAAAAAAAMAAMAAAACAAAAAAABAAQAAAABAAAAAAACAAQAAAAAAAAAAAADAAQAAAABAAAAAAAEAAQAAAAAAAAAAAAFAAQAAAABAAAAAAAGAAQAAAAAAAAAAAAHAAQAAAABAAAAAAAIAAQAAAACAAAAAAAJAAQAAAACAAAAAAAKAAQAAAACAAAAAAALAAQAAAACAAAAAAAMAAQAAAACAAAAAAABAAUAAAAAAAAAAAACAAUAAAABAAAAAAADAAUAAAAAAAAAAAAEAAUAAAABAAAAAAAFAAUAAAAAAAAAAAAGAAUAAAABAAAAAAAHAAUAAAAAAAAAAAAIAAUAAAACAAAAAAAJAAUAAAACAAAAAAAKAAUAAAACAAAAAAALAAUAAAACAAAAAAAMAAUAAAACAAAAAAABAAYAAAABAAAAAAACAAYAAAAAAAAAAAADAAYAAAABAAAAAAAEAAYAAAAAAAAAAAAFAAYAAAABAAAAAAAGAAYAAAAAAAAAAAAHAAYAAAABAAAAAAAIAAYAAAACAAAAAAAJAAYAAAACAAAAAAAKAAYAAAACAAAAAAALAAYAAAACAAAAAAAMAAYAAAACAAAAAAABAAcAAAAAAAAAAAACAAcAAAABAAAAAAADAAcAAAAAAAAAAAAEAAcAAAABAAAAAAAFAAcAAAAAAAAAAAAGAAcAAAABAAAAAAAHAAcAAAAAAAAAAAAIAAcAAAACAAAAAAAJAAcAAAACAAAAAAAKAAcAAAACAAAAAAALAAcAAAACAAAAAAAMAAcAAAACAAAAAAABAAgAAAABAAAAAAACAAgAAAAAAAAAAAADAAgAAAABAAAAAAAEAAgAAAAAAAAAAAAFAAgAAAABAAAAAAAGAAgAAAAAAAAAAAAHAAgAAAABAAAAAAAIAAgAAAACAAAAAAAJAAgAAAACAAAAAAAKAAgAAAACAAAAAAALAAgAAAACAAAAAAAMAAgAAAACAAAAAAABAAkAAAAAAAAAAAACAAkAAAABAAAAAAADAAkAAAAAAAAAAAAEAAkAAAABAAAAAAAFAAkAAAAAAAAAAAAGAAkAAAABAAAAAAAHAAkAAAAAAAAAAAAIAAkAAAACAAAAAAAJAAkAAAACAAAAAAAKAAkAAAACAAAAAAALAAkAAAACAAAAAAAMAAkAAAACAAAAAAA=")
+tile_set = ExtResource("1_ck3gs")
+
+[node name="Paredes32" type="TileMapLayer" parent="." unique_id=847385477]
+z_index = 1
+tile_map_data = PackedByteArray("AAABAAAAAAAAAAEAAAABAAEAAAABAAEAAAABAAkAAAADAAEAAAACAAAAAAAAAAEAAAACAAEAAAABAAEAAAACAAkAAAADAAEAAAADAAAAAAACAAIAAAADAAEAAAABAAEAAAADAAkAAAADAAEAAAAEAAAAAAAAAAEAAAAEAAEAAAABAAEAAAAEAAkAAAADAAEAAAAFAAAAAAAAAAEAAAAFAAEAAAABAAEAAAAFAAkAAAADAAEAAAAGAAAAAAAAAAEAAAAGAAEAAAABAAEAAAAHAAAAAAAAAAEAAAAHAAEAAAABAAEAAAAHAAkAAAADAAEAAAAIAAAAAAAAAAEAAAAIAAEAAAABAAEAAAAIAAkAAAADAAEAAAAJAAAAAAAAAAEAAAAJAAEAAAABAAEAAAAJAAkAAAADAAEAAAAKAAAAAAACAAIAAAAKAAEAAAABAAEAAAAKAAkAAAADAAEAAAALAAAAAAAAAAEAAAALAAEAAAABAAEAAAALAAkAAAADAAEAAAAMAAAAAAAAAAEAAAAMAAEAAAABAAEAAAAMAAkAAAADAAEAAAAAAAAAAAACAAEAAAANAAAAAAACAAEAAAAAAAEAAAACAAEAAAANAAEAAAACAAEAAAAAAAIAAAACAAEAAAANAAIAAAACAAEAAAAAAAMAAAACAAEAAAANAAMAAAACAAEAAAAAAAQAAAACAAEAAAANAAQAAAACAAEAAAAAAAUAAAACAAEAAAANAAUAAAACAAEAAAAAAAYAAAACAAEAAAANAAYAAAACAAEAAAAAAAcAAAACAAEAAAANAAcAAAACAAEAAAAAAAgAAAACAAEAAAANAAgAAAACAAEAAAAAAAkAAAACAAEAAAANAAkAAAACAAEAAAA=")
+tile_set = ExtResource("1_ck3gs")
+
+[node name="geladeira" type="Sprite2D" parent="." unique_id=1093271067]
+z_index = 2
+position = Vector2(272, 40)
+texture = ExtResource("2_36elk")
+centered = false
+
+[node name="fogao" type="Sprite2D" parent="." unique_id=1049867439]
+z_index = 2
+position = Vector2(304, 40)
+texture = ExtResource("3_h6mts")
+centered = false
+
+[node name="pia" type="Sprite2D" parent="." unique_id=1450713649]
+z_index = 2
+position = Vector2(368, 40)
+texture = ExtResource("4_f4qk5")
+centered = false
+
+[node name="cadeira_costas" type="Sprite2D" parent="." unique_id=1855796070]
+z_index = 2
+position = Vector2(64, 72)
+texture = ExtResource("5_pxyky")
+centered = false
+
+[node name="@Sprite2D@2" type="Sprite2D" parent="." unique_id=2147255427]
+z_index = 2
+position = Vector2(96, 72)
+texture = ExtResource("5_pxyky")
+centered = false
+
+[node name="mesa_jantar" type="Sprite2D" parent="." unique_id=996296486]
+z_index = 2
+position = Vector2(64, 104)
+texture = ExtResource("6_0nydv")
+centered = false
+
+[node name="cadeira_frente" type="Sprite2D" parent="." unique_id=1548630131]
+z_index = 2
+position = Vector2(64, 168)
+texture = ExtResource("7_r2316")
+centered = false
+
+[node name="@Sprite2D@3" type="Sprite2D" parent="." unique_id=1348474346]
+z_index = 2
+position = Vector2(96, 168)
+texture = ExtResource("7_r2316")
+centered = false
+
+[node name="@Sprite2D@4" type="Sprite2D" parent="." unique_id=156718798]
+z_index = 2
+position = Vector2(144, 160)
+texture = ExtResource("5_pxyky")
+centered = false
+
+[node name="@Sprite2D@5" type="Sprite2D" parent="." unique_id=1326369005]
+z_index = 2
+position = Vector2(176, 160)
+texture = ExtResource("5_pxyky")
+centered = false
+
+[node name="@Sprite2D@6" type="Sprite2D" parent="." unique_id=233050060]
+z_index = 2
+position = Vector2(144, 192)
+texture = ExtResource("6_0nydv")
+centered = false
+
+[node name="@Sprite2D@7" type="Sprite2D" parent="." unique_id=395414011]
+z_index = 2
+position = Vector2(144, 256)
+texture = ExtResource("7_r2316")
+centered = false
+
+[node name="@Sprite2D@8" type="Sprite2D" parent="." unique_id=1419198078]
+z_index = 2
+position = Vector2(176, 256)
+texture = ExtResource("7_r2316")
+centered = false
+
+[node name="mesa_trabalho" type="Sprite2D" parent="." unique_id=1833456670]
+z_index = 2
+position = Vector2(304, 176)
+texture = ExtResource("8_orcuw")
+centered = false
+
+[node name="tabua_corte" type="Sprite2D" parent="." unique_id=619281868]
+z_index = 2
+position = Vector2(320, 184)
+texture = ExtResource("9_r157p")
+centered = false

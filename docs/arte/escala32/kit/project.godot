@@ -1,0 +1,15 @@
+config_version=5
+[application]
+config/name="Entre Esquinas — Amostra 32px"
+run/main_scene="res://Amostra.tscn"
+[display]
+window/size/viewport_width=448
+window/size/viewport_height=320
+window/size/window_width_override=1344
+window/size/window_height_override=960
+window/stretch/mode="canvas_items"
+[rendering]
+renderer/rendering_method="gl_compatibility"
+textures/default_filters/use_nearest_mipmap_filter=false
+textures/canvas_textures/default_texture_filter=0
+environment/defaults/default_clear_color=Color(0.094,0.106,0.094,1)
