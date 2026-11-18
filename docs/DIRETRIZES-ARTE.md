@@ -69,3 +69,16 @@ Os originais permanecem preservados. A migração artística será por lotes:
 base arquitetônica/mobiliário → utensílios/alimentos → personagens/animações →
 rua/decoração/interface restante. Conferir encaixes a 1× e em cena antes de
 substituir referências, recortes e pivôs. Não alterar o save junto com a arte.
+
+## Composição por blocos — esclarecimento de 18/11/2026
+
+A unidade é 32×32, não uma moldura quadrada obrigatória para toda a arte.
+32×64 usa dois blocos empilhados; 64×32 usa dois lado a lado; 64×64 usa quatro.
+No desenho atual, o fogão combina uma base larga e uma chaminé: a previsão é
+64×64. Uma geladeira fechada pode usar 32×64. Não comprimir ou esticar a silhueta
+para reduzir a quantidade de blocos. Mesas e pia partem de 64×64.
+
+O [mapa de tamanhos](arte/escala32/tamanhos-planejados.json) inventaria fontes e
+recortes e define canvases por peça. É uma especificação de conversão, não
+a afirmação de que os PNGs atuais já foram substituídos. Cortes, frames, pivôs
+e conexões precisam acompanhar cada integração. Preservar os originais.

@@ -1,0 +1,1547 @@
+{
+  "unit_px": 32,
+  "status": "Sizing specification only; no artwork or runtime references replaced by this file.",
+  "rules": [
+    "Canvas size is distinct from physical footprint and world scale.",
+    "Keep save/map grid at 40 logical units.",
+    "Use 32x32 cells and multiples for larger objects; never stretch an object just to fill a square.",
+    "Preserve shared palette, perspective, pivots and actual physical item sizes.",
+    "Keep originals and classify resampling as conversion, not hand-authored native pixel art."
+  ],
+  "pieces": [
+    {
+      "name": "fogao_aceso",
+      "source": "godot/arte/taverna/moveis.png",
+      "source_rect": [
+        29,
+        22,
+        177,
+        238
+      ],
+      "target_canvas": [
+        64,
+        64
+      ],
+      "grid_cells": [
+        2,
+        2
+      ],
+      "cell_count": 4,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "fogao_apagado",
+      "source": "godot/arte/taverna/moveis.png",
+      "source_rect": [
+        259,
+        22,
+        176,
+        238
+      ],
+      "target_canvas": [
+        64,
+        64
+      ],
+      "grid_cells": [
+        2,
+        2
+      ],
+      "cell_count": 4,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "geladeira_fechada",
+      "source": "godot/arte/taverna/moveis.png",
+      "source_rect": [
+        511,
+        29,
+        125,
+        232
+      ],
+      "target_canvas": [
+        32,
+        64
+      ],
+      "grid_cells": [
+        1,
+        2
+      ],
+      "cell_count": 2,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "geladeira_aberta",
+      "source": "godot/arte/taverna/moveis.png",
+      "source_rect": [
+        696,
+        29,
+        184,
+        235
+      ],
+      "target_canvas": [
+        64,
+        64
+      ],
+      "grid_cells": [
+        2,
+        2
+      ],
+      "cell_count": 4,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "preparo_estudo",
+      "source": "godot/arte/taverna/moveis.png",
+      "source_rect": [
+        929,
+        108,
+        199,
+        151
+      ],
+      "target_canvas": [
+        64,
+        64
+      ],
+      "grid_cells": [
+        2,
+        2
+      ],
+      "cell_count": 4,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "empratamento_estudo",
+      "source": "godot/arte/taverna/moveis.png",
+      "source_rect": [
+        1162,
+        109,
+        195,
+        152
+      ],
+      "target_canvas": [
+        64,
+        64
+      ],
+      "grid_cells": [
+        2,
+        2
+      ],
+      "cell_count": 4,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "mesa_vazia",
+      "source": "godot/arte/taverna/moveis.png",
+      "source_rect": [
+        16,
+        335,
+        198,
+        139
+      ],
+      "target_canvas": [
+        64,
+        64
+      ],
+      "grid_cells": [
+        2,
+        2
+      ],
+      "cell_count": 4,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "mesa_jantar",
+      "source": "godot/arte/taverna/moveis.png",
+      "source_rect": [
+        246,
+        331,
+        202,
+        143
+      ],
+      "target_canvas": [
+        64,
+        64
+      ],
+      "grid_cells": [
+        2,
+        2
+      ],
+      "cell_count": 4,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "cadeira_esquerda",
+      "source": "godot/arte/taverna/moveis.png",
+      "source_rect": [
+        524,
+        322,
+        98,
+        155
+      ],
+      "target_canvas": [
+        32,
+        32
+      ],
+      "grid_cells": [
+        1,
+        1
+      ],
+      "cell_count": 1,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "cadeira_costas",
+      "source": "godot/arte/taverna/moveis.png",
+      "source_rect": [
+        750,
+        325,
+        104,
+        146
+      ],
+      "target_canvas": [
+        32,
+        32
+      ],
+      "grid_cells": [
+        1,
+        1
+      ],
+      "cell_count": 1,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "cadeira_frente",
+      "source": "godot/arte/taverna/moveis.png",
+      "source_rect": [
+        974,
+        317,
+        99,
+        163
+      ],
+      "target_canvas": [
+        32,
+        32
+      ],
+      "grid_cells": [
+        1,
+        1
+      ],
+      "cell_count": 1,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "cadeira_direita",
+      "source": "godot/arte/taverna/moveis.png",
+      "source_rect": [
+        1196,
+        317,
+        95,
+        163
+      ],
+      "target_canvas": [
+        32,
+        32
+      ],
+      "grid_cells": [
+        1,
+        1
+      ],
+      "cell_count": 1,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "armario_vazio",
+      "source": "godot/arte/taverna/moveis.png",
+      "source_rect": [
+        34,
+        517,
+        162,
+        255
+      ],
+      "target_canvas": [
+        32,
+        64
+      ],
+      "grid_cells": [
+        1,
+        2
+      ],
+      "cell_count": 2,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "armario_louca",
+      "source": "godot/arte/taverna/moveis.png",
+      "source_rect": [
+        264,
+        517,
+        162,
+        255
+      ],
+      "target_canvas": [
+        32,
+        64
+      ],
+      "grid_cells": [
+        1,
+        2
+      ],
+      "cell_count": 2,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "estante_vazia",
+      "source": "godot/arte/taverna/moveis.png",
+      "source_rect": [
+        508,
+        548,
+        133,
+        200
+      ],
+      "target_canvas": [
+        32,
+        64
+      ],
+      "grid_cells": [
+        1,
+        2
+      ],
+      "cell_count": 2,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "estante_panelas",
+      "source": "godot/arte/taverna/moveis.png",
+      "source_rect": [
+        736,
+        538,
+        133,
+        210
+      ],
+      "target_canvas": [
+        32,
+        64
+      ],
+      "grid_cells": [
+        1,
+        2
+      ],
+      "cell_count": 2,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "pia",
+      "source": "godot/arte/taverna/moveis.png",
+      "source_rect": [
+        946,
+        537,
+        169,
+        224
+      ],
+      "target_canvas": [
+        64,
+        64
+      ],
+      "grid_cells": [
+        2,
+        2
+      ],
+      "cell_count": 4,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "lixeira",
+      "source": "godot/arte/taverna/moveis.png",
+      "source_rect": [
+        1181,
+        579,
+        155,
+        166
+      ],
+      "target_canvas": [
+        32,
+        32
+      ],
+      "grid_cells": [
+        1,
+        1
+      ],
+      "cell_count": 1,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "pilha_pratos_estudo",
+      "source": "godot/arte/taverna/moveis.png",
+      "source_rect": [
+        52,
+        819,
+        124,
+        114
+      ],
+      "target_canvas": [
+        32,
+        32
+      ],
+      "grid_cells": [
+        1,
+        1
+      ],
+      "cell_count": 1,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "prato_limpo",
+      "source": "godot/arte/taverna/moveis.png",
+      "source_rect": [
+        273,
+        842,
+        143,
+        72
+      ],
+      "target_canvas": [
+        32,
+        32
+      ],
+      "grid_cells": [
+        1,
+        1
+      ],
+      "cell_count": 1,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "prato_sujo",
+      "source": "godot/arte/taverna/moveis.png",
+      "source_rect": [
+        500,
+        837,
+        143,
+        76
+      ],
+      "target_canvas": [
+        32,
+        32
+      ],
+      "grid_cells": [
+        1,
+        1
+      ],
+      "cell_count": 1,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "panela",
+      "source": "godot/arte/taverna/moveis.png",
+      "source_rect": [
+        711,
+        806,
+        178,
+        131
+      ],
+      "target_canvas": [
+        32,
+        32
+      ],
+      "grid_cells": [
+        1,
+        1
+      ],
+      "cell_count": 1,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "tampa",
+      "source": "godot/arte/taverna/moveis.png",
+      "source_rect": [
+        956,
+        838,
+        145,
+        74
+      ],
+      "target_canvas": [
+        32,
+        32
+      ],
+      "grid_cells": [
+        1,
+        1
+      ],
+      "cell_count": 1,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "panela_queimada",
+      "source": "godot/arte/taverna/moveis.png",
+      "source_rect": [
+        1170,
+        808,
+        178,
+        127
+      ],
+      "target_canvas": [
+        32,
+        32
+      ],
+      "grid_cells": [
+        1,
+        1
+      ],
+      "cell_count": 1,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "prateleira_potes",
+      "source": "godot/arte/taverna/moveis.png",
+      "source_rect": [
+        16,
+        999,
+        202,
+        111
+      ],
+      "target_canvas": [
+        64,
+        32
+      ],
+      "grid_cells": [
+        2,
+        1
+      ],
+      "cell_count": 2,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "suporte_utensilios",
+      "source": "godot/arte/taverna/moveis.png",
+      "source_rect": [
+        257,
+        992,
+        173,
+        136
+      ],
+      "target_canvas": [
+        32,
+        32
+      ],
+      "grid_cells": [
+        1,
+        1
+      ],
+      "cell_count": 1,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "balcao_estudo",
+      "source": "godot/arte/taverna/moveis.png",
+      "source_rect": [
+        473,
+        995,
+        200,
+        132
+      ],
+      "target_canvas": [
+        64,
+        64
+      ],
+      "grid_cells": [
+        2,
+        2
+      ],
+      "cell_count": 4,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "banco",
+      "source": "godot/arte/taverna/moveis.png",
+      "source_rect": [
+        707,
+        1025,
+        190,
+        91
+      ],
+      "target_canvas": [
+        64,
+        32
+      ],
+      "grid_cells": [
+        2,
+        1
+      ],
+      "cell_count": 2,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "chaleira",
+      "source": "godot/arte/taverna/moveis.png",
+      "source_rect": [
+        958,
+        992,
+        130,
+        135
+      ],
+      "target_canvas": [
+        32,
+        32
+      ],
+      "grid_cells": [
+        1,
+        1
+      ],
+      "cell_count": 1,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "frigideira",
+      "source": "godot/arte/taverna/moveis.png",
+      "source_rect": [
+        1209,
+        970,
+        100,
+        161
+      ],
+      "target_canvas": [
+        32,
+        32
+      ],
+      "grid_cells": [
+        1,
+        1
+      ],
+      "cell_count": 1,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "mesa_trabalho_atual",
+      "source": "godot/arte/modular/mesa-trabalho.png",
+      "source_rect": [
+        94,
+        122,
+        1245,
+        877
+      ],
+      "target_canvas": [
+        64,
+        64
+      ],
+      "grid_cells": [
+        2,
+        2
+      ],
+      "cell_count": 4,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "kit_corte_atual",
+      "source": "godot/arte/modular/kits-mesa.png",
+      "source_rect": [
+        155,
+        335,
+        599,
+        255
+      ],
+      "target_canvas": [
+        32,
+        32
+      ],
+      "grid_cells": [
+        1,
+        1
+      ],
+      "cell_count": 1,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "prato_limpo_atual",
+      "source": "godot/arte/modular/prato-vazio.png",
+      "source_rect": [
+        125,
+        166,
+        1249,
+        736
+      ],
+      "target_canvas": [
+        32,
+        32
+      ],
+      "grid_cells": [
+        1,
+        1
+      ],
+      "cell_count": 1,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "decoracao_00",
+      "source": "godot/arte/taverna/decoracao.png",
+      "source_rect": [
+        48,
+        33,
+        137,
+        192
+      ],
+      "target_canvas": [
+        32,
+        32
+      ],
+      "grid_cells": [
+        1,
+        1
+      ],
+      "cell_count": 1,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "decoracao_01",
+      "source": "godot/arte/taverna/decoracao.png",
+      "source_rect": [
+        278,
+        33,
+        136,
+        188
+      ],
+      "target_canvas": [
+        32,
+        32
+      ],
+      "grid_cells": [
+        1,
+        1
+      ],
+      "cell_count": 1,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "decoracao_02",
+      "source": "godot/arte/taverna/decoracao.png",
+      "source_rect": [
+        522,
+        74,
+        121,
+        143
+      ],
+      "target_canvas": [
+        32,
+        32
+      ],
+      "grid_cells": [
+        1,
+        1
+      ],
+      "cell_count": 1,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "decoracao_03",
+      "source": "godot/arte/taverna/decoracao.png",
+      "source_rect": [
+        727,
+        29,
+        154,
+        200
+      ],
+      "target_canvas": [
+        32,
+        32
+      ],
+      "grid_cells": [
+        1,
+        1
+      ],
+      "cell_count": 1,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "decoracao_04",
+      "source": "godot/arte/taverna/decoracao.png",
+      "source_rect": [
+        956,
+        12,
+        150,
+        254
+      ],
+      "target_canvas": [
+        32,
+        64
+      ],
+      "grid_cells": [
+        1,
+        2
+      ],
+      "cell_count": 2,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "decoracao_05",
+      "source": "godot/arte/taverna/decoracao.png",
+      "source_rect": [
+        1197,
+        78,
+        133,
+        151
+      ],
+      "target_canvas": [
+        32,
+        32
+      ],
+      "grid_cells": [
+        1,
+        1
+      ],
+      "cell_count": 1,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "decoracao_06",
+      "source": "godot/arte/taverna/decoracao.png",
+      "source_rect": [
+        20,
+        283,
+        220,
+        170
+      ],
+      "target_canvas": [
+        96,
+        64
+      ],
+      "grid_cells": [
+        3,
+        2
+      ],
+      "cell_count": 6,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "decoracao_07",
+      "source": "godot/arte/taverna/decoracao.png",
+      "source_rect": [
+        279,
+        333,
+        170,
+        78
+      ],
+      "target_canvas": [
+        64,
+        32
+      ],
+      "grid_cells": [
+        2,
+        1
+      ],
+      "cell_count": 2,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "decoracao_08",
+      "source": "godot/arte/taverna/decoracao.png",
+      "source_rect": [
+        485,
+        305,
+        179,
+        144
+      ],
+      "target_canvas": [
+        64,
+        32
+      ],
+      "grid_cells": [
+        2,
+        1
+      ],
+      "cell_count": 2,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "decoracao_09",
+      "source": "godot/arte/taverna/decoracao.png",
+      "source_rect": [
+        713,
+        277,
+        185,
+        192
+      ],
+      "target_canvas": [
+        32,
+        64
+      ],
+      "grid_cells": [
+        1,
+        2
+      ],
+      "cell_count": 2,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "decoracao_10",
+      "source": "godot/arte/taverna/decoracao.png",
+      "source_rect": [
+        959,
+        303,
+        151,
+        130
+      ],
+      "target_canvas": [
+        32,
+        32
+      ],
+      "grid_cells": [
+        1,
+        1
+      ],
+      "cell_count": 1,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "decoracao_11",
+      "source": "godot/arte/taverna/decoracao.png",
+      "source_rect": [
+        1187,
+        295,
+        151,
+        154
+      ],
+      "target_canvas": [
+        32,
+        32
+      ],
+      "grid_cells": [
+        1,
+        1
+      ],
+      "cell_count": 1,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "decoracao_12",
+      "source": "godot/arte/taverna/decoracao.png",
+      "source_rect": [
+        16,
+        501,
+        217,
+        203
+      ],
+      "target_canvas": [
+        64,
+        64
+      ],
+      "grid_cells": [
+        2,
+        2
+      ],
+      "cell_count": 4,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "decoracao_13",
+      "source": "godot/arte/taverna/decoracao.png",
+      "source_rect": [
+        266,
+        501,
+        198,
+        201
+      ],
+      "target_canvas": [
+        64,
+        64
+      ],
+      "grid_cells": [
+        2,
+        2
+      ],
+      "cell_count": 4,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "decoracao_14",
+      "source": "godot/arte/taverna/decoracao.png",
+      "source_rect": [
+        481,
+        503,
+        218,
+        196
+      ],
+      "target_canvas": [
+        64,
+        64
+      ],
+      "grid_cells": [
+        2,
+        2
+      ],
+      "cell_count": 4,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "decoracao_15",
+      "source": "godot/arte/taverna/decoracao.png",
+      "source_rect": [
+        720,
+        513,
+        216,
+        186
+      ],
+      "target_canvas": [
+        64,
+        64
+      ],
+      "grid_cells": [
+        2,
+        2
+      ],
+      "cell_count": 4,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "decoracao_16",
+      "source": "godot/arte/taverna/decoracao.png",
+      "source_rect": [
+        916,
+        513,
+        204,
+        186
+      ],
+      "target_canvas": [
+        32,
+        32
+      ],
+      "grid_cells": [
+        1,
+        1
+      ],
+      "cell_count": 1,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "decoracao_17",
+      "source": "godot/arte/taverna/decoracao.png",
+      "source_rect": [
+        1163,
+        527,
+        191,
+        146
+      ],
+      "target_canvas": [
+        32,
+        32
+      ],
+      "grid_cells": [
+        1,
+        1
+      ],
+      "cell_count": 1,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "decoracao_18",
+      "source": "godot/arte/taverna/decoracao.png",
+      "source_rect": [
+        30,
+        779,
+        181,
+        139
+      ],
+      "target_canvas": [
+        32,
+        32
+      ],
+      "grid_cells": [
+        1,
+        1
+      ],
+      "cell_count": 1,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "decoracao_19",
+      "source": "godot/arte/taverna/decoracao.png",
+      "source_rect": [
+        267,
+        762,
+        174,
+        155
+      ],
+      "target_canvas": [
+        32,
+        32
+      ],
+      "grid_cells": [
+        1,
+        1
+      ],
+      "cell_count": 1,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "decoracao_20",
+      "source": "godot/arte/taverna/decoracao.png",
+      "source_rect": [
+        502,
+        754,
+        203,
+        169
+      ],
+      "target_canvas": [
+        64,
+        32
+      ],
+      "grid_cells": [
+        2,
+        1
+      ],
+      "cell_count": 2,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "decoracao_21",
+      "source": "godot/arte/taverna/decoracao.png",
+      "source_rect": [
+        705,
+        746,
+        238,
+        172
+      ],
+      "target_canvas": [
+        64,
+        64
+      ],
+      "grid_cells": [
+        2,
+        2
+      ],
+      "cell_count": 4,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "decoracao_22",
+      "source": "godot/arte/taverna/decoracao.png",
+      "source_rect": [
+        926,
+        782,
+        174,
+        128
+      ],
+      "target_canvas": [
+        32,
+        32
+      ],
+      "grid_cells": [
+        1,
+        1
+      ],
+      "cell_count": 1,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "decoracao_23",
+      "source": "godot/arte/taverna/decoracao.png",
+      "source_rect": [
+        1151,
+        743,
+        201,
+        175
+      ],
+      "target_canvas": [
+        32,
+        32
+      ],
+      "grid_cells": [
+        1,
+        1
+      ],
+      "cell_count": 1,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "decoracao_24",
+      "source": "godot/arte/taverna/decoracao.png",
+      "source_rect": [
+        28,
+        957,
+        221,
+        170
+      ],
+      "target_canvas": [
+        64,
+        32
+      ],
+      "grid_cells": [
+        2,
+        1
+      ],
+      "cell_count": 2,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "decoracao_25",
+      "source": "godot/arte/taverna/decoracao.png",
+      "source_rect": [
+        249,
+        974,
+        197,
+        153
+      ],
+      "target_canvas": [
+        64,
+        64
+      ],
+      "grid_cells": [
+        2,
+        2
+      ],
+      "cell_count": 4,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "decoracao_26",
+      "source": "godot/arte/taverna/decoracao.png",
+      "source_rect": [
+        476,
+        993,
+        224,
+        134
+      ],
+      "target_canvas": [
+        64,
+        32
+      ],
+      "grid_cells": [
+        2,
+        1
+      ],
+      "cell_count": 2,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "decoracao_27",
+      "source": "godot/arte/taverna/decoracao.png",
+      "source_rect": [
+        758,
+        988,
+        124,
+        136
+      ],
+      "target_canvas": [
+        32,
+        32
+      ],
+      "grid_cells": [
+        1,
+        1
+      ],
+      "cell_count": 1,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "decoracao_28",
+      "source": "godot/arte/taverna/decoracao.png",
+      "source_rect": [
+        974,
+        957,
+        171,
+        178
+      ],
+      "target_canvas": [
+        32,
+        32
+      ],
+      "grid_cells": [
+        1,
+        1
+      ],
+      "cell_count": 1,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "decoracao_29",
+      "source": "godot/arte/taverna/decoracao.png",
+      "source_rect": [
+        1145,
+        982,
+        205,
+        145
+      ],
+      "target_canvas": [
+        32,
+        32
+      ],
+      "grid_cells": [
+        1,
+        1
+      ],
+      "cell_count": 1,
+      "status": "planned_not_converted"
+    },
+    {
+      "name": "cozinheira",
+      "source": "godot/arte/taverna/cozinheira.png",
+      "target_frame": [
+        32,
+        32
+      ],
+      "frames_grid": [
+        4,
+        4
+      ],
+      "target_sheet": [
+        128,
+        128
+      ],
+      "status": "planned_not_converted",
+      "note": "Preserve animation order and align feet; whole-sheet resizing does not fix fractional source frames."
+    },
+    {
+      "name": "garcom-estudo-sprites",
+      "source": "godot/arte/taverna/garcom-estudo-sprites.png",
+      "target_frame": [
+        32,
+        32
+      ],
+      "frames_grid": [
+        4,
+        4
+      ],
+      "target_sheet": [
+        128,
+        128
+      ],
+      "status": "planned_not_converted",
+      "note": "Preserve animation order and align feet; whole-sheet resizing does not fix fractional source frames."
+    },
+    {
+      "name": "cliente-01-estudo-sprites",
+      "source": "godot/arte/taverna/cliente-01-estudo-sprites.png",
+      "target_frame": [
+        32,
+        32
+      ],
+      "frames_grid": [
+        4,
+        4
+      ],
+      "target_sheet": [
+        128,
+        128
+      ],
+      "status": "planned_not_converted",
+      "note": "Preserve animation order and align feet; whole-sheet resizing does not fix fractional source frames."
+    },
+    {
+      "name": "cliente-02-estudo-sprites",
+      "source": "godot/arte/taverna/cliente-02-estudo-sprites.png",
+      "target_frame": [
+        32,
+        32
+      ],
+      "frames_grid": [
+        4,
+        4
+      ],
+      "target_sheet": [
+        128,
+        128
+      ],
+      "status": "planned_not_converted",
+      "note": "Preserve animation order and align feet; whole-sheet resizing does not fix fractional source frames."
+    },
+    {
+      "name": "cliente-03-estudo-sprites",
+      "source": "godot/arte/taverna/cliente-03-estudo-sprites.png",
+      "target_frame": [
+        32,
+        32
+      ],
+      "frames_grid": [
+        4,
+        4
+      ],
+      "target_sheet": [
+        128,
+        128
+      ],
+      "status": "planned_not_converted",
+      "note": "Preserve animation order and align feet; whole-sheet resizing does not fix fractional source frames."
+    }
+  ],
+  "remaining_source_groups": {
+    "food_and_icons": "Every ingredient, cut ingredient, dish and item icon: 32x32 canvas; crop visible plate bounds consistently.",
+    "counters": "Thin/wide Piskel pieces require a shared edge grid and explicit fitting; do not independently resize joints.",
+    "architecture": "32x32 tile or multiple thereof; floors must repeat seamlessly.",
+    "legacy_world_maps": "Separate unique 40px source tiles before converting to 32px; keep old save coordinates.",
+    "ui": "Small icons use 32px cells; paper/panels may use multiples and nine-patch borders. Existing native bars stay unchanged."
+  },
+  "tracked_png_inventory": [
+    {
+      "path": "godot/arte/cozinheira-12-poses-64.png",
+      "width": 192,
+      "height": 256,
+      "png_bytes": 36591,
+      "rgba8_bytes": 196608
+    },
+    {
+      "path": "godot/arte/esquina-frame.png",
+      "width": 64,
+      "height": 64,
+      "png_bytes": 6067,
+      "rgba8_bytes": 16384
+    },
+    {
+      "path": "godot/arte/esquina-tools.png",
+      "width": 480,
+      "height": 112,
+      "png_bytes": 37541,
+      "rgba8_bytes": 215040
+    },
+    {
+      "path": "godot/arte/inicio-32.png",
+      "width": 288,
+      "height": 32,
+      "png_bytes": 1321,
+      "rgba8_bytes": 36864
+    },
+    {
+      "path": "godot/arte/modular/bancadas-piskel.png",
+      "width": 1536,
+      "height": 1024,
+      "png_bytes": 851695,
+      "rgba8_bytes": 6291456
+    },
+    {
+      "path": "godot/arte/modular/kits-mesa.png",
+      "width": 1774,
+      "height": 887,
+      "png_bytes": 338450,
+      "rgba8_bytes": 6294152
+    },
+    {
+      "path": "godot/arte/modular/mesa-trabalho.png",
+      "width": 1439,
+      "height": 1093,
+      "png_bytes": 999561,
+      "rgba8_bytes": 6291308
+    },
+    {
+      "path": "godot/arte/modular/prato-vazio.png",
+      "width": 1499,
+      "height": 1049,
+      "png_bytes": 758164,
+      "rgba8_bytes": 6289804
+    },
+    {
+      "path": "godot/arte/taverna/alimentos.png",
+      "width": 1536,
+      "height": 1024,
+      "png_bytes": 1526080,
+      "rgba8_bytes": 6291456
+    },
+    {
+      "path": "godot/arte/taverna/arquitetura.png",
+      "width": 1536,
+      "height": 1024,
+      "png_bytes": 2215704,
+      "rgba8_bytes": 6291456
+    },
+    {
+      "path": "godot/arte/taverna/cliente-01-estudo-sprites.png",
+      "width": 1254,
+      "height": 1254,
+      "png_bytes": 970326,
+      "rgba8_bytes": 6290064
+    },
+    {
+      "path": "godot/arte/taverna/cliente-02-estudo-sprites.png",
+      "width": 1254,
+      "height": 1254,
+      "png_bytes": 999378,
+      "rgba8_bytes": 6290064
+    },
+    {
+      "path": "godot/arte/taverna/cliente-03-estudo-sprites.png",
+      "width": 1254,
+      "height": 1254,
+      "png_bytes": 986236,
+      "rgba8_bytes": 6290064
+    },
+    {
+      "path": "godot/arte/taverna/cozinheira.png",
+      "width": 1254,
+      "height": 1254,
+      "png_bytes": 795236,
+      "rgba8_bytes": 6290064
+    },
+    {
+      "path": "godot/arte/taverna/decoracao.png",
+      "width": 1374,
+      "height": 1145,
+      "png_bytes": 1666886,
+      "rgba8_bytes": 6292920
+    },
+    {
+      "path": "godot/arte/taverna/garcom-estudo-sprites.png",
+      "width": 1254,
+      "height": 1254,
+      "png_bytes": 936142,
+      "rgba8_bytes": 6290064
+    },
+    {
+      "path": "godot/arte/taverna/moveis.png",
+      "width": 1374,
+      "height": 1145,
+      "png_bytes": 1271547,
+      "rgba8_bytes": 6292920
+    },
+    {
+      "path": "godot/arte/ui/barras-compactas-32.png",
+      "width": 128,
+      "height": 32,
+      "png_bytes": 545,
+      "rgba8_bytes": 16384
+    },
+    {
+      "path": "godot/arte/ui/comanda-aprovada.png",
+      "width": 1774,
+      "height": 887,
+      "png_bytes": 1095931,
+      "rgba8_bytes": 6294152
+    },
+    {
+      "path": "godot/mundo/restaurant.png",
+      "width": 960,
+      "height": 640,
+      "png_bytes": 33866,
+      "rgba8_bytes": 2457600
+    },
+    {
+      "path": "godot/mundo/stock.png",
+      "width": 960,
+      "height": 640,
+      "png_bytes": 10678,
+      "rgba8_bytes": 2457600
+    },
+    {
+      "path": "godot/mundo/street.png",
+      "width": 960,
+      "height": 640,
+      "png_bytes": 15069,
+      "rgba8_bytes": 2457600
+    },
+    {
+      "path": "godot/personagens/Garcom.png",
+      "width": 192,
+      "height": 256,
+      "png_bytes": 24625,
+      "rgba8_bytes": 196608
+    },
+    {
+      "path": "godot/personagens/Logistica.png",
+      "width": 192,
+      "height": 256,
+      "png_bytes": 25151,
+      "rgba8_bytes": 196608
+    },
+    {
+      "path": "godot/personagens/Moradora.png",
+      "width": 192,
+      "height": 256,
+      "png_bytes": 24664,
+      "rgba8_bytes": 196608
+    }
+  ]
+}
