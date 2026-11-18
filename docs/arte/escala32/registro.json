@@ -169,6 +169,958 @@
       "width": 128,
       "height": 32,
       "cell": 32
+    },
+    {
+      "path": "docs/arte/redesenho32/png/moveis/mesa_trabalho.png",
+      "width": 64,
+      "height": 64,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/moveis/mesa_jantar.png",
+      "width": 64,
+      "height": 64,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/moveis/cadeira_frente.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/moveis/cadeira_costas.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/moveis/cadeira_esquerda.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/moveis/cadeira_direita.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/moveis/fogao_apagado.png",
+      "width": 64,
+      "height": 64,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/moveis/fogao_aceso.png",
+      "width": 64,
+      "height": 64,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/moveis/geladeira_fechada.png",
+      "width": 32,
+      "height": 64,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/moveis/geladeira_aberta.png",
+      "width": 64,
+      "height": 64,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/moveis/pia.png",
+      "width": 64,
+      "height": 64,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/moveis/estante_panelas_vazia.png",
+      "width": 32,
+      "height": 64,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/moveis/armario_vazio.png",
+      "width": 32,
+      "height": 64,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/moveis/armario_louca.png",
+      "width": 32,
+      "height": 64,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/moveis/lixeira.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/moveis/banco.png",
+      "width": 64,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/moveis/prateleira_potes.png",
+      "width": 64,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/utensilios/prato_limpo.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/utensilios/prato_sujo.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/utensilios/panela_vazia.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/utensilios/panela_queimada.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/utensilios/tampa_panela.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/utensilios/kit_corte.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/utensilios/tabua_vazia.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/utensilios/pano.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/alimentos/arroz.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/alimentos/legumes.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/alimentos/frango.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/alimentos/batata.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/alimentos/cenoura.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/alimentos/batata_cut.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/alimentos/cenoura_cut.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/alimentos/frango_cut.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/alimentos/legumes_cut.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/receitas/arrozLegumes.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/receitas/sopa.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/receitas/frangoArroz.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/receitas/caldoBatata.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/receitas/arrozCenoura.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/receitas/canja.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/icones/tempo.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/icones/nutricao.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/interface/comanda_vazia.png",
+      "width": 64,
+      "height": 96,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/decoracao/vaso_folhagem.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/decoracao/vaso_flores.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/decoracao/planta_pendente.png",
+      "width": 32,
+      "height": 64,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/decoracao/lanterna_acesa.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/decoracao/lanterna_apagada.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/decoracao/vela.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/decoracao/tapete.png",
+      "width": 96,
+      "height": 64,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/decoracao/caixa_vazia.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/decoracao/caixa_legumes.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/decoracao/barril.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/decoracao/quadro_avisos.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/decoracao/placa_perigo.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/arquitetura/janela.png",
+      "width": 32,
+      "height": 64,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/arquitetura/porta.png",
+      "width": 32,
+      "height": 64,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/exterior/arvore.png",
+      "width": 64,
+      "height": 96,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/tiles/piso_madeira_a.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/tiles/piso_madeira_b.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/tiles/piso_cozinha_a.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/tiles/piso_cozinha_b.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/tiles/terra.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/tiles/pedra_rua.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/tiles/pedra_musgo.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/tiles/grama.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/tiles/parede_reboco_superior.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/tiles/parede_lambril.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/tiles/parede_azulejo_superior.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/tiles/parede_azulejo_inferior.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/tiles/viga_vertical_a.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/tiles/viga_vertical_b.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/tiles/parede_frontal.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/tiles/soleira.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/tiles/quina_parede.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/tiles/telhado_0.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/tiles/telhado_1.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/bancadas/bancada_fina_esquerda.png",
+      "width": 32,
+      "height": 64,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/bancadas/bancada_fina_horizontal.png",
+      "width": 32,
+      "height": 64,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/bancadas/bancada_fina_direita.png",
+      "width": 32,
+      "height": 64,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/bancadas/bancada_fina_topo.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/bancadas/bancada_fina_vertical.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/bancadas/bancada_fina_base.png",
+      "width": 32,
+      "height": 64,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/bancadas/bancada_fina_quina_esquerda.png",
+      "width": 32,
+      "height": 64,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/bancadas/bancada_fina_quina_direita.png",
+      "width": 32,
+      "height": 64,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/bancadas/bancada_grossa_esquerda.png",
+      "width": 32,
+      "height": 64,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/bancadas/bancada_grossa_horizontal.png",
+      "width": 32,
+      "height": 64,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/bancadas/bancada_grossa_direita.png",
+      "width": 32,
+      "height": 64,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/bancadas/bancada_grossa_topo.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/bancadas/bancada_grossa_vertical.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/bancadas/bancada_grossa_base.png",
+      "width": 32,
+      "height": 64,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/bancadas/bancada_grossa_quina_esquerda.png",
+      "width": 32,
+      "height": 64,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/bancadas/bancada_grossa_quina_direita.png",
+      "width": 32,
+      "height": 64,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/personagens/cozinheira.png",
+      "width": 128,
+      "height": 128,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/personagens/garcom.png",
+      "width": 128,
+      "height": 128,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/personagens/cliente_01.png",
+      "width": 128,
+      "height": 128,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/personagens/cliente_02.png",
+      "width": 128,
+      "height": 128,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/personagens/cliente_03.png",
+      "width": 128,
+      "height": 128,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/personagens/lia.png",
+      "width": 128,
+      "height": 128,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/personagens/beto.png",
+      "width": 128,
+      "height": 128,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/personagens/nina.png",
+      "width": 128,
+      "height": 128,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/personagens/manequim.png",
+      "width": 128,
+      "height": 128,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/utensilios/chaleira.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/utensilios/frigideira.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/decoracao/suporte_utensilios.png",
+      "width": 64,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/decoracao/capacho.png",
+      "width": 64,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/utensilios/toalha_dobrada.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/decoracao/bandeira.png",
+      "width": 32,
+      "height": 64,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/exterior/barraca_vazia.png",
+      "width": 64,
+      "height": 64,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/exterior/barraca_mercador.png",
+      "width": 64,
+      "height": 64,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/exterior/banca_ferro_velho.png",
+      "width": 64,
+      "height": 64,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/exterior/toldo.png",
+      "width": 64,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/exterior/engrenagem.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/exterior/tubos.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/exterior/caixa_ferramentas.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/exterior/pecas_geladeira.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/exterior/floreira.png",
+      "width": 64,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/exterior/ruina.png",
+      "width": 64,
+      "height": 64,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/utensilios/balde.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/utensilios/vassoura.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/exterior/lenha.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/legado/computador_legado.png",
+      "width": 64,
+      "height": 64,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/interface/moldura_32.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/icones/prato_inserir.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/icones/prato_retirar.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/icones/panela_inserir.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/icones/panela_retirar.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/icones/corte_inserir.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/icones/corte_retirar.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/icones/confirmar.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/icones/cancelar.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/icones/martelo.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/icones/livro.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/icones/mesa.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/png/icones/lavar.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "redrawn at final canvas size"
+    },
+    {
+      "path": "docs/arte/redesenho32/tileset-32.png",
+      "width": 256,
+      "height": 96,
+      "cell": 32,
+      "method": "atlas assembled from native 32px tiles"
     }
   ],
   "legacy": [

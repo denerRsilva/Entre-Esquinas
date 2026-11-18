@@ -1,0 +1,681 @@
+{
+	"cell": 96,
+	"columns": 8,
+	"positions": [
+		{
+			"column": 0,
+			"id": "mesa_trabalho",
+			"row": 0
+		},
+		{
+			"column": 1,
+			"id": "mesa_jantar",
+			"row": 0
+		},
+		{
+			"column": 2,
+			"id": "cadeira_frente",
+			"row": 0
+		},
+		{
+			"column": 3,
+			"id": "cadeira_costas",
+			"row": 0
+		},
+		{
+			"column": 4,
+			"id": "cadeira_esquerda",
+			"row": 0
+		},
+		{
+			"column": 5,
+			"id": "cadeira_direita",
+			"row": 0
+		},
+		{
+			"column": 6,
+			"id": "fogao_apagado",
+			"row": 0
+		},
+		{
+			"column": 7,
+			"id": "fogao_aceso",
+			"row": 0
+		},
+		{
+			"column": 0,
+			"id": "geladeira_fechada",
+			"row": 1
+		},
+		{
+			"column": 1,
+			"id": "geladeira_aberta",
+			"row": 1
+		},
+		{
+			"column": 2,
+			"id": "pia",
+			"row": 1
+		},
+		{
+			"column": 3,
+			"id": "estante_panelas_vazia",
+			"row": 1
+		},
+		{
+			"column": 4,
+			"id": "armario_vazio",
+			"row": 1
+		},
+		{
+			"column": 5,
+			"id": "armario_louca",
+			"row": 1
+		},
+		{
+			"column": 6,
+			"id": "lixeira",
+			"row": 1
+		},
+		{
+			"column": 7,
+			"id": "banco",
+			"row": 1
+		},
+		{
+			"column": 0,
+			"id": "prateleira_potes",
+			"row": 2
+		},
+		{
+			"column": 1,
+			"id": "prato_limpo",
+			"row": 2
+		},
+		{
+			"column": 2,
+			"id": "prato_sujo",
+			"row": 2
+		},
+		{
+			"column": 3,
+			"id": "panela_vazia",
+			"row": 2
+		},
+		{
+			"column": 4,
+			"id": "panela_queimada",
+			"row": 2
+		},
+		{
+			"column": 5,
+			"id": "tampa_panela",
+			"row": 2
+		},
+		{
+			"column": 6,
+			"id": "kit_corte",
+			"row": 2
+		},
+		{
+			"column": 7,
+			"id": "tabua_vazia",
+			"row": 2
+		},
+		{
+			"column": 0,
+			"id": "pano",
+			"row": 3
+		},
+		{
+			"column": 1,
+			"id": "arroz",
+			"row": 3
+		},
+		{
+			"column": 2,
+			"id": "legumes",
+			"row": 3
+		},
+		{
+			"column": 3,
+			"id": "frango",
+			"row": 3
+		},
+		{
+			"column": 4,
+			"id": "batata",
+			"row": 3
+		},
+		{
+			"column": 5,
+			"id": "cenoura",
+			"row": 3
+		},
+		{
+			"column": 6,
+			"id": "batata_cut",
+			"row": 3
+		},
+		{
+			"column": 7,
+			"id": "cenoura_cut",
+			"row": 3
+		},
+		{
+			"column": 0,
+			"id": "frango_cut",
+			"row": 4
+		},
+		{
+			"column": 1,
+			"id": "legumes_cut",
+			"row": 4
+		},
+		{
+			"column": 2,
+			"id": "arrozLegumes",
+			"row": 4
+		},
+		{
+			"column": 3,
+			"id": "sopa",
+			"row": 4
+		},
+		{
+			"column": 4,
+			"id": "frangoArroz",
+			"row": 4
+		},
+		{
+			"column": 5,
+			"id": "caldoBatata",
+			"row": 4
+		},
+		{
+			"column": 6,
+			"id": "arrozCenoura",
+			"row": 4
+		},
+		{
+			"column": 7,
+			"id": "canja",
+			"row": 4
+		},
+		{
+			"column": 0,
+			"id": "tempo",
+			"row": 5
+		},
+		{
+			"column": 1,
+			"id": "nutricao",
+			"row": 5
+		},
+		{
+			"column": 2,
+			"id": "comanda_vazia",
+			"row": 5
+		},
+		{
+			"column": 3,
+			"id": "vaso_folhagem",
+			"row": 5
+		},
+		{
+			"column": 4,
+			"id": "vaso_flores",
+			"row": 5
+		},
+		{
+			"column": 5,
+			"id": "planta_pendente",
+			"row": 5
+		},
+		{
+			"column": 6,
+			"id": "lanterna_acesa",
+			"row": 5
+		},
+		{
+			"column": 7,
+			"id": "lanterna_apagada",
+			"row": 5
+		},
+		{
+			"column": 0,
+			"id": "vela",
+			"row": 6
+		},
+		{
+			"column": 1,
+			"id": "tapete",
+			"row": 6
+		},
+		{
+			"column": 2,
+			"id": "caixa_vazia",
+			"row": 6
+		},
+		{
+			"column": 3,
+			"id": "caixa_legumes",
+			"row": 6
+		},
+		{
+			"column": 4,
+			"id": "barril",
+			"row": 6
+		},
+		{
+			"column": 5,
+			"id": "quadro_avisos",
+			"row": 6
+		},
+		{
+			"column": 6,
+			"id": "placa_perigo",
+			"row": 6
+		},
+		{
+			"column": 7,
+			"id": "janela",
+			"row": 6
+		},
+		{
+			"column": 0,
+			"id": "porta",
+			"row": 7
+		},
+		{
+			"column": 1,
+			"id": "arvore",
+			"row": 7
+		},
+		{
+			"column": 2,
+			"id": "piso_madeira_a",
+			"row": 7
+		},
+		{
+			"column": 3,
+			"id": "piso_madeira_b",
+			"row": 7
+		},
+		{
+			"column": 4,
+			"id": "piso_cozinha_a",
+			"row": 7
+		},
+		{
+			"column": 5,
+			"id": "piso_cozinha_b",
+			"row": 7
+		},
+		{
+			"column": 6,
+			"id": "terra",
+			"row": 7
+		},
+		{
+			"column": 7,
+			"id": "pedra_rua",
+			"row": 7
+		},
+		{
+			"column": 0,
+			"id": "pedra_musgo",
+			"row": 8
+		},
+		{
+			"column": 1,
+			"id": "grama",
+			"row": 8
+		},
+		{
+			"column": 2,
+			"id": "parede_reboco_superior",
+			"row": 8
+		},
+		{
+			"column": 3,
+			"id": "parede_lambril",
+			"row": 8
+		},
+		{
+			"column": 4,
+			"id": "parede_azulejo_superior",
+			"row": 8
+		},
+		{
+			"column": 5,
+			"id": "parede_azulejo_inferior",
+			"row": 8
+		},
+		{
+			"column": 6,
+			"id": "viga_vertical_a",
+			"row": 8
+		},
+		{
+			"column": 7,
+			"id": "viga_vertical_b",
+			"row": 8
+		},
+		{
+			"column": 0,
+			"id": "parede_frontal",
+			"row": 9
+		},
+		{
+			"column": 1,
+			"id": "soleira",
+			"row": 9
+		},
+		{
+			"column": 2,
+			"id": "quina_parede",
+			"row": 9
+		},
+		{
+			"column": 3,
+			"id": "telhado_0",
+			"row": 9
+		},
+		{
+			"column": 4,
+			"id": "telhado_1",
+			"row": 9
+		},
+		{
+			"column": 5,
+			"id": "bancada_fina_esquerda",
+			"row": 9
+		},
+		{
+			"column": 6,
+			"id": "bancada_fina_horizontal",
+			"row": 9
+		},
+		{
+			"column": 7,
+			"id": "bancada_fina_direita",
+			"row": 9
+		},
+		{
+			"column": 0,
+			"id": "bancada_fina_topo",
+			"row": 10
+		},
+		{
+			"column": 1,
+			"id": "bancada_fina_vertical",
+			"row": 10
+		},
+		{
+			"column": 2,
+			"id": "bancada_fina_base",
+			"row": 10
+		},
+		{
+			"column": 3,
+			"id": "bancada_fina_quina_esquerda",
+			"row": 10
+		},
+		{
+			"column": 4,
+			"id": "bancada_fina_quina_direita",
+			"row": 10
+		},
+		{
+			"column": 5,
+			"id": "bancada_grossa_esquerda",
+			"row": 10
+		},
+		{
+			"column": 6,
+			"id": "bancada_grossa_horizontal",
+			"row": 10
+		},
+		{
+			"column": 7,
+			"id": "bancada_grossa_direita",
+			"row": 10
+		},
+		{
+			"column": 0,
+			"id": "bancada_grossa_topo",
+			"row": 11
+		},
+		{
+			"column": 1,
+			"id": "bancada_grossa_vertical",
+			"row": 11
+		},
+		{
+			"column": 2,
+			"id": "bancada_grossa_base",
+			"row": 11
+		},
+		{
+			"column": 3,
+			"id": "bancada_grossa_quina_esquerda",
+			"row": 11
+		},
+		{
+			"column": 4,
+			"id": "bancada_grossa_quina_direita",
+			"row": 11
+		},
+		{
+			"column": 5,
+			"id": "cozinheira",
+			"row": 11
+		},
+		{
+			"column": 6,
+			"id": "garcom",
+			"row": 11
+		},
+		{
+			"column": 7,
+			"id": "cliente_01",
+			"row": 11
+		},
+		{
+			"column": 0,
+			"id": "cliente_02",
+			"row": 12
+		},
+		{
+			"column": 1,
+			"id": "cliente_03",
+			"row": 12
+		},
+		{
+			"column": 2,
+			"id": "lia",
+			"row": 12
+		},
+		{
+			"column": 3,
+			"id": "beto",
+			"row": 12
+		},
+		{
+			"column": 4,
+			"id": "nina",
+			"row": 12
+		},
+		{
+			"column": 5,
+			"id": "manequim",
+			"row": 12
+		},
+		{
+			"column": 6,
+			"id": "chaleira",
+			"row": 12
+		},
+		{
+			"column": 7,
+			"id": "frigideira",
+			"row": 12
+		},
+		{
+			"column": 0,
+			"id": "suporte_utensilios",
+			"row": 13
+		},
+		{
+			"column": 1,
+			"id": "capacho",
+			"row": 13
+		},
+		{
+			"column": 2,
+			"id": "toalha_dobrada",
+			"row": 13
+		},
+		{
+			"column": 3,
+			"id": "bandeira",
+			"row": 13
+		},
+		{
+			"column": 4,
+			"id": "barraca_vazia",
+			"row": 13
+		},
+		{
+			"column": 5,
+			"id": "barraca_mercador",
+			"row": 13
+		},
+		{
+			"column": 6,
+			"id": "banca_ferro_velho",
+			"row": 13
+		},
+		{
+			"column": 7,
+			"id": "toldo",
+			"row": 13
+		},
+		{
+			"column": 0,
+			"id": "engrenagem",
+			"row": 14
+		},
+		{
+			"column": 1,
+			"id": "tubos",
+			"row": 14
+		},
+		{
+			"column": 2,
+			"id": "caixa_ferramentas",
+			"row": 14
+		},
+		{
+			"column": 3,
+			"id": "pecas_geladeira",
+			"row": 14
+		},
+		{
+			"column": 4,
+			"id": "floreira",
+			"row": 14
+		},
+		{
+			"column": 5,
+			"id": "ruina",
+			"row": 14
+		},
+		{
+			"column": 6,
+			"id": "balde",
+			"row": 14
+		},
+		{
+			"column": 7,
+			"id": "vassoura",
+			"row": 14
+		},
+		{
+			"column": 0,
+			"id": "lenha",
+			"row": 15
+		},
+		{
+			"column": 1,
+			"id": "computador_legado",
+			"row": 15
+		},
+		{
+			"column": 2,
+			"id": "moldura_32",
+			"row": 15
+		},
+		{
+			"column": 3,
+			"id": "prato_inserir",
+			"row": 15
+		},
+		{
+			"column": 4,
+			"id": "prato_retirar",
+			"row": 15
+		},
+		{
+			"column": 5,
+			"id": "panela_inserir",
+			"row": 15
+		},
+		{
+			"column": 6,
+			"id": "panela_retirar",
+			"row": 15
+		},
+		{
+			"column": 7,
+			"id": "corte_inserir",
+			"row": 15
+		},
+		{
+			"column": 0,
+			"id": "corte_retirar",
+			"row": 16
+		},
+		{
+			"column": 1,
+			"id": "confirmar",
+			"row": 16
+		},
+		{
+			"column": 2,
+			"id": "cancelar",
+			"row": 16
+		},
+		{
+			"column": 3,
+			"id": "martelo",
+			"row": 16
+		},
+		{
+			"column": 4,
+			"id": "livro",
+			"row": 16
+		},
+		{
+			"column": 5,
+			"id": "mesa",
+			"row": 16
+		},
+		{
+			"column": 6,
+			"id": "lavar",
+			"row": 16
+		}
+	]
+}

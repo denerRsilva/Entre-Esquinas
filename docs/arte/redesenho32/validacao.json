@@ -1,0 +1,40 @@
+{
+  "production_png_count": 135,
+  "production_png_bytes": 65555,
+  "rgba8_theoretical_sum_bytes": 1409024,
+  "character_sheets": 9,
+  "animation_frames": 144,
+  "frame_size": [
+    32,
+    32
+  ],
+  "group_counts": {
+    "moveis": 17,
+    "utensilios": 13,
+    "alimentos": 9,
+    "receitas": 6,
+    "icones": 14,
+    "interface": 2,
+    "decoracao": 15,
+    "arquitetura": 2,
+    "exterior": 12,
+    "tiles": 19,
+    "bancadas": 16,
+    "personagens": 9,
+    "legado": 1
+  },
+  "planned_pieces_with_redraws": 68,
+  "unit_px": 32,
+  "integrated_in_main_game": false,
+  "originals_preserved": true,
+  "method": "All sprites drawn on new final-size canvases with integer pixel clusters. No source PNG sampled or downsized. Enlargements appear only in preview files.",
+  "validation": [
+    "exact canvas sizes and binary alpha",
+    "limited per-sprite palettes",
+    "plate silhouette consistent across recipes and dirty state",
+    "matching counter connection ports",
+    "144 frame regions at 32x32 with fixed foot baselines",
+    "real TileSet32 and editable scene",
+    "Linux/Godot Compatibility render of sample scene"
+  ]
+}

@@ -82,3 +82,12 @@ O [mapa de tamanhos](arte/escala32/tamanhos-planejados.json) inventaria fontes e
 recortes e define canvases por peça. É uma especificação de conversão, não
 a afirmação de que os PNGs atuais já foram substituídos. Cortes, frames, pivôs
 e conexões precisam acompanhar cada integração. Preservar os originais.
+
+## Redesenho autorizado em 18/11/2026
+
+O proprietário escolheu redesenhar usando as artes atuais como referência, em
+vez de reduzir/converter os PNGs grandes. O [novo acervo](arte/redesenho32/LEIA-ME.md)
+contém 135 PNGs desenhados no tamanho final, com cena Godot editável separada.
+A imagem conceitual gerada serve de referência, não de folha reduzida. Os
+originais permanecem preservados; as referências do jogo ainda não foram trocadas.
+O mapa de tamanhos identifica quais peças já têm redesenho disponível.

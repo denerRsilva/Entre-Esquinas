@@ -1,0 +1,4021 @@
+{
+	"entries": [
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				64,
+				64
+			],
+			"cells": [
+				2,
+				2
+			],
+			"file": "png/moveis/mesa_trabalho.png",
+			"footprint": [
+				2,
+				1
+			],
+			"group": "moveis",
+			"id": "mesa_trabalho",
+			"opaque_bounds": [
+				2,
+				8,
+				60,
+				52
+			],
+			"palette_colors": 6,
+			"pivot": [
+				32,
+				64
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				64,
+				64
+			],
+			"cells": [
+				2,
+				2
+			],
+			"file": "png/moveis/mesa_jantar.png",
+			"footprint": [
+				2,
+				1
+			],
+			"group": "moveis",
+			"id": "mesa_jantar",
+			"opaque_bounds": [
+				2,
+				8,
+				60,
+				52
+			],
+			"palette_colors": 14,
+			"pivot": [
+				32,
+				64
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/moveis/cadeira_frente.png",
+			"footprint": [
+				1,
+				1
+			],
+			"group": "moveis",
+			"id": "cadeira_frente",
+			"opaque_bounds": [
+				4,
+				3,
+				24,
+				28
+			],
+			"palette_colors": 6,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/moveis/cadeira_costas.png",
+			"footprint": [
+				1,
+				1
+			],
+			"group": "moveis",
+			"id": "cadeira_costas",
+			"opaque_bounds": [
+				4,
+				3,
+				24,
+				28
+			],
+			"palette_colors": 6,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/moveis/cadeira_esquerda.png",
+			"footprint": [
+				1,
+				1
+			],
+			"group": "moveis",
+			"id": "cadeira_esquerda",
+			"opaque_bounds": [
+				5,
+				3,
+				23,
+				28
+			],
+			"palette_colors": 5,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/moveis/cadeira_direita.png",
+			"footprint": [
+				1,
+				1
+			],
+			"group": "moveis",
+			"id": "cadeira_direita",
+			"opaque_bounds": [
+				5,
+				3,
+				23,
+				28
+			],
+			"palette_colors": 5,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				64,
+				64
+			],
+			"cells": [
+				2,
+				2
+			],
+			"file": "png/moveis/fogao_apagado.png",
+			"footprint": [
+				2,
+				1
+			],
+			"group": "moveis",
+			"id": "fogao_apagado",
+			"opaque_bounds": [
+				3,
+				1,
+				58,
+				61
+			],
+			"palette_colors": 7,
+			"pivot": [
+				32,
+				64
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				64,
+				64
+			],
+			"cells": [
+				2,
+				2
+			],
+			"file": "png/moveis/fogao_aceso.png",
+			"footprint": [
+				2,
+				1
+			],
+			"group": "moveis",
+			"id": "fogao_aceso",
+			"opaque_bounds": [
+				3,
+				1,
+				58,
+				61
+			],
+			"palette_colors": 12,
+			"pivot": [
+				32,
+				64
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				64
+			],
+			"cells": [
+				1,
+				2
+			],
+			"file": "png/moveis/geladeira_fechada.png",
+			"footprint": [
+				1,
+				1
+			],
+			"group": "moveis",
+			"id": "geladeira_fechada",
+			"opaque_bounds": [
+				3,
+				2,
+				26,
+				61
+			],
+			"palette_colors": 9,
+			"pivot": [
+				16,
+				64
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				64,
+				64
+			],
+			"cells": [
+				2,
+				2
+			],
+			"file": "png/moveis/geladeira_aberta.png",
+			"footprint": [
+				1,
+				1
+			],
+			"group": "moveis",
+			"id": "geladeira_aberta",
+			"opaque_bounds": [
+				7,
+				2,
+				49,
+				61
+			],
+			"palette_colors": 7,
+			"pivot": [
+				32,
+				64
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				64,
+				64
+			],
+			"cells": [
+				2,
+				2
+			],
+			"file": "png/moveis/pia.png",
+			"footprint": [
+				2,
+				1
+			],
+			"group": "moveis",
+			"id": "pia",
+			"opaque_bounds": [
+				2,
+				2,
+				60,
+				58
+			],
+			"palette_colors": 17,
+			"pivot": [
+				32,
+				64
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				64
+			],
+			"cells": [
+				1,
+				2
+			],
+			"file": "png/moveis/estante_panelas_vazia.png",
+			"footprint": [
+				1,
+				1
+			],
+			"group": "moveis",
+			"id": "estante_panelas_vazia",
+			"opaque_bounds": [
+				3,
+				4,
+				26,
+				59
+			],
+			"palette_colors": 5,
+			"pivot": [
+				16,
+				64
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				64
+			],
+			"cells": [
+				1,
+				2
+			],
+			"file": "png/moveis/armario_vazio.png",
+			"footprint": [
+				1,
+				1
+			],
+			"group": "moveis",
+			"id": "armario_vazio",
+			"opaque_bounds": [
+				3,
+				4,
+				26,
+				59
+			],
+			"palette_colors": 6,
+			"pivot": [
+				16,
+				64
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				64
+			],
+			"cells": [
+				1,
+				2
+			],
+			"file": "png/moveis/armario_louca.png",
+			"footprint": [
+				1,
+				1
+			],
+			"group": "moveis",
+			"id": "armario_louca",
+			"opaque_bounds": [
+				3,
+				4,
+				26,
+				59
+			],
+			"palette_colors": 8,
+			"pivot": [
+				16,
+				64
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/moveis/lixeira.png",
+			"footprint": [
+				1,
+				1
+			],
+			"group": "moveis",
+			"id": "lixeira",
+			"opaque_bounds": [
+				4,
+				2,
+				24,
+				28
+			],
+			"palette_colors": 5,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				64,
+				32
+			],
+			"cells": [
+				2,
+				1
+			],
+			"file": "png/moveis/banco.png",
+			"footprint": [
+				2,
+				1
+			],
+			"group": "moveis",
+			"id": "banco",
+			"opaque_bounds": [
+				2,
+				6,
+				60,
+				23
+			],
+			"palette_colors": 6,
+			"pivot": [
+				32,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				64,
+				32
+			],
+			"cells": [
+				2,
+				1
+			],
+			"file": "png/moveis/prateleira_potes.png",
+			"footprint": [
+				2,
+				0
+			],
+			"group": "moveis",
+			"id": "prateleira_potes",
+			"opaque_bounds": [
+				2,
+				6,
+				60,
+				21
+			],
+			"palette_colors": 9,
+			"pivot": [
+				32,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/utensilios/prato_limpo.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "utensilios",
+			"id": "prato_limpo",
+			"opaque_bounds": [
+				6,
+				10,
+				20,
+				14
+			],
+			"palette_colors": 6,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/utensilios/prato_sujo.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "utensilios",
+			"id": "prato_sujo",
+			"opaque_bounds": [
+				6,
+				10,
+				20,
+				14
+			],
+			"palette_colors": 9,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/utensilios/panela_vazia.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "utensilios",
+			"id": "panela_vazia",
+			"opaque_bounds": [
+				1,
+				5,
+				30,
+				24
+			],
+			"palette_colors": 5,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/utensilios/panela_queimada.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "utensilios",
+			"id": "panela_queimada",
+			"opaque_bounds": [
+				1,
+				5,
+				30,
+				24
+			],
+			"palette_colors": 9,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/utensilios/tampa_panela.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "utensilios",
+			"id": "tampa_panela",
+			"opaque_bounds": [
+				2,
+				9,
+				28,
+				17
+			],
+			"palette_colors": 6,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/utensilios/kit_corte.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "utensilios",
+			"id": "kit_corte",
+			"opaque_bounds": [
+				2,
+				4,
+				28,
+				22
+			],
+			"palette_colors": 8,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/utensilios/tabua_vazia.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "utensilios",
+			"id": "tabua_vazia",
+			"opaque_bounds": [
+				2,
+				9,
+				28,
+				17
+			],
+			"palette_colors": 6,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/utensilios/pano.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "utensilios",
+			"id": "pano",
+			"opaque_bounds": [
+				9,
+				5,
+				14,
+				23
+			],
+			"palette_colors": 5,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/alimentos/arroz.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "alimentos",
+			"id": "arroz",
+			"opaque_bounds": [
+				5,
+				3,
+				22,
+				27
+			],
+			"palette_colors": 8,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/alimentos/legumes.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "alimentos",
+			"id": "legumes",
+			"opaque_bounds": [
+				3,
+				5,
+				26,
+				24
+			],
+			"palette_colors": 6,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/alimentos/frango.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "alimentos",
+			"id": "frango",
+			"opaque_bounds": [
+				2,
+				7,
+				28,
+				20
+			],
+			"palette_colors": 5,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/alimentos/batata.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "alimentos",
+			"id": "batata",
+			"opaque_bounds": [
+				2,
+				7,
+				28,
+				22
+			],
+			"palette_colors": 7,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/alimentos/cenoura.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "alimentos",
+			"id": "cenoura",
+			"opaque_bounds": [
+				4,
+				3,
+				26,
+				27
+			],
+			"palette_colors": 8,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/alimentos/batata_cut.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "alimentos",
+			"id": "batata_cut",
+			"opaque_bounds": [
+				2,
+				6,
+				25,
+				22
+			],
+			"palette_colors": 5,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/alimentos/cenoura_cut.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "alimentos",
+			"id": "cenoura_cut",
+			"opaque_bounds": [
+				0,
+				6,
+				27,
+				24
+			],
+			"palette_colors": 4,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/alimentos/frango_cut.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "alimentos",
+			"id": "frango_cut",
+			"opaque_bounds": [
+				2,
+				6,
+				25,
+				22
+			],
+			"palette_colors": 5,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/alimentos/legumes_cut.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "alimentos",
+			"id": "legumes_cut",
+			"opaque_bounds": [
+				0,
+				6,
+				27,
+				24
+			],
+			"palette_colors": 7,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/receitas/arrozLegumes.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "receitas",
+			"id": "arrozLegumes",
+			"opaque_bounds": [
+				6,
+				10,
+				20,
+				14
+			],
+			"palette_colors": 13,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/receitas/sopa.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "receitas",
+			"id": "sopa",
+			"opaque_bounds": [
+				6,
+				10,
+				20,
+				14
+			],
+			"palette_colors": 11,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/receitas/frangoArroz.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "receitas",
+			"id": "frangoArroz",
+			"opaque_bounds": [
+				6,
+				10,
+				20,
+				14
+			],
+			"palette_colors": 10,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/receitas/caldoBatata.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "receitas",
+			"id": "caldoBatata",
+			"opaque_bounds": [
+				6,
+				10,
+				20,
+				14
+			],
+			"palette_colors": 8,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/receitas/arrozCenoura.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "receitas",
+			"id": "arrozCenoura",
+			"opaque_bounds": [
+				6,
+				10,
+				20,
+				14
+			],
+			"palette_colors": 12,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/receitas/canja.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "receitas",
+			"id": "canja",
+			"opaque_bounds": [
+				6,
+				10,
+				20,
+				14
+			],
+			"palette_colors": 11,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/icones/tempo.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "icones",
+			"id": "tempo",
+			"opaque_bounds": [
+				4,
+				4,
+				24,
+				24
+			],
+			"palette_colors": 5,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/icones/nutricao.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "icones",
+			"id": "nutricao",
+			"opaque_bounds": [
+				4,
+				4,
+				24,
+				23
+			],
+			"palette_colors": 7,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				64,
+				96
+			],
+			"cells": [
+				2,
+				3
+			],
+			"file": "png/interface/comanda_vazia.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "interface",
+			"id": "comanda_vazia",
+			"opaque_bounds": [
+				4,
+				2,
+				56,
+				91
+			],
+			"palette_colors": 6,
+			"pivot": [
+				32,
+				96
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/decoracao/vaso_folhagem.png",
+			"footprint": [
+				1,
+				1
+			],
+			"group": "decoracao",
+			"id": "vaso_folhagem",
+			"opaque_bounds": [
+				1,
+				8,
+				28,
+				22
+			],
+			"palette_colors": 7,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/decoracao/vaso_flores.png",
+			"footprint": [
+				1,
+				1
+			],
+			"group": "decoracao",
+			"id": "vaso_flores",
+			"opaque_bounds": [
+				1,
+				8,
+				28,
+				22
+			],
+			"palette_colors": 9,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				64
+			],
+			"cells": [
+				1,
+				2
+			],
+			"file": "png/decoracao/planta_pendente.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "decoracao",
+			"id": "planta_pendente",
+			"opaque_bounds": [
+				0,
+				0,
+				29,
+				58
+			],
+			"palette_colors": 9,
+			"pivot": [
+				16,
+				64
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/decoracao/lanterna_acesa.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "decoracao",
+			"id": "lanterna_acesa",
+			"opaque_bounds": [
+				7,
+				1,
+				18,
+				30
+			],
+			"palette_colors": 8,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/decoracao/lanterna_apagada.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "decoracao",
+			"id": "lanterna_apagada",
+			"opaque_bounds": [
+				7,
+				1,
+				18,
+				30
+			],
+			"palette_colors": 6,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/decoracao/vela.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "decoracao",
+			"id": "vela",
+			"opaque_bounds": [
+				8,
+				5,
+				16,
+				25
+			],
+			"palette_colors": 7,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				96,
+				64
+			],
+			"cells": [
+				3,
+				2
+			],
+			"file": "png/decoracao/tapete.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "decoracao",
+			"id": "tapete",
+			"opaque_bounds": [
+				2,
+				3,
+				92,
+				58
+			],
+			"palette_colors": 7,
+			"pivot": [
+				48,
+				64
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/decoracao/caixa_vazia.png",
+			"footprint": [
+				1,
+				1
+			],
+			"group": "decoracao",
+			"id": "caixa_vazia",
+			"opaque_bounds": [
+				2,
+				10,
+				28,
+				19
+			],
+			"palette_colors": 6,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/decoracao/caixa_legumes.png",
+			"footprint": [
+				1,
+				1
+			],
+			"group": "decoracao",
+			"id": "caixa_legumes",
+			"opaque_bounds": [
+				2,
+				4,
+				28,
+				25
+			],
+			"palette_colors": 9,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/decoracao/barril.png",
+			"footprint": [
+				1,
+				1
+			],
+			"group": "decoracao",
+			"id": "barril",
+			"opaque_bounds": [
+				5,
+				3,
+				22,
+				27
+			],
+			"palette_colors": 8,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/decoracao/quadro_avisos.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "decoracao",
+			"id": "quadro_avisos",
+			"opaque_bounds": [
+				2,
+				5,
+				28,
+				23
+			],
+			"palette_colors": 9,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/decoracao/placa_perigo.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "decoracao",
+			"id": "placa_perigo",
+			"opaque_bounds": [
+				2,
+				5,
+				28,
+				23
+			],
+			"palette_colors": 6,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				64
+			],
+			"cells": [
+				1,
+				2
+			],
+			"file": "png/arquitetura/janela.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "arquitetura",
+			"id": "janela",
+			"opaque_bounds": [
+				1,
+				7,
+				30,
+				51
+			],
+			"palette_colors": 8,
+			"pivot": [
+				16,
+				64
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				64
+			],
+			"cells": [
+				1,
+				2
+			],
+			"file": "png/arquitetura/porta.png",
+			"footprint": [
+				1,
+				1
+			],
+			"group": "arquitetura",
+			"id": "porta",
+			"opaque_bounds": [
+				1,
+				0,
+				30,
+				64
+			],
+			"palette_colors": 8,
+			"pivot": [
+				16,
+				64
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				64,
+				96
+			],
+			"cells": [
+				2,
+				3
+			],
+			"file": "png/exterior/arvore.png",
+			"footprint": [
+				1,
+				1
+			],
+			"group": "exterior",
+			"id": "arvore",
+			"opaque_bounds": [
+				1,
+				1,
+				60,
+				90
+			],
+			"palette_colors": 8,
+			"pivot": [
+				32,
+				96
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/tiles/piso_madeira_a.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "tiles",
+			"id": "piso_madeira_a",
+			"opaque_bounds": [
+				0,
+				0,
+				32,
+				32
+			],
+			"palette_colors": 5,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/tiles/piso_madeira_b.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "tiles",
+			"id": "piso_madeira_b",
+			"opaque_bounds": [
+				0,
+				0,
+				32,
+				32
+			],
+			"palette_colors": 5,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/tiles/piso_cozinha_a.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "tiles",
+			"id": "piso_cozinha_a",
+			"opaque_bounds": [
+				0,
+				0,
+				32,
+				32
+			],
+			"palette_colors": 4,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/tiles/piso_cozinha_b.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "tiles",
+			"id": "piso_cozinha_b",
+			"opaque_bounds": [
+				0,
+				0,
+				32,
+				32
+			],
+			"palette_colors": 4,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/tiles/terra.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "tiles",
+			"id": "terra",
+			"opaque_bounds": [
+				0,
+				0,
+				32,
+				32
+			],
+			"palette_colors": 3,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/tiles/pedra_rua.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "tiles",
+			"id": "pedra_rua",
+			"opaque_bounds": [
+				0,
+				0,
+				32,
+				32
+			],
+			"palette_colors": 3,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/tiles/pedra_musgo.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "tiles",
+			"id": "pedra_musgo",
+			"opaque_bounds": [
+				0,
+				0,
+				32,
+				32
+			],
+			"palette_colors": 5,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/tiles/grama.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "tiles",
+			"id": "grama",
+			"opaque_bounds": [
+				0,
+				0,
+				32,
+				32
+			],
+			"palette_colors": 3,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/tiles/parede_reboco_superior.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "tiles",
+			"id": "parede_reboco_superior",
+			"opaque_bounds": [
+				0,
+				0,
+				32,
+				32
+			],
+			"palette_colors": 7,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/tiles/parede_lambril.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "tiles",
+			"id": "parede_lambril",
+			"opaque_bounds": [
+				0,
+				0,
+				32,
+				32
+			],
+			"palette_colors": 7,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/tiles/parede_azulejo_superior.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "tiles",
+			"id": "parede_azulejo_superior",
+			"opaque_bounds": [
+				0,
+				0,
+				32,
+				32
+			],
+			"palette_colors": 7,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/tiles/parede_azulejo_inferior.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "tiles",
+			"id": "parede_azulejo_inferior",
+			"opaque_bounds": [
+				0,
+				0,
+				32,
+				32
+			],
+			"palette_colors": 8,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/tiles/viga_vertical_a.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "tiles",
+			"id": "viga_vertical_a",
+			"opaque_bounds": [
+				8,
+				0,
+				16,
+				32
+			],
+			"palette_colors": 5,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/tiles/viga_vertical_b.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "tiles",
+			"id": "viga_vertical_b",
+			"opaque_bounds": [
+				8,
+				0,
+				16,
+				32
+			],
+			"palette_colors": 5,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/tiles/parede_frontal.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "tiles",
+			"id": "parede_frontal",
+			"opaque_bounds": [
+				0,
+				10,
+				32,
+				14
+			],
+			"palette_colors": 4,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/tiles/soleira.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "tiles",
+			"id": "soleira",
+			"opaque_bounds": [
+				0,
+				10,
+				32,
+				14
+			],
+			"palette_colors": 4,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/tiles/quina_parede.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "tiles",
+			"id": "quina_parede",
+			"opaque_bounds": [
+				8,
+				0,
+				24,
+				32
+			],
+			"palette_colors": 5,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/tiles/telhado_0.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "tiles",
+			"id": "telhado_0",
+			"opaque_bounds": [
+				0,
+				0,
+				32,
+				32
+			],
+			"palette_colors": 4,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/tiles/telhado_1.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "tiles",
+			"id": "telhado_1",
+			"opaque_bounds": [
+				0,
+				0,
+				32,
+				32
+			],
+			"palette_colors": 6,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				64
+			],
+			"cells": [
+				1,
+				2
+			],
+			"file": "png/bancadas/bancada_fina_esquerda.png",
+			"footprint": [
+				1,
+				1
+			],
+			"group": "bancadas",
+			"id": "bancada_fina_esquerda",
+			"opaque_bounds": [
+				0,
+				20,
+				32,
+				38
+			],
+			"palette_colors": 7,
+			"pivot": [
+				16,
+				64
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				64
+			],
+			"cells": [
+				1,
+				2
+			],
+			"file": "png/bancadas/bancada_fina_horizontal.png",
+			"footprint": [
+				1,
+				1
+			],
+			"group": "bancadas",
+			"id": "bancada_fina_horizontal",
+			"opaque_bounds": [
+				0,
+				20,
+				32,
+				38
+			],
+			"palette_colors": 7,
+			"pivot": [
+				16,
+				64
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				64
+			],
+			"cells": [
+				1,
+				2
+			],
+			"file": "png/bancadas/bancada_fina_direita.png",
+			"footprint": [
+				1,
+				1
+			],
+			"group": "bancadas",
+			"id": "bancada_fina_direita",
+			"opaque_bounds": [
+				0,
+				20,
+				32,
+				38
+			],
+			"palette_colors": 7,
+			"pivot": [
+				16,
+				64
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/bancadas/bancada_fina_topo.png",
+			"footprint": [
+				1,
+				1
+			],
+			"group": "bancadas",
+			"id": "bancada_fina_topo",
+			"opaque_bounds": [
+				10,
+				0,
+				12,
+				32
+			],
+			"palette_colors": 5,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/bancadas/bancada_fina_vertical.png",
+			"footprint": [
+				1,
+				1
+			],
+			"group": "bancadas",
+			"id": "bancada_fina_vertical",
+			"opaque_bounds": [
+				10,
+				0,
+				12,
+				32
+			],
+			"palette_colors": 5,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				64
+			],
+			"cells": [
+				1,
+				2
+			],
+			"file": "png/bancadas/bancada_fina_base.png",
+			"footprint": [
+				1,
+				1
+			],
+			"group": "bancadas",
+			"id": "bancada_fina_base",
+			"opaque_bounds": [
+				10,
+				0,
+				12,
+				58
+			],
+			"palette_colors": 7,
+			"pivot": [
+				16,
+				64
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				64
+			],
+			"cells": [
+				1,
+				2
+			],
+			"file": "png/bancadas/bancada_fina_quina_esquerda.png",
+			"footprint": [
+				1,
+				1
+			],
+			"group": "bancadas",
+			"id": "bancada_fina_quina_esquerda",
+			"opaque_bounds": [
+				10,
+				0,
+				22,
+				58
+			],
+			"palette_colors": 7,
+			"pivot": [
+				16,
+				64
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				64
+			],
+			"cells": [
+				1,
+				2
+			],
+			"file": "png/bancadas/bancada_fina_quina_direita.png",
+			"footprint": [
+				1,
+				1
+			],
+			"group": "bancadas",
+			"id": "bancada_fina_quina_direita",
+			"opaque_bounds": [
+				0,
+				0,
+				22,
+				58
+			],
+			"palette_colors": 7,
+			"pivot": [
+				16,
+				64
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				64
+			],
+			"cells": [
+				1,
+				2
+			],
+			"file": "png/bancadas/bancada_grossa_esquerda.png",
+			"footprint": [
+				1,
+				1
+			],
+			"group": "bancadas",
+			"id": "bancada_grossa_esquerda",
+			"opaque_bounds": [
+				0,
+				8,
+				32,
+				50
+			],
+			"palette_colors": 7,
+			"pivot": [
+				16,
+				64
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				64
+			],
+			"cells": [
+				1,
+				2
+			],
+			"file": "png/bancadas/bancada_grossa_horizontal.png",
+			"footprint": [
+				1,
+				1
+			],
+			"group": "bancadas",
+			"id": "bancada_grossa_horizontal",
+			"opaque_bounds": [
+				0,
+				8,
+				32,
+				50
+			],
+			"palette_colors": 7,
+			"pivot": [
+				16,
+				64
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				64
+			],
+			"cells": [
+				1,
+				2
+			],
+			"file": "png/bancadas/bancada_grossa_direita.png",
+			"footprint": [
+				1,
+				1
+			],
+			"group": "bancadas",
+			"id": "bancada_grossa_direita",
+			"opaque_bounds": [
+				0,
+				8,
+				32,
+				50
+			],
+			"palette_colors": 7,
+			"pivot": [
+				16,
+				64
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/bancadas/bancada_grossa_topo.png",
+			"footprint": [
+				1,
+				1
+			],
+			"group": "bancadas",
+			"id": "bancada_grossa_topo",
+			"opaque_bounds": [
+				4,
+				0,
+				24,
+				32
+			],
+			"palette_colors": 5,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/bancadas/bancada_grossa_vertical.png",
+			"footprint": [
+				1,
+				1
+			],
+			"group": "bancadas",
+			"id": "bancada_grossa_vertical",
+			"opaque_bounds": [
+				4,
+				0,
+				24,
+				32
+			],
+			"palette_colors": 5,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				64
+			],
+			"cells": [
+				1,
+				2
+			],
+			"file": "png/bancadas/bancada_grossa_base.png",
+			"footprint": [
+				1,
+				1
+			],
+			"group": "bancadas",
+			"id": "bancada_grossa_base",
+			"opaque_bounds": [
+				4,
+				0,
+				24,
+				58
+			],
+			"palette_colors": 7,
+			"pivot": [
+				16,
+				64
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				64
+			],
+			"cells": [
+				1,
+				2
+			],
+			"file": "png/bancadas/bancada_grossa_quina_esquerda.png",
+			"footprint": [
+				1,
+				1
+			],
+			"group": "bancadas",
+			"id": "bancada_grossa_quina_esquerda",
+			"opaque_bounds": [
+				4,
+				0,
+				28,
+				58
+			],
+			"palette_colors": 7,
+			"pivot": [
+				16,
+				64
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				64
+			],
+			"cells": [
+				1,
+				2
+			],
+			"file": "png/bancadas/bancada_grossa_quina_direita.png",
+			"footprint": [
+				1,
+				1
+			],
+			"group": "bancadas",
+			"id": "bancada_grossa_quina_direita",
+			"opaque_bounds": [
+				0,
+				0,
+				28,
+				58
+			],
+			"palette_colors": 7,
+			"pivot": [
+				16,
+				64
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				128,
+				128
+			],
+			"cells": [
+				4,
+				4
+			],
+			"directions": [
+				"baixo",
+				"esquerda",
+				"direita",
+				"cima"
+			],
+			"file": "png/personagens/cozinheira.png",
+			"footprint": [
+				1,
+				1
+			],
+			"frame": [
+				32,
+				32
+			],
+			"frames_per_direction": 4,
+			"group": "personagens",
+			"id": "cozinheira",
+			"opaque_bounds": [
+				6,
+				1,
+				116,
+				125
+			],
+			"palette_colors": 12,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				128,
+				128
+			],
+			"cells": [
+				4,
+				4
+			],
+			"directions": [
+				"baixo",
+				"esquerda",
+				"direita",
+				"cima"
+			],
+			"file": "png/personagens/garcom.png",
+			"footprint": [
+				1,
+				1
+			],
+			"frame": [
+				32,
+				32
+			],
+			"frames_per_direction": 4,
+			"group": "personagens",
+			"id": "garcom",
+			"opaque_bounds": [
+				6,
+				5,
+				116,
+				121
+			],
+			"palette_colors": 11,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				128,
+				128
+			],
+			"cells": [
+				4,
+				4
+			],
+			"directions": [
+				"baixo",
+				"esquerda",
+				"direita",
+				"cima"
+			],
+			"file": "png/personagens/cliente_01.png",
+			"footprint": [
+				1,
+				1
+			],
+			"frame": [
+				32,
+				32
+			],
+			"frames_per_direction": 4,
+			"group": "personagens",
+			"id": "cliente_01",
+			"opaque_bounds": [
+				6,
+				5,
+				116,
+				121
+			],
+			"palette_colors": 8,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				128,
+				128
+			],
+			"cells": [
+				4,
+				4
+			],
+			"directions": [
+				"baixo",
+				"esquerda",
+				"direita",
+				"cima"
+			],
+			"file": "png/personagens/cliente_02.png",
+			"footprint": [
+				1,
+				1
+			],
+			"frame": [
+				32,
+				32
+			],
+			"frames_per_direction": 4,
+			"group": "personagens",
+			"id": "cliente_02",
+			"opaque_bounds": [
+				6,
+				5,
+				116,
+				121
+			],
+			"palette_colors": 7,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				128,
+				128
+			],
+			"cells": [
+				4,
+				4
+			],
+			"directions": [
+				"baixo",
+				"esquerda",
+				"direita",
+				"cima"
+			],
+			"file": "png/personagens/cliente_03.png",
+			"footprint": [
+				1,
+				1
+			],
+			"frame": [
+				32,
+				32
+			],
+			"frames_per_direction": 4,
+			"group": "personagens",
+			"id": "cliente_03",
+			"opaque_bounds": [
+				6,
+				1,
+				116,
+				125
+			],
+			"palette_colors": 9,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				128,
+				128
+			],
+			"cells": [
+				4,
+				4
+			],
+			"directions": [
+				"baixo",
+				"esquerda",
+				"direita",
+				"cima"
+			],
+			"file": "png/personagens/lia.png",
+			"footprint": [
+				1,
+				1
+			],
+			"frame": [
+				32,
+				32
+			],
+			"frames_per_direction": 4,
+			"group": "personagens",
+			"id": "lia",
+			"opaque_bounds": [
+				6,
+				1,
+				116,
+				125
+			],
+			"palette_colors": 7,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				128,
+				128
+			],
+			"cells": [
+				4,
+				4
+			],
+			"directions": [
+				"baixo",
+				"esquerda",
+				"direita",
+				"cima"
+			],
+			"file": "png/personagens/beto.png",
+			"footprint": [
+				1,
+				1
+			],
+			"frame": [
+				32,
+				32
+			],
+			"frames_per_direction": 4,
+			"group": "personagens",
+			"id": "beto",
+			"opaque_bounds": [
+				6,
+				2,
+				116,
+				124
+			],
+			"palette_colors": 8,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				128,
+				128
+			],
+			"cells": [
+				4,
+				4
+			],
+			"directions": [
+				"baixo",
+				"esquerda",
+				"direita",
+				"cima"
+			],
+			"file": "png/personagens/nina.png",
+			"footprint": [
+				1,
+				1
+			],
+			"frame": [
+				32,
+				32
+			],
+			"frames_per_direction": 4,
+			"group": "personagens",
+			"id": "nina",
+			"opaque_bounds": [
+				6,
+				1,
+				116,
+				125
+			],
+			"palette_colors": 8,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				128,
+				128
+			],
+			"cells": [
+				4,
+				4
+			],
+			"directions": [
+				"baixo",
+				"esquerda",
+				"direita",
+				"cima"
+			],
+			"file": "png/personagens/manequim.png",
+			"footprint": [
+				1,
+				1
+			],
+			"frame": [
+				32,
+				32
+			],
+			"frames_per_direction": 4,
+			"group": "personagens",
+			"id": "manequim",
+			"opaque_bounds": [
+				6,
+				5,
+				116,
+				121
+			],
+			"palette_colors": 7,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/utensilios/chaleira.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "utensilios",
+			"id": "chaleira",
+			"opaque_bounds": [
+				1,
+				3,
+				26,
+				26
+			],
+			"palette_colors": 7,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/utensilios/frigideira.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "utensilios",
+			"id": "frigideira",
+			"opaque_bounds": [
+				5,
+				2,
+				20,
+				28
+			],
+			"palette_colors": 6,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				64,
+				32
+			],
+			"cells": [
+				2,
+				1
+			],
+			"file": "png/decoracao/suporte_utensilios.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "decoracao",
+			"id": "suporte_utensilios",
+			"opaque_bounds": [
+				2,
+				3,
+				60,
+				28
+			],
+			"palette_colors": 9,
+			"pivot": [
+				32,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				64,
+				32
+			],
+			"cells": [
+				2,
+				1
+			],
+			"file": "png/decoracao/capacho.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "decoracao",
+			"id": "capacho",
+			"opaque_bounds": [
+				2,
+				7,
+				60,
+				20
+			],
+			"palette_colors": 5,
+			"pivot": [
+				32,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/utensilios/toalha_dobrada.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "utensilios",
+			"id": "toalha_dobrada",
+			"opaque_bounds": [
+				3,
+				6,
+				26,
+				23
+			],
+			"palette_colors": 5,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				64
+			],
+			"cells": [
+				1,
+				2
+			],
+			"file": "png/decoracao/bandeira.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "decoracao",
+			"id": "bandeira",
+			"opaque_bounds": [
+				3,
+				4,
+				26,
+				53
+			],
+			"palette_colors": 6,
+			"pivot": [
+				16,
+				64
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				64,
+				64
+			],
+			"cells": [
+				2,
+				2
+			],
+			"file": "png/exterior/barraca_vazia.png",
+			"footprint": [
+				2,
+				1
+			],
+			"group": "exterior",
+			"id": "barraca_vazia",
+			"opaque_bounds": [
+				1,
+				3,
+				62,
+				59
+			],
+			"palette_colors": 9,
+			"pivot": [
+				32,
+				64
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				64,
+				64
+			],
+			"cells": [
+				2,
+				2
+			],
+			"file": "png/exterior/barraca_mercador.png",
+			"footprint": [
+				2,
+				1
+			],
+			"group": "exterior",
+			"id": "barraca_mercador",
+			"opaque_bounds": [
+				1,
+				3,
+				62,
+				59
+			],
+			"palette_colors": 12,
+			"pivot": [
+				32,
+				64
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				64,
+				64
+			],
+			"cells": [
+				2,
+				2
+			],
+			"file": "png/exterior/banca_ferro_velho.png",
+			"footprint": [
+				2,
+				1
+			],
+			"group": "exterior",
+			"id": "banca_ferro_velho",
+			"opaque_bounds": [
+				1,
+				3,
+				62,
+				59
+			],
+			"palette_colors": 15,
+			"pivot": [
+				32,
+				64
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				64,
+				32
+			],
+			"cells": [
+				2,
+				1
+			],
+			"file": "png/exterior/toldo.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "exterior",
+			"id": "toldo",
+			"opaque_bounds": [
+				1,
+				3,
+				62,
+				25
+			],
+			"palette_colors": 5,
+			"pivot": [
+				32,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/exterior/engrenagem.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "exterior",
+			"id": "engrenagem",
+			"opaque_bounds": [
+				3,
+				3,
+				29,
+				29
+			],
+			"palette_colors": 4,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/exterior/tubos.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "exterior",
+			"id": "tubos",
+			"opaque_bounds": [
+				4,
+				2,
+				24,
+				27
+			],
+			"palette_colors": 5,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/exterior/caixa_ferramentas.png",
+			"footprint": [
+				1,
+				1
+			],
+			"group": "exterior",
+			"id": "caixa_ferramentas",
+			"opaque_bounds": [
+				4,
+				5,
+				25,
+				24
+			],
+			"palette_colors": 9,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/exterior/pecas_geladeira.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "exterior",
+			"id": "pecas_geladeira",
+			"opaque_bounds": [
+				3,
+				2,
+				27,
+				28
+			],
+			"palette_colors": 8,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				64,
+				32
+			],
+			"cells": [
+				2,
+				1
+			],
+			"file": "png/exterior/floreira.png",
+			"footprint": [
+				2,
+				1
+			],
+			"group": "exterior",
+			"id": "floreira",
+			"opaque_bounds": [
+				0,
+				5,
+				62,
+				25
+			],
+			"palette_colors": 8,
+			"pivot": [
+				32,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				64,
+				64
+			],
+			"cells": [
+				2,
+				2
+			],
+			"file": "png/exterior/ruina.png",
+			"footprint": [
+				2,
+				1
+			],
+			"group": "exterior",
+			"id": "ruina",
+			"opaque_bounds": [
+				0,
+				2,
+				64,
+				60
+			],
+			"palette_colors": 6,
+			"pivot": [
+				32,
+				64
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/utensilios/balde.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "utensilios",
+			"id": "balde",
+			"opaque_bounds": [
+				5,
+				4,
+				22,
+				26
+			],
+			"palette_colors": 6,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/utensilios/vassoura.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "utensilios",
+			"id": "vassoura",
+			"opaque_bounds": [
+				3,
+				3,
+				22,
+				27
+			],
+			"palette_colors": 6,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/exterior/lenha.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "exterior",
+			"id": "lenha",
+			"opaque_bounds": [
+				5,
+				10,
+				26,
+				18
+			],
+			"palette_colors": 4,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				64,
+				64
+			],
+			"cells": [
+				2,
+				2
+			],
+			"file": "png/legado/computador_legado.png",
+			"footprint": [
+				2,
+				1
+			],
+			"group": "legado",
+			"id": "computador_legado",
+			"opaque_bounds": [
+				2,
+				0,
+				60,
+				60
+			],
+			"palette_colors": 12,
+			"pivot": [
+				32,
+				64
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/interface/moldura_32.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "interface",
+			"id": "moldura_32",
+			"opaque_bounds": [
+				1,
+				1,
+				30,
+				30
+			],
+			"palette_colors": 9,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/icones/prato_inserir.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "icones",
+			"id": "prato_inserir",
+			"opaque_bounds": [
+				3,
+				2,
+				23,
+				22
+			],
+			"palette_colors": 7,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/icones/prato_retirar.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "icones",
+			"id": "prato_retirar",
+			"opaque_bounds": [
+				3,
+				2,
+				23,
+				22
+			],
+			"palette_colors": 6,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/icones/panela_inserir.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "icones",
+			"id": "panela_inserir",
+			"opaque_bounds": [
+				1,
+				2,
+				30,
+				27
+			],
+			"palette_colors": 6,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/icones/panela_retirar.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "icones",
+			"id": "panela_retirar",
+			"opaque_bounds": [
+				1,
+				2,
+				30,
+				27
+			],
+			"palette_colors": 6,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/icones/corte_inserir.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "icones",
+			"id": "corte_inserir",
+			"opaque_bounds": [
+				2,
+				2,
+				28,
+				24
+			],
+			"palette_colors": 9,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/icones/corte_retirar.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "icones",
+			"id": "corte_retirar",
+			"opaque_bounds": [
+				2,
+				2,
+				28,
+				24
+			],
+			"palette_colors": 8,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/icones/confirmar.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "icones",
+			"id": "confirmar",
+			"opaque_bounds": [
+				4,
+				5,
+				25,
+				20
+			],
+			"palette_colors": 3,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/icones/cancelar.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "icones",
+			"id": "cancelar",
+			"opaque_bounds": [
+				3,
+				4,
+				26,
+				25
+			],
+			"palette_colors": 2,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/icones/martelo.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "icones",
+			"id": "martelo",
+			"opaque_bounds": [
+				8,
+				2,
+				22,
+				26
+			],
+			"palette_colors": 5,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/icones/livro.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "icones",
+			"id": "livro",
+			"opaque_bounds": [
+				5,
+				3,
+				23,
+				27
+			],
+			"palette_colors": 6,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/icones/mesa.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "icones",
+			"id": "mesa",
+			"opaque_bounds": [
+				2,
+				5,
+				28,
+				24
+			],
+			"palette_colors": 6,
+			"pivot": [
+				16,
+				32
+			]
+		},
+		{
+			"authorship": "redrawn on final-size pixel canvas; no source pixels sampled",
+			"canvas": [
+				32,
+				32
+			],
+			"cells": [
+				1,
+				1
+			],
+			"file": "png/icones/lavar.png",
+			"footprint": [
+				0,
+				0
+			],
+			"group": "icones",
+			"id": "lavar",
+			"opaque_bounds": [
+				3,
+				3,
+				26,
+				25
+			],
+			"palette_colors": 7,
+			"pivot": [
+				16,
+				32
+			]
+		}
+	],
+	"integrated_in_game": false,
+	"method": "redrawn directly using integer pixel clusters; no Image.load or resize in authoring",
+	"unit": 32
+}

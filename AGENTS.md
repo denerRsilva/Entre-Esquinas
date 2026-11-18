@@ -7,8 +7,9 @@
   substituir, recortar ou integrar arte. Pranchas ampliadas existentes são
   materiais provisórios; filtro nearest ou redução na Godot não os torna arte
   nativa 32 × 32.
-- Preserve os originais e aguarde os arquivos editados pelo proprietário antes
-  de substituir as sprites exportadas nesta revisão. Alterar dimensões exige
+- Preserve os originais. O pedido de 18/11/2026 autoriza redesenhar usando-os
+  como referência, sem reduzir os PNGs antigos; o novo acervo está separado em
+  `docs/arte/redesenho32`. Alterar dimensões na integração exige
   atualizar recortes, frames e pivôs, sem alterar automaticamente os saves.
 
 - A premissa vigente é o **refúgio no apocalipse zumbi**, conforme o GDD 3.6;

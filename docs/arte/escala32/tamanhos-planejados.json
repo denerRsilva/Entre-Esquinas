@@ -1,6 +1,6 @@
 {
   "unit_px": 32,
-  "status": "Sizing specification only; no artwork or runtime references replaced by this file.",
+  "status": "Redraw artwork available in a standalone kit; runtime references have not been replaced.",
   "rules": [
     "Canvas size is distinct from physical footprint and world scale.",
     "Keep save/map grid at 40 logical units.",
@@ -27,7 +27,10 @@
         2
       ],
       "cell_count": 4,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/moveis/fogao_aceso.png"
+      ]
     },
     {
       "name": "fogao_apagado",
@@ -47,7 +50,10 @@
         2
       ],
       "cell_count": 4,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/moveis/fogao_apagado.png"
+      ]
     },
     {
       "name": "geladeira_fechada",
@@ -67,7 +73,10 @@
         2
       ],
       "cell_count": 2,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/moveis/geladeira_fechada.png"
+      ]
     },
     {
       "name": "geladeira_aberta",
@@ -87,7 +96,10 @@
         2
       ],
       "cell_count": 4,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/moveis/geladeira_aberta.png"
+      ]
     },
     {
       "name": "preparo_estudo",
@@ -107,7 +119,11 @@
         2
       ],
       "cell_count": 4,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/moveis/mesa_trabalho.png",
+        "docs/arte/redesenho32/png/utensilios/kit_corte.png"
+      ]
     },
     {
       "name": "empratamento_estudo",
@@ -127,7 +143,12 @@
         2
       ],
       "cell_count": 4,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/moveis/mesa_trabalho.png",
+        "docs/arte/redesenho32/png/utensilios/prato_limpo.png"
+      ],
+      "assembly": "Base vazia; louça e receitas são sobreposições independentes; não instalar pano fixo."
     },
     {
       "name": "mesa_vazia",
@@ -147,7 +168,10 @@
         2
       ],
       "cell_count": 4,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/moveis/mesa_trabalho.png"
+      ]
     },
     {
       "name": "mesa_jantar",
@@ -167,7 +191,10 @@
         2
       ],
       "cell_count": 4,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/moveis/mesa_jantar.png"
+      ]
     },
     {
       "name": "cadeira_esquerda",
@@ -187,7 +214,10 @@
         1
       ],
       "cell_count": 1,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/moveis/cadeira_esquerda.png"
+      ]
     },
     {
       "name": "cadeira_costas",
@@ -207,7 +237,10 @@
         1
       ],
       "cell_count": 1,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/moveis/cadeira_costas.png"
+      ]
     },
     {
       "name": "cadeira_frente",
@@ -227,7 +260,10 @@
         1
       ],
       "cell_count": 1,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/moveis/cadeira_frente.png"
+      ]
     },
     {
       "name": "cadeira_direita",
@@ -247,7 +283,10 @@
         1
       ],
       "cell_count": 1,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/moveis/cadeira_direita.png"
+      ]
     },
     {
       "name": "armario_vazio",
@@ -267,7 +306,10 @@
         2
       ],
       "cell_count": 2,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/moveis/armario_vazio.png"
+      ]
     },
     {
       "name": "armario_louca",
@@ -287,7 +329,10 @@
         2
       ],
       "cell_count": 2,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/moveis/armario_louca.png"
+      ]
     },
     {
       "name": "estante_vazia",
@@ -307,7 +352,10 @@
         2
       ],
       "cell_count": 2,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/moveis/estante_panelas_vazia.png"
+      ]
     },
     {
       "name": "estante_panelas",
@@ -327,7 +375,12 @@
         2
       ],
       "cell_count": 2,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/moveis/estante_panelas_vazia.png",
+        "docs/arte/redesenho32/png/utensilios/panela_vazia.png"
+      ],
+      "assembly": "Estrutura vazia; repetir a panela separada conforme estoque real."
     },
     {
       "name": "pia",
@@ -347,7 +400,10 @@
         2
       ],
       "cell_count": 4,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/moveis/pia.png"
+      ]
     },
     {
       "name": "lixeira",
@@ -367,7 +423,10 @@
         1
       ],
       "cell_count": 1,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/moveis/lixeira.png"
+      ]
     },
     {
       "name": "pilha_pratos_estudo",
@@ -387,7 +446,11 @@
         1
       ],
       "cell_count": 1,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/utensilios/prato_limpo.png"
+      ],
+      "assembly": "Repetir prato_limpo pelo número real de pratos; nunca desenhar uma pilha fictícia."
     },
     {
       "name": "prato_limpo",
@@ -407,7 +470,10 @@
         1
       ],
       "cell_count": 1,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/utensilios/prato_limpo.png"
+      ]
     },
     {
       "name": "prato_sujo",
@@ -427,7 +493,10 @@
         1
       ],
       "cell_count": 1,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/utensilios/prato_sujo.png"
+      ]
     },
     {
       "name": "panela",
@@ -447,7 +516,10 @@
         1
       ],
       "cell_count": 1,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/utensilios/panela_vazia.png"
+      ]
     },
     {
       "name": "tampa",
@@ -467,7 +539,10 @@
         1
       ],
       "cell_count": 1,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/utensilios/tampa_panela.png"
+      ]
     },
     {
       "name": "panela_queimada",
@@ -487,7 +562,10 @@
         1
       ],
       "cell_count": 1,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/utensilios/panela_queimada.png"
+      ]
     },
     {
       "name": "prateleira_potes",
@@ -507,7 +585,10 @@
         1
       ],
       "cell_count": 2,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/moveis/prateleira_potes.png"
+      ]
     },
     {
       "name": "suporte_utensilios",
@@ -519,15 +600,18 @@
         136
       ],
       "target_canvas": [
-        32,
+        64,
         32
       ],
       "grid_cells": [
-        1,
+        2,
         1
       ],
-      "cell_count": 1,
-      "status": "planned_not_converted"
+      "cell_count": 2,
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/decoracao/suporte_utensilios.png"
+      ]
     },
     {
       "name": "balcao_estudo",
@@ -547,7 +631,11 @@
         2
       ],
       "cell_count": 4,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/bancadas/bancada_grossa_horizontal.png"
+      ],
+      "assembly": "Duas peças horizontais compõem a largura de 64px; quinas e pontas estão no grupo bancadas."
     },
     {
       "name": "banco",
@@ -567,7 +655,10 @@
         1
       ],
       "cell_count": 2,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/moveis/banco.png"
+      ]
     },
     {
       "name": "chaleira",
@@ -587,7 +678,10 @@
         1
       ],
       "cell_count": 1,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/utensilios/chaleira.png"
+      ]
     },
     {
       "name": "frigideira",
@@ -607,7 +701,10 @@
         1
       ],
       "cell_count": 1,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/utensilios/frigideira.png"
+      ]
     },
     {
       "name": "mesa_trabalho_atual",
@@ -627,7 +724,10 @@
         2
       ],
       "cell_count": 4,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/moveis/mesa_trabalho.png"
+      ]
     },
     {
       "name": "kit_corte_atual",
@@ -647,7 +747,10 @@
         1
       ],
       "cell_count": 1,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/utensilios/kit_corte.png"
+      ]
     },
     {
       "name": "prato_limpo_atual",
@@ -667,7 +770,10 @@
         1
       ],
       "cell_count": 1,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/utensilios/prato_limpo.png"
+      ]
     },
     {
       "name": "decoracao_00",
@@ -687,7 +793,10 @@
         1
       ],
       "cell_count": 1,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/decoracao/lanterna_acesa.png"
+      ]
     },
     {
       "name": "decoracao_01",
@@ -707,7 +816,10 @@
         1
       ],
       "cell_count": 1,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/decoracao/lanterna_apagada.png"
+      ]
     },
     {
       "name": "decoracao_02",
@@ -727,7 +839,10 @@
         1
       ],
       "cell_count": 1,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/decoracao/vela.png"
+      ]
     },
     {
       "name": "decoracao_03",
@@ -747,7 +862,10 @@
         1
       ],
       "cell_count": 1,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/decoracao/vaso_folhagem.png"
+      ]
     },
     {
       "name": "decoracao_04",
@@ -767,7 +885,10 @@
         2
       ],
       "cell_count": 2,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/decoracao/planta_pendente.png"
+      ]
     },
     {
       "name": "decoracao_05",
@@ -787,7 +908,10 @@
         1
       ],
       "cell_count": 1,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/decoracao/vaso_flores.png"
+      ]
     },
     {
       "name": "decoracao_06",
@@ -807,7 +931,10 @@
         2
       ],
       "cell_count": 6,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/decoracao/tapete.png"
+      ]
     },
     {
       "name": "decoracao_07",
@@ -827,7 +954,10 @@
         1
       ],
       "cell_count": 2,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/decoracao/capacho.png"
+      ]
     },
     {
       "name": "decoracao_08",
@@ -839,15 +969,18 @@
         144
       ],
       "target_canvas": [
-        64,
+        32,
         32
       ],
       "grid_cells": [
-        2,
+        1,
         1
       ],
-      "cell_count": 2,
-      "status": "planned_not_converted"
+      "cell_count": 1,
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/utensilios/toalha_dobrada.png"
+      ]
     },
     {
       "name": "decoracao_09",
@@ -867,7 +1000,10 @@
         2
       ],
       "cell_count": 2,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/decoracao/bandeira.png"
+      ]
     },
     {
       "name": "decoracao_10",
@@ -887,7 +1023,10 @@
         1
       ],
       "cell_count": 1,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/decoracao/placa_perigo.png"
+      ]
     },
     {
       "name": "decoracao_11",
@@ -907,7 +1046,10 @@
         1
       ],
       "cell_count": 1,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/decoracao/quadro_avisos.png"
+      ]
     },
     {
       "name": "decoracao_12",
@@ -927,7 +1069,10 @@
         2
       ],
       "cell_count": 4,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/exterior/barraca_mercador.png"
+      ]
     },
     {
       "name": "decoracao_13",
@@ -947,7 +1092,10 @@
         2
       ],
       "cell_count": 4,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/exterior/barraca_vazia.png"
+      ]
     },
     {
       "name": "decoracao_14",
@@ -967,7 +1115,10 @@
         2
       ],
       "cell_count": 4,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/exterior/banca_ferro_velho.png"
+      ]
     },
     {
       "name": "decoracao_15",
@@ -980,14 +1131,17 @@
       ],
       "target_canvas": [
         64,
-        64
+        32
       ],
       "grid_cells": [
         2,
-        2
+        1
       ],
-      "cell_count": 4,
-      "status": "planned_not_converted"
+      "cell_count": 2,
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/exterior/toldo.png"
+      ]
     },
     {
       "name": "decoracao_16",
@@ -1007,7 +1161,10 @@
         1
       ],
       "cell_count": 1,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/exterior/engrenagem.png"
+      ]
     },
     {
       "name": "decoracao_17",
@@ -1027,7 +1184,10 @@
         1
       ],
       "cell_count": 1,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/exterior/tubos.png"
+      ]
     },
     {
       "name": "decoracao_18",
@@ -1047,7 +1207,10 @@
         1
       ],
       "cell_count": 1,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/decoracao/caixa_vazia.png"
+      ]
     },
     {
       "name": "decoracao_19",
@@ -1067,7 +1230,10 @@
         1
       ],
       "cell_count": 1,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/decoracao/caixa_legumes.png"
+      ]
     },
     {
       "name": "decoracao_20",
@@ -1079,15 +1245,18 @@
         169
       ],
       "target_canvas": [
-        64,
+        32,
         32
       ],
       "grid_cells": [
-        2,
+        1,
         1
       ],
-      "cell_count": 2,
-      "status": "planned_not_converted"
+      "cell_count": 1,
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/decoracao/barril.png"
+      ]
     },
     {
       "name": "decoracao_21",
@@ -1099,15 +1268,18 @@
         172
       ],
       "target_canvas": [
-        64,
-        64
+        32,
+        32
       ],
       "grid_cells": [
-        2,
-        2
+        1,
+        1
       ],
-      "cell_count": 4,
-      "status": "planned_not_converted"
+      "cell_count": 1,
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/alimentos/arroz.png"
+      ]
     },
     {
       "name": "decoracao_22",
@@ -1127,7 +1299,10 @@
         1
       ],
       "cell_count": 1,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/exterior/caixa_ferramentas.png"
+      ]
     },
     {
       "name": "decoracao_23",
@@ -1147,7 +1322,10 @@
         1
       ],
       "cell_count": 1,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/exterior/pecas_geladeira.png"
+      ]
     },
     {
       "name": "decoracao_24",
@@ -1167,7 +1345,10 @@
         1
       ],
       "cell_count": 2,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/exterior/floreira.png"
+      ]
     },
     {
       "name": "decoracao_25",
@@ -1187,7 +1368,10 @@
         2
       ],
       "cell_count": 4,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/exterior/ruina.png"
+      ]
     },
     {
       "name": "decoracao_26",
@@ -1207,7 +1391,10 @@
         1
       ],
       "cell_count": 2,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/moveis/banco.png"
+      ]
     },
     {
       "name": "decoracao_27",
@@ -1227,7 +1414,10 @@
         1
       ],
       "cell_count": 1,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/utensilios/balde.png"
+      ]
     },
     {
       "name": "decoracao_28",
@@ -1247,7 +1437,10 @@
         1
       ],
       "cell_count": 1,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/utensilios/vassoura.png"
+      ]
     },
     {
       "name": "decoracao_29",
@@ -1267,7 +1460,10 @@
         1
       ],
       "cell_count": 1,
-      "status": "planned_not_converted"
+      "status": "redrawn_available_not_integrated",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/exterior/lenha.png"
+      ]
     },
     {
       "name": "cozinheira",
@@ -1284,8 +1480,11 @@
         128,
         128
       ],
-      "status": "planned_not_converted",
-      "note": "Preserve animation order and align feet; whole-sheet resizing does not fix fractional source frames."
+      "status": "redrawn_available_not_integrated",
+      "note": "Preserve animation order and align feet; whole-sheet resizing does not fix fractional source frames.",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/personagens/cozinheira.png"
+      ]
     },
     {
       "name": "garcom-estudo-sprites",
@@ -1302,8 +1501,11 @@
         128,
         128
       ],
-      "status": "planned_not_converted",
-      "note": "Preserve animation order and align feet; whole-sheet resizing does not fix fractional source frames."
+      "status": "redrawn_available_not_integrated",
+      "note": "Preserve animation order and align feet; whole-sheet resizing does not fix fractional source frames.",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/personagens/garcom.png"
+      ]
     },
     {
       "name": "cliente-01-estudo-sprites",
@@ -1320,8 +1522,11 @@
         128,
         128
       ],
-      "status": "planned_not_converted",
-      "note": "Preserve animation order and align feet; whole-sheet resizing does not fix fractional source frames."
+      "status": "redrawn_available_not_integrated",
+      "note": "Preserve animation order and align feet; whole-sheet resizing does not fix fractional source frames.",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/personagens/cliente_01.png"
+      ]
     },
     {
       "name": "cliente-02-estudo-sprites",
@@ -1338,8 +1543,11 @@
         128,
         128
       ],
-      "status": "planned_not_converted",
-      "note": "Preserve animation order and align feet; whole-sheet resizing does not fix fractional source frames."
+      "status": "redrawn_available_not_integrated",
+      "note": "Preserve animation order and align feet; whole-sheet resizing does not fix fractional source frames.",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/personagens/cliente_02.png"
+      ]
     },
     {
       "name": "cliente-03-estudo-sprites",
@@ -1356,8 +1564,11 @@
         128,
         128
       ],
-      "status": "planned_not_converted",
-      "note": "Preserve animation order and align feet; whole-sheet resizing does not fix fractional source frames."
+      "status": "redrawn_available_not_integrated",
+      "note": "Preserve animation order and align feet; whole-sheet resizing does not fix fractional source frames.",
+      "redrawn_files": [
+        "docs/arte/redesenho32/png/personagens/cliente_03.png"
+      ]
     }
   ],
   "remaining_source_groups": {
