@@ -2,6 +2,8 @@ extends "res://qa/FluxoCompletoNativoUI.gd"
 const REF = preload("res://simulacao/nativa/Refugio.gd")
 func clone_campaign() -> Dictionary:
 	var s: Dictionary = g.session.PARTIDA.furnished(true,true);REF.start(s)
+	# Legacy three-resident scenario for the historic service/growth regressions.
+	s.refuge.erase("initialPopulation");s.refuge.residents=s.refuge.residents.slice(0,3)
 	return s
 func stats(s: Dictionary,value: float) -> void:
 	for key in REF.STATS:s.refuge.stats[key]=value
@@ -18,7 +20,7 @@ func run():
 	root.size=Vector2i(960,700);g=load("res://mundo/Restaurante.tscn").instantiate();root.add_child(g);g.set_process(false);await layout()
 	check(await press("Novo jogo"),"Entrada jogável da nova premissa")
 	var s: Dictionary = g.session.state
-	check(REF.active(s) and s.refuge.residents.size()==3 and s.refuge.nextHorde==3,"Três moradores e primeira horda no terceiro dia")
+	check(REF.active(s) and s.refuge.residents.size()==50 and s.refuge.nextHorde==3,"Cinquenta moradores e primeira horda no terceiro dia")
 	check(g.session.SAVE.VALIDATOR.valid(s) and g.values.has(g.session.checkpoint_key()),"Campanha começa válida e com retomada persistida")
 	for worker in s.workers:worker.task="none"
 	g.session.simulation.service.idle_walk_enabled=false

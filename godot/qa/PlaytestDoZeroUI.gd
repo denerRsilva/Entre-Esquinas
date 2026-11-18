@@ -61,7 +61,10 @@ func run():
 	if not g.session.REFUGE.active(g.session.state):await finish();return
 	g.session.rng=func():return 0.5
 	var s: Dictionary = g.session.state
-	check(s.cash==200 and s.workers.is_empty(),"Playtest começa do zero com 200 e sem garçom")
+	check(s.cash==200 and s.workers.is_empty() and s.refuge.residents.size()==50,"Novo jogo começa com 50 moradores, 200 e sem garçom")
+	# Keep this fixed three-customer interaction regression on a legacy campaign.
+	# Populacao50UI exercises the real new population, UI, visits and persistence.
+	s.refuge.erase("initialPopulation");s.refuge.residents=s.refuge.residents.slice(0,3)
 	await capture("inicio")
 	check(await choose("Gestão") and await choose("Cardápio"),"Cardápio pelo mouse")
 	var toggles: Array = g.hud.find_children("*","CheckButton",true,false).filter(func(n):return n.is_visible_in_tree())

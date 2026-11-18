@@ -3,13 +3,19 @@ extends RefCounted
 const HIRING = preload("res://simulacao/nativa/Contratacao.gd")
 const BAL = preload("res://simulacao/nativa/Equilibrio.gd")
 const STATS = ["food","energy","morale"]
+const INITIAL_POPULATION := 50
+const LEGACY_POPULATION := 3
 const BATTLE_SECONDS := 8.0
 const INTERVALS = [4,5,3]
 static func active(s: Dictionary) -> bool:return s.get("refuge") is Dictionary
 static func resident(id: int) -> Dictionary:
-	return {"id":id,"name":["Lia","Beto","Nina","Íris","Rui","Cora"][id-1],"skin":12+(id-1)%3}
+	var names := ["Lia","Beto","Nina","Íris","Rui","Cora"]
+	return {"id":id,"name":names[id-1] if id<=names.size() else "Morador %02d"%id,"skin":12+(id-1)%3}
+static func initial_population(r: Dictionary) -> int:return int(r.get("initialPopulation",LEGACY_POPULATION))
 static func start(s: Dictionary) -> void:
-	s.refuge={"version":2,"stats":{"food":65.0,"energy":70.0,"morale":65.0},"victories":0,"losses":0,"residents":[resident(1),resident(2),resident(3)],"nextHorde":3,"wave":0,"defeats":0,"defense":65.0,"level":0,"phase":"day","battle":null,"visits":[],"closed":[],"lastAttack":0}
+	var residents: Array = []
+	for id in range(1,INITIAL_POPULATION+1):residents.append(resident(id))
+	s.refuge={"version":2,"stats":{"food":65.0,"energy":70.0,"morale":65.0},"victories":0,"losses":0,"initialPopulation":INITIAL_POPULATION,"residents":residents,"nextHorde":3,"wave":0,"defeats":0,"defense":65.0,"level":0,"phase":"day","battle":null,"visits":[],"closed":[],"lastAttack":0}
 	HIRING.initialize(s)
 	BAL.initialize(s)
 	s.clock={"minute":600,"remainder":0,"ending":false}
@@ -90,7 +96,7 @@ static func resolve(s: Dictionary) -> void:
 		change(s,"morale",8)
 		# First reconstruction reward: a better cutting kit; then new residents.
 		r.level=mini(3,r.level+1)
-		if r.residents.size()<6:r.residents.append(resident(r.residents.size()+1))
+		if r.residents.size()<initial_population(r)+3:r.residents.append(resident(r.residents.size()+1))
 	change(s,"energy",-12)
 	r.nextHorde=s.day+INTERVALS[(int(r.wave)-1)%INTERVALS.size()]
 	r.phase="gameover" if r.defeats>=2 else "aftermath"
@@ -144,16 +150,19 @@ static func valid(s: Dictionary) -> bool:
 	for key in STATS:
 		if not percent(r.stats.get(key)):return false
 	if r.get("phase") not in ["day","battle","aftermath","gameover"]:return false
-	if not r.get("residents") is Array or r.residents.size()!=3+r.level:return false
+	if r.has("initialPopulation") and (not integer(r.initialPopulation) or (r.initialPopulation!=LEGACY_POPULATION and r.initialPopulation!=INITIAL_POPULATION)):return false
+	var initial: int = initial_population(r)
+	if not r.get("residents") is Array or r.residents.size()!=initial+r.level:return false
 	var ids := {}
 	for person in r.residents:
-		if not person is Dictionary or not integer(person.get("id")) or person.id<1 or person.id>6 or ids.has(int(person.id)) or not person.get("name") is String or person.name.length()>32:return false
+		if not person is Dictionary or not integer(person.get("id")) or person.id<1 or person.id>initial+3 or ids.has(int(person.id)) or not person.get("name") is String or person.name.length()>32:return false
 		if not integer(person.get("skin")) or person.skin<12 or person.skin>14:return false
 		for key in STATS:
 			if person.has(key):return false
 		ids[int(person.id)]=true
 	for key in ["visits","closed"]:
-		if not r.get(key) is Array or r[key].size()>12:return false
+		var limit: int = maxi(12,2*r.residents.size()) if key=="visits" else 12
+		if not r.get(key) is Array or r[key].size()>limit:return false
 		var seen := {}
 		for entry in r[key]:
 			if not entry is String or entry.length()>40 or seen.has(entry):return false

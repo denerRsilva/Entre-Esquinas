@@ -97,7 +97,7 @@ static func valid(s: Dictionary) -> bool:
 		if record.legacy:
 			if record.get("resident")!=null or record.get("role")!=("waiter" if record.actor=="worker2" else "logistics"):return false
 		else:
-			if record.actor!="worker2" or record.get("role")!="waiter" or not integer(record.get("resident")) or record.resident<4 or record.resident>6 or residents.has(int(record.resident)):return false
+			if record.actor!="worker2" or record.get("role")!="waiter" or not integer(record.get("resident")) or record.resident<4 or residents.has(int(record.resident)):return false
 			if not unlocked(s) or worker.get("refugeResident")!=record.resident or worker.get("task") not in ["none","waiter"]:return false
 			residents[int(record.resident)]=true
 			var found := false

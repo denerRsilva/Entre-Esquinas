@@ -2,6 +2,9 @@ extends "res://qa/CidadeUI.gd"
 const HIRE = preload("res://simulacao/nativa/Contratacao.gd")
 func run():
 	await start_game();g.session.root_action("refuge");g.tick(0)
+
+	# Preserve the locked recruitment regression on an old three-resident colony.
+	g.session.load_state(clone_campaign());g.tick(0)
 	var s: Dictionary = g.session.state
 	check(s.workers.is_empty() and s.refuge.hiring.hires.is_empty(),"Campanha nova começa sem funcionário")
 	check(not g.frame_data.scene.any(func(op):return op[0]=="npc" and op[1]=="worker2"),"Garçom inicial não aparece no salão")

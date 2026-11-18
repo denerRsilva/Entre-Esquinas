@@ -9,7 +9,7 @@ scripts/testar-migracao.sh
 
 Requer Godot 4.6.3 e `rg`. O runner usa diretórios temporários isolados para os salvamentos e reprova erros GDScript, falhas de asserção ou término anormal. Os logs ficam no caminho informado ao terminar. `GODOT_BIN` permite selecionar o executável e `QA_TIMEOUT_SECONDS` altera o limite por suíte.
 
-As 59 suítes padrão cobrem criação de partidas; mapa e inventários; qualidade, receitas e conservação; salvamentos dos formatos 4–12; movimento e portais; construção; clientes/garçom; administração e dias completos; cozinha; simulação; câmera; interações; composição visual; ícones; controlador; menus; fluxo geladeira → corte → panela → empratamento → cliente → louça → pia; compras/equipe/horários; edição da planta; conversas; e recuperação de salvamentos em disco.
+As 60 suítes padrão cobrem criação de partidas; mapa e inventários; qualidade, receitas e conservação; salvamentos dos formatos 4–12; movimento e portais; construção; clientes/garçom; administração e dias completos; cozinha; simulação; câmera; interações; composição visual; ícones; controlador; menus; fluxo geladeira → corte → panela → empratamento → cliente → louça → pia; compras/equipe/horários; edição da planta; conversas; e recuperação de salvamentos em disco.
 
 As fixtures em `referencia-migracao/*.json` registram os resultados do motor anterior e são comparadas com os módulos GDScript. As referências e geradores JavaScript foram removidos após a validação; podem ser consultados no histórico Git, incluindo o commit `0205aa0`. Os testes antigos que dirigiam a VM foram substituídos, sem depender de Node.js ou QuickJS.
 
@@ -65,3 +65,9 @@ reserva de cliente e avanço seguro. `--capture` inclui livro compacto e reaçã
 `AtlasCompacto` compara todos os recortes das barras com o pacote original,
 pixel e alpha idênticos. O atlas completo é preservado como fonte, mas não
 acompanha os APKs. Rodar também `python3 scripts/verificar-arte.py`.
+
+`Populacao50UI` verifica Novo jogo com 50 identidades, consulta da Cidade, contratação
+do morador50 pelo menu rolável, chegada/anotação com ID alto, até cem visitas
+nos dois turnos e persistência/crescimento das bases antiga3 e nova50.
+Os cenários históricos de contratação bloqueada e do almoço de três clientes
+continuam usando explicitamente uma campanha anterior de três moradores.

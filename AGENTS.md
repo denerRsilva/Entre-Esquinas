@@ -84,3 +84,5 @@
 - Feedback visual de 18/11: o primeiro redesenho foi rejeitado por aparência genérica e perspectiva inconsistente. Não tratá-lo como direção aprovada. A revisão 2 de fogão/pia/geladeira está em `docs/arte/redesenho32/REVISAO-COZINHA.md`: tampos profundos vistos de cima, frentes curtas, volumes/bevels e desgaste em clusters. Verificação de canvas não substitui avaliação artística.
 
 - Refinamento atual: trabalhar poucas sprites por vez. O pedido seguinte focou somente um fogão em canvas 64×64 (2×2 blocos de 32), permitindo áreas vazias. O estudo 3 está em `docs/arte/fogao-64-r3`; não expandir automaticamente a revisão aos outros móveis.
+
+- Experimento .56 autorizado: novos jogos começam com 50 moradores; não recalibrar intervalos, estoques, receitas, preços, horários, status ou contratação. Saves anteriores conservam sua população. `initialPopulation` distingue a base antiga3 da nova50; crescimento continua +1 nas primeiras três vitórias. A arte está pausada neste trabalho.

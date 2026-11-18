@@ -2,6 +2,7 @@
 
 O projeto ativo está em [godot/project.godot](godot/project.godot). Abra com Godot 4.6.3 Standard e siga [as instruções](godot/LEIA-ME.md).
 
+- [Teste .56: novo jogo com 50 moradores, sem recalibração](docs/teste-50-moradores.md).
 - [APK Android universal](build/Android/EntreEsquinas.apk): no GitHub, use **Download raw file**.
 - [APK Android ARM64 — menor, para aparelhos compatíveis](build/Android/EntreEsquinas-arm64.apk).
 - [Compilação Android](godot/ANDROID.md), [testes nativos](godot/qa/LEIA-ME.md) e [conclusão da migração](docs/MIGRACAO-GDSCRIPT.md).
