@@ -73,7 +73,9 @@
   Interiors é referência estrutural, não arte autorizada a copiar para o jogo.
 - Rodar `python3 scripts/verificar-arte.py` ao adicionar arte. Não registrar
   estudos ampliados como nativos só porque suas dimensões são múltiplas de 32.
-- Dez pranchas antigas/completas ficam preservadas, porém excluídas das exportações.
+- Dez pranchas antigas/completas ficam preservadas em `docs/arte/fontes-preservadas`, fora de `res://`; os caminhos antigos continuam bloqueados nas exportações.
   Reintroduzir uma dependência exige rever `excluidos-exportacao.json` e presets.
 - Android universal permanece disponível. `Android ARM64` é uma opção menor;
   não remover silenciosamente suporte a ARM32/x86_64 do preset universal.
+
+- Limpeza: não duplicar APKs com nomes diferentes no Git. Manter universal e ARM64; gerar o ZIP completo de sprites sob demanda, conforme `docs/arte/EXPORTAR-SPRITES.md`. Não recolocar cópias de atlas em docs; apontar para a fonte única.

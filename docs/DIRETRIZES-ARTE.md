@@ -21,7 +21,7 @@ Várias imagens em uso ainda são estudos ampliados com recortes em resoluções
 como 1254 × 1254 e 1536 × 1024. São provisórias e **não cumprem** a resolução de
 produção só por serem exibidas pequenas com filtro nearest.
 
-O pacote [sprites completas para edição](arte/sprites-completas-para-aseprite.zip)
+O pacote [sprites completas para edição](https://github.com/denerRsilva/Entre-Esquinas/blob/090eac49287a956a189323fc700c08dacccd488d/docs/arte/sprites-completas-para-aseprite.zip)
 preserva os arquivos atuais e inclui recortes e exportações do renderizador.
 Não redimensiona ou redesenha as imagens: o proprietário fará o acabamento no
 Aseprite e devolverá os arquivos. Veja o LEIA-ME e os manifestos dentro do ZIP.

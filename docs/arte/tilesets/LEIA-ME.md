@@ -29,3 +29,7 @@ Estas são folhas de referência ampliadas geradas por imagem, não um recurso T
 Próxima preparação técnica: normalizar pixels, recortar e alinhar peças a 32 × 32; corrigir cadeiras laterais e cantos que ficaram diagonais; testar pisos repetidos; separar decoração de colisão; criar atlas e terrenos na Godot; validar uma sala montada e circulação. Não substituir a geometria do jogo com esta folha sem essas verificações.
 
 Objetos com conteúdo têm versões vazias quando presentes. Na integração, panelas, pratos e ingredientes reais devem ser camadas ligadas ao estado do jogo; uma imagem de prateleira cheia não deve gerar itens nem exibir conteúdo inexistente. Bancas, peças e objetos novos não implementam comércio ou crafting por si só.
+
+## Arquivos únicos após a limpeza
+
+As cópias desta pasta eram byte a byte iguais às texturas do jogo. Use [arquitetura](../../../godot/arte/taverna/arquitetura.png), [móveis](../../../godot/arte/taverna/moveis.png) e [decoração](../../../godot/arte/taverna/decoracao.png).

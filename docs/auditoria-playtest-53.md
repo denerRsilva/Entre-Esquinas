@@ -57,8 +57,8 @@ de save continua versão 12.
 [Caldo servido](arte/auditoria53-servido.png) ·
 [Janela compacta](arte/auditoria53-telefone.png) ·
 [Catálogo renderizado](arte/auditoria53-catalogo.png) ·
-[Livro compacto](arte/auditoria53-livro-telefone.png) ·
-[Mercador compacto](arte/auditoria53-mercador-telefone.png).
+[Livro compacto](arte/inicio-receitas-telefone.png) ·
+[Mercador compacto](arte/inicio-mercador-telefone.png).
 
 Foram percorridas 12 etapas de alimento por resolução: retirar, cortar,
 adicionar ao fogão, terminar cozimento, empratar e retirar prato, tanto para

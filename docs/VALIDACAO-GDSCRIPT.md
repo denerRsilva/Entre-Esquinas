@@ -1,5 +1,7 @@
 # Validação final da migração
 
+Atualização da limpeza: o APK atual é [EntreEsquinas.apk](../build/Android/EntreEsquinas.apk). A cópia idêntica `-gdscript` e seu checksum foram removidos; nomes nas validações abaixo são históricos.
+
 Godot 4.6.3 Standard, Linux, 14/11/2026. Executado em três lotes com diretórios de dados isolados; 22 suítes aprovadas, sem erros GDScript nos logs.
 
 - PartidaNativa

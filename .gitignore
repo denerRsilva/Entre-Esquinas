@@ -1,0 +1,11 @@
+# Exportações redundantes e assinaturas auxiliares regeneráveis.
+/build/Android/*.idsig
+/build/Android/EntreEsquinas-gdscript.apk
+/build/Android/SHA256SUMS-gdscript
+
+# Pacote completo para edição: gerar sob demanda, sem duplicar os PNGs no Git.
+/docs/arte/sprites-completas-para-aseprite.zip
+/docs/arte/sprites-completas-para-aseprite.sha256
+
+# Cache do Python usado pelas ferramentas locais.
+__pycache__/

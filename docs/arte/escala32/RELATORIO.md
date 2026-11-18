@@ -1,5 +1,7 @@
 # Reformulação da arte e do peso — .55
 
+Após a limpeza, as dez fontes sem uso ficam em [fontes-preservadas](../fontes-preservadas/LEIA-ME.md), fora de `res://`. O ZIP completo de edição é gerado sob demanda; a versão entregue anteriormente continua disponível no histórico. Veja [o relatório de limpeza](../../limpeza-arquivos.md). As medições abaixo registram a entrega .55 antes dessa organização.
+
 18/11/2026. Referência: Epic RPG World — Village Interiors V1.3, enviada pelo
 proprietário para estudar escala e organização. A arte comercial não foi copiada
 nem adicionada ao repositório. O jogo conserva sua paleta/direção própria.

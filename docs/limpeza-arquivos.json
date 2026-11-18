@@ -1,0 +1,292 @@
+{
+  "base_commit": "090eac49287a956a189323fc700c08dacccd488d",
+  "duplicates": [
+    {
+      "removed": "build/Android/EntreEsquinas-gdscript.apk",
+      "retained": "build/Android/EntreEsquinas.apk",
+      "bytes": 96474631,
+      "sha256": "439c40e86065f2180f4bd802642ef4b207280c1f60c3de4ff71d2cc2f3759497"
+    },
+    {
+      "removed": "docs/arte/alimentos-estudo-sprites.png",
+      "retained": "godot/arte/taverna/alimentos.png",
+      "bytes": 1526080,
+      "sha256": "b53590f16c84413a8f5f46d3410634cefbfad6d94bd98a7975b6741c23e90c92"
+    },
+    {
+      "removed": "docs/arte/cozinheira-estudo-sprites.png",
+      "retained": "godot/arte/taverna/cozinheira.png",
+      "bytes": 795236,
+      "sha256": "17994a35e7245070a7bfc40a313c88b55d199038f52622d9ed947797a7ea6d34"
+    },
+    {
+      "removed": "docs/arte/garcom-estudo-sprites.png",
+      "retained": "godot/arte/taverna/garcom-estudo-sprites.png",
+      "bytes": 936142,
+      "sha256": "995ceb952b2f16e517739d30850e7f7576ca2e52b6c214b83d366dd15058a820"
+    },
+    {
+      "removed": "docs/arte/tilesets/arquitetura.png",
+      "retained": "godot/arte/taverna/arquitetura.png",
+      "bytes": 2215704,
+      "sha256": "a2e85ad248baf8cd5d989cb352d363053141092a7d3697723487332ac2995e11"
+    },
+    {
+      "removed": "docs/arte/tilesets/decoracao-vila.png",
+      "retained": "godot/arte/taverna/decoracao.png",
+      "bytes": 1666886,
+      "sha256": "3eb4362a05cbb56d80adcb2eda2e30ce5d2973ee110bfcf50dec8eceaffed955"
+    },
+    {
+      "removed": "docs/arte/tilesets/moveis-cozinha.png",
+      "retained": "godot/arte/taverna/moveis.png",
+      "bytes": 1271547,
+      "sha256": "c5d086601b580550a84a28362c0f00e7d63f8fb141eee1b4f5d6058334683d9d"
+    },
+    {
+      "removed": "docs/arte/auditoria53-livro-telefone.png",
+      "retained": "docs/arte/inicio-receitas-telefone.png",
+      "bytes": 39276,
+      "sha256": "8f2d449ede8c9165b60abe95ab6f736d98c3996f37e3dd0cd5a680396a7a9370"
+    },
+    {
+      "removed": "docs/arte/auditoria53-mercador-telefone.png",
+      "retained": "docs/arte/inicio-mercador-telefone.png",
+      "bytes": 53459,
+      "sha256": "b3adcd5fd0c3044579f43b6c2ca51b8d3b7dfaa98fd5c002310f16d3d56bcbab"
+    },
+    {
+      "removed": "docs/arte/playtest-zero-inicio.png",
+      "retained": "docs/arte/inicio-salao.png",
+      "bytes": 425097,
+      "sha256": "2465c381554da88c329c7a9158611ebef1c4003af868ae5e4635d3c7f1a44efb"
+    },
+    {
+      "removed": "docs/arte/cliente-01-estudo-sprites.png",
+      "retained": "godot/arte/taverna/cliente-01-estudo-sprites.png",
+      "bytes": 970326,
+      "sha256": "e00dbd2a9495b7e3504577f7f509c4028aa6a67ba7580a35290cc9d230a7998b"
+    },
+    {
+      "removed": "docs/arte/cliente-02-estudo-sprites.png",
+      "retained": "godot/arte/taverna/cliente-02-estudo-sprites.png",
+      "bytes": 999378,
+      "sha256": "1ecb70814a88af25dc29e510bffa2958d4d0787833900d2f58dd9b971eb35ec0"
+    },
+    {
+      "removed": "docs/arte/cliente-03-estudo-sprites.png",
+      "retained": "godot/arte/taverna/cliente-03-estudo-sprites.png",
+      "bytes": 986236,
+      "sha256": "9f8944ce4da77901c6782ca496312ccf23be342b1ab6646a13d6afc9639bd6c5"
+    }
+  ],
+  "generated_removed": [
+    {
+      "removed": "docs/arte/sprites-completas-para-aseprite.zip",
+      "bytes": 53997188,
+      "sha256": "9880f36549172518d731b54c7593be76574648714db4f55a9ac651f8e2d8d079",
+      "recovery_commit": "090eac49287a956a189323fc700c08dacccd488d"
+    },
+    {
+      "removed": "docs/arte/sprites-completas-para-aseprite.sha256",
+      "bytes": 112,
+      "sha256": "a09db36c03c8532cfa4a51999eac6bf22b40d28509e1eb525cb21e9854c2f76f",
+      "recovery_commit": "090eac49287a956a189323fc700c08dacccd488d"
+    },
+    {
+      "removed": "build/Android/SHA256SUMS-gdscript",
+      "bytes": 93,
+      "sha256": "0f0083b9b7d19010a2a75391f8f913bb3521d6bd385168381b5fdee0660e60e8",
+      "recovery_commit": "090eac49287a956a189323fc700c08dacccd488d"
+    }
+  ],
+  "archived_sources": [
+    {
+      "old": "godot/arte/cozinheira-12-poses.png",
+      "preserved": "docs/arte/fontes-preservadas/cozinheira-12-poses.png",
+      "bytes": 534756,
+      "sha256": "23385c4805d6efbe9f01f1450e6693bc3e8723d48beb7feaf6a85f7720169f46"
+    },
+    {
+      "old": "godot/arte/cozinheira-grade.png",
+      "preserved": "docs/arte/fontes-preservadas/cozinheira-grade.png",
+      "bytes": 918112,
+      "sha256": "62aba99fb01f735731806c98248ca4914342cc9c5b15ad7b7796ff0ed5ca40a8"
+    },
+    {
+      "old": "godot/arte/esquina-atlas.png",
+      "preserved": "docs/arte/fontes-preservadas/esquina-atlas.png",
+      "bytes": 1212934,
+      "sha256": "cd9a4ff9f14260e373f72cbcb10ce064cb6aac7dcdf7be4272ac6e511840c73c"
+    },
+    {
+      "old": "godot/arte/esquina-cook-source.png",
+      "preserved": "docs/arte/fontes-preservadas/esquina-cook-source.png",
+      "bytes": 928069,
+      "sha256": "c8be86d5744d19f08c6a1852bd0018742f45e7576847a6ae1fe10b619107ff4b"
+    },
+    {
+      "old": "godot/arte/esquina-food.png",
+      "preserved": "docs/arte/fontes-preservadas/esquina-food.png",
+      "bytes": 1470253,
+      "sha256": "27fc40b89f1518d2a2f111960350369ec819a12a011debf72f6f2e8ed47f62bb"
+    },
+    {
+      "old": "godot/arte/esquina-walk.png",
+      "preserved": "docs/arte/fontes-preservadas/esquina-walk.png",
+      "bytes": 961766,
+      "sha256": "a6cdba99d2f2baff20e956a14570fca42f6e8f5a1e087efdcc219438f1fff56b"
+    },
+    {
+      "old": "godot/arte/modular/bancadas-modulares-revisadas.png",
+      "preserved": "docs/arte/fontes-preservadas/modular/bancadas-modulares-revisadas.png",
+      "bytes": 1468642,
+      "sha256": "d50ee51955c408972c9dcf2ebe4861ac78714c7324ce4549d6f4a9795acc3acf"
+    },
+    {
+      "old": "godot/arte/modular/kit-empratamento-utensilios.png",
+      "preserved": "docs/arte/fontes-preservadas/modular/kit-empratamento-utensilios.png",
+      "bytes": 935161,
+      "sha256": "f0b2c0f0a7c3865b32a0f1839e43b36427e8ed289f8076776eedd9dfddf6492b"
+    },
+    {
+      "old": "godot/arte/modular/mesas-bancadas-base-comum-concept.png",
+      "preserved": "docs/arte/fontes-preservadas/modular/mesas-bancadas-base-comum-concept.png",
+      "bytes": 1644761,
+      "sha256": "a88f94592bf1d889035227f1ad198d565169182bd085c199d33c0a8796fe1939"
+    },
+    {
+      "old": "godot/arte/ui/modern-ui-32.png",
+      "preserved": "docs/arte/fontes-preservadas/ui/modern-ui-32.png",
+      "bytes": 191738,
+      "sha256": "377cc56789fc83a3508f165b93416f8c0876b12dd8f3d966273ab8e5235e187d"
+    }
+  ],
+  "local_generated_deleted": [
+    {
+      "path": "godot/.godot/imported/cozinheira-12-poses.png-dc0a3c688e978cd6cfe86f6b4deef85b.ctex",
+      "bytes": 393148
+    },
+    {
+      "path": "godot/.godot/imported/cozinheira-12-poses.png-dc0a3c688e978cd6cfe86f6b4deef85b.md5",
+      "bytes": 91
+    },
+    {
+      "path": "godot/.godot/imported/cozinheira-grade.png-f0e72a5ae7fb70c744c918e9a4eb2745.ctex",
+      "bytes": 731942
+    },
+    {
+      "path": "godot/.godot/imported/cozinheira-grade.png-f0e72a5ae7fb70c744c918e9a4eb2745.md5",
+      "bytes": 91
+    },
+    {
+      "path": "godot/.godot/imported/esquina-atlas.png-e665f2efa04713b0c7a2c86a32a22717.ctex",
+      "bytes": 923702
+    },
+    {
+      "path": "godot/.godot/imported/esquina-atlas.png-e665f2efa04713b0c7a2c86a32a22717.md5",
+      "bytes": 91
+    },
+    {
+      "path": "godot/.godot/imported/esquina-cook-source.png-8132200ada489f4b9d12a9d01cb9231d.ctex",
+      "bytes": 731752
+    },
+    {
+      "path": "godot/.godot/imported/esquina-cook-source.png-8132200ada489f4b9d12a9d01cb9231d.md5",
+      "bytes": 91
+    },
+    {
+      "path": "godot/.godot/imported/esquina-food.png-c966ced4a3e05065d199d48c98860468.ctex",
+      "bytes": 1220774
+    },
+    {
+      "path": "godot/.godot/imported/esquina-food.png-c966ced4a3e05065d199d48c98860468.md5",
+      "bytes": 91
+    },
+    {
+      "path": "godot/.godot/imported/esquina-walk.png-66b70d8465e4290a3b5e8a19fac071e4.ctex",
+      "bytes": 730402
+    },
+    {
+      "path": "godot/.godot/imported/esquina-walk.png-66b70d8465e4290a3b5e8a19fac071e4.md5",
+      "bytes": 91
+    },
+    {
+      "path": "godot/.godot/imported/bancadas-modulares-revisadas.png-b9e966a7a056faa5ac6e0a74f6987101.ctex",
+      "bytes": 1122466
+    },
+    {
+      "path": "godot/.godot/imported/bancadas-modulares-revisadas.png-b9e966a7a056faa5ac6e0a74f6987101.md5",
+      "bytes": 91
+    },
+    {
+      "path": "godot/.godot/imported/kit-empratamento-utensilios.png-a176908d82ef72b6b79d845f05142ef1.ctex",
+      "bytes": 720418
+    },
+    {
+      "path": "godot/.godot/imported/kit-empratamento-utensilios.png-a176908d82ef72b6b79d845f05142ef1.md5",
+      "bytes": 91
+    },
+    {
+      "path": "godot/.godot/imported/mesas-bancadas-base-comum-concept.png-120e0d22816cc09b9137cdb4786e5da1.ctex",
+      "bytes": 1227200
+    },
+    {
+      "path": "godot/.godot/imported/mesas-bancadas-base-comum-concept.png-120e0d22816cc09b9137cdb4786e5da1.md5",
+      "bytes": 91
+    },
+    {
+      "path": "godot/.godot/imported/modern-ui-32.png-9b2e0b2451c6c8d49b2b609bb8d8d7b9.ctex",
+      "bytes": 66034
+    },
+    {
+      "path": "godot/.godot/imported/modern-ui-32.png-9b2e0b2451c6c8d49b2b609bb8d8d7b9.md5",
+      "bytes": 91
+    },
+    {
+      "path": "build/Android/EntreEsquinas-arm64.apk.idsig",
+      "bytes": 316851
+    },
+    {
+      "path": "build/Android/EntreEsquinas.apk.idsig",
+      "bytes": 771507
+    },
+    {
+      "path": "build/Android/EntreEsquinas-gdscript.apk.idsig",
+      "bytes": 787891
+    }
+  ],
+  "measurements": {
+    "tracked_before_bytes": 385171855,
+    "removed_redundant_bytes": 162357391,
+    "archived_outside_godot_bytes": 10266192,
+    "local_generated_removed_bytes": 9744997,
+    "tracked_after_bytes_approx": 222827924,
+    "note": "Sizes of tracked files in this revision, excluding Git history, ignored caches and untracked variants; final report metadata may add a few bytes."
+  },
+  "validation": {
+    "source_tests_passed": [
+      "AtlasCompacto",
+      "BarrasAnimadasUI",
+      "CatalogoSecoesUI"
+    ],
+    "editor_import": "passed",
+    "sprite_export": {
+      "originals": 39,
+      "derived_images": 722,
+      "zip_integrity": "passed"
+    },
+    "runtime_scripts_scenes_and_used_images": "unchanged from base commit; only excluded images moved",
+    "apks": "unchanged; no gameplay change or rebuild necessary",
+    "physical_android_tested": false
+  },
+  "local_git_compaction": {
+    "objects": 16,
+    "loose_before_bytes": 1046996326,
+    "verified_pack_bytes": 166080605,
+    "saved_bytes": 880915721,
+    "refs_preserved": true,
+    "history_rewritten": false,
+    "verification": "git verify-pack validated all selected objects; cat-file succeeded after removing only their loose copies"
+  }
+}

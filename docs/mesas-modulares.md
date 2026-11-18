@@ -21,7 +21,7 @@ mesmo objeto, mantendo ID, posição e ocupação; não cria um móvel sobrepost
 Saves antigos já representam mesas equipadas e mantêm ingredientes, pratos,
 panelas e trabalhos em andamento. Saves novos também registram `tableKit`.
 
-As bancadas em L/U de `arte/modular/mesas-bancadas-base-comum-concept.png`
+As bancadas em L/U de [estudo preservado](arte/fontes-preservadas/modular/mesas-bancadas-base-comum-concept.png)
 são um estudo atualizado para alinhar madeira, perspectiva e altura da base
 à mesa compartilhada. Ainda não substituem o atlas das bancadas do cenário:
 essa prancha não é um atlas com encaixes de 32 × 32 validados.

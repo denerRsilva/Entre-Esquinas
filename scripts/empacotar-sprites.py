@@ -12,7 +12,7 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 EXPORT = Path(sys.argv[1] if len(sys.argv) > 1 else "/tmp/entre-esquinas-sprites")
-DEST = ROOT / "docs/arte/sprites-completas-para-aseprite.zip"
+DEST = Path(sys.argv[2]) if len(sys.argv) > 2 else EXPORT.parent / "sprites-completas-para-aseprite.zip"
 PREFIX = "Entre-Esquinas-sprites/"
 
 
@@ -39,7 +39,8 @@ def main():
     tracked = set(git("ls-files").splitlines())
     files = {}
     originals = []
-    for path in sorted((ROOT / "godot").rglob("*")):
+    sources = list((ROOT / "godot").rglob("*")) + list((ROOT / "docs/arte/fontes-preservadas").rglob("*"))
+    for path in sorted(sources):
         rel = path.relative_to(ROOT).as_posix()
         if path.suffix.lower() not in {".png", ".svg"} or "/.godot/" in rel or "/qa/" in rel:
             continue
@@ -56,17 +57,23 @@ def main():
     for path in sorted(EXPORT.rglob("*")):
         if path.is_file():
             files[path.relative_to(EXPORT).as_posix()] = path
-    refs = ["manequim-estudo-sprites.png", "cozinheira-estudo-sprites.png",
-            "garcom-estudo-sprites.png", "cliente-01-estudo-sprites.png",
-            "cliente-02-estudo-sprites.png", "cliente-03-estudo-sprites.png",
-            "alimentos-estudo-sprites.png", "direcao-aprovada.png"]
-    for name in refs:
-        path = ROOT / "docs/arte" / name
+    refs = {"manequim-estudo-sprites.png": "docs/arte/manequim-estudo-sprites.png",
+            "cozinheira-estudo-sprites.png": "godot/arte/taverna/cozinheira.png",
+            "garcom-estudo-sprites.png": "godot/arte/taverna/garcom-estudo-sprites.png",
+            "alimentos-estudo-sprites.png": "godot/arte/taverna/alimentos.png",
+            "direcao-aprovada.png": "docs/arte/direcao-aprovada.png"}
+    for i in [1, 2, 3]:
+        name = f"cliente-0{i}-estudo-sprites.png"
+        refs[name] = "godot/arte/taverna/" + name
+    for name, source in refs.items():
+        path = ROOT / source
         assert path.is_file(), name
         files["04-referencias/" + name] = path
     for path in sorted((ROOT / "docs/arte/tilesets").iterdir()):
         if path.suffix in {".png", ".md"}:
             files["04-referencias/tilesets/" + path.name] = path
+    for name, source in {"arquitetura.png": "arquitetura.png", "decoracao-vila.png": "decoracao.png", "moveis-cozinha.png": "moveis.png"}.items():
+        files["04-referencias/tilesets/" + name] = ROOT / "godot/arte/taverna" / source
     source_files = []
     for folder in ["godot/moveis", "godot/personagens", "godot/mundo"]:
         source_files.extend(p for p in (ROOT / folder).iterdir() if p.suffix in {".gd", ".tscn", ".tres"})
@@ -125,7 +132,7 @@ redesenhado ou substituído no jogo. A base é o commit {git('rev-parse', '--sho
 ## Pastas
 
 - **01-originais**: {len(originals)} imagens/fontes PNG e SVG, copiadas byte a byte
-  de godot/arte, godot/personagens e godot/mundo. Inclui atlas atuais, materiais
+  de godot/arte, godot/personagens, godot/mundo e docs/arte/fontes-preservadas. Inclui atlas atuais, materiais
   antigos e variantes locais existentes (identificadas por no_git em originais.csv).
 - **02-recortes**: partes extraídas sem reamostragem dos atlas: pisos, paredes,
   móveis, decoração, ingredientes, receitas, pratos, bancadas e frames de

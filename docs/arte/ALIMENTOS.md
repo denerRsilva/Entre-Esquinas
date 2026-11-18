@@ -1,7 +1,7 @@
 # Estudo visual dos alimentos
 
 Referência: direção de arte aprovada em `direcao-aprovada.png`.
-Folha: `alimentos-estudo-sprites.png`, organizada em três linhas, da esquerda para a direita.
+Folha: [alimentos.png](../../godot/arte/taverna/alimentos.png), organizada em três linhas, da esquerda para a direita.
 
 1. Arroz no saco; legumes inteiros (cenoura e repolho); frango cru.
 2. Arroz solto (alternativa visual, não um estado cortado); legumes cortados; frango cru cortado.

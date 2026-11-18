@@ -64,7 +64,7 @@ falhas de verificação.
 cliques repetidos e zooms de 0,7 a 2 em tela compacta. `HigieneUI` e
 `LoucaEmpilhadaUI` exercitam as novas escolhas sem criar/apagar louça.
 
-Capturas Compatibility: [novo jogo](arte/playtest-zero-inicio.png),
+Capturas Compatibility: [novo jogo](arte/inicio-salao.png),
 [anotando](arte/playtest-zero-anotando.png), [pedido concluído](arte/playtest-zero-pedido.png),
 [escolhas de limpeza](arte/playtest-zero-limpeza.png),
 [almoço concluído](arte/playtest-zero-almoco.png) e [mercador](arte/playtest-zero-mercador.png).

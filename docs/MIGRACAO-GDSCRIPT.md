@@ -1,5 +1,7 @@
 # Migração para GDScript — concluída
 
+Atualização da limpeza: o APK atual é [EntreEsquinas.apk](../build/Android/EntreEsquinas.apk). A cópia idêntica `-gdscript` e seu checksum foram removidos; nomes nas validações abaixo são históricos.
+
 O jogo não executa mais JavaScript. Foram removidos os cinco arquivos de produção, o DOM simulado, os controladores transitórios, a GDExtension RestauranteVM e todas as bibliotecas/fontes QuickJS. Os testes atuais também são GDScript; permanecem fixtures JSON para comparação com o comportamento anterior.
 
 `mundo/Restaurante.gd` inicia diretamente `SessaoCompleta.gd`, mantém a gravação atômica/backup e recebe os controles Godot. A sessão possui a partida e coordena entrada, interação, câmera, pausas, simulação, notificações e sons. `Cena.gd` compõe o cenário; os TileMaps e cenas de móveis/personagens continuam editáveis. `AdministracaoUI`, `PainelJogoNativo`, inventários, catálogo, utensílios, ícones e livro geram os controles diretamente em GDScript.

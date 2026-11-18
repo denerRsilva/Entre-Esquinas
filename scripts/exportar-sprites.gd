@@ -88,7 +88,7 @@ func raw_crops():
 	crop("res://arte/ui/comanda-aprovada.png",Rect2(948,70,729,793),"interface/comanda-vazia.png")
 	crop("res://arte/ui/comanda-aprovada.png",Rect2(147,117,143,125),"interface/icone-mesa-comanda.png")
 	var bar_parts := {"moldura-meio":Rect2(672,266,30,16),"moldura-esquerda":Rect2(666,234,6,16),"moldura-direita":Rect2(702,234,6,16),"verde":Rect2(672,300,30,10),"amarelo":Rect2(672,396,30,10),"vermelho":Rect2(672,492,30,10),"azul":Rect2(672,588,30,10)}
-	for key in bar_parts:crop("res://arte/ui/modern-ui-32.png",bar_parts[key],"interface/barra-"+key+".png")
+	for key in bar_parts:crop(ProjectSettings.globalize_path("res://../docs/arte/fontes-preservadas/ui/modern-ui-32.png"),bar_parts[key],"interface/barra-"+key+".png")
 
 func furniture():
 	var frame := Vector2i(256,256)

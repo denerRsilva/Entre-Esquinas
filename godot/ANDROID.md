@@ -1,6 +1,6 @@
 # APK Android em GDScript
 
-A compilação nativa fica em `../build/Android/EntreEsquinas-gdscript.apk`; `EntreEsquinas.apk` é um nome alternativo do mesmo arquivo atualizado. O SHA-256 está em `SHA256SUMS-gdscript`. No GitHub, baixe o arquivo completo pelo botão **Download raw file**.
+A compilação universal fica em `../build/Android/EntreEsquinas.apk`, com SHA-256 em `SHA256SUMS`. A opção ARM64 fica em `EntreEsquinas-arm64.apk`, com `SHA256SUMS-arm64`. A cópia idêntica com sufixo `-gdscript` foi retirada na limpeza; o jogo continua inteiramente em GDScript. No GitHub, baixe o arquivo completo pelo botão **Download raw file**.
 
 Versão atual: `com.entreesquinas.restaurante`, `0.21.2-godot.55` (21255), Android 7.0+, orientação horizontal e toque emulando mouse. A assinatura de depuração é a mesma do APK anterior. Não é necessário recompilar extensões C/C++ ou QuickJS.
 
@@ -10,10 +10,10 @@ Use Godot 4.6.3 Standard, modelos de exportação Android correspondentes, Java 
 
 ```sh
 mkdir -p build/Android
-godot --headless --path godot --export-debug Android build/Android/EntreEsquinas-gdscript.apk
+godot --headless --path godot --export-debug Android build/Android/EntreEsquinas.apk
 ```
 
-Se executar dentro da pasta `godot/`, use `../build/Android/EntreEsquinas-gdscript.apk` como destino. A exportação usa assinatura de depuração. Publicação em loja requer configuração de assinatura de produção; a chave privada não integra o repositório.
+Se executar dentro da pasta `godot/`, use `../build/Android/EntreEsquinas.apk` como destino. A exportação usa assinatura de depuração. Publicação em loja requer configuração de assinatura de produção; a chave privada não integra o repositório.
 
 ## Validação desta migração
 

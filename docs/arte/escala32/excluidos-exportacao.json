@@ -1,5 +1,5 @@
 {
-  "reason": "Historical concepts/source sheets without runtime references. Preserve originals and exclude only from exports.",
+  "reason": "Historical paths remain blocked from exports. Originals were moved outside res://; preserved_sources maps every original, byte-identically.",
   "files": [
     "arte/cozinheira-12-poses.png",
     "arte/cozinheira-grade.png",
@@ -11,5 +11,17 @@
     "arte/modular/kit-empratamento-utensilios.png",
     "arte/modular/mesas-bancadas-base-comum-concept.png",
     "arte/ui/modern-ui-32.png"
-  ]
+  ],
+  "preserved_sources": {
+    "arte/cozinheira-12-poses.png": "docs/arte/fontes-preservadas/cozinheira-12-poses.png",
+    "arte/cozinheira-grade.png": "docs/arte/fontes-preservadas/cozinheira-grade.png",
+    "arte/esquina-atlas.png": "docs/arte/fontes-preservadas/esquina-atlas.png",
+    "arte/esquina-cook-source.png": "docs/arte/fontes-preservadas/esquina-cook-source.png",
+    "arte/esquina-food.png": "docs/arte/fontes-preservadas/esquina-food.png",
+    "arte/esquina-walk.png": "docs/arte/fontes-preservadas/esquina-walk.png",
+    "arte/modular/bancadas-modulares-revisadas.png": "docs/arte/fontes-preservadas/modular/bancadas-modulares-revisadas.png",
+    "arte/modular/kit-empratamento-utensilios.png": "docs/arte/fontes-preservadas/modular/kit-empratamento-utensilios.png",
+    "arte/modular/mesas-bancadas-base-comum-concept.png": "docs/arte/fontes-preservadas/modular/mesas-bancadas-base-comum-concept.png",
+    "arte/ui/modern-ui-32.png": "docs/arte/fontes-preservadas/ui/modern-ui-32.png"
+  }
 }

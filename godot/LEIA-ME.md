@@ -1,6 +1,6 @@
 # Migração concluída para GDScript
 
-O projeto atual e o APK `EntreEsquinas-gdscript.apk` usam somente GDScript. Veja [o relatório](../docs/MIGRACAO-GDSCRIPT.md) e [os testes atuais](qa/LEIA-ME.md). Os registros antigos de versões abaixo são históricos; a validação desta migração foi executada na Godot 4.6.3 Standard.
+O projeto atual e o APK `EntreEsquinas.apk` usam somente GDScript. Veja [o relatório](../docs/MIGRACAO-GDSCRIPT.md) e [os testes atuais](qa/LEIA-ME.md). Os registros antigos de versões abaixo são históricos; a validação desta migração foi executada na Godot 4.6.3 Standard.
 
 # Fluxo atual: somente as mãos
 

@@ -14,7 +14,11 @@ def main():
     known=native|set(registry['legacy'])
     for path in tracked:
         if path.endswith('.png') and '/qa/' not in path:assert path in known,'Declare canvas/grade e revise a densidade: '+path
-    excluded=json.loads((ROOT/'docs/arte/escala32/excluidos-exportacao.json').read_text())['files']
+    archive=json.loads((ROOT/'docs/arte/escala32/excluidos-exportacao.json').read_text())
+    excluded=archive['files']
+    for old, preserved in archive.get('preserved_sources',{}).items():
+        assert not (ROOT/'godot'/old).exists(),'Fonte arquivada voltou ao projeto: '+old
+        assert (ROOT/preserved).is_file(),'Original preservado ausente: '+preserved
     cfg=(ROOT/'godot/export_presets.cfg').read_text()
     for path in excluded:
         assert path in cfg,'Exclusão ausente: '+path

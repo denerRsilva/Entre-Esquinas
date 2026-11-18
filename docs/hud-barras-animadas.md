@@ -1,6 +1,6 @@
 # Barras animadas da HUD
 
-O atlas `godot/arte/ui/modern-ui-32.png` é o PNG original do pacote
+O atlas [modern-ui-32.png](arte/fontes-preservadas/ui/modern-ui-32.png) é o PNG original do pacote
 Modern UI Style 1 32x32 enviado pelo proprietário do projeto, que informou
 ter adquirido o direito de uso. Não foi redesenhado nem reamostrado.
 
@@ -9,7 +9,7 @@ ter adquirido o direito de uso. Não foi redesenhado nem reamostrado.
   Os limites são 50% e 25% de paciência restante.
 - Verde, amarelo e vermelho: ponto ideal e alertas do fogão.
 
-`ArteBarras.gd` compartilha o atlas, mantém as pontas da moldura e recorta o
+Desde a .55, `ArteBarras.gd` compartilha o atlas compacto de 128×32, extraído sem alterar pixels do original. O código, mantém as pontas da moldura e recorta o
 preenchimento. `BarraAnimada.gd` conserva o valor real da tarefa no Range e
 interpola apenas o desenho. O cenário usa a mesma arte e interpola por
 identidade da tarefa/cliente. Tarefas concluídas ou canceladas removem a barra
