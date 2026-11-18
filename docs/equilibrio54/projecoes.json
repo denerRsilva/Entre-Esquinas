@@ -1,0 +1,3511 @@
+{
+	"method": "Formula projections with perfect service at 85% satisfaction, not physical playthroughs. Margins assume ingredients replaced at catalog cost; no spoilage, wages or extra purchases. Staff meals included at reference price, assuming a real surplus portion is prepared.",
+	"policies": [
+		{
+			"days": [
+				{
+					"cumulative_margin": -12.0,
+					"day": 1.0,
+					"hired": false,
+					"meals": 0,
+					"population": 3,
+					"stats": {
+						"energy": 58.0,
+						"food": 49.0,
+						"morale": 61.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": -24.0,
+					"day": 2.0,
+					"hired": false,
+					"meals": 0,
+					"population": 3,
+					"stats": {
+						"energy": 62.0,
+						"food": 33.0,
+						"morale": 57.0
+					},
+					"workers": 0
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 3.0,
+						"defense": 65.0,
+						"elapsed": 8.0,
+						"population": 3,
+						"readiness": 48.25,
+						"result": "retreat",
+						"stats": {
+							"energy": 64.0,
+							"food": 25.0,
+							"morale": 55.0
+						},
+						"streakBefore": 0,
+						"strength": 50.0
+					},
+					"cumulative_margin": -36.0,
+					"day": 3.0,
+					"hired": false,
+					"meals": 0,
+					"population": 3,
+					"stats": {
+						"energy": 64.0,
+						"food": 25.0,
+						"morale": 55.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": -48.0,
+					"day": 4.0,
+					"hired": false,
+					"meals": 0,
+					"population": 3,
+					"stats": {
+						"energy": 48.0,
+						"food": 9.0,
+						"morale": 43.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": -60.0,
+					"day": 5.0,
+					"hired": false,
+					"meals": 0,
+					"population": 3,
+					"stats": {
+						"energy": 44.0,
+						"food": 0.0,
+						"morale": 39.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": -72.0,
+					"day": 6.0,
+					"hired": false,
+					"meals": 0,
+					"population": 3,
+					"stats": {
+						"energy": 40.0,
+						"food": 0.0,
+						"morale": 35.0
+					},
+					"workers": 0
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 7.0,
+						"defense": 45.0,
+						"elapsed": 8.0,
+						"population": 3,
+						"readiness": 25.5,
+						"result": "fallen",
+						"stats": {
+							"energy": 42.0,
+							"food": 0.0,
+							"morale": 33.0
+						},
+						"streakBefore": 1,
+						"strength": 54.0
+					},
+					"cumulative_margin": -84.0,
+					"day": 7.0,
+					"hired": false,
+					"meals": 0,
+					"population": 3,
+					"stats": {
+						"energy": 42.0,
+						"food": 0.0,
+						"morale": 33.0
+					},
+					"workers": 0
+				}
+			],
+			"ending": "gameover",
+			"hire": false,
+			"lunch_only": false,
+			"meals": 0,
+			"price": 10.0,
+			"recipe": "",
+			"replacement_margin_less_daily_expenses_and_hire": -84.0
+		},
+		{
+			"days": [
+				{
+					"cumulative_margin": 12.0,
+					"day": 1.0,
+					"hired": false,
+					"meals": 3,
+					"population": 3,
+					"stats": {
+						"energy": 58.0,
+						"food": 57.0,
+						"morale": 63.5
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 24.0,
+					"day": 2.0,
+					"hired": false,
+					"meals": 3,
+					"population": 3,
+					"stats": {
+						"energy": 62.0,
+						"food": 49.0,
+						"morale": 62.0
+					},
+					"workers": 0
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 3.0,
+						"defense": 65.0,
+						"elapsed": 8.0,
+						"population": 3,
+						"readiness": 60.525,
+						"result": "held",
+						"stats": {
+							"energy": 72.0,
+							"food": 49.0,
+							"morale": 62.5
+						},
+						"streakBefore": 0,
+						"strength": 50.0
+					},
+					"cumulative_margin": 36.0,
+					"day": 3.0,
+					"hired": false,
+					"meals": 3,
+					"population": 3,
+					"stats": {
+						"energy": 72.0,
+						"food": 49.0,
+						"morale": 62.5
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 56.0,
+					"day": 4.0,
+					"hired": false,
+					"meals": 4,
+					"population": 4,
+					"stats": {
+						"energy": 64.0,
+						"food": 41.0,
+						"morale": 69.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 76.0,
+					"day": 5.0,
+					"hired": false,
+					"meals": 4,
+					"population": 4,
+					"stats": {
+						"energy": 68.0,
+						"food": 33.0,
+						"morale": 67.5
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 96.0,
+					"day": 6.0,
+					"hired": false,
+					"meals": 4,
+					"population": 4,
+					"stats": {
+						"energy": 64.0,
+						"food": 25.0,
+						"morale": 66.0
+					},
+					"workers": 0
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 7.0,
+						"defense": 73.0,
+						"elapsed": 8.0,
+						"population": 4,
+						"readiness": 52.825,
+						"result": "retreat",
+						"stats": {
+							"energy": 66.0,
+							"food": 25.0,
+							"morale": 66.5
+						},
+						"streakBefore": 0,
+						"strength": 54.0
+					},
+					"cumulative_margin": 116.0,
+					"day": 7.0,
+					"hired": false,
+					"meals": 4,
+					"population": 4,
+					"stats": {
+						"energy": 66.0,
+						"food": 25.0,
+						"morale": 66.5
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 136.0,
+					"day": 8.0,
+					"hired": false,
+					"meals": 4,
+					"population": 4,
+					"stats": {
+						"energy": 50.0,
+						"food": 17.0,
+						"morale": 57.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 156.0,
+					"day": 9.0,
+					"hired": false,
+					"meals": 4,
+					"population": 4,
+					"stats": {
+						"energy": 46.0,
+						"food": 9.00000000000001,
+						"morale": 55.5
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 176.0,
+					"day": 10.0,
+					"hired": false,
+					"meals": 4,
+					"population": 4,
+					"stats": {
+						"energy": 42.0,
+						"food": 1.00000000000001,
+						"morale": 54.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 196.0,
+					"day": 11.0,
+					"hired": false,
+					"meals": 4,
+					"population": 4,
+					"stats": {
+						"energy": 38.0,
+						"food": 0.0,
+						"morale": 52.5
+					},
+					"workers": 0
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 12.0,
+						"defense": 53.0,
+						"elapsed": 8.0,
+						"population": 4,
+						"readiness": 31.2,
+						"result": "fallen",
+						"stats": {
+							"energy": 40.0,
+							"food": 0.0,
+							"morale": 53.0
+						},
+						"streakBefore": 1,
+						"strength": 58.0
+					},
+					"cumulative_margin": 216.0,
+					"day": 12.0,
+					"hired": false,
+					"meals": 4,
+					"population": 4,
+					"stats": {
+						"energy": 40.0,
+						"food": 0.0,
+						"morale": 53.0
+					},
+					"workers": 0
+				}
+			],
+			"ending": "gameover",
+			"hire": false,
+			"lunch_only": true,
+			"meals": 45,
+			"price": 10.0,
+			"recipe": "caldoBatata",
+			"replacement_margin_less_daily_expenses_and_hire": 216.0
+		},
+		{
+			"days": [
+				{
+					"cumulative_margin": 36.0,
+					"day": 1.0,
+					"hired": false,
+					"meals": 6,
+					"population": 3,
+					"stats": {
+						"energy": 58.0,
+						"food": 65.0,
+						"morale": 66.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 72.0,
+					"day": 2.0,
+					"hired": false,
+					"meals": 6,
+					"population": 3,
+					"stats": {
+						"energy": 62.0,
+						"food": 65.0000000000001,
+						"morale": 66.9999999999999
+					},
+					"workers": 0
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 3.0,
+						"defense": 65.0,
+						"elapsed": 8.0,
+						"population": 3,
+						"readiness": 67.375,
+						"result": "held",
+						"stats": {
+							"energy": 72.0,
+							"food": 65.0000000000001,
+							"morale": 67.4999999999999
+						},
+						"streakBefore": 0,
+						"strength": 50.0
+					},
+					"cumulative_margin": 84.0,
+					"day": 3.0,
+					"hired": false,
+					"meals": 3,
+					"population": 3,
+					"stats": {
+						"energy": 72.0,
+						"food": 65.0000000000001,
+						"morale": 67.4999999999999
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 136.0,
+					"day": 4.0,
+					"hired": false,
+					"meals": 8,
+					"population": 4,
+					"stats": {
+						"energy": 64.0,
+						"food": 65.0000000000001,
+						"morale": 76.4999999999999
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 188.0,
+					"day": 5.0,
+					"hired": false,
+					"meals": 8,
+					"population": 4,
+					"stats": {
+						"energy": 68.0,
+						"food": 65.0000000000001,
+						"morale": 77.4999999999999
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 240.0,
+					"day": 6.0,
+					"hired": false,
+					"meals": 8,
+					"population": 4,
+					"stats": {
+						"energy": 72.0,
+						"food": 65.0000000000001,
+						"morale": 78.4999999999999
+					},
+					"workers": 0
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 7.0,
+						"defense": 73.0,
+						"elapsed": 8.0,
+						"population": 4,
+						"readiness": 73.95,
+						"result": "calm",
+						"stats": {
+							"energy": 82.0,
+							"food": 65.0000000000001,
+							"morale": 78.9999999999999
+						},
+						"streakBefore": 0,
+						"strength": 54.0
+					},
+					"cumulative_margin": 260.0,
+					"day": 7.0,
+					"hired": false,
+					"meals": 4,
+					"population": 4,
+					"stats": {
+						"energy": 82.0,
+						"food": 65.0000000000001,
+						"morale": 78.9999999999999
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 328.0,
+					"day": 8.0,
+					"hired": false,
+					"meals": 10,
+					"population": 5,
+					"stats": {
+						"energy": 74.0,
+						"food": 65.0,
+						"morale": 87.9999999999999
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 396.0,
+					"day": 9.0,
+					"hired": false,
+					"meals": 10,
+					"population": 5,
+					"stats": {
+						"energy": 78.0,
+						"food": 65.0,
+						"morale": 88.9999999999999
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 464.0,
+					"day": 10.0,
+					"hired": false,
+					"meals": 10,
+					"population": 5,
+					"stats": {
+						"energy": 82.0,
+						"food": 64.9999999999999,
+						"morale": 89.9999999999999
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 532.0,
+					"day": 11.0,
+					"hired": false,
+					"meals": 10,
+					"population": 5,
+					"stats": {
+						"energy": 86.0,
+						"food": 64.9999999999998,
+						"morale": 90.9999999999999
+					},
+					"workers": 0
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 12.0,
+						"defense": 81.0,
+						"elapsed": 8.0,
+						"population": 5,
+						"readiness": 81.2749999999999,
+						"result": "calm",
+						"stats": {
+							"energy": 94.0,
+							"food": 64.9999999999998,
+							"morale": 91.4999999999999
+						},
+						"streakBefore": 0,
+						"strength": 58.0
+					},
+					"cumulative_margin": 560.0,
+					"day": 12.0,
+					"hired": false,
+					"meals": 5,
+					"population": 5,
+					"stats": {
+						"energy": 94.0,
+						"food": 64.9999999999998,
+						"morale": 91.4999999999999
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 644.0,
+					"day": 13.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 86.0,
+						"food": 64.9999999999998,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 728.0,
+					"day": 14.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 64.9999999999997,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 15.0,
+						"defense": 89.0,
+						"elapsed": 8.0,
+						"population": 6,
+						"readiness": 84.0999999999999,
+						"result": "calm",
+						"stats": {
+							"energy": 94.0,
+							"food": 64.9999999999997,
+							"morale": 98.0
+						},
+						"streakBefore": 0,
+						"strength": 62.0
+					},
+					"cumulative_margin": 764.0,
+					"day": 15.0,
+					"hired": false,
+					"meals": 6,
+					"population": 6,
+					"stats": {
+						"energy": 94.0,
+						"food": 64.9999999999997,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 848.0,
+					"day": 16.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 86.0,
+						"food": 64.9999999999996,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 932.0,
+					"day": 17.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 64.9999999999996,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 1016.0,
+					"day": 18.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 64.9999999999995,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 19.0,
+						"defense": 97.0,
+						"elapsed": 8.0,
+						"population": 6,
+						"readiness": 85.2999999999998,
+						"result": "calm",
+						"stats": {
+							"energy": 94.0,
+							"food": 64.9999999999995,
+							"morale": 98.0
+						},
+						"streakBefore": 0,
+						"strength": 66.0
+					},
+					"cumulative_margin": 1052.0,
+					"day": 19.0,
+					"hired": false,
+					"meals": 6,
+					"population": 6,
+					"stats": {
+						"energy": 94.0,
+						"food": 64.9999999999995,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 1136.0,
+					"day": 20.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 86.0,
+						"food": 64.9999999999994,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 1220.0,
+					"day": 21.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 64.9999999999994,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 1304.0,
+					"day": 22.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 64.9999999999993,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 1388.0,
+					"day": 23.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 64.9999999999992,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 24.0,
+						"defense": 100.0,
+						"elapsed": 8.0,
+						"population": 6,
+						"readiness": 85.7499999999997,
+						"result": "held",
+						"stats": {
+							"energy": 94.0,
+							"food": 64.9999999999992,
+							"morale": 98.0
+						},
+						"streakBefore": 0,
+						"strength": 70.0
+					},
+					"cumulative_margin": 1424.0,
+					"day": 24.0,
+					"hired": false,
+					"meals": 6,
+					"population": 6,
+					"stats": {
+						"energy": 94.0,
+						"food": 64.9999999999992,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 1508.0,
+					"day": 25.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 86.0,
+						"food": 64.9999999999992,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 1592.0,
+					"day": 26.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 64.9999999999991,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 27.0,
+						"defense": 100.0,
+						"elapsed": 8.0,
+						"population": 6,
+						"readiness": 85.7499999999997,
+						"result": "held",
+						"stats": {
+							"energy": 94.0,
+							"food": 64.9999999999991,
+							"morale": 98.0
+						},
+						"streakBefore": 0,
+						"strength": 72.0
+					},
+					"cumulative_margin": 1628.0,
+					"day": 27.0,
+					"hired": false,
+					"meals": 6,
+					"population": 6,
+					"stats": {
+						"energy": 94.0,
+						"food": 64.9999999999991,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 1712.0,
+					"day": 28.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 86.0,
+						"food": 64.999999999999,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 1796.0,
+					"day": 29.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 64.999999999999,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 1880.0,
+					"day": 30.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 64.9999999999989,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 31.0,
+						"defense": 100.0,
+						"elapsed": 8.0,
+						"population": 6,
+						"readiness": 85.7499999999996,
+						"result": "held",
+						"stats": {
+							"energy": 94.0,
+							"food": 64.9999999999989,
+							"morale": 98.0
+						},
+						"streakBefore": 0,
+						"strength": 72.0
+					},
+					"cumulative_margin": 1916.0,
+					"day": 31.0,
+					"hired": false,
+					"meals": 6,
+					"population": 6,
+					"stats": {
+						"energy": 94.0,
+						"food": 64.9999999999989,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 2000.0,
+					"day": 32.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 86.0,
+						"food": 64.9999999999988,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 2084.0,
+					"day": 33.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 64.9999999999988,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 2168.0,
+					"day": 34.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 64.9999999999987,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 2252.0,
+					"day": 35.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 64.9999999999986,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 36.0,
+						"defense": 100.0,
+						"elapsed": 8.0,
+						"population": 6,
+						"readiness": 85.7499999999995,
+						"result": "held",
+						"stats": {
+							"energy": 94.0,
+							"food": 64.9999999999986,
+							"morale": 98.0
+						},
+						"streakBefore": 0,
+						"strength": 72.0
+					},
+					"cumulative_margin": 2288.0,
+					"day": 36.0,
+					"hired": false,
+					"meals": 6,
+					"population": 6,
+					"stats": {
+						"energy": 94.0,
+						"food": 64.9999999999986,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 2372.0,
+					"day": 37.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 86.0,
+						"food": 64.9999999999986,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 2456.0,
+					"day": 38.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 64.9999999999985,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 39.0,
+						"defense": 100.0,
+						"elapsed": 8.0,
+						"population": 6,
+						"readiness": 85.7499999999995,
+						"result": "held",
+						"stats": {
+							"energy": 94.0,
+							"food": 64.9999999999985,
+							"morale": 98.0
+						},
+						"streakBefore": 0,
+						"strength": 72.0
+					},
+					"cumulative_margin": 2492.0,
+					"day": 39.0,
+					"hired": false,
+					"meals": 6,
+					"population": 6,
+					"stats": {
+						"energy": 94.0,
+						"food": 64.9999999999985,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 2576.0,
+					"day": 40.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 86.0,
+						"food": 64.9999999999984,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 2660.0,
+					"day": 41.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 64.9999999999984,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 2744.0,
+					"day": 42.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 64.9999999999983,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 43.0,
+						"defense": 100.0,
+						"elapsed": 8.0,
+						"population": 6,
+						"readiness": 85.7499999999994,
+						"result": "held",
+						"stats": {
+							"energy": 94.0,
+							"food": 64.9999999999983,
+							"morale": 98.0
+						},
+						"streakBefore": 0,
+						"strength": 72.0
+					},
+					"cumulative_margin": 2780.0,
+					"day": 43.0,
+					"hired": false,
+					"meals": 6,
+					"population": 6,
+					"stats": {
+						"energy": 94.0,
+						"food": 64.9999999999983,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 2864.0,
+					"day": 44.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 86.0,
+						"food": 64.9999999999982,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 2948.0,
+					"day": 45.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 64.9999999999982,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 3032.0,
+					"day": 46.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 64.9999999999981,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 3116.0,
+					"day": 47.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 64.9999999999981,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 48.0,
+						"defense": 100.0,
+						"elapsed": 8.0,
+						"population": 6,
+						"readiness": 85.7499999999993,
+						"result": "held",
+						"stats": {
+							"energy": 94.0,
+							"food": 64.999999999998,
+							"morale": 98.0
+						},
+						"streakBefore": 0,
+						"strength": 72.0
+					},
+					"cumulative_margin": 3152.0,
+					"day": 48.0,
+					"hired": false,
+					"meals": 6,
+					"population": 6,
+					"stats": {
+						"energy": 94.0,
+						"food": 64.999999999998,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 3236.0,
+					"day": 49.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 86.0,
+						"food": 64.999999999998,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 3320.0,
+					"day": 50.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 64.9999999999979,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 51.0,
+						"defense": 100.0,
+						"elapsed": 8.0,
+						"population": 6,
+						"readiness": 85.7499999999993,
+						"result": "held",
+						"stats": {
+							"energy": 94.0,
+							"food": 64.9999999999979,
+							"morale": 98.0
+						},
+						"streakBefore": 0,
+						"strength": 72.0
+					},
+					"cumulative_margin": 3356.0,
+					"day": 51.0,
+					"hired": false,
+					"meals": 6,
+					"population": 6,
+					"stats": {
+						"energy": 94.0,
+						"food": 64.9999999999979,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 3440.0,
+					"day": 52.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 86.0,
+						"food": 64.9999999999978,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 3524.0,
+					"day": 53.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 64.9999999999978,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 3608.0,
+					"day": 54.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 64.9999999999977,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 55.0,
+						"defense": 100.0,
+						"elapsed": 8.0,
+						"population": 6,
+						"readiness": 85.7499999999992,
+						"result": "held",
+						"stats": {
+							"energy": 94.0,
+							"food": 64.9999999999977,
+							"morale": 98.0
+						},
+						"streakBefore": 0,
+						"strength": 72.0
+					},
+					"cumulative_margin": 3644.0,
+					"day": 55.0,
+					"hired": false,
+					"meals": 6,
+					"population": 6,
+					"stats": {
+						"energy": 94.0,
+						"food": 64.9999999999977,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 3728.0,
+					"day": 56.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 86.0,
+						"food": 64.9999999999976,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 3812.0,
+					"day": 57.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 64.9999999999976,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 3896.0,
+					"day": 58.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 64.9999999999975,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 3980.0,
+					"day": 59.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 64.9999999999975,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 60.0,
+						"defense": 100.0,
+						"elapsed": 8.0,
+						"population": 6,
+						"readiness": 85.7499999999991,
+						"result": "held",
+						"stats": {
+							"energy": 94.0,
+							"food": 64.9999999999974,
+							"morale": 98.0
+						},
+						"streakBefore": 0,
+						"strength": 72.0
+					},
+					"cumulative_margin": 4016.0,
+					"day": 60.0,
+					"hired": false,
+					"meals": 6,
+					"population": 6,
+					"stats": {
+						"energy": 94.0,
+						"food": 64.9999999999974,
+						"morale": 98.0
+					},
+					"workers": 0
+				}
+			],
+			"ending": "day",
+			"hire": false,
+			"lunch_only": false,
+			"meals": 592,
+			"price": 10.0,
+			"recipe": "caldoBatata",
+			"replacement_margin_less_daily_expenses_and_hire": 4016.0
+		},
+		{
+			"days": [
+				{
+					"cumulative_margin": 48.0,
+					"day": 1.0,
+					"hired": false,
+					"meals": 6,
+					"population": 3,
+					"stats": {
+						"energy": 58.0,
+						"food": 73.0,
+						"morale": 66.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 96.0,
+					"day": 2.0,
+					"hired": false,
+					"meals": 6,
+					"population": 3,
+					"stats": {
+						"energy": 62.0,
+						"food": 81.0,
+						"morale": 66.9999999999999
+					},
+					"workers": 0
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 3.0,
+						"defense": 65.0,
+						"elapsed": 8.0,
+						"population": 3,
+						"readiness": 74.375,
+						"result": "calm",
+						"stats": {
+							"energy": 72.0,
+							"food": 85.0,
+							"morale": 67.4999999999999
+						},
+						"streakBefore": 0,
+						"strength": 50.0
+					},
+					"cumulative_margin": 114.0,
+					"day": 3.0,
+					"hired": false,
+					"meals": 3,
+					"population": 3,
+					"stats": {
+						"energy": 72.0,
+						"food": 85.0,
+						"morale": 67.4999999999999
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 182.0,
+					"day": 4.0,
+					"hired": false,
+					"meals": 8,
+					"population": 4,
+					"stats": {
+						"energy": 64.0,
+						"food": 92.0,
+						"morale": 76.4999999999999
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 250.0,
+					"day": 5.0,
+					"hired": false,
+					"meals": 8,
+					"population": 4,
+					"stats": {
+						"energy": 68.0,
+						"food": 92.0,
+						"morale": 77.4999999999999
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 318.0,
+					"day": 6.0,
+					"hired": false,
+					"meals": 8,
+					"population": 4,
+					"stats": {
+						"energy": 72.0,
+						"food": 92.0,
+						"morale": 78.4999999999999
+					},
+					"workers": 0
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 7.0,
+						"defense": 73.0,
+						"elapsed": 8.0,
+						"population": 4,
+						"readiness": 83.4,
+						"result": "calm",
+						"stats": {
+							"energy": 82.0,
+							"food": 92.0,
+							"morale": 78.9999999999999
+						},
+						"streakBefore": 0,
+						"strength": 54.0
+					},
+					"cumulative_margin": 346.0,
+					"day": 7.0,
+					"hired": false,
+					"meals": 4,
+					"population": 4,
+					"stats": {
+						"energy": 82.0,
+						"food": 92.0,
+						"morale": 78.9999999999999
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 434.0,
+					"day": 8.0,
+					"hired": false,
+					"meals": 10,
+					"population": 5,
+					"stats": {
+						"energy": 74.0,
+						"food": 92.0,
+						"morale": 87.9999999999999
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 522.0,
+					"day": 9.0,
+					"hired": false,
+					"meals": 10,
+					"population": 5,
+					"stats": {
+						"energy": 78.0,
+						"food": 92.0,
+						"morale": 88.9999999999999
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 610.0,
+					"day": 10.0,
+					"hired": false,
+					"meals": 10,
+					"population": 5,
+					"stats": {
+						"energy": 82.0,
+						"food": 92.0,
+						"morale": 89.9999999999999
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 698.0,
+					"day": 11.0,
+					"hired": false,
+					"meals": 10,
+					"population": 5,
+					"stats": {
+						"energy": 86.0,
+						"food": 92.0,
+						"morale": 90.9999999999999
+					},
+					"workers": 0
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 12.0,
+						"defense": 81.0,
+						"elapsed": 8.0,
+						"population": 5,
+						"readiness": 90.725,
+						"result": "calm",
+						"stats": {
+							"energy": 94.0,
+							"food": 92.0,
+							"morale": 91.4999999999999
+						},
+						"streakBefore": 0,
+						"strength": 58.0
+					},
+					"cumulative_margin": 736.0,
+					"day": 12.0,
+					"hired": false,
+					"meals": 5,
+					"population": 5,
+					"stats": {
+						"energy": 94.0,
+						"food": 92.0,
+						"morale": 91.4999999999999
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 844.0,
+					"day": 13.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 86.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 952.0,
+					"day": 14.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 15.0,
+						"defense": 89.0,
+						"elapsed": 8.0,
+						"population": 6,
+						"readiness": 93.55,
+						"result": "calm",
+						"stats": {
+							"energy": 94.0,
+							"food": 92.0,
+							"morale": 98.0
+						},
+						"streakBefore": 0,
+						"strength": 62.0
+					},
+					"cumulative_margin": 1000.0,
+					"day": 15.0,
+					"hired": false,
+					"meals": 6,
+					"population": 6,
+					"stats": {
+						"energy": 94.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 1108.0,
+					"day": 16.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 86.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 1216.0,
+					"day": 17.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 1324.0,
+					"day": 18.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 19.0,
+						"defense": 97.0,
+						"elapsed": 8.0,
+						"population": 6,
+						"readiness": 94.75,
+						"result": "calm",
+						"stats": {
+							"energy": 94.0,
+							"food": 92.0,
+							"morale": 98.0
+						},
+						"streakBefore": 0,
+						"strength": 66.0
+					},
+					"cumulative_margin": 1372.0,
+					"day": 19.0,
+					"hired": false,
+					"meals": 6,
+					"population": 6,
+					"stats": {
+						"energy": 94.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 1480.0,
+					"day": 20.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 86.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 1588.0,
+					"day": 21.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 1696.0,
+					"day": 22.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 1804.0,
+					"day": 23.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 24.0,
+						"defense": 100.0,
+						"elapsed": 8.0,
+						"population": 6,
+						"readiness": 95.2,
+						"result": "calm",
+						"stats": {
+							"energy": 94.0,
+							"food": 92.0,
+							"morale": 98.0
+						},
+						"streakBefore": 0,
+						"strength": 70.0
+					},
+					"cumulative_margin": 1852.0,
+					"day": 24.0,
+					"hired": false,
+					"meals": 6,
+					"population": 6,
+					"stats": {
+						"energy": 94.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 1960.0,
+					"day": 25.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 86.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 2068.0,
+					"day": 26.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 27.0,
+						"defense": 100.0,
+						"elapsed": 8.0,
+						"population": 6,
+						"readiness": 95.2,
+						"result": "calm",
+						"stats": {
+							"energy": 94.0,
+							"food": 92.0,
+							"morale": 98.0
+						},
+						"streakBefore": 0,
+						"strength": 72.0
+					},
+					"cumulative_margin": 2116.0,
+					"day": 27.0,
+					"hired": false,
+					"meals": 6,
+					"population": 6,
+					"stats": {
+						"energy": 94.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 2224.0,
+					"day": 28.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 86.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 2332.0,
+					"day": 29.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 2440.0,
+					"day": 30.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 31.0,
+						"defense": 100.0,
+						"elapsed": 8.0,
+						"population": 6,
+						"readiness": 95.2,
+						"result": "calm",
+						"stats": {
+							"energy": 94.0,
+							"food": 92.0,
+							"morale": 98.0
+						},
+						"streakBefore": 0,
+						"strength": 72.0
+					},
+					"cumulative_margin": 2488.0,
+					"day": 31.0,
+					"hired": false,
+					"meals": 6,
+					"population": 6,
+					"stats": {
+						"energy": 94.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 2596.0,
+					"day": 32.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 86.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 2704.0,
+					"day": 33.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 2812.0,
+					"day": 34.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 2920.0,
+					"day": 35.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 36.0,
+						"defense": 100.0,
+						"elapsed": 8.0,
+						"population": 6,
+						"readiness": 95.2,
+						"result": "calm",
+						"stats": {
+							"energy": 94.0,
+							"food": 92.0,
+							"morale": 98.0
+						},
+						"streakBefore": 0,
+						"strength": 72.0
+					},
+					"cumulative_margin": 2968.0,
+					"day": 36.0,
+					"hired": false,
+					"meals": 6,
+					"population": 6,
+					"stats": {
+						"energy": 94.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 3076.0,
+					"day": 37.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 86.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 3184.0,
+					"day": 38.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 39.0,
+						"defense": 100.0,
+						"elapsed": 8.0,
+						"population": 6,
+						"readiness": 95.2,
+						"result": "calm",
+						"stats": {
+							"energy": 94.0,
+							"food": 92.0,
+							"morale": 98.0
+						},
+						"streakBefore": 0,
+						"strength": 72.0
+					},
+					"cumulative_margin": 3232.0,
+					"day": 39.0,
+					"hired": false,
+					"meals": 6,
+					"population": 6,
+					"stats": {
+						"energy": 94.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 3340.0,
+					"day": 40.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 86.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 3448.0,
+					"day": 41.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 3556.0,
+					"day": 42.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 43.0,
+						"defense": 100.0,
+						"elapsed": 8.0,
+						"population": 6,
+						"readiness": 95.2,
+						"result": "calm",
+						"stats": {
+							"energy": 94.0,
+							"food": 92.0,
+							"morale": 98.0
+						},
+						"streakBefore": 0,
+						"strength": 72.0
+					},
+					"cumulative_margin": 3604.0,
+					"day": 43.0,
+					"hired": false,
+					"meals": 6,
+					"population": 6,
+					"stats": {
+						"energy": 94.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 3712.0,
+					"day": 44.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 86.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 3820.0,
+					"day": 45.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 3928.0,
+					"day": 46.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 4036.0,
+					"day": 47.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 48.0,
+						"defense": 100.0,
+						"elapsed": 8.0,
+						"population": 6,
+						"readiness": 95.2,
+						"result": "calm",
+						"stats": {
+							"energy": 94.0,
+							"food": 92.0,
+							"morale": 98.0
+						},
+						"streakBefore": 0,
+						"strength": 72.0
+					},
+					"cumulative_margin": 4084.0,
+					"day": 48.0,
+					"hired": false,
+					"meals": 6,
+					"population": 6,
+					"stats": {
+						"energy": 94.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 4192.0,
+					"day": 49.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 86.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 4300.0,
+					"day": 50.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 51.0,
+						"defense": 100.0,
+						"elapsed": 8.0,
+						"population": 6,
+						"readiness": 95.2,
+						"result": "calm",
+						"stats": {
+							"energy": 94.0,
+							"food": 92.0,
+							"morale": 98.0
+						},
+						"streakBefore": 0,
+						"strength": 72.0
+					},
+					"cumulative_margin": 4348.0,
+					"day": 51.0,
+					"hired": false,
+					"meals": 6,
+					"population": 6,
+					"stats": {
+						"energy": 94.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 4456.0,
+					"day": 52.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 86.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 4564.0,
+					"day": 53.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 4672.0,
+					"day": 54.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 55.0,
+						"defense": 100.0,
+						"elapsed": 8.0,
+						"population": 6,
+						"readiness": 95.2,
+						"result": "calm",
+						"stats": {
+							"energy": 94.0,
+							"food": 92.0,
+							"morale": 98.0
+						},
+						"streakBefore": 0,
+						"strength": 72.0
+					},
+					"cumulative_margin": 4720.0,
+					"day": 55.0,
+					"hired": false,
+					"meals": 6,
+					"population": 6,
+					"stats": {
+						"energy": 94.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 4828.0,
+					"day": 56.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 86.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 4936.0,
+					"day": 57.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 5044.0,
+					"day": 58.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 5152.0,
+					"day": 59.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 60.0,
+						"defense": 100.0,
+						"elapsed": 8.0,
+						"population": 6,
+						"readiness": 95.2,
+						"result": "calm",
+						"stats": {
+							"energy": 94.0,
+							"food": 92.0,
+							"morale": 98.0
+						},
+						"streakBefore": 0,
+						"strength": 72.0
+					},
+					"cumulative_margin": 5200.0,
+					"day": 60.0,
+					"hired": false,
+					"meals": 6,
+					"population": 6,
+					"stats": {
+						"energy": 94.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 0
+				}
+			],
+			"ending": "day",
+			"hire": false,
+			"lunch_only": false,
+			"meals": 592,
+			"price": 14.0,
+			"recipe": "arrozCenoura",
+			"replacement_margin_less_daily_expenses_and_hire": 5200.0
+		},
+		{
+			"days": [
+				{
+					"cumulative_margin": 48.0,
+					"day": 1.0,
+					"hired": false,
+					"meals": 6,
+					"population": 3,
+					"stats": {
+						"energy": 58.0,
+						"food": 73.0,
+						"morale": 66.0
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 96.0,
+					"day": 2.0,
+					"hired": false,
+					"meals": 6,
+					"population": 3,
+					"stats": {
+						"energy": 62.0,
+						"food": 81.0,
+						"morale": 66.9999999999999
+					},
+					"workers": 0
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 3.0,
+						"defense": 65.0,
+						"elapsed": 8.0,
+						"population": 3,
+						"readiness": 74.375,
+						"result": "calm",
+						"stats": {
+							"energy": 72.0,
+							"food": 85.0,
+							"morale": 67.4999999999999
+						},
+						"streakBefore": 0,
+						"strength": 50.0
+					},
+					"cumulative_margin": 114.0,
+					"day": 3.0,
+					"hired": false,
+					"meals": 3,
+					"population": 3,
+					"stats": {
+						"energy": 72.0,
+						"food": 85.0,
+						"morale": 67.4999999999999
+					},
+					"workers": 0
+				},
+				{
+					"cumulative_margin": 82.0,
+					"day": 4.0,
+					"hired": true,
+					"meals": 8,
+					"population": 4,
+					"stats": {
+						"energy": 64.0,
+						"food": 92.0,
+						"morale": 76.4999999999999
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 150.0,
+					"day": 5.0,
+					"hired": false,
+					"meals": 8,
+					"population": 4,
+					"stats": {
+						"energy": 68.0,
+						"food": 92.0,
+						"morale": 77.4999999999999
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 218.0,
+					"day": 6.0,
+					"hired": false,
+					"meals": 8,
+					"population": 4,
+					"stats": {
+						"energy": 72.0,
+						"food": 92.0,
+						"morale": 78.4999999999999
+					},
+					"workers": 1
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 7.0,
+						"defense": 73.0,
+						"elapsed": 8.0,
+						"population": 4,
+						"readiness": 83.4,
+						"result": "calm",
+						"stats": {
+							"energy": 82.0,
+							"food": 92.0,
+							"morale": 78.9999999999999
+						},
+						"streakBefore": 0,
+						"strength": 54.0
+					},
+					"cumulative_margin": 246.0,
+					"day": 7.0,
+					"hired": false,
+					"meals": 4,
+					"population": 4,
+					"stats": {
+						"energy": 82.0,
+						"food": 92.0,
+						"morale": 78.9999999999999
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 334.0,
+					"day": 8.0,
+					"hired": false,
+					"meals": 10,
+					"population": 5,
+					"stats": {
+						"energy": 74.0,
+						"food": 92.0,
+						"morale": 87.9999999999999
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 422.0,
+					"day": 9.0,
+					"hired": false,
+					"meals": 10,
+					"population": 5,
+					"stats": {
+						"energy": 78.0,
+						"food": 92.0,
+						"morale": 88.9999999999999
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 510.0,
+					"day": 10.0,
+					"hired": false,
+					"meals": 10,
+					"population": 5,
+					"stats": {
+						"energy": 82.0,
+						"food": 92.0,
+						"morale": 89.9999999999999
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 598.0,
+					"day": 11.0,
+					"hired": false,
+					"meals": 10,
+					"population": 5,
+					"stats": {
+						"energy": 86.0,
+						"food": 92.0,
+						"morale": 90.9999999999999
+					},
+					"workers": 1
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 12.0,
+						"defense": 81.0,
+						"elapsed": 8.0,
+						"population": 5,
+						"readiness": 90.725,
+						"result": "calm",
+						"stats": {
+							"energy": 94.0,
+							"food": 92.0,
+							"morale": 91.4999999999999
+						},
+						"streakBefore": 0,
+						"strength": 58.0
+					},
+					"cumulative_margin": 636.0,
+					"day": 12.0,
+					"hired": false,
+					"meals": 5,
+					"population": 5,
+					"stats": {
+						"energy": 94.0,
+						"food": 92.0,
+						"morale": 91.4999999999999
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 744.0,
+					"day": 13.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 86.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 852.0,
+					"day": 14.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 15.0,
+						"defense": 89.0,
+						"elapsed": 8.0,
+						"population": 6,
+						"readiness": 93.55,
+						"result": "calm",
+						"stats": {
+							"energy": 94.0,
+							"food": 92.0,
+							"morale": 98.0
+						},
+						"streakBefore": 0,
+						"strength": 62.0
+					},
+					"cumulative_margin": 900.0,
+					"day": 15.0,
+					"hired": false,
+					"meals": 6,
+					"population": 6,
+					"stats": {
+						"energy": 94.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 1008.0,
+					"day": 16.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 86.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 1116.0,
+					"day": 17.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 1224.0,
+					"day": 18.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 19.0,
+						"defense": 97.0,
+						"elapsed": 8.0,
+						"population": 6,
+						"readiness": 94.75,
+						"result": "calm",
+						"stats": {
+							"energy": 94.0,
+							"food": 92.0,
+							"morale": 98.0
+						},
+						"streakBefore": 0,
+						"strength": 66.0
+					},
+					"cumulative_margin": 1272.0,
+					"day": 19.0,
+					"hired": false,
+					"meals": 6,
+					"population": 6,
+					"stats": {
+						"energy": 94.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 1380.0,
+					"day": 20.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 86.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 1488.0,
+					"day": 21.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 1596.0,
+					"day": 22.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 1704.0,
+					"day": 23.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 24.0,
+						"defense": 100.0,
+						"elapsed": 8.0,
+						"population": 6,
+						"readiness": 95.2,
+						"result": "calm",
+						"stats": {
+							"energy": 94.0,
+							"food": 92.0,
+							"morale": 98.0
+						},
+						"streakBefore": 0,
+						"strength": 70.0
+					},
+					"cumulative_margin": 1752.0,
+					"day": 24.0,
+					"hired": false,
+					"meals": 6,
+					"population": 6,
+					"stats": {
+						"energy": 94.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 1860.0,
+					"day": 25.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 86.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 1968.0,
+					"day": 26.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 27.0,
+						"defense": 100.0,
+						"elapsed": 8.0,
+						"population": 6,
+						"readiness": 95.2,
+						"result": "calm",
+						"stats": {
+							"energy": 94.0,
+							"food": 92.0,
+							"morale": 98.0
+						},
+						"streakBefore": 0,
+						"strength": 72.0
+					},
+					"cumulative_margin": 2016.0,
+					"day": 27.0,
+					"hired": false,
+					"meals": 6,
+					"population": 6,
+					"stats": {
+						"energy": 94.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 2124.0,
+					"day": 28.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 86.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 2232.0,
+					"day": 29.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 2340.0,
+					"day": 30.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 31.0,
+						"defense": 100.0,
+						"elapsed": 8.0,
+						"population": 6,
+						"readiness": 95.2,
+						"result": "calm",
+						"stats": {
+							"energy": 94.0,
+							"food": 92.0,
+							"morale": 98.0
+						},
+						"streakBefore": 0,
+						"strength": 72.0
+					},
+					"cumulative_margin": 2388.0,
+					"day": 31.0,
+					"hired": false,
+					"meals": 6,
+					"population": 6,
+					"stats": {
+						"energy": 94.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 2496.0,
+					"day": 32.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 86.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 2604.0,
+					"day": 33.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 2712.0,
+					"day": 34.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 2820.0,
+					"day": 35.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 36.0,
+						"defense": 100.0,
+						"elapsed": 8.0,
+						"population": 6,
+						"readiness": 95.2,
+						"result": "calm",
+						"stats": {
+							"energy": 94.0,
+							"food": 92.0,
+							"morale": 98.0
+						},
+						"streakBefore": 0,
+						"strength": 72.0
+					},
+					"cumulative_margin": 2868.0,
+					"day": 36.0,
+					"hired": false,
+					"meals": 6,
+					"population": 6,
+					"stats": {
+						"energy": 94.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 2976.0,
+					"day": 37.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 86.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 3084.0,
+					"day": 38.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 39.0,
+						"defense": 100.0,
+						"elapsed": 8.0,
+						"population": 6,
+						"readiness": 95.2,
+						"result": "calm",
+						"stats": {
+							"energy": 94.0,
+							"food": 92.0,
+							"morale": 98.0
+						},
+						"streakBefore": 0,
+						"strength": 72.0
+					},
+					"cumulative_margin": 3132.0,
+					"day": 39.0,
+					"hired": false,
+					"meals": 6,
+					"population": 6,
+					"stats": {
+						"energy": 94.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 3240.0,
+					"day": 40.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 86.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 3348.0,
+					"day": 41.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 3456.0,
+					"day": 42.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 43.0,
+						"defense": 100.0,
+						"elapsed": 8.0,
+						"population": 6,
+						"readiness": 95.2,
+						"result": "calm",
+						"stats": {
+							"energy": 94.0,
+							"food": 92.0,
+							"morale": 98.0
+						},
+						"streakBefore": 0,
+						"strength": 72.0
+					},
+					"cumulative_margin": 3504.0,
+					"day": 43.0,
+					"hired": false,
+					"meals": 6,
+					"population": 6,
+					"stats": {
+						"energy": 94.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 3612.0,
+					"day": 44.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 86.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 3720.0,
+					"day": 45.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 3828.0,
+					"day": 46.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 3936.0,
+					"day": 47.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 48.0,
+						"defense": 100.0,
+						"elapsed": 8.0,
+						"population": 6,
+						"readiness": 95.2,
+						"result": "calm",
+						"stats": {
+							"energy": 94.0,
+							"food": 92.0,
+							"morale": 98.0
+						},
+						"streakBefore": 0,
+						"strength": 72.0
+					},
+					"cumulative_margin": 3984.0,
+					"day": 48.0,
+					"hired": false,
+					"meals": 6,
+					"population": 6,
+					"stats": {
+						"energy": 94.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 4092.0,
+					"day": 49.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 86.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 4200.0,
+					"day": 50.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 51.0,
+						"defense": 100.0,
+						"elapsed": 8.0,
+						"population": 6,
+						"readiness": 95.2,
+						"result": "calm",
+						"stats": {
+							"energy": 94.0,
+							"food": 92.0,
+							"morale": 98.0
+						},
+						"streakBefore": 0,
+						"strength": 72.0
+					},
+					"cumulative_margin": 4248.0,
+					"day": 51.0,
+					"hired": false,
+					"meals": 6,
+					"population": 6,
+					"stats": {
+						"energy": 94.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 4356.0,
+					"day": 52.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 86.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 4464.0,
+					"day": 53.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 4572.0,
+					"day": 54.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 55.0,
+						"defense": 100.0,
+						"elapsed": 8.0,
+						"population": 6,
+						"readiness": 95.2,
+						"result": "calm",
+						"stats": {
+							"energy": 94.0,
+							"food": 92.0,
+							"morale": 98.0
+						},
+						"streakBefore": 0,
+						"strength": 72.0
+					},
+					"cumulative_margin": 4620.0,
+					"day": 55.0,
+					"hired": false,
+					"meals": 6,
+					"population": 6,
+					"stats": {
+						"energy": 94.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 4728.0,
+					"day": 56.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 86.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 4836.0,
+					"day": 57.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 4944.0,
+					"day": 58.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"cumulative_margin": 5052.0,
+					"day": 59.0,
+					"hired": false,
+					"meals": 12,
+					"population": 6,
+					"stats": {
+						"energy": 88.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				},
+				{
+					"attack": {
+						"applied": true,
+						"day": 60.0,
+						"defense": 100.0,
+						"elapsed": 8.0,
+						"population": 6,
+						"readiness": 95.2,
+						"result": "calm",
+						"stats": {
+							"energy": 94.0,
+							"food": 92.0,
+							"morale": 98.0
+						},
+						"streakBefore": 0,
+						"strength": 72.0
+					},
+					"cumulative_margin": 5100.0,
+					"day": 60.0,
+					"hired": false,
+					"meals": 6,
+					"population": 6,
+					"stats": {
+						"energy": 94.0,
+						"food": 92.0,
+						"morale": 98.0
+					},
+					"workers": 1
+				}
+			],
+			"ending": "day",
+			"hire": true,
+			"lunch_only": false,
+			"meals": 592,
+			"price": 14.0,
+			"recipe": "arrozCenoura",
+			"replacement_margin_less_daily_expenses_and_hire": 5100.0
+		}
+	],
+	"price_probe": [
+		{
+			"limits": {
+				"food": 120.0,
+				"service": 75.0
+			},
+			"price": 8.0,
+			"profile": "normal",
+			"recipe": "caldoBatata",
+			"satisfaction_with_equal_waits": {
+				"classification": "verySatisfied",
+				"quality": 0,
+				"score": 99.15
+			}
+		},
+		{
+			"limits": {
+				"food": 120.0,
+				"service": 75.0
+			},
+			"price": 10.0,
+			"profile": "normal",
+			"recipe": "caldoBatata",
+			"satisfaction_with_equal_waits": {
+				"classification": "verySatisfied",
+				"quality": 0,
+				"score": 91.15
+			}
+		},
+		{
+			"accepted": true,
+			"customer_ordered": false,
+			"reason": "price",
+			"requested_price": 12.0
+		},
+		{
+			"accepted": false,
+			"menu_price": 10.0,
+			"requested_price": 100.0
+		}
+	],
+	"recipes": [
+		{
+			"ingredients": 2.0,
+			"margin": 8.0,
+			"nutrition": 4.0,
+			"price": 10.0,
+			"recipe": "caldoBatata"
+		},
+		{
+			"ingredients": 4.0,
+			"margin": 10.0,
+			"nutrition": 6.0,
+			"price": 14.0,
+			"recipe": "arrozCenoura"
+		},
+		{
+			"ingredients": 8.0,
+			"margin": 12.0,
+			"nutrition": 8.0,
+			"price": 20.0,
+			"recipe": "canja"
+		}
+	]
+}

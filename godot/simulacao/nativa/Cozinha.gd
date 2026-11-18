@@ -76,7 +76,7 @@ func cook_error(s: Dictionary,o: Variant,recipe: Variant) -> Variant:
 	if s.player.get("hand")!=null or s.player.get("carry")!=null or s.get("chopping")!=null or s.get("plating")!=null or s.get("washing")!=null:return "Libere as mãos e conclua o trabalho manual antes de cozinhar."
 	if s.get("cooking")!=null:return "Há uma panela cozinhando."
 	if o.get("pan")!="pot":return "Instale uma panela vazia."
-	return "A combinação não corresponde à receita." if RECIPES.recognized(o)!=recipe else null
+	return "A combinação não corresponde à receita." if RECIPES.recognized(o,s)!=recipe else null
 func cook(s: Dictionary,id: Variant,recipe: Variant) -> Dictionary:
 	var o = find(s,id)
 	if not near(s,o):return result(s,false,"Aproxime-se do fogão.")
@@ -87,8 +87,9 @@ func cook(s: Dictionary,id: Variant,recipe: Variant) -> Dictionary:
 		var raw: String = INV.ITEMS.data[p.item].get("raw",p.item)
 		var q := int(p.get("quality",0))
 		total+=p.n;weighted+=p.n*q;cost+=p.n*INV.ITEMS.data[raw].cost*[1,1.25,1.5,2][q];s.used[raw]+=p.n
+	var servings := RECIPES.portions(s,o,recipe)
 	o.ingredients=[];o.pan="cookingPot";s.cookActive=true;s.ledger.foodCost+=cost
-	s.cooking={"stove":id,"recipe":recipe,"servings":1,"quality":floor(weighted/total),"left":RECIPES.RECIPES.data[recipe].time,"total":RECIPES.RECIPES.data[recipe].time}
+	s.cooking={"stove":id,"recipe":recipe,"servings":servings,"quality":floor(weighted/total),"left":RECIPES.RECIPES.data[recipe].time,"total":RECIPES.RECIPES.data[recipe].time}
 	return feedback(s,o,"Cozinhando — pode realizar outras tarefas")
 func plating_plan(s: Dictionary,o: Variant) -> Dictionary:
 	if o==null or o.type!="kitchen":return {"error":"Use a mesa de cozinha."}
@@ -259,15 +260,15 @@ func physical(s: Dictionary,id: Variant,action: String) -> Dictionary:
 					var count := 0.0
 					for v in next:
 						if v.item==part.item:count+=v.n
-					if count>recipe.foods.get(INV.ITEMS.data.get(part.item,{}).get("raw",part.item),0):matches=false
+					if count>recipe.foods.get(INV.ITEMS.data.get(part.item,{}).get("raw",part.item),0)*RECIPES.batch_limit(s):matches=false
 				if matches:possible=true
 			if not possible:return result(s,false,"Ingrediente incompatível ou excedente; continua nas mãos.")
-			a.hand=null;o.ingredients=next;return feedback(s,o,"Receita identificada" if RECIPES.recognized(o)!=null else "Ingrediente adicionado")
+			a.hand=null;o.ingredients=next;return feedback(s,o,"Receita identificada" if RECIPES.recognized(o,s)!=null else "Ingrediente adicionado")
 		"removeIngredient":
 			if p!=null or a.get("carry")!=null or o.type!="stove" or o.get("pan")!="pot":return result(s,false,"Libere as mãos; só é possível corrigir antes de cozinhar.")
 			if o.get("ingredients",[]).is_empty():return result(s,false,"Não há ingredientes na panela.")
 			a.hand=o.ingredients.pop_back();return feedback(s,o,"Ingrediente devolvido às mãos")
-		"cook":return cook(s,id,RECIPES.recognized(o))
+		"cook":return cook(s,id,RECIPES.recognized(o,s))
 		"plate":return plate(s,id)
 		"takeDish":
 			if p!=null or a.get("carry")!=null:return result(s,false,"Libere as mãos.")

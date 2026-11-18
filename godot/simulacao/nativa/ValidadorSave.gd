@@ -23,7 +23,7 @@ static func score(v: Variant) -> bool:
 	return v.quality==null or (number(v.quality) and v.quality>=0 and v.quality<=3)
 static func experience_data(p: Variant) -> bool:
 	if not has_keys(p,["profile","limits","elapsed","results","satisfaction"]) or not CLIENTS.data.profiles.has(p.profile):return false
-	if p.has("arrivalIssue") and p.arrivalIssue not in ["dirtySeat","dirtyDiningRoom"]:return false
+	if p.has("arrivalIssue") and p.arrivalIssue not in ["dirtySeat","dirtyDiningRoom","price"]:return false
 	for phase in ["service","food"]:
 		if not has_keys(p.limits,[phase]) or not has_keys(p.elapsed,[phase]) or not has_keys(p.results,[phase]):return false
 		if not number(p.limits[phase]) or p.limits[phase]<=0 or not number(p.elapsed[phase]) or p.elapsed[phase]<0 or p.elapsed[phase]>p.limits[phase]:return false
@@ -42,6 +42,7 @@ static func experience(s: Dictionary) -> bool:
 		if (e.outcome=="abandoned" and e.type=="praise") or not visits.has(e.visitId) or events.has(e.visitId) or e.type not in ["praise","complaint"] or not number(e.time) or e.time>s.time or visits[e.visitId].outcome!=e.outcome:return false
 		events[e.visitId]=true
 	for c in s.customers:
+		if c.has("reactionUntil") and (not number(c.reactionUntil) or c.reactionUntil<0 or c.reactionUntil>s.time+2.001):return false
 		var p = c.get("experience")
 		if not experience_data(p) or customers.has(c.id) or not has_keys(p,["phase","visual","abandoned","reviewResolved","legacy","indicatorUntil"]):return false
 		customers[c.id]=true
@@ -190,4 +191,4 @@ static func valid(value: Variant,slots: int = 0) -> bool:
 	var cooking = s.get("cooking")
 	if cooking!=null:
 		if not cooking is Dictionary or not RECIPES.data.has(cooking.get("recipe")) or not ids.has(cooking.get("stove")) or ids[cooking.stove].type!="stove" or ids[cooking.stove].get("pan")!="cookingPot" or not number(cooking.get("left")) or cooking.left<0:return false
-	return preload("res://simulacao/nativa/Inicio.gd").valid(s) and preload("res://simulacao/nativa/Mercado.gd").valid(s) and preload("res://simulacao/nativa/Refugio.gd").valid(s) and HYGIENE.valid(s) and K.valid(s) and Q.valid(s) and experience(s) and A.valid_time_reputation(s) and N.food(s) and N.equipment(s) and N.meals(s)
+	return preload("res://simulacao/nativa/Equilibrio.gd").valid(s) and preload("res://simulacao/nativa/Inicio.gd").valid(s) and preload("res://simulacao/nativa/Mercado.gd").valid(s) and preload("res://simulacao/nativa/Refugio.gd").valid(s) and HYGIENE.valid(s) and K.valid(s) and Q.valid(s) and experience(s) and A.valid_time_reputation(s) and N.food(s) and N.equipment(s) and N.meals(s)

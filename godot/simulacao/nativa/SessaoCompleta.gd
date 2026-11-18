@@ -262,6 +262,16 @@ func admin_action(action: Dictionary,value: Variant) -> void:
 			if k=="build":open_dialog("build")
 			else:tab=k;generation+=1;menu_notice=""
 		"zoom":set_zoom(1 if k=="reset" else camera_level+(-0.1 if k=="out" else 0.1));generation+=1;menu_notice=""
+		"nextShift":
+			var error := ADMIN.skip_error(state)
+			if error.is_empty():
+				var day: int = state.day;var target := ADMIN.next_mark(state)
+				simulation.service.random_source=rng
+				checkpoint();close_dialog()
+				while state.day==day and state.clock.minute<target and not REFUGE.blocked(state):simulation.step(state,minf(1.0,7.0-state.clock.remainder))
+				ADMIN.auto_open(state)
+				if state.day!=day:save_game();checkpoint()
+			else:notify(error,true)
 		"applyHours":result=ADMIN.set_hours(state,admin_ui.form.hours);generation+=int(result.ok)
 		"advance":result=ADMIN.test_clock(state,admin_ui.form.time);generation+=1
 		"searchStaff":admin_ui.form.searchStaff=true

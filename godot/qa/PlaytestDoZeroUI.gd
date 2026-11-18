@@ -118,7 +118,7 @@ func run():
 		print("PAGO ",visit+1," tempo=",s.time," arrival=",s.arrival," dirty=",s.dirtyTables," clientes=",s.customers.map(func(v):return [v.id,v.state,v.x,v.y]))
 		await clean_table(table)
 		print("ATENDIDO ",visit+1," tempo=",s.time," clientes=",s.customers.map(func(v):return [v.id,v.state,v.x,v.y])," perdidos=",s.ledger.lost)
-	check(s.ledger.sales==2 and s.ledger.lost==1 and s.experience.visits.size()==3,"Almoço acompanha três chegadas: duas vendas e uma recusa de cadeira suja")
+	check(s.ledger.sales==3 and s.ledger.lost==0 and s.experience.visits.size()==3,"Cadência permite servir e limpar as três chegadas sem perdas")
 	check(s.experience.visits.filter(func(v):return v.outcome=="abandoned").all(func(v):return v.get("arrivalIssue")=="dirtySeat"),"A saída é causada pela regra aprovada de sujeira, não por falha de anotação")
 	for table in s.objects:
 		if table.type=="table" and g.session.INTERACT.KITCHEN.HYGIENE.can_wipe(s,table):await clean_table(table)
@@ -136,7 +136,7 @@ func run():
 	await capture("mercador");await choose("Voltar ao jogo")
 	check(await choose("Opções") and await choose("Salvar e carregar") and await choose("Salvar jogo"),"Salva progresso pelo mouse")
 	var cash: float = s.cash
-	check(await choose("Carregar jogo") and g.session.state.cash==cash and g.session.state.ledger.sales==2,"Carrega o almoço sem perder pagamentos")
+	check(await choose("Carregar jogo") and g.session.state.cash==cash and g.session.state.ledger.sales==3,"Carrega o almoço sem perder pagamentos")
 	await choose("Voltar ao jogo")
 	print("ETAPAS PLAYTEST: ",stages)
 	await finish()

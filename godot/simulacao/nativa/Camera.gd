@@ -31,7 +31,8 @@ static func expanded_view(state: Dictionary,camera: Dictionary,viewport: Diction
 	# Fit the interior with breathing room for the overlay HUD. Wider screens
 	# reveal more world/void rather than stretching sprites or adding side bars.
 	var base := minf((viewport.width-64)/bounds.size.x,(viewport.height-120)/bounds.size.y)
-	var zoom := maxf(0.35,base)*zoom_level
+	var close_view: float = 1.25 if viewport.width/viewport.height>=2 and not construction else 1.0
+	var zoom := maxf(0.35,base)*zoom_level*close_view
 	var limits := bounds.grow(40)
 	var player := MOVE.position(state.player)
 	var result := {"zoom":zoom,"mode":"build" if construction else "play"}

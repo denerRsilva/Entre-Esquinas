@@ -86,7 +86,7 @@ func primary(s: Dictionary,o: Dictionary,pointer: Variant = null) -> Variant:
 		elif pan.begins_with("pot_"):action="takePan" if p==null else null
 		elif pan!="cookingPot":
 			if p!=null and item in INV.COOKABLE:action="add"
-			elif p==null and kitchen.RECIPES.recognized(o)!=null:action="cook"
+			elif p==null and kitchen.RECIPES.recognized(o,s)!=null:action="cook"
 			elif p==null and o.get("ingredients",[]).is_empty():action="takePan"
 		return physical(s,o,action) if action!=null else false
 	if o.type=="kitchen":

@@ -2,7 +2,7 @@
 
 A compilação nativa fica em `../build/Android/EntreEsquinas-gdscript.apk`; `EntreEsquinas.apk` é um nome alternativo do mesmo arquivo atualizado. O SHA-256 está em `SHA256SUMS-gdscript`. No GitHub, baixe o arquivo completo pelo botão **Download raw file**.
 
-Versão atual: `com.entreesquinas.restaurante`, `0.21.2-godot.53` (21253), Android 7.0+, orientação horizontal e toque emulando mouse. A assinatura de depuração é a mesma do APK anterior. Não é necessário recompilar extensões C/C++ ou QuickJS.
+Versão atual: `com.entreesquinas.restaurante`, `0.21.2-godot.54` (21254), Android 7.0+, orientação horizontal e toque emulando mouse. A assinatura de depuração é a mesma do APK anterior. Não é necessário recompilar extensões C/C++ ou QuickJS.
 
 ## Exportar
 
@@ -68,3 +68,11 @@ exibição dos pratos para manter a largura da louça, sem editar os atlas.
 Relatório de playtest, evidências e propostas de balanceamento em
 [Auditoria .53](../docs/auditoria-playtest-53.md). Janela compacta verificada no
 Linux; teste Android físico continua pendente.
+
+
+## Melhorias 0.21.2-godot.54
+
+Balanceamento de alimentação/moral/preços, refeição remunerada da equipe,
+descanso por horário, preferências, lote de duas porções após primeira vitória,
+chegadas distribuídas, avanço seguro pelo menu, zoom compacto e livro/ações
+mais claros. [Regras e validação](../docs/melhorias-equilibrio-54.md).

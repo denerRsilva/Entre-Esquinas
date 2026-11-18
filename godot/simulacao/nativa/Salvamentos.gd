@@ -64,6 +64,7 @@ func convert(value: Variant,random_values: Array = []) -> Dictionary:
 		if s.inventory.size() not in [0,5,10] or not VALIDATOR.valid(s,s.inventory.size()):return {"value":null}
 		if not MIGRATE.hands(s):return {"value":null}
 	preload("res://simulacao/nativa/HistoricoPedidos.gd").compact(s)
+	if VALIDATOR.valid(s):preload("res://simulacao/nativa/Equilibrio.gd").initialize(s)
 	return {"value":s if VALIDATOR.valid(s) else null}
 func parse_text(raw: Variant,random_values: Array = []) -> Dictionary:
 	if not raw is String:return {"value":null}

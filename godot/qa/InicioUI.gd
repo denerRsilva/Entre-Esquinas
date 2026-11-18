@@ -83,7 +83,7 @@ func run():
 	var rich: Dictionary = small.duplicate(true)
 	var guest := {"refugeResident":1,"recipe":"caldoBatata","experience":{"satisfaction":{"score":50}}}
 	g.session.REFUGE.completed(small,guest,"completed");guest.recipe="arrozCenoura";g.session.REFUGE.completed(rich,guest,"completed")
-	check(is_equal_approx(small.refuge.stats.food-20,4*5.2/3) and rich.refuge.stats.food>small.refuge.stats.food,"Nutrição visual corresponde à contribuição alimentar real")
+	check(is_equal_approx(small.refuge.stats.food-20,4*2.0/3) and rich.refuge.stats.food>small.refuge.stats.food,"Nutrição visual corresponde à contribuição alimentar real")
 	trip.player.room="restaurant";trip.player.x=18;trip.player.y=11;g.session.load_state(trip);g.tick(0)
 	await prepare("canja")
 	check(g.session.SAVE.serialize(trip)!=null and trip.meals.made.canja==1,"Canja desbloqueada também funciona na cozinha e no save")

@@ -1,0 +1,98 @@
+[
+	{
+		"draw_commands": 1,
+		"item": "batata",
+		"pixel_width": 16,
+		"stage": "batata-inteira",
+		"visible_pixels": 182,
+		"zoom": 1.3125
+	},
+	{
+		"draw_commands": 1,
+		"item": "batata_cut",
+		"pixel_width": 14,
+		"stage": "batata-cortada",
+		"visible_pixels": 113,
+		"zoom": 1.3125
+	},
+	{
+		"draw_commands": 1,
+		"item": "batata_cut",
+		"pixel_width": 14,
+		"stage": "batata-na-panela",
+		"visible_pixels": 102,
+		"zoom": 1.3125
+	},
+	{
+		"draw_commands": 1,
+		"item": "caldoBatata",
+		"pixel_width": 30,
+		"stage": "caldo-pronto-no-fogao",
+		"visible_pixels": 393,
+		"zoom": 1.3125
+	},
+	{
+		"draw_commands": 1,
+		"item": "caldoBatata",
+		"pixel_width": 20,
+		"stage": "caldo-empratado",
+		"visible_pixels": 164,
+		"zoom": 1.3125
+	},
+	{
+		"draw_commands": 1,
+		"item": "caldoBatata",
+		"pixel_width": 20,
+		"stage": "caldo-na-mao",
+		"visible_pixels": 185,
+		"zoom": 1.3125
+	},
+	{
+		"draw_commands": 1,
+		"item": "cenoura",
+		"pixel_width": 15,
+		"stage": "cenoura-inteira",
+		"visible_pixels": 125,
+		"zoom": 1.3125
+	},
+	{
+		"draw_commands": 1,
+		"item": "cenoura_cut",
+		"pixel_width": 16,
+		"stage": "cenoura-cortada",
+		"visible_pixels": 72,
+		"zoom": 1.3125
+	},
+	{
+		"draw_commands": 1,
+		"item": "cenoura_cut",
+		"pixel_width": 17,
+		"stage": "cenoura-na-panela",
+		"visible_pixels": 82,
+		"zoom": 1.3125
+	},
+	{
+		"draw_commands": 1,
+		"item": "arrozCenoura",
+		"pixel_width": 30,
+		"stage": "arroz-pronto-no-fogao",
+		"visible_pixels": 390,
+		"zoom": 1.3125
+	},
+	{
+		"draw_commands": 1,
+		"item": "arrozCenoura",
+		"pixel_width": 20,
+		"stage": "arroz-empratado",
+		"visible_pixels": 164,
+		"zoom": 1.3125
+	},
+	{
+		"draw_commands": 1,
+		"item": "arrozCenoura",
+		"pixel_width": 20,
+		"stage": "arroz-na-mao",
+		"visible_pixels": 185,
+		"zoom": 1.3125
+	}
+]

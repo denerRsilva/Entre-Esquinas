@@ -6,6 +6,7 @@ const ITEMS = preload("res://simulacao/nativa/itens.json")
 const STATE = preload("res://simulacao/nativa/EstadoCozinha.gd")
 static func hours(s: Dictionary) -> Array:return s.get("serviceHours",CALENDAR.hours())
 static func pending(s: Dictionary) -> bool:
+	if s.workers.any(func(w):return w.has("mealBreak") or w.has("noteJob")):return true
 	if not s.customers.is_empty() or STATE.truthy(s.get("chopping")) or STATE.truthy(s.get("cooking")) or STATE.truthy(s.get("plating")) or STATE.truthy(s.get("washing")) or not s.ready.is_empty():return true
 	for order in s.orders:
 		if order.state not in ["paid","lost"]:return true
@@ -27,7 +28,7 @@ static func auto_open(s: Dictionary) -> void:
 	sync(s)
 	var h: Dictionary = hours(s)[int(s.period)]
 	if s.clock.minute>=h.start and s.clock.minute<h.end:
-		s.open=true;s.arrival=17
+		s.open=true;s.arrival=preload("res://simulacao/nativa/Equilibrio.gd").interval(s)-8
 		s.message=("Almoço" if s.period==0 else "Jantar")+" aberto."
 
 static func open_error(s: Dictionary) -> String:
@@ -53,7 +54,7 @@ static func toggle(s: Dictionary) -> bool:
 		var error := open_error(s)
 		if not error.is_empty():s.message=error;return false
 	if s.open:s.closing=true;s.message="Entrada encerrada. Conclua os pedidos e deixe os clientes saírem.";return true
-	s.open=true;s.arrival=17
+	s.open=true;s.arrival=preload("res://simulacao/nativa/Equilibrio.gd").interval(s)-8
 	s.message=("Almoço" if s.period==0 else "Jantar")+" aberto. Receba pedidos nas mesas, prepare e sirva."
 	return true
 static func advance_clock(s: Dictionary,dt: float) -> void:
@@ -178,3 +179,19 @@ static func valid_time_reputation(s: Dictionary) -> bool:
 		if not numeric(entry.get("time")) or entry.time>s.time or not NUM.integer(entry.get("day")) or entry.day<1:return false
 		visited[entry.visitId]=true;expected=entry.after
 	return r.score==expected
+
+# Read-only eligibility; session advances the ordinary simulation, never jumps it.
+static func skip_error(s: Dictionary) -> String:
+	if not REFUGE.active(s) or REFUGE.blocked(s) or s.clock.ending:return "Conclua o dia atual."
+	if pending(s):return "Conclua o atendimento e as tarefas."
+	if s.open and REFUGE.next_resident(s)!=null:return "Ainda há moradores chegando neste turno."
+	for o in s.objects:
+		if o.type=="stove" and (not o.get("ingredients",[]).is_empty() or o.get("readyBatch")!=null):return "Retire a comida do fogão."
+	for a in N_actors(s):
+		if a.get("motion")!=null or a.get("carry")!=null:return "Conclua os deslocamentos e libere a carga."
+	return ""
+static func N_actors(s: Dictionary) -> Array:return [s.player]+s.workers
+static func next_mark(s: Dictionary) -> int:
+	for minute in [hours(s)[0].start,hours(s)[1].start,1560]:
+		if minute>s.clock.minute:return minute
+	return 1560

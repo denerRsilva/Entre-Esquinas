@@ -63,6 +63,7 @@ func ingredient(item: String,x: float,y: float) -> void:
 	var size := FOOD.INGREDIENT_SIZE
 	food(item,x-size.x/2,y-size.y/2,size.x,size.y)
 static func held(s: Dictionary,a: Dictionary) -> Variant:
+	if a.get("mealBreak")!=null:return a.mealBreak.dish
 	if a.get("hand")!=null:return a.hand
 	var carry = a.get("carry")
 	if carry==null:return null
@@ -116,12 +117,19 @@ func actor(s: Dictionary,a: Dictionary,selected: Variant,construction: bool) -> 
 		if chair!=null and a.room==chair.room and a.x==chair.x and a.y==chair.y and BUILD.seat_table(chair,s.objects)!=null:
 			dir=["up","right","down","left"][posmod(int(chair.rot),4)]
 			facing[identities.get(a.id,a.id)]=dir
+	if a.get("reactionUntil",0)>s.time:
+		var chair = BUILD.find(s.objects,a.get("seat"))
+		if chair!=null:
+			var dx: float = chair.x-pose.x;var dy: float = chair.y-pose.y
+			dir=("left" if dx<0 else "right") if absf(dx)>absf(dy) else ("up" if dy<0 else "down")
+			x+=sin((a.reactionUntil-s.time)*PI*2)*2
 	var moving: bool = a.get("motion")!=null or (a.id=="player" and velocity!=null and velocity.get("moving",false))
 	commands.append(["cook",x,bottom,dir,moving] if a.id=="player" else ["npc",a.id,skin,x,bottom,dir,moving])
 	if a.get("noteJob")!=null:
 		var job: Dictionary = a.noteJob
 		commands.append(["progress","note:"+str(a.id),x-22,bottom-78,44,8,1-job.left/job.total,"blue"])
 	draw_held(s,held(s,a),x+(-12 if dir=="left" else 12 if dir=="right" else 8),bottom-(32 if dir=="up" else 22))
+	if a.get("mealBreak")!=null:commands.append(["progress","meal:"+str(a.id),x-22,bottom-78,44,8,1-a.mealBreak.left/4,"green"])
 	if construction:return
 	if a.id=="player":label("Você",x,bottom+12,"#77603a")
 	elif a.id.begins_with("worker"):label("Logística" if a.id=="worker1" else "Garçom",x,bottom+11)
@@ -202,8 +210,8 @@ func object(s: Dictionary,o: Dictionary,selected: bool,preview: bool = false) ->
 	var cooking = s.get("cooking") if o.has("id") and s.get("cooking")!=null and s.cooking.stove==o.id else null
 	if o.type=="stove" and (not o.get("ingredients",[]).is_empty() or cooking!=null or o.get("readyBatch")!=null):
 		var index := 0
-		for p in o.get("ingredients",[]):ingredient(p.item,x+14+index*24,y-6);index+=1
-		var recipe = RECIPES.recognized(o)
+		for p in o.get("ingredients",[]):ingredient(p.item,x+14+(index%3)*24,y-6-(index/3)*14);index+=1
+		var recipe = RECIPES.recognized(o,s)
 		if recipe==null:recipe=cooking.recipe if cooking!=null else o.readyBatch.recipe if o.get("readyBatch")!=null else null
 		if recipe!=null:food(recipe,x+w/2-14,y-50,28,24)
 	if STORE.is_support_surface(o) and o.get("support")!=null:

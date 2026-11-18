@@ -30,11 +30,11 @@ func project(recipe: String,lunch_only: bool,hire: bool,price: float) -> Diction
 			if period==1 and REF.attack_day(s):continue
 			if not recipe.is_empty() and not (period==1 and lunch_only):
 				for person in s.refuge.residents:
-					if HIRE.employed(s,person.id):continue
+					var employed := HIRE.employed(s,person.id)
 					# Assume every eligible resident is served at 85% satisfaction.
 					# No navigation, inventory, dirt, wastage or time simulation here.
 					REF.completed(s,{"refugeResident":person.id,"recipe":recipe,"experience":{"satisfaction":{"score":85}}},"completed")
-					served+=1;meals+=1;margin+=price-cost(recipe)
+					served+=1;meals+=1;margin+=(float(RECIPES.data[recipe].price) if employed else price)-cost(recipe)
 			REF.end_shift(s,period)
 		var row := {"day":s.day,"population":s.refuge.residents.size(),"workers":s.workers.size(),"meals":served,"stats":REF.collective(s),"hired":hired}
 		if REF.attack_day(s):
@@ -48,20 +48,23 @@ func project(recipe: String,lunch_only: bool,hire: bool,price: float) -> Diction
 	return {"recipe":recipe,"lunch_only":lunch_only,"hire":hire,"price":price,"days":rows,"meals":meals,"replacement_margin_less_daily_expenses_and_hire":margin,"ending":s.refuge.phase}
 func price_probe(price: float) -> Dictionary:
 	var s := fresh();s.menu.arrozCenoura=false
-	check(CMD.execute(s,"price",["caldoBatata",price]).ok,"Preço permitido pelo comando real")
+	var response := CMD.execute(s,"price",["caldoBatata",price])
+	if not response.ok:return {"requested_price":price,"accepted":false,"menu_price":s.prices.caldoBatata}
 	var sim := SIM.new();sim.service.random_source=func():return 0.5
 	check(sim.spawn(s),"Preço permite chegada")
-	var c: Dictionary = s.customers[0];c.state="waiting";c.goal=null
+	var c: Dictionary = s.customers[0]
+	if c.state=="leave":return {"requested_price":price,"accepted":true,"customer_ordered":false,"reason":c.experience.get("arrivalIssue")}
+	c.state="waiting";c.goal=null
 	s.player.x=c.x+1;s.player.y=c.y;sim.service.begin(s,c,"service")
 	c.experience.elapsed.service=2
 	check(sim.service.take_order(s,s.player,c),"Preço permite anotar pedido")
 	c.experience.elapsed.food=10;sim.service.finish(c);c.experience.servedQuality=0
 	return {"price":s.orders[0].price,"profile":c.experience.profile,"limits":c.experience.limits,"recipe":c.recipe,"satisfaction_with_equal_waits":sim.service.satisfaction(c.experience)}
 func run():
-	var data := {"method":"Formula projections with perfect service at 85% satisfaction, not physical playthroughs. Margins assume ingredients replaced at catalog cost; no spoilage, wages or extra purchases.","price_probe":[price_probe(10),price_probe(100)],"recipes":[],"policies":[]}
+	var data := {"method":"Formula projections with perfect service at 85% satisfaction, not physical playthroughs. Margins assume ingredients replaced at catalog cost; no spoilage, wages or extra purchases. Staff meals included at reference price, assuming a real surplus portion is prepared.","price_probe":[price_probe(8),price_probe(10),price_probe(12),price_probe(100)],"recipes":[],"policies":[]}
 	for id in ["caldoBatata","arrozCenoura","canja"]:
 		data.recipes.append({"recipe":id,"price":RECIPES.data[id].price,"ingredients":cost(id),"margin":RECIPES.data[id].price-cost(id),"nutrition":RECIPES.data[id].nutrition})
-	for policy in [["",false,false,10],["caldoBatata",true,false,10],["caldoBatata",false,false,10],["arrozCenoura",false,false,14],["arrozCenoura",false,true,14],["caldoBatata",false,false,100]]:
+	for policy in [["",false,false,10],["caldoBatata",true,false,10],["caldoBatata",false,false,10],["arrozCenoura",false,false,14],["arrozCenoura",false,true,14]]:
 		data.policies.append(project(policy[0],policy[1],policy[2],policy[3]))
 	FileAccess.open("/tmp/auditoria-balanceamento.json",FileAccess.WRITE).store_string(JSON.stringify(data,"\t"))
 	print("PROJEÇÕES /tmp/auditoria-balanceamento.json; FALHAS: ",failures);quit(1 if failures else 0)

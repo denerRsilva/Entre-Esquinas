@@ -66,7 +66,7 @@ func art_control(d: Dictionary) -> Control:
 	n.material=mat
 	n.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	n.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	n.custom_minimum_size = Vector2(160,88) if d.get("cls","")=="recipeHeroSmall" else Vector2(28,24) if d.get("cls","")=="controlIcon" else Vector2(180,130) if d.get("cls","")=="recipeHero" else Vector2(52,42)
+	n.custom_minimum_size = Vector2(160,64) if d.get("cls","")=="recipeHeroSmall" else Vector2(28,24) if d.get("cls","")=="controlIcon" else Vector2(180,130) if d.get("cls","")=="recipeHero" else Vector2(52,42)
 	n.tooltip_text = d.get("label","")
 	return n
 
@@ -224,7 +224,7 @@ func render(d: Dictionary, parent: Control) -> void:
 	var group: Container
 	if cls=="recipeBook":
 		var grid:=GridContainer.new()
-		grid.columns=3
+		grid.columns=mini(kids.size(),2 if parent.get_viewport().get_visible_rect().size.x<1300 else 3)
 		grid.add_theme_constant_override("h_separation",12)
 		group=grid
 	elif cls in ["recipeIngredients","recipeFlow"]:
@@ -250,9 +250,10 @@ func render(d: Dictionary, parent: Control) -> void:
 		grid.add_theme_constant_override("h_separation",10)
 		grid.add_theme_constant_override("v_separation",10)
 		group=grid
-	elif cls in ["cards","recipeGrid","inventoryGrid","splitInventories","prepSlots","prepPrimary"]:
+	elif cls in ["cards","recipeGrid","inventoryGrid","splitInventories","prepSlots","prepPrimary","menuCards"]:
 		var grid := GridContainer.new()
 		grid.columns = 1 if compact else (5 if cls=="inventoryGrid" else 3 if cls in ["cards","recipeGrid"] else 2)
+		if cls=="menuCards":grid.columns=mini(2,kids.size())
 		if cls=="inventoryGrid" and compact: grid.columns=2
 		if cls in ["prepSlots","prepPrimary"]: grid.columns=2
 		group=grid
@@ -261,10 +262,14 @@ func render(d: Dictionary, parent: Control) -> void:
 	else:
 		group=VBoxContainer.new()
 	group.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	if cls=="card" or cls=="inventoryPane":
+	if cls in ["card","recipeCard","inventoryPane"]:
 		var panel := PanelContainer.new()
 		panel.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 		parent.add_child(panel)
+		if cls=="recipeCard":
+			var style: StyleBox = panel.get_theme_stylebox("panel").duplicate()
+			style.content_margin_bottom=28;style.content_margin_top=24
+			panel.add_theme_stylebox_override("panel",style)
 		panel.add_child(group)
 		group.add_theme_constant_override("separation",8)
 	else: parent.add_child(group)

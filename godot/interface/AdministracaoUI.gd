@@ -1,4 +1,5 @@
 extends RefCounted
+const BAL = preload("res://simulacao/nativa/Equilibrio.gd")
 const REFUGE = preload("res://simulacao/nativa/Refugio.gd")
 const ADMIN = preload("res://simulacao/nativa/Administracao.gd")
 const SERVICE = preload("res://simulacao/nativa/Atendimento.gd")
@@ -79,6 +80,12 @@ func panel(s: Dictionary,model: Dictionary) -> Array:
 			var condition: String = "Boas condições" if city.defense>=75 else "Estáveis" if city.defense>=50 else "Precisam de reparos"
 			result.append(label("Defesas: "+condition+" · "+number(city.defense)+" / 100"))
 			result.append(label("Próxima horda: hoje" if days==0 else "Próxima horda: em "+number(days)+(" dia" if days==1 else " dias")))
+			if BAL.active(s):
+				result.append(label("Descanso previsto: +"+str(BAL.recovery(s))+" energia. Jantar até 22h: descanso completo; após 23h: reduzido."))
+				result.append(label("Último descanso: +"+str(city.balance.lastRest)+" energia"))
+				if city.level>=1:result.append(label("Oficina: até 2 porções por panela usando 2× os ingredientes."))
+				result.append(button("Avançar até o próximo turno","nextShift","",not ADMIN.skip_error(s).is_empty()))
+				for person in city.residents:result.append(node("div",[text(person.name),FOOD.icon(BAL.favorite(int(person.id)))],"","recipeFlow"))
 			result.append(label("Derrotas seguidas: "+number(city.defeats)+" / 2 · Uma vitória reinicia a sequência."))
 		"camera":
 			result.append(node("div",[button("− Afastar","zoom","out",model.camera<=0.7),node("output",[text(number(round(model.camera*100))+"%")]),button("+ Aproximar","zoom","in",model.camera>=2)],"","cameraControls"))
@@ -90,6 +97,7 @@ func panel(s: Dictionary,model: Dictionary) -> Array:
 				for key in ["start","end"]:parts.append(node("label",[text("Início" if key=="start" else "Término"),select(("Almoço" if i==0 else "Jantar")+" — "+("Início" if key=="start" else "Término"),"hours",str(i)+":"+key,form.hours[i][key],time_options(),busy,{"index":i,"field":key})]))
 				result.append(node("div",parts,"","card"))
 			result.append(button("Aplicar horários","applyHours","",busy))
+			if BAL.active(s):result.append(button("Avançar até o próximo turno","nextShift","",not ADMIN.skip_error(s).is_empty()))
 		"supplier":
 			var receiving := false
 			for o in s.objects:
@@ -111,12 +119,13 @@ func panel(s: Dictionary,model: Dictionary) -> Array:
 					rows.append(values)
 			result.append(node("div",cards,"","cards"));result.append(table(["Ingrediente","Recebimento","Estoque","Cozinha"],rows))
 		"menu":
-			result.append(label("Escolha os pratos oferecidos e ajuste os preços. Receitas e custos são hipóteses de teste. Pedidos já anotados mantêm o preço combinado."));var cards: Array = []
+			result.append(label("Escolha os pratos e preços. Pedidos anotados mantêm o valor combinado."));var cards: Array = []
 			for id in preload("res://simulacao/nativa/Receitas.gd").available(s):
 				var recipe: Dictionary = SERVICE.RECIPES.data[id];var cost := 0.0;var ingredients: PackedStringArray = []
 				for food in recipe.foods:cost+=recipe.foods[food]*SERVICE.INV.ITEMS.data[food].cost;ingredients.append(number(recipe.foods[food])+" "+SERVICE.INV.ITEMS.data[food].name)
-				cards.append(node("div",[node("b",[text(recipe.name)]),FOOD.icon(id),preload("res://interface/LivroReceitasNativo.gd").ratings(s,id),label(" + ".join(ingredients)+" • custo "+money(cost)+" • preparo "+number(recipe.time)+"s por porção"),{"tag":"input","type":"checkbox","checked":s.menu[id],"value":s.menu[id],"label":"Oferecer no cardápio","path":register("menu",id),"disabled":false},input("Preço de "+recipe.name,"price",id,s.prices[id],1,100,0.25)],"","card"))
-			result.append(node("div",cards,"","cards"))
+				cards.append(node("div",[node("b",[text(recipe.name)]),FOOD.icon(id),preload("res://interface/LivroReceitasNativo.gd").ratings(s,id),label(" + ".join(ingredients)+" • custo "+money(cost)+" • preparo "+number(recipe.time)+"s por porção"),{"tag":"input","type":"checkbox","checked":s.menu[id],"value":s.menu[id],"label":"Oferecer no cardápio","path":register("menu",id),"disabled":false},input("Preço de "+recipe.name,"price",id,s.prices[id],BAL.bounds(id).x if BAL.active(s) else 1,BAL.bounds(id).y if BAL.active(s) else 100,0.25)],"","card"))
+			result.append(node("div",cards,"","menuCards"))
+			if BAL.active(s):result.append(label("Faixa ±20%. Descontos favorecem a moral. Preço alto reduz satisfação e pode exceder o orçamento."))
 		"deliveries":
 			var rows: Array = []
 			for delivery in s.deliveries:rows.append(["#"+number(delivery.id),FOOD.icon(delivery.food,delivery.get("quality",0)),delivery.total,delivery.received,delivery.pending,number(ceil(delivery.eta-s.time))+"s" if delivery.eta>s.time else "No recebimento / aguarda espaço"])
@@ -124,6 +133,7 @@ func panel(s: Dictionary,model: Dictionary) -> Array:
 		"team":
 			if HIRING.active(s):
 				result.append(node("h2",[text("Equipe da taverna")]))
+				if BAL.active(s):result.append(label("Deixe uma porção extra por funcionário e turno. A cidade paga o preço de referência pela refeição."))
 				if not HIRING.occupied(s):
 					if not HIRING.unlocked(s):
 						result.append(label("A chegada de novos moradores abrirá a primeira vaga: Garçom."))
@@ -131,7 +141,7 @@ func panel(s: Dictionary,model: Dictionary) -> Array:
 					else:result.append(button("Procurar contratação","searchStaff"))
 				for record in s.refuge.hiring.hires:
 					var worker = SERVICE.new().find(s.workers,record.actor)
-					result.append(node("div",[node("b",[text(record.name+" · "+("Garçom" if record.role=="waiter" else "Logística"))]),select("Tarefa de "+record.name,"task",record.actor,worker.task,[["Pausado","none"],["Anotar, servir e recolher louça","waiter"]] if record.role=="waiter" else [["Pausado","none"],["Logística","logistics"]])],"","card"))
+					result.append(node("div",[node("b",[text(record.name+" · "+("Garçom" if record.role=="waiter" else "Logística"))]),label("Refeição da equipe: "+("concluída neste turno" if BAL.active(s) and s.refuge.balance.staff.has(BAL.staff_key(s,worker)) else "em intervalo" if worker.has("mealBreak") else "deixe uma porção extra na estação")),select("Tarefa de "+record.name,"task",record.actor,worker.task,[["Pausado","none"],["Anotar, servir e recolher louça","waiter"]] if record.role=="waiter" else [["Pausado","none"],["Logística","logistics"]])],"","card"))
 				if form.get("searchStaff",false) and not HIRING.occupied(s):
 					for person in HIRING.candidates(s):
 						var reason := HIRING.error(s,person.id)
@@ -143,7 +153,8 @@ func panel(s: Dictionary,model: Dictionary) -> Array:
 				var name: String = "Garçom" if worker.id=="worker2" else "Logística"
 				result.append(node("div",[node("b",[text(name)]),label({"restaurant":"Restaurante • salão e cozinha","street":"Rua da Praça","stock":"Estoque • recebimento e administração"}[worker.room]+" • "+("Aguardando passagem" if worker.wait>=5 else "Transportando carga" if worker.get("carry")!=null else "Em deslocamento" if worker.get("goal")!=null else "Aguardando trabalho ou ingredientes")),select("Tarefa de "+name,"task",worker.id,worker.task,[["Parado","none"],["Anotar, servir e recolher louça","waiter"]] if s.singleRoom else [["Parado","none"],["Recebimento → estoque → cozinha","logistics"],["Anotar, servir e recolher louça","waiter"]])],"","card"))
 		"finance":
-			result.append(table(["Indicador","Hoje"],[["Receita",money(s.ledger.revenue)],["Ingredientes consumidos",money(s.ledger.foodCost)],["Compras",money(s.ledger.purchases)],["Investimentos",money(s.ledger.investment)],["Clientes pagos",s.ledger.sales],["Clientes perdidos (inclui abandono)",s.ledger.lost],["Esperas por circulação",s.flowWaits]]))
+			result.append(table(["Indicador","Hoje"],[["Receita",money(s.ledger.revenue)],["Ingredientes consumidos",money(s.ledger.foodCost)],["Compras",money(s.ledger.purchases)],["Investimentos",money(s.ledger.investment)],["Refeições pagas",s.ledger.sales],["Clientes perdidos (inclui abandono)",s.ledger.lost],["Esperas por circulação",s.flowWaits]]))
+			if BAL.active(s):result.append(label("Refeições da equipe incluídas na receita: "+money(s.ledger.get("teamRevenue",0))))
 			if s.get("lastReport")!=null:
 				var report: Dictionary = s.lastReport
 				result.append(table(["Último fechamento • dia "+number(report.day),"Valor"],[["Receita",money(report.revenue)],["Custo dos ingredientes",money(report.foodCost)],["Despesa",money(report.expense)],["Resultado operacional",money(report.result)],["Caixa final",money(report.cash)]]))

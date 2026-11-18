@@ -1,4 +1,5 @@
 extends RefCounted
+const BAL = preload("res://simulacao/nativa/Equilibrio.gd")
 const REFUGE = preload("res://simulacao/nativa/Refugio.gd")
 const ADMIN = preload("res://simulacao/nativa/Administracao.gd")
 const MOVE = preload("res://simulacao/nativa/Movimento.gd")
@@ -51,7 +52,7 @@ func satisfaction(p: Dictionary) -> Dictionary:
 	var score: float = (p.results.get("service") if p.results.get("service")!=null else 0)*weights.service+(p.results.get("food") if p.results.get("food")!=null else 0)*weights.food
 	var denominator: float = weights.service+weights.food
 	if p.has("servedQuality"):score+=[0.7,0.8,0.9,1][int(p.servedQuality)]*weights.quality;denominator+=weights.quality
-	score=100*score/denominator
+	score=clampf(100*score/denominator-float(p.get("pricePenalty",0))+float(p.get("preference",0)),0,100)
 	var classification: String = CONFIG.data.satisfaction.classes[-1].id
 	for item in CONFIG.data.satisfaction.classes:
 		if score>=item.min:classification=item.id;break
@@ -75,7 +76,9 @@ func finalize(s: Dictionary,c: Dictionary,outcome: String) -> bool:
 func reject_dirty(s: Dictionary,c: Dictionary,reason: String) -> bool:
 	var p: Dictionary = c.experience
 	if p.reviewResolved:return false
+	BAL.departure(s)
 	p.arrivalIssue=reason;p.abandoned=true;p.phase=null
+	c.reactionUntil=s.time+2.0
 	p.satisfaction={"score":0,"classification":"unsatisfied","quality":null}
 	p.indicatorUntil=null
 	c.state="leave";MOVE.go(c,{"room":"restaurant","x":7,"y":14})
@@ -84,7 +87,7 @@ func reject_dirty(s: Dictionary,c: Dictionary,reason: String) -> bool:
 func abandon(s: Dictionary,c: Dictionary) -> bool:
 	var p: Dictionary = c.experience
 	if p.abandoned or p.phase==null:return false
-	finish(c);p.abandoned=true;p.satisfaction={"score":0,"classification":"unsatisfied","quality":null}
+	finish(c);BAL.departure(s);p.abandoned=true;p.satisfaction={"score":0,"classification":"unsatisfied","quality":null}
 	p.indicatorUntil=null if CONFIG.data.indicators.abandonSeconds==null else s.time+CONFIG.data.indicators.abandonSeconds
 	var order = find(s.orders,c.order)
 	if order!=null:
@@ -118,6 +121,7 @@ func return_canceled(s: Dictionary,a: Dictionary) -> bool:
 func take_order(s: Dictionary,a: Dictionary,c: Variant) -> bool:
 	if a.get("motion")!=null or c==null or c.state!="waiting" or not near(a,c) or expired(s,c):return false
 	finish(c)
+	if BAL.active(s):c.experience.pricePenalty=BAL.price_penalty(s,c.recipe);c.experience.preference=4 if BAL.favorite(int(c.refugeResident))==c.recipe else 0
 	var order := {"id":s.serial,"customer":c.id,"recipe":c.recipe,"state":"ordered","age":0,"price":s.prices[c.recipe]}
 	s.serial+=1;s.orders.append(order);c.order=order.id;c.state="ordered";begin(s,c,"food")
 	s.message="Pedido anotado: "+RECIPES.data[c.recipe].name
@@ -358,6 +362,7 @@ func clients_step(s: Dictionary,dt: float) -> void:
 		if c.state=="eating":
 			c.timer-=dt
 			if c.timer<=0:
+				BAL.departure(s)
 				HYGIENE.after_meal(s,c)
 				var order = find(s.orders,c.order)
 				order.state="paid";finalize(s,c,"completed");s.meals.eaten[order.recipe]+=1

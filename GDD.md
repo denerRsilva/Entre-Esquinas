@@ -1,8 +1,8 @@
 # Entre Esquinas
 
-## GDD 3.5 — Refúgio no apocalipse zumbi
+## GDD 3.6 — Refúgio no apocalipse zumbi
 
-**Revisão documental:** 17 de novembro de 2026. **Responsável pelas decisões:** Dener Silva.
+**Revisão documental:** 18 de novembro de 2026. **Responsável pelas decisões:** Dener Silva.
 
 Esta versão consolida a proposta aprovada pelo proprietário em 17/11/2026 e suas
 retificações: **três barras coletivas**, **derrotas consecutivas, reiniciadas
@@ -10,6 +10,37 @@ por uma vitória**, início sem funcionário e contratação conquistada pelo cr
 Registra também o início aprovado para teste, abastecimento limitado e mundo sem
 computador. A revisão 3.3 simplifica a entrada para Novo jogo e Carregar jogo,
 com um único slot; três partidas ficam para uma etapa futura. O histórico Git preserva as versões anteriores.
+
+### Revisão jogável .54 — melhorias aprovadas
+
+Implementa as propostas de balanceamento e clareza aprovadas em 18/11/2026.
+Valores continuam sujeitos a playtests. [Especificação e validação](docs/melhorias-equilibrio-54.md).
+
+- Alimentação por refeição: nutrição × 2 / população. Caldo sustenta o consumo
+  com os dois turnos atendidos; receitas melhores recuperam déficits.
+- Moral por refeição: `clamp((satisfação − 60) / 10, −4, 4) / população`.
+  Atendimento bom recupera gradualmente; atendimento ruim pode prejudicar.
+- Cardápio do refúgio: faixa de ±20% da referência, arredondada para dentro em
+  incrementos de 0,25. Orçamentos por perfil e ajuste de até 8 pontos na
+  satisfação por preço: descontos favorecem a moral, preços altos a reduzem. Pedidos já anotados preservam o preço.
+- Preferências de moradores influenciam escolha e satisfação, mostradas na
+  Cidade. Não exigem oferecer uma receita ainda não aprendida.
+- Funcionário contratado come uma porção real excedente em intervalo de 4s,
+  até uma por turno. A cidade remunera ao preço de referência. Não duplicar
+  o NPC, ingredientes, pratos ou pagamentos; pedidos de clientes têm prioridade.
+- Descanso recupera 16/12/8 de energia conforme jantar termine até 22h/23h/depois.
+  Alimentação abaixo de 40 limita a recuperação a 8. Histórico e previsão na
+  Cidade. Não criar penalidade pelo jantar suspenso na horda.
+- Chegadas distribuídas pelo turno. Avanço pelo menu apenas sem tarefas,
+  clientes, demanda restante ou comida no fogão, preservando o backup anterior
+  à preparação da horda. A abertura permanece automática.
+- Primeira vitória: corte 20% mais rápido e capacidade de duas porções por panela.
+- Zoom compacto mais próximo, livro com melhor distribuição/margens, ações de
+  louça distintas e reação corporal breve à sujeira, sem nomes ou popups novos.
+
+Os fluxos e valores históricos descritos adiante não substituem esta revisão.
+Hospedagem, ampliação da cidade e produção artística definitiva continuam etapas
+futuras; nenhuma sprite original foi substituída nesta atualização.
 
 > **A taverna é onde a cidade recupera as forças para sobreviver à próxima horda.**
 
@@ -281,7 +312,7 @@ indicadores ao selecionar as receitas do dia. O tempo considera corte, cozimento
 e empratamento, e a nutrição deve corresponder à contribuição alimentar real.
 Na .50, cada relógio representa aproximadamente 2 segundos, arredondando para
 cima; é uma escala de teste. Nutrição: caldo 4, arroz com cenoura 6 e canja 8.
-Cada refeição contribui com nutrição × 5,2 / população para a alimentação coletiva.
+Na .54, cada refeição contribui com nutrição × 2 / população para a alimentação coletiva. Substitui o multiplicador 5,2 da .50.
 O preço inicial é 10/14/20; tempos de cozimento 5/6/8s, respectivamente.
 A caravana chega nos dias 4, 8, 12 etc.; Nina intermedeia o teste, com seis
 frangos a 4 cada e aprendizado único de canja por 30. Agenda, quantidades,
@@ -511,7 +542,7 @@ Começar vazio permite montar do zero. O cenário mobiliado e a ferramenta de li
 7. Apoiar a panela na mesa de cozinha e liberar as mãos. Com prato limpo disponível, empratar por dois segundos junto à mesa.
 8. Pegar o prato pronto e servir. Retirar a panela vazia da mesa para reinstalar no fogão.
 
-Cada novo cozimento rende uma porção. Cada empratamento produz um prato. O sistema aceita panelas antigas com mais porções apenas para conservar partidas migradas.
+Na .54, cada cozimento rende uma porção antes da primeira vitória. A oficina reconstruída libera até duas porções: usar duas vezes todos os ingredientes da receita. O mesmo fogo cozinha o lote e o empratamento da panela nas mãos produz as duas porções, consumindo dois pratos limpos. Panelas antigas com mais porções continuam aceitas para conservar partidas migradas.
 
 | Receita | Ingredientes preparados por cozimento | Cozinhar | Preço inicial |
 | --- | --- | --- | --- |

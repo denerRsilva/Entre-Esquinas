@@ -35,5 +35,5 @@ func render(s: Dictionary = {}) -> Dictionary:
 			ingredients.append(node("div",symbols,"recipeIngredient"))
 		var flow: Array = []
 		for step in [["pot","Panela"],["flame",str(int(recipe.time))+" s"],["serve","Prato"]]:flow.append(node("div",[icon(step[0]),caption(step[1])]))
-		pages.append(node("div",[food(id,true),caption(recipe.name,"b"),caption("1 porção"),ratings(s,id),node("div",ingredients,"recipeIngredients"),node("div",flow,"recipeFlow")],"card"))
+		pages.append(node("div",[food(id,true),caption(recipe.name,"b"),caption("Até 2 porções por panela" if RECIPES.batch_limit(s)>1 else "1 porção"),ratings(s,id),node("div",ingredients,"recipeIngredients"),node("div",flow,"recipeFlow")],"recipeCard"))
 	return {"tag":"div","id":"panel","children":[node("div",pages,"recipeBook")]}

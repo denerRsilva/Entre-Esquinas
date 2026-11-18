@@ -77,7 +77,7 @@ func _draw() -> void:
 	text("A horda chegou" if model.phase=="battle" else titles[model.battle.result],Vector2(center,battle_rect.position.y+28),22,Color("fff0cf"),true)
 	battlefield()
 	var y: float = battle_rect.end.y-120
-	var words: String = "Moradores em seus postos" if model.phase=="battle" else "A oficina foi recuperada · tempo de corte −20%" if model.level==1 and model.battle.result in ["calm","held"] else "Um novo morador encontrou abrigo" if model.battle.result in ["calm","held"] else "Uma chance restante · recupere a cidade" if model.phase!="gameover" else "Retome o preparo e tente outra estratégia"
+	var words: String = "Moradores em seus postos" if model.phase=="battle" else "Oficina recuperada · corte −20% · até 2 porções/panela" if model.level==1 and model.battle.result in ["calm","held"] else "Um novo morador encontrou abrigo" if model.battle.result in ["calm","held"] else "Uma chance restante · recupere a cidade" if model.phase!="gameover" else "Retome o preparo e tente outra estratégia"
 	# Two short lines stay legible in small landscape windows.
 	if words.length()>45 and words.contains(" · "):
 		var parts := words.split(" · ");text(parts[0],Vector2(center,y),16,Color("e7c695"),true);text(parts[1],Vector2(center,y+20),16,Color("e7c695"),true)

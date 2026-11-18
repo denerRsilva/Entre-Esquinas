@@ -11,6 +11,11 @@ static func icon(label:String, fallback:Texture2D)->Texture2D:
   item='<path fill="#5d8e42" d="M14 5h5v8h-5zM20 4h5v10h-5z"/><path fill="#ef9b35" d="M12 13h17v7h-4v5h-5v5h-5v4h-5z"/>'
  else:
   return fallback
+ # Distinguish a cooked plate from clean stacks using the existing food colors.
+ if "prato nas mãos" in text:
+  item+='<path fill="#dd963d" d="M12 17h8v6h-8z"/><path fill="#6c903e" d="M22 16h6v7h-6z"/>'
+ elif "pratos limpos" in text:
+  item+='<path fill="#6c513d" d="M8 31h24v3H8zM8 35h24v3H8z"/>'
  var badge:=""
  if "cancel" in text or "descart" in text:
   badge='<path stroke="#f3b481" stroke-width="4" d="M38 26l12 12m0-12L38 38"/>'

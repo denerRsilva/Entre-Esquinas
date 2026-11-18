@@ -16,6 +16,8 @@ static func actors(state: Dictionary) -> Array:
 
 static func locations(state: Dictionary) -> Array:
 	var result: Array = [state.inventory,[state.player.hand] if state.player.get("hand") else [],state.get("recovery",[])]
+	for worker in state.workers:
+		if worker.get("mealBreak")!=null:result.append([worker.mealBreak.dish])
 	for object in state.objects:result.append(STORAGE.slots(object))
 	return result
 

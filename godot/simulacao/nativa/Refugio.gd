@@ -1,6 +1,7 @@
 extends RefCounted
 ## First playable refuge. Optional state keeps existing restaurants compatible.
 const HIRING = preload("res://simulacao/nativa/Contratacao.gd")
+const BAL = preload("res://simulacao/nativa/Equilibrio.gd")
 const STATS = ["food","energy","morale"]
 const BATTLE_SECONDS := 8.0
 const INTERVALS = [4,5,3]
@@ -10,6 +11,7 @@ static func resident(id: int) -> Dictionary:
 static func start(s: Dictionary) -> void:
 	s.refuge={"version":2,"stats":{"food":65.0,"energy":70.0,"morale":65.0},"victories":0,"losses":0,"residents":[resident(1),resident(2),resident(3)],"nextHorde":3,"wave":0,"defeats":0,"defense":65.0,"level":0,"phase":"day","battle":null,"visits":[],"closed":[],"lastAttack":0}
 	HIRING.initialize(s)
+	BAL.initialize(s)
 	s.clock={"minute":600,"remainder":0,"ending":false}
 static func blocked(s: Dictionary) -> bool:return active(s) and s.refuge.phase!="day"
 static func attack_day(s: Dictionary) -> bool:return active(s) and (s.day>=s.refuge.nextHorde or s.refuge.lastAttack==s.day)
@@ -37,6 +39,9 @@ static func completed(s: Dictionary,c: Dictionary,outcome: String) -> void:
 	var population: int = s.refuge.residents.size()
 	if outcome=="completed":
 		var nutrition: float = preload("res://simulacao/nativa/receitas.json").data.get(c.get("recipe"),{}).get("nutrition",5)
+		if BAL.active(s):
+			var result = c.experience.get("satisfaction")
+			BAL.meal(s,str(c.get("recipe","")),float(result.score) if result!=null else 50.0);return
 		change(s,"food",nutrition*5.2/population)
 		var satisfaction = c.experience.get("satisfaction")
 		change(s,"morale",(2+6*(float(satisfaction.score)/100 if satisfaction!=null else 0.5))/population)
@@ -51,7 +56,9 @@ static func end_shift(s: Dictionary,period: int) -> void:
 	change(s,"food",-8);change(s,"energy",-6);change(s,"morale",-2)
 static func dawn(s: Dictionary) -> void:
 	if not active(s):return
-	change(s,"energy",16 if s.refuge.stats.food>=40 else 8)
+	var recovery := BAL.recovery(s)
+	change(s,"energy",recovery)
+	if BAL.active(s):s.refuge.balance.lastRest=recovery;s.refuge.balance.lateMinute=0;s.refuge.balance.staff={}
 	s.refuge.visits=[];s.refuge.closed=[]
 static func collective(s: Dictionary) -> Dictionary:
 	return s.refuge.stats.duplicate() if active(s) else {"food":0.0,"energy":0.0,"morale":0.0}

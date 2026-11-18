@@ -11,7 +11,7 @@
   de substituir as sprites exportadas nesta revisão. Alterar dimensões exige
   atualizar recortes, frames e pivôs, sem alterar automaticamente os saves.
 
-- A premissa vigente é o **refúgio no apocalipse zumbi**, conforme o GDD 3.5;
+- A premissa vigente é o **refúgio no apocalipse zumbi**, conforme o GDD 3.6;
   a origem nuclear anterior foi substituída. `docs/primeiro-ciclo-refugio.md`
   registra o protótipo .46 e não prevalece sobre as regras aprovadas no GDD.
 - Alimentação, energia e moral são **três barras coletivas da cidade**, de 0 a 100.
@@ -55,3 +55,15 @@
   duplicado sobre o cliente. Mesas sujas apresentam recolher pratos e limpar;
   passar pano exige retirar a louça, liberar a mesa e as mãos. Não renderizar
   contextos vazios que possam interceptar cliques no mapa.
+
+- A .54 implementa as melhorias aprovadas em `docs/melhorias-equilibrio-54.md`:
+  multiplicador alimentar 2; moral pela satisfação; faixa de preços ±20%,
+  orçamento e preferências; descanso pelo término do jantar; chegadas distribuídas.
+- Funcionário vinculado a morador consome uma porção excedente real por turno,
+  remunerada pela cidade ao preço de referência, sem tomar pratos reservados.
+  `mealBreak` integra conservação, validação e save; nunca pagar antes da conclusão
+  nem duplicar a refeição ao carregar. Funcionário continua sem lavar pratos.
+- Primeira vitória libera lote de duas porções com o dobro dos ingredientes,
+  além do corte 20% mais rápido. Não conceder comida/utensílios gratuitamente.
+- Avanço ao próximo turno usa a simulação e exige ausência de pendências e
+  comida no fogão; nunca sobrescrever o checkpoint de preparação da horda.

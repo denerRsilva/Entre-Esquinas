@@ -9,16 +9,23 @@ static func total_time(s: Dictionary,id: String) -> float:
 	for item in RECIPES.data[id].foods:
 		if item!="arroz":total+=RECIPES.data[id].foods[item]*preload("res://simulacao/nativa/Refugio.gd").cut_time(s)
 	return total
-static func recognized(object: Dictionary) -> Variant:
+static func batch_limit(s: Dictionary) -> int:
+	return 2 if s.get("refuge") is Dictionary and s.refuge.get("balance") is Dictionary and s.refuge.level>=1 else 1
+static func portions(s: Dictionary,object: Dictionary,id: String) -> int:
 	var got := {}
 	for portion in object.get("ingredients",[]):got[portion.item]=got.get(portion.item,0)+portion.n
-	for id in RECIPES.data:
-		var needed := {}
-		for food in RECIPES.data[id].foods:needed[food if food=="arroz" else food+"_cut"]=RECIPES.data[id].foods[food]
-		var matches: bool = got.size()==needed.size()
+	var needed := {}
+	for food in RECIPES.data[id].foods:needed[food if food=="arroz" else food+"_cut"]=RECIPES.data[id].foods[food]
+	if got.size()!=needed.size():return 0
+	for factor in range(1,batch_limit(s)+1):
+		var matches := true
 		for item in needed:
-			if not got.has(item) or got[item]!=needed[item]:matches=false;break
-		if matches:return id
+			if got.get(item,0)!=needed[item]*factor:matches=false;break
+		if matches:return factor
+	return 0
+static func recognized(object: Dictionary,s: Dictionary = {}) -> Variant:
+	for id in RECIPES.data:
+		if portions(s,object,id)>0:return id
 	return null
 static func batch_quality(state: Dictionary, object: Dictionary) -> int:
 	var batch = object.get("readyBatch")

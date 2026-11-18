@@ -1,4 +1,5 @@
 extends RefCounted
+const BAL = preload("res://simulacao/nativa/Equilibrio.gd")
 const REFUGE = preload("res://simulacao/nativa/Refugio.gd")
 const SERVICE = preload("res://simulacao/nativa/Atendimento.gd")
 const KITCHEN = preload("res://simulacao/nativa/Cozinha.gd")
@@ -9,10 +10,13 @@ const ADMIN = preload("res://simulacao/nativa/Administracao.gd")
 var service = SERVICE.new()
 var kitchen = KITCHEN.new()
 var velocity: Variant = null
-func choose_recipe(s: Dictionary) -> Variant:
+func choose_recipe(s: Dictionary,person: Variant = null,profile: String = "normal") -> Variant:
 	var available: Array = []
 	for id in preload("res://simulacao/nativa/Receitas.gd").available(s):
 		if s.menu.get(id,false):available.append(id)
+	if BAL.active(s) and person!=null:
+		available=available.filter(func(id):return BAL.affordable(s,id,profile))
+		if BAL.favorite(int(person.id)) in available:return BAL.favorite(int(person.id))
 	return available[int(s.serial)%available.size()] if not available.is_empty() else null
 func spawn(s: Dictionary) -> bool:
 	if s.clock.ending or REFUGE.blocked(s) or REFUGE.dinner_blocked(s):return false
@@ -30,7 +34,13 @@ func spawn(s: Dictionary) -> bool:
 	var seat: Dictionary = choice.seat
 	var id: int = s.serial;s.serial+=1
 	var customer := {"id":"client"+str(id),"room":"restaurant","x":7,"y":13,"goal":null,"wait":0,"hold":0,"state":"walk","carry":null,"seat":seat.id,"recipe":choose_recipe(s),"order":null,"timer":0,"experience":service.experience()}
-	if person!=null:REFUGE.bind_visit(s,customer,person)
+	if person!=null:
+		REFUGE.bind_visit(s,customer,person)
+		if BAL.active(s):
+			var selected_recipe = choose_recipe(s,person,customer.experience.profile)
+			if selected_recipe!=null:customer.recipe=selected_recipe
+			else:
+				s.customers.append(customer);service.reject_dirty(s,customer,"price");return true
 	s.customers.append(customer)
 	if choice.get("reject",false):
 		service.reject_dirty(s,customer,choice.reason);return true
@@ -87,17 +97,20 @@ func simulate(s: Dictionary,dt: float) -> void:
 	MOVE.move(s,dt,velocity)
 	service.manual_moving=velocity!=null and velocity.get("moving",false)
 	kitchen.manual_moving=service.manual_moving
-	for w in s.workers:worker(s,w)
+	for w in s.workers:
+		if not service.pending_service(s) or w.has("mealBreak"):
+			if BAL.staff_step(s,w,dt):continue
+		worker(s,w)
 	service.notes_step(s,dt)
 	kitchen.step(s,dt);service.clients_step(s,dt)
 	if s.open and not s.closing:
 		s.arrival+=dt
-		if s.arrival>=25:s.arrival=0;spawn(s)
+		if s.arrival>=BAL.interval(s):s.arrival=0;spawn(s)
 	if s.closing and s.customers.is_empty() and s.get("cooking")==null and s.get("plating")==null and s.ready.is_empty():
 		var carried := false
 		for actor in MOVE.ACTORS.actors(s):
 			if actor.get("carry")!=null and actor.carry.kind=="dish" and not service.canceled(s,actor):carried=true
-		if not carried:ADMIN.finish_period(s)
+		if not carried and not s.workers.any(func(w):return w.has("mealBreak")):ADMIN.finish_period(s)
 func step(s: Dictionary,dt: Variant) -> void:
 	if not ADMIN.numeric(dt) or dt<=0:return
 	if REFUGE.blocked(s):REFUGE.battle_step(s,dt);return
