@@ -65,3 +65,18 @@ Validação em Linux/Godot 4.6.3: passaram Populacao50UI, EquilibrioNativo,
 CidadeUI, ContratacaoUI, InicioUI, MenuInicialUI, RefugioUI, EquilibrioUI,
 PlaytestDoZeroUI, SalvamentoDiscoNativoUI e AuditoriaRegressoes. Verificadores
 de migração e arte também passaram. Não é uma declaração de equilíbrio final.
+
+## APKs publicados
+
+Versão0.21.2-godot.56, Android21256. [Universal](../build/Android/EntreEsquinas.apk)
+(92,01 MiB) e [ARM64](../build/Android/EntreEsquinas-arm64.apk) (37,68 MiB),
+com a mesma assinatura anterior. [Metadados e hashes](teste-50-moradores-apks.json).
+A integridade ZIP, assinatura e versão foram verificadas; as texturas e bibliotecas
+do motor são idênticas às da .55, sem JavaScript nem QA nos pacotes. Os assets
+de execução são idênticos entre as variantes.
+
+`Populacao50UI` também passou com zero falhas sobre os assets extraídos do APK
+universal, acrescentando apenas os quatro scripts do harness de teste ao
+diretório temporário. Nenhum script compilado ou textura do pacote foi trocado.
+Esse ensaio confirma o conteúdo exportado no Linux, sem substituir teste em
+Android físico ou a avaliação de dificuldade pelo proprietário.

@@ -1,0 +1,35 @@
+{
+  "version": "0.21.2-godot.56",
+  "code": 21256,
+  "source_commit": "58513f6bf62091ed922a1e448b61064480211859",
+  "signing_certificate_sha256": "b66cc994c1e0440b0b17facf6484bcd3dac90b63ed61c977ccc9606a523b3dbe",
+  "variants": {
+    "EntreEsquinas.apk": {
+      "bytes": 96474631,
+      "sha256": "b7e33f30fbc6278c34005278bcaae3d01c1beef9f027fafc037d25ba0758a773",
+      "architectures": [
+        "arm64-v8a",
+        "armeabi-v7a",
+        "x86_64"
+      ],
+      "signature": "verified v2/v3; same certificate as .55"
+    },
+    "EntreEsquinas-arm64.apk": {
+      "bytes": 39507155,
+      "sha256": "1b72fd76f6f20948fb4faa66bed7aed5b4c91af3e58136808092a066a235ebcf",
+      "architectures": [
+        "arm64-v8a"
+      ],
+      "signature": "verified v2/v3; same certificate as .55"
+    }
+  },
+  "checks": {
+    "zip_integrity": true,
+    "runtime_assets_equal_between_variants": true,
+    "textures_identical_to_55": true,
+    "engine_libraries_identical_to_55": true,
+    "no_javascript_or_qa_in_apk": true,
+    "physical_android_tested": false,
+    "extracted_apk_populacao50_ui": "passed with zero failures on Linux; only QA harness added to extracted assets"
+  }
+}
