@@ -1,0 +1,74 @@
+{
+	"cell_height": 32,
+	"cell_width": 32,
+	"columns": 4,
+	"filter": "nearest",
+	"integrated": false,
+	"rows": 2,
+	"sprites": [
+		{
+			"file": "batata.png",
+			"h": 32,
+			"id": "batata",
+			"w": 32,
+			"x": 0,
+			"y": 0
+		},
+		{
+			"file": "batata_cut.png",
+			"h": 32,
+			"id": "batata_cut",
+			"w": 32,
+			"x": 32,
+			"y": 0
+		},
+		{
+			"file": "cenoura.png",
+			"h": 32,
+			"id": "cenoura",
+			"w": 32,
+			"x": 64,
+			"y": 0
+		},
+		{
+			"file": "cenoura_cut.png",
+			"h": 32,
+			"id": "cenoura_cut",
+			"w": 32,
+			"x": 96,
+			"y": 0
+		},
+		{
+			"file": "caldoBatata.png",
+			"h": 32,
+			"id": "caldoBatata",
+			"w": 32,
+			"x": 0,
+			"y": 32
+		},
+		{
+			"file": "arrozCenoura.png",
+			"h": 32,
+			"id": "arrozCenoura",
+			"w": 32,
+			"x": 32,
+			"y": 32
+		},
+		{
+			"file": "canja.png",
+			"h": 32,
+			"id": "canja",
+			"w": 32,
+			"x": 64,
+			"y": 32
+		},
+		{
+			"file": "prato_vazio.png",
+			"h": 32,
+			"id": "prato_vazio",
+			"w": 32,
+			"x": 96,
+			"y": 32
+		}
+	]
+}
