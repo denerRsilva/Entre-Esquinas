@@ -196,3 +196,13 @@ e refeições de equipe do dia; o prato durante intervalo integra conservação.
 Dados legados válidos são atualizados sem reaplicar kit inicial ou zerar barras,
 dinheiro, utensílios e pedidos. Os registros da auditoria .53 são históricos e
 não foram sobrescritos pelas novas projeções.
+
+
+## Entrega Android
+
+APK **0.21.2-godot.54 / 21254**, compilado do código `98d8470`.
+Assinatura verificada e igual à .53; ZIP íntegro. As 35 texturas importadas têm
+os mesmos bytes da versão anterior. O novo módulo de equilíbrio e os 14 módulos
+alterados da simulação estão incluídos/recompilados. Sem JavaScript ou QA no APK.
+Ambos os nomes de APK contêm a mesma versão, com 99,519MiB.
+[Metadados e SHA-256](equilibrio54/android.json). Não testado em Android físico.

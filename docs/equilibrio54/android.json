@@ -1,0 +1,29 @@
+{
+  "version": "0.21.2-godot.54",
+  "versionCode": 21254,
+  "sourceCommit": "98d84703016073902464800a79f3b688b41a9848",
+  "apkBytes": 104353227,
+  "sha256": "b9535af1bdb535ab6b9e42031925ddf9c7bf2829d9a484c8846a2a744ee0caac",
+  "certificateSha256": "b66cc994c1e0440b0b17facf6484bcd3dac90b63ed61c977ccc9606a523b3dbe",
+  "unchangedTextureCount": 35,
+  "verifiedRecompiledModules": [
+    "Administracao",
+    "Atendimento",
+    "Camera",
+    "Cena",
+    "ComandosInterface",
+    "Conservacao",
+    "Cozinha",
+    "Interacoes",
+    "Receitas",
+    "Refugio",
+    "Salvamentos",
+    "SessaoCompleta",
+    "Simulacao",
+    "ValidadorSave",
+    "Equilibrio"
+  ],
+  "zipIntegrity": true,
+  "noJavaScriptOrQA": true,
+  "testedOnPhysicalAndroid": false
+}
