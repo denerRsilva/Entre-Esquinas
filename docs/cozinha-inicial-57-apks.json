@@ -1,0 +1,33 @@
+{
+  "version": "0.21.2-godot.57",
+  "code": 21257,
+  "source_commit": "e6bad5a28557df8ce519ff843b38abb8b6fc71f0",
+  "variants": {
+    "EntreEsquinas.apk": {
+      "bytes": 96478727,
+      "sha256": "de5a8f5e3ed66fb73974ae94b46d0e7e550b227efd1e6b677867ebbe1cd46dfe",
+      "architectures": [
+        "arm64-v8a",
+        "armeabi-v7a",
+        "x86_64"
+      ],
+      "signature": "verified; same certificate as .56"
+    },
+    "EntreEsquinas-arm64.apk": {
+      "bytes": 39507155,
+      "sha256": "faf783de20d14c0a01308b1b671b8935c89d095500bc4d5b28469b762548b15b",
+      "architectures": [
+        "arm64-v8a"
+      ],
+      "signature": "verified; same certificate as .56"
+    }
+  },
+  "checks": {
+    "physical_android_tested": false,
+    "zip_integrity": true,
+    "runtime_assets_equal_between_variants": true,
+    "no_javascript_or_qa_in_apk": true,
+    "extracted_apk_inicio_ui": "passed with zero failures on Linux; only QA harness added to extracted assets"
+  },
+  "signing_certificate_sha256": "b66cc994c1e0440b0b17facf6484bcd3dac90b63ed61c977ccc9606a523b3dbe"
+}

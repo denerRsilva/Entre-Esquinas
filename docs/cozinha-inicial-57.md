@@ -25,3 +25,12 @@ Os 50 moradores e os demais parâmetros da .56 permanecem. Arte não alterada.
 Validação em Linux/Godot: Novo jogo, as duas receitas iniciais e canja, servir,
 comércio e salvar/carregar pelo fluxo InicioUI; captura renderizada do salão;
 navegação e construção na área liberada. APKs universal e ARM64 em build/Android.
+
+Também passaram Populacao50UI, TelaExpandidaUI, AuditoriaRegressoes,
+RegrasNativas, MovimentoNativo, ConstrucaoNativa, SalvamentoDiscoNativoUI e
+PlaytestDoZeroUI, além das auditorias de migração e de arte.
+Os APKs .57/21257 têm a mesma assinatura anterior, integridade ZIP e
+arquiteturas conferidas. Os arquivos de execução extraídos do APK universal
+passaram InicioUI com zero falhas; só o harness de QA foi acrescentado.
+Isso valida o conteúdo exportado em Linux, sem teste físico em Android.
+Hashes e detalhes em [cozinha-inicial-57-apks.json](cozinha-inicial-57-apks.json).
