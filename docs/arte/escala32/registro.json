@@ -1121,6 +1121,41 @@
       "height": 96,
       "cell": 32,
       "method": "atlas assembled from native 32px tiles"
+    },
+    {
+      "path": "docs/arte/fogao-64-r3/fogao-64.png",
+      "width": 64,
+      "height": 64,
+      "cell": 32,
+      "method": "explicit native pixel clusters; 2x2 assembly for one stove"
+    },
+    {
+      "path": "docs/arte/fogao-64-r3/bloco-1.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "explicit native pixel clusters; 2x2 assembly for one stove"
+    },
+    {
+      "path": "docs/arte/fogao-64-r3/bloco-2.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "explicit native pixel clusters; 2x2 assembly for one stove"
+    },
+    {
+      "path": "docs/arte/fogao-64-r3/bloco-3.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "explicit native pixel clusters; 2x2 assembly for one stove"
+    },
+    {
+      "path": "docs/arte/fogao-64-r3/bloco-4.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32,
+      "method": "explicit native pixel clusters; 2x2 assembly for one stove"
     }
   ],
   "legacy": [

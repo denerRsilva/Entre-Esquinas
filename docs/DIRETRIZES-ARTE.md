@@ -101,3 +101,10 @@ visível, bocas elípticas, cuba com paredes internas e topo da geladeira aparen
 frentes orientadas para baixo, sem mudar para isométrico. Usar bevels, reflexos
 e desgaste em grupos de pixels para dar volume. [Revisão dos aparelhos](arte/redesenho32/REVISAO-COZINHA.md).
 Os testes de dimensões são técnicos e não significam aprovação visual do lote.
+
+## Iteração por peça — estudo do fogão
+
+O pedido seguinte limita o refinamento a um fogão por vez: canvas 64×64, quatro
+blocos de 32×32, sem obrigar a silhueta a ocupar toda a imagem. O [estudo 3](arte/fogao-64-r3/LEIA-ME.md)
+fornece a sprite e os quatro recortes exatos, com prévia da grade. Os demais
+móveis ficam como estão; as propostas anteriores continuam em avaliação.

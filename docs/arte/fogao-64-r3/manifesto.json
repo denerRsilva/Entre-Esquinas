@@ -1,0 +1,50 @@
+{
+	"blocks": [
+		{
+			"file": "bloco-1.png",
+			"position": [
+				0,
+				0
+			]
+		},
+		{
+			"file": "bloco-2.png",
+			"position": [
+				32,
+				0
+			]
+		},
+		{
+			"file": "bloco-3.png",
+			"position": [
+				0,
+				32
+			]
+		},
+		{
+			"file": "bloco-4.png",
+			"position": [
+				32,
+				32
+			]
+		}
+	],
+	"canvas": [
+		64,
+		64
+	],
+	"cell": [
+		32,
+		32
+	],
+	"grid": [
+		2,
+		2
+	],
+	"integrated_in_game": false,
+	"opaque_pixels": 2396,
+	"pixel_colors": 17,
+	"revision": 3,
+	"scope": "one stove only",
+	"source": "desenhar.gd — new final-size pixel clusters; no source-image resizing"
+}

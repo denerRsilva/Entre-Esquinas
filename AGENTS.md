@@ -82,3 +82,5 @@
 - Limpeza: não duplicar APKs com nomes diferentes no Git. Manter universal e ARM64; gerar o ZIP completo de sprites sob demanda, conforme `docs/arte/EXPORTAR-SPRITES.md`. Não recolocar cópias de atlas em docs; apontar para a fonte única.
 
 - Feedback visual de 18/11: o primeiro redesenho foi rejeitado por aparência genérica e perspectiva inconsistente. Não tratá-lo como direção aprovada. A revisão 2 de fogão/pia/geladeira está em `docs/arte/redesenho32/REVISAO-COZINHA.md`: tampos profundos vistos de cima, frentes curtas, volumes/bevels e desgaste em clusters. Verificação de canvas não substitui avaliação artística.
+
+- Refinamento atual: trabalhar poucas sprites por vez. O pedido seguinte focou somente um fogão em canvas 64×64 (2×2 blocos de 32), permitindo áreas vazias. O estudo 3 está em `docs/arte/fogao-64-r3`; não expandir automaticamente a revisão aos outros móveis.
