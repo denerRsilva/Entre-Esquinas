@@ -2,7 +2,7 @@
 
 A compilação universal fica em `../build/Android/EntreEsquinas.apk`, com SHA-256 em `SHA256SUMS`. A opção ARM64 fica em `EntreEsquinas-arm64.apk`, com `SHA256SUMS-arm64`. A cópia idêntica com sufixo `-gdscript` foi retirada na limpeza; o jogo continua inteiramente em GDScript. No GitHub, baixe o arquivo completo pelo botão **Download raw file**.
 
-Versão atual: `com.entreesquinas.restaurante`, `0.21.2-godot.56` (21256), Android 7.0+, orientação horizontal e toque emulando mouse. A assinatura de depuração é a mesma do APK anterior. Não é necessário recompilar extensões C/C++ ou QuickJS.
+Versão atual: `com.entreesquinas.restaurante`, `0.21.2-godot.57` (21257), Android 7.0+, orientação horizontal e toque emulando mouse. A assinatura de depuração é a mesma do APK anterior. Não é necessário recompilar extensões C/C++ ou QuickJS.
 
 ## Exportar
 
@@ -92,3 +92,9 @@ Novos jogos iniciam com 50 moradores. Fórmulas, horários, estoques, preços,
 velocidades e requisitos de contratação permanecem os mesmos. O crescimento
 por vitória continua +1 nos primeiros três níveis. Partidas existentes
 continuam com sua população. [Escopo do teste](../docs/teste-50-moradores.md).
+
+## Cozinha .57
+
+Novo jogo adota a disposição da referência; divisória ao lado do fogão removida
+do cenário e da navegação. Saves existentes mantêm os móveis em suas posições.
+[Detalhes e validação](../docs/cozinha-inicial-57.md).

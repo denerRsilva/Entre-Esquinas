@@ -3,12 +3,14 @@ const P = preload("res://simulacao/nativa/Partida.gd")
 const INV = preload("res://simulacao/nativa/Inventario.gd")
 const STORE = preload("res://simulacao/nativa/Armazenamento.gd")
 const RECIPES = preload("res://simulacao/nativa/receitas.json")
+const KITCHEN_LAYOUT = {"stove":Vector2i(15,8),"prep":Vector2i(17,8),"fridge":Vector2i(19,7),"sink":Vector2i(20,8),"bin":Vector2i(22,8),"kitchen":Vector2i(15,11),"potRack":Vector2i(19,11)}
 static func apply(s: Dictionary) -> void:
 	s.startKit={"version":1,"recipes":["caldoBatata","arrozCenoura"]}
 	s.cash=200
 	var table_ids: Array = s.objects.filter(func(o):return o.type=="table").map(func(o):return o.id)
-	# Remove the lower-right table and its four linked chairs, preserving layout.
-	var table = s.objects.filter(func(o):return o.id==table_ids.back())[0]
+	# In the single-room starter, keep the two lower tables from the reference.
+	var removed_table = table_ids.front() if s.get("singleRoom",false) else table_ids.back()
+	var table = s.objects.filter(func(o):return o.id==removed_table)[0]
 	var erase_ids: Array = [table.id]
 	for o in s.objects:
 		if o.type=="chair":
@@ -22,6 +24,9 @@ static func apply(s: Dictionary) -> void:
 		s.menu[id]=id in s.startKit.recipes;s.prices[id]=RECIPES.data[id].price
 		for kind in ["made","eaten","wasted"]:s.meals[kind][id]=0
 	for o in s.objects:
+		if s.get("singleRoom",false) and KITCHEN_LAYOUT.has(o.type):
+			var position: Vector2i = KITCHEN_LAYOUT[o.type]
+			o.x=position.x;o.y=position.y
 		if o.type=="fridge":
 			o.inventory.fill(null)
 			for pair in [["arroz",12],["batata",8],["cenoura",8]]:INV.add(o.inventory,pair[0],pair[1]);s.purchased[pair[0]]=pair[1]

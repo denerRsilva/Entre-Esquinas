@@ -8,7 +8,7 @@ static func rect(object: Dictionary) -> Rect2i:
 
 static func wall(room: String, x: int, y: int, state: Dictionary = {}) -> bool:
 	if room=="restaurant" and state.get("singleRoom",false):
-		return x<=4 or x>=23 or y<=6 or y>=15 or (x==14 and y<10)
+		return x<=4 or x>=23 or y<=6 or y>=15
 	if room=="restaurant" and state.get("compact",false) and (x<=4 or y<=2):return true
 	if x<1 or y<1 or x>=23 or y>=15:return true
 	if room=="restaurant":return (x==14 and y!=7) or (x>=15 and y==10 and x!=18)

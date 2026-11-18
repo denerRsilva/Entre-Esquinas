@@ -1,5 +1,6 @@
 extends "res://qa/FluxoCompletoNativoUI.gd"
 const MARKET = preload("res://simulacao/nativa/Mercado.gd")
+const START = preload("res://simulacao/nativa/Inicio.gd")
 func snapshot(name: String) -> void:
 	if not "--capture" in OS.get_cmdline_user_args():return
 	root.mode=Window.MODE_WINDOWED;root.size=Vector2i(1280,720);g.tick(0);await layout();await RenderingServer.frame_post_draw
@@ -24,6 +25,15 @@ func run():
 	var s: Dictionary = g.session.state
 	check(s.cash==200 and s.workers.is_empty(),"Início com 200 e sem funcionário")
 	check(s.objects.filter(func(o):return o.type=="table").size()==2 and s.objects.filter(func(o):return o.type=="chair").size()==8,"Duas mesas e oito cadeiras")
+	for type in START.KITCHEN_LAYOUT:
+		var o: Dictionary = s.objects.filter(func(object):return object.type==type)[0]
+		check(Vector2i(o.x,o.y)==START.KITCHEN_LAYOUT[type],"Posição inicial da cozinha: "+type)
+	check(s.objects.filter(func(o):return o.type=="table").map(func(o):return Vector2i(o.x,o.y))==[Vector2i(6,11),Vector2i(11,12)],"Duas mesas do salão nas posições da referência")
+	for y in range(7,10):
+		check(not g.session.MOVE.MAP.blocked(s,"restaurant",Vector2i(14,y)),"Divisória removida libera passagem: "+str(y))
+	check(g.session.MOVE.MAP.route(s,"restaurant",Vector2i(13,9),Vector2i(15,9))!=null,"Navegação atravessa o antigo local da divisória")
+	var building: Dictionary = s.duplicate(true)
+	check(preload("res://simulacao/nativa/Construcao.gd").place(building,"counterThinMiddle",14,8,0).ok,"Construção também libera o espaço da divisória removida")
 	check(s.equipment.pot==2 and s.equipment.plate==8 and s.inv.kitchen.arroz==12 and s.inv.kitchen.batata==8 and s.inv.kitchen.cenoura==8,"Utensílios e ingredientes do kit aprovado")
 	check(g.session.SAVE.serialize(s)!=null,"Início conserva recursos e pode ser salvo")
 	check(g.session.simulation.choose_recipe(s) in ["caldoBatata","arrozCenoura"],"Clientes só escolhem as duas receitas iniciais")

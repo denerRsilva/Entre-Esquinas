@@ -71,3 +71,8 @@ do morador50 pelo menu rolável, chegada/anotação com ID alto, até cem visita
 nos dois turnos e persistência/crescimento das bases antiga3 e nova50.
 Os cenários históricos de contratação bloqueada e do almoço de três clientes
 continuam usando explicitamente uma campanha anterior de três moradores.
+
+Na .57, `InicioUI` também confere posições do novo kit, as duas mesas inferiores,
+passagem/navegação e construção na antiga divisória. As fixtures de construção
+foram atualizadas somente nos casos que tocam a área removida (x14, y7–9);
+uma rota muda seu penúltimo ponto porque agora pode cruzar esse espaço.

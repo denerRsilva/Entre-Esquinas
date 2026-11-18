@@ -52,7 +52,7 @@ func _draw():
 		asset(WALLS,[0,0,32,32],Rect2(x*40,top,40,62))
 		asset(WALLS,[0,0,32,32],Rect2(x*40+40,top,40,62))
 	# Continuous side walls: only plaster repeats, never the horizontal wall's plinth.
-	var spans := [[left,top+40,600],[920,top+40,600],[560,top+40,400]] if single_room else [[left,top+40,600],[920,top+40,600],[560,top+40,280],[560,320,600]]
+	var spans := [[left,top+40,600],[920,top+40,600]] if single_room else [[left,top+40,600],[920,top+40,600],[560,top+40,280],[560,320,600]]
 	for span in spans:
 		side_wall(span[0],span[1],span[2])
 	if not single_room:
