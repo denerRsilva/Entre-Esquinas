@@ -1,4 +1,9 @@
-# Redesenho em pixels de 32px
+# Redesenho em pixels de 32px — revisão visual em andamento
+
+**O primeiro resultado não foi aprovado visualmente pelo proprietário.** A
+[revisão 2 de fogão, pia e geladeira](REVISAO-COZINHA.md) corrige os três aparelhos
+como conjunto. Os outros desenhos continuam estudos e não devem ser tratados
+como direção final aprovada apenas por passarem nas verificações técnicas.
 
 Este é o **novo acervo desenhado no tamanho final**, usando a direção aprovada e
 as artes existentes como referência visual. Contém **135 PNGs individuais**,
@@ -71,7 +76,7 @@ em L sem frestas. As peças do Piskel anteriores permanecem intactas no jogo.
 
 ## Peso e procedência
 
-Os **135 PNGs individuais somam 65.555 bytes, aproximadamente 64 KiB**. A soma
+Os **135 PNGs individuais somam 68.220 bytes, aproximadamente 67 KiB**. A soma
 teórica de seus canvases RGBA8 é 1.409.024 bytes (1,34 MiB); isso não é uma
 medição de RAM em execução. O TileSet usa o pequeno `tileset-32.png` montado
 com os tiles individuais. Nenhum arquivo comercial do pacote de referência

@@ -7,7 +7,7 @@ O projeto ativo está em [godot/project.godot](godot/project.godot). Abra com Go
 - [Compilação Android](godot/ANDROID.md), [testes nativos](godot/qa/LEIA-ME.md) e [conclusão da migração](docs/MIGRACAO-GDSCRIPT.md).
 - [GDD — direção aprovada](GDD.md) e [direção de arte](docs/arte/RESTAURANTE.md).
 - [Diretriz de pixel art 32 × 32](docs/DIRETRIZES-ARTE.md) e [exportação de sprites para editar no Aseprite](docs/arte/EXPORTAR-SPRITES.md).
-- [Novo acervo redesenhado em 32px — PNGs, animações e cena editável](docs/arte/redesenho32/LEIA-ME.md).
+- [Estudos de redesenho em 32px — revisão visual em andamento](docs/arte/redesenho32/LEIA-ME.md).
 - [Escala 32px: análise do pacote, redução de peso e primeiro kit nativo](docs/arte/escala32/RELATORIO.md).
 - [Novos alimentos: PNGs individuais 32 × 32 para edição](docs/arte/novos-alimentos-32x32.zip).
 - [Melhorias .54: balanceamento, refeição da equipe, descanso e clareza visual](docs/melhorias-equilibrio-54.md).

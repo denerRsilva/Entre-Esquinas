@@ -1,6 +1,6 @@
 {
   "production_png_count": 135,
-  "production_png_bytes": 65555,
+  "production_png_bytes": 68220,
   "rgba8_theoretical_sum_bytes": 1409024,
   "character_sheets": 9,
   "animation_frames": 144,
@@ -36,5 +36,19 @@
     "144 frame regions at 32x32 with fixed foot baselines",
     "real TileSet32 and editable scene",
     "Linux/Godot Compatibility render of sample scene"
-  ]
+  ],
+  "visual_revision": {
+    "revision": 2,
+    "scope": "stove, sink and fridge only",
+    "feedback": "First art revision rejected as generic and inconsistent in perspective. Canvas checks do not establish visual approval.",
+    "projection": "Elevated orthographic, fronts aligned downward; deep top plane on stove and sink; visible rounded top of fridge.",
+    "main_game_replaced": false,
+    "changed_production_files": [
+      "docs/arte/redesenho32/png/moveis/fogao_aceso.png",
+      "docs/arte/redesenho32/png/moveis/fogao_apagado.png",
+      "docs/arte/redesenho32/png/moveis/geladeira_aberta.png",
+      "docs/arte/redesenho32/png/moveis/geladeira_fechada.png",
+      "docs/arte/redesenho32/png/moveis/pia.png"
+    ]
+  }
 }

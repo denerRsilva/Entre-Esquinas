@@ -50,197 +50,197 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_uqax3")
 
-[node name="Amostra32" type="Node2D" unique_id=311000703]
+[node name="Amostra32" type="Node2D" unique_id=980175220]
 texture_filter = 1
 
-[node name="Piso32" type="TileMapLayer" parent="." unique_id=787530841]
+[node name="Piso32" type="TileMapLayer" parent="." unique_id=1097422338]
 tile_map_data = PackedByteArray("AAABAAIAAAABAAAAAAACAAIAAAAAAAAAAAADAAIAAAABAAAAAAAEAAIAAAAAAAAAAAAFAAIAAAABAAAAAAAGAAIAAAAAAAAAAAAHAAIAAAABAAAAAAAIAAIAAAAAAAAAAAAJAAIAAAACAAAAAAAKAAIAAAACAAAAAAALAAIAAAACAAAAAAAMAAIAAAACAAAAAAANAAIAAAACAAAAAAAOAAIAAAACAAAAAAABAAMAAAAAAAAAAAACAAMAAAABAAAAAAADAAMAAAAAAAAAAAAEAAMAAAABAAAAAAAFAAMAAAAAAAAAAAAGAAMAAAABAAAAAAAHAAMAAAAAAAAAAAAIAAMAAAABAAAAAAAJAAMAAAACAAAAAAAKAAMAAAACAAAAAAALAAMAAAACAAAAAAAMAAMAAAACAAAAAAANAAMAAAACAAAAAAAOAAMAAAACAAAAAAABAAQAAAABAAAAAAACAAQAAAAAAAAAAAADAAQAAAABAAAAAAAEAAQAAAAAAAAAAAAFAAQAAAABAAAAAAAGAAQAAAAAAAAAAAAHAAQAAAABAAAAAAAIAAQAAAAAAAAAAAAJAAQAAAACAAAAAAAKAAQAAAACAAAAAAALAAQAAAACAAAAAAAMAAQAAAACAAAAAAANAAQAAAACAAAAAAAOAAQAAAACAAAAAAABAAUAAAAAAAAAAAACAAUAAAABAAAAAAADAAUAAAAAAAAAAAAEAAUAAAABAAAAAAAFAAUAAAAAAAAAAAAGAAUAAAABAAAAAAAHAAUAAAAAAAAAAAAIAAUAAAABAAAAAAAJAAUAAAACAAAAAAAKAAUAAAACAAAAAAALAAUAAAACAAAAAAAMAAUAAAACAAAAAAANAAUAAAACAAAAAAAOAAUAAAACAAAAAAABAAYAAAABAAAAAAACAAYAAAAAAAAAAAADAAYAAAABAAAAAAAEAAYAAAAAAAAAAAAFAAYAAAABAAAAAAAGAAYAAAAAAAAAAAAHAAYAAAABAAAAAAAIAAYAAAAAAAAAAAAJAAYAAAACAAAAAAAKAAYAAAACAAAAAAALAAYAAAACAAAAAAAMAAYAAAACAAAAAAANAAYAAAACAAAAAAAOAAYAAAACAAAAAAABAAcAAAAAAAAAAAACAAcAAAABAAAAAAADAAcAAAAAAAAAAAAEAAcAAAABAAAAAAAFAAcAAAAAAAAAAAAGAAcAAAABAAAAAAAHAAcAAAAAAAAAAAAIAAcAAAABAAAAAAAJAAcAAAACAAAAAAAKAAcAAAACAAAAAAALAAcAAAACAAAAAAAMAAcAAAACAAAAAAANAAcAAAACAAAAAAAOAAcAAAACAAAAAAABAAgAAAABAAAAAAACAAgAAAAAAAAAAAADAAgAAAABAAAAAAAEAAgAAAAAAAAAAAAFAAgAAAABAAAAAAAGAAgAAAAAAAAAAAAHAAgAAAABAAAAAAAIAAgAAAAAAAAAAAAJAAgAAAACAAAAAAAKAAgAAAACAAAAAAALAAgAAAACAAAAAAAMAAgAAAACAAAAAAANAAgAAAACAAAAAAAOAAgAAAACAAAAAAABAAkAAAAAAAAAAAACAAkAAAABAAAAAAADAAkAAAAAAAAAAAAEAAkAAAABAAAAAAAFAAkAAAAAAAAAAAAGAAkAAAABAAAAAAAHAAkAAAAAAAAAAAAIAAkAAAABAAAAAAAJAAkAAAACAAAAAAAKAAkAAAACAAAAAAALAAkAAAACAAAAAAAMAAkAAAACAAAAAAANAAkAAAACAAAAAAAOAAkAAAACAAAAAAABAAoAAAABAAAAAAACAAoAAAAAAAAAAAADAAoAAAABAAAAAAAEAAoAAAAAAAAAAAAFAAoAAAABAAAAAAAGAAoAAAAAAAAAAAAHAAoAAAABAAAAAAAIAAoAAAAAAAAAAAAJAAoAAAACAAAAAAAKAAoAAAACAAAAAAALAAoAAAACAAAAAAAMAAoAAAACAAAAAAANAAoAAAACAAAAAAAOAAoAAAACAAAAAAA=")
 tile_set = SubResource("TileSet_a5m08")
 
-[node name="Paredes32" type="TileMapLayer" parent="." unique_id=1304734076]
+[node name="Paredes32" type="TileMapLayer" parent="." unique_id=1431365934]
 tile_map_data = PackedByteArray("AAABAAAAAAAAAAEAAAABAAEAAAABAAEAAAABAAoAAAAGAAEAAAACAAAAAAAAAAEAAAACAAEAAAABAAEAAAACAAoAAAAGAAEAAAADAAAAAAAAAAEAAAADAAEAAAABAAEAAAADAAoAAAAGAAEAAAAEAAAAAAAAAAEAAAAEAAEAAAABAAEAAAAFAAAAAAAAAAEAAAAFAAEAAAABAAEAAAAFAAoAAAAGAAEAAAAGAAAAAAAAAAEAAAAGAAEAAAABAAEAAAAGAAoAAAAGAAEAAAAHAAAAAAAAAAEAAAAHAAEAAAABAAEAAAAHAAoAAAAGAAEAAAAIAAAAAAAAAAEAAAAIAAEAAAABAAEAAAAIAAoAAAAGAAEAAAAJAAAAAAACAAEAAAAJAAEAAAADAAEAAAAJAAoAAAAGAAEAAAAKAAAAAAACAAEAAAAKAAEAAAADAAEAAAAKAAoAAAAGAAEAAAALAAAAAAACAAEAAAALAAEAAAADAAEAAAALAAoAAAAGAAEAAAAMAAAAAAACAAEAAAAMAAEAAAADAAEAAAAMAAoAAAAGAAEAAAANAAAAAAACAAEAAAANAAEAAAADAAEAAAANAAoAAAAGAAEAAAAOAAAAAAACAAEAAAAOAAEAAAADAAEAAAAOAAoAAAAGAAEAAAAAAAAAAAAEAAEAAAAPAAAAAAAEAAEAAAAAAAEAAAAEAAEAAAAPAAEAAAAEAAEAAAAAAAIAAAAEAAEAAAAPAAIAAAAEAAEAAAAAAAMAAAAEAAEAAAAPAAMAAAAEAAEAAAAAAAQAAAAEAAEAAAAPAAQAAAAEAAEAAAAAAAUAAAAEAAEAAAAPAAUAAAAEAAEAAAAAAAYAAAAEAAEAAAAPAAYAAAAEAAEAAAAAAAcAAAAEAAEAAAAPAAcAAAAEAAEAAAAAAAgAAAAEAAEAAAAPAAgAAAAEAAEAAAAAAAkAAAAEAAEAAAAPAAkAAAAEAAEAAAAAAAoAAAAEAAEAAAAPAAoAAAAEAAEAAAA=")
 tile_set = SubResource("TileSet_a5m08")
 
-[node name="janela" type="Sprite2D" parent="." unique_id=74559345]
+[node name="janela" type="Sprite2D" parent="." unique_id=782641384]
 position = Vector2(82, 0)
 texture = ExtResource("2_es24i")
 centered = false
 
-[node name="prateleira_potes" type="Sprite2D" parent="." unique_id=1528376128]
+[node name="prateleira_potes" type="Sprite2D" parent="." unique_id=1834383759]
 position = Vector2(171, 24)
 texture = ExtResource("3_w6706")
 centered = false
 
-[node name="planta_pendente" type="Sprite2D" parent="." unique_id=219173578]
+[node name="planta_pendente" type="Sprite2D" parent="." unique_id=2142638828]
 position = Vector2(249, 1)
 texture = ExtResource("4_r16h4")
 centered = false
 
-[node name="geladeira_fechada" type="Sprite2D" parent="." unique_id=457674447]
+[node name="geladeira_fechada" type="Sprite2D" parent="." unique_id=1653266196]
 position = Vector2(288, 40)
 texture = ExtResource("5_b5pdq")
 centered = false
 
-[node name="fogao_aceso" type="Sprite2D" parent="." unique_id=397632434]
+[node name="fogao_aceso" type="Sprite2D" parent="." unique_id=665071997]
 position = Vector2(320, 40)
 texture = ExtResource("6_qed80")
 centered = false
 
-[node name="panela_vazia" type="Sprite2D" parent="." unique_id=931635273]
-position = Vector2(333, 38)
+[node name="panela_vazia" type="Sprite2D" parent="." unique_id=875142052]
+position = Vector2(322, 42)
 texture = ExtResource("7_uk3i1")
 centered = false
 
-[node name="pia" type="Sprite2D" parent="." unique_id=53484748]
+[node name="pia" type="Sprite2D" parent="." unique_id=1345495809]
 position = Vector2(384, 40)
 texture = ExtResource("8_nhst1")
 centered = false
 
-[node name="estante_panelas_vazia" type="Sprite2D" parent="." unique_id=2097512505]
+[node name="estante_panelas_vazia" type="Sprite2D" parent="." unique_id=438185880]
 position = Vector2(449, 40)
 texture = ExtResource("9_dvws2")
 centered = false
 
-[node name="@Sprite2D@2" type="Sprite2D" parent="." unique_id=1165994390]
+[node name="@Sprite2D@2" type="Sprite2D" parent="." unique_id=358106750]
 position = Vector2(449, 44)
 texture = ExtResource("7_uk3i1")
 centered = false
 
-[node name="@Sprite2D@3" type="Sprite2D" parent="." unique_id=25338490]
+[node name="@Sprite2D@3" type="Sprite2D" parent="." unique_id=1152675172]
 position = Vector2(449, 61)
 texture = ExtResource("7_uk3i1")
 centered = false
 
-[node name="mesa_jantar" type="Sprite2D" parent="." unique_id=1143684650]
+[node name="mesa_jantar" type="Sprite2D" parent="." unique_id=1751435128]
 position = Vector2(64, 112)
 texture = ExtResource("10_iy7ey")
 centered = false
 
-[node name="cadeira_costas" type="Sprite2D" parent="." unique_id=1194360318]
+[node name="cadeira_costas" type="Sprite2D" parent="." unique_id=455738937]
 position = Vector2(64, 87)
 texture = ExtResource("11_rrxlt")
 centered = false
 
-[node name="@Sprite2D@4" type="Sprite2D" parent="." unique_id=78397177]
+[node name="@Sprite2D@4" type="Sprite2D" parent="." unique_id=819808666]
 position = Vector2(96, 87)
 texture = ExtResource("11_rrxlt")
 centered = false
 
-[node name="cadeira_frente" type="Sprite2D" parent="." unique_id=2015308906]
+[node name="cadeira_frente" type="Sprite2D" parent="." unique_id=490538430]
 position = Vector2(64, 177)
 texture = ExtResource("12_boi8c")
 centered = false
 
-[node name="@Sprite2D@5" type="Sprite2D" parent="." unique_id=1211451255]
+[node name="@Sprite2D@5" type="Sprite2D" parent="." unique_id=732818573]
 position = Vector2(96, 177)
 texture = ExtResource("12_boi8c")
 centered = false
 
-[node name="tapete" type="Sprite2D" parent="." unique_id=710387388]
+[node name="tapete" type="Sprite2D" parent="." unique_id=1370387926]
 position = Vector2(171, 112)
 texture = ExtResource("13_mnx2l")
 centered = false
 
-[node name="@Sprite2D@6" type="Sprite2D" parent="." unique_id=551148505]
+[node name="@Sprite2D@6" type="Sprite2D" parent="." unique_id=1678508168]
 position = Vector2(176, 225)
 texture = ExtResource("10_iy7ey")
 centered = false
 
-[node name="@Sprite2D@7" type="Sprite2D" parent="." unique_id=23493892]
+[node name="@Sprite2D@7" type="Sprite2D" parent="." unique_id=848523733]
 position = Vector2(176, 201)
 texture = ExtResource("11_rrxlt")
 centered = false
 
-[node name="@Sprite2D@8" type="Sprite2D" parent="." unique_id=729505465]
+[node name="@Sprite2D@8" type="Sprite2D" parent="." unique_id=253089693]
 position = Vector2(208, 201)
 texture = ExtResource("11_rrxlt")
 centered = false
 
-[node name="@Sprite2D@9" type="Sprite2D" parent="." unique_id=1605796174]
+[node name="@Sprite2D@9" type="Sprite2D" parent="." unique_id=380241750]
 position = Vector2(176, 289)
 texture = ExtResource("12_boi8c")
 centered = false
 
-[node name="@Sprite2D@10" type="Sprite2D" parent="." unique_id=50877239]
+[node name="@Sprite2D@10" type="Sprite2D" parent="." unique_id=604341884]
 position = Vector2(208, 289)
 texture = ExtResource("12_boi8c")
 centered = false
 
-[node name="mesa_trabalho" type="Sprite2D" parent="." unique_id=1731044158]
+[node name="mesa_trabalho" type="Sprite2D" parent="." unique_id=1652226866]
 position = Vector2(320, 225)
 texture = ExtResource("14_5f57a")
 centered = false
 
-[node name="@Sprite2D@11" type="Sprite2D" parent="." unique_id=771356448]
+[node name="@Sprite2D@11" type="Sprite2D" parent="." unique_id=967642008]
 position = Vector2(416, 225)
 texture = ExtResource("14_5f57a")
 centered = false
 
-[node name="kit_corte" type="Sprite2D" parent="." unique_id=831322209]
+[node name="kit_corte" type="Sprite2D" parent="." unique_id=68110015]
 position = Vector2(431, 225)
 texture = ExtResource("15_rhf8h")
 centered = false
 
-[node name="vaso_folhagem" type="Sprite2D" parent="." unique_id=1195610510]
+[node name="vaso_folhagem" type="Sprite2D" parent="." unique_id=1325711079]
 position = Vector2(36, 60)
 texture = ExtResource("16_bkyjc")
 centered = false
 
-[node name="@Sprite2D@12" type="Sprite2D" parent="." unique_id=315892629]
+[node name="@Sprite2D@12" type="Sprite2D" parent="." unique_id=151791785]
 position = Vector2(39, 285)
 texture = ExtResource("16_bkyjc")
 centered = false
 
-[node name="lanterna_acesa" type="Sprite2D" parent="." unique_id=193581060]
+[node name="lanterna_acesa" type="Sprite2D" parent="." unique_id=1466631119]
 position = Vector2(38, 9)
 texture = ExtResource("17_oq1w3")
 centered = false
 
-[node name="@Sprite2D@13" type="Sprite2D" parent="." unique_id=181988359]
+[node name="@Sprite2D@13" type="Sprite2D" parent="." unique_id=1572497975]
 position = Vector2(247, 9)
 texture = ExtResource("17_oq1w3")
 centered = false
 
-[node name="prato_limpo" type="Sprite2D" parent="." unique_id=436455410]
+[node name="prato_limpo" type="Sprite2D" parent="." unique_id=82961033]
 position = Vector2(318, 227)
 texture = ExtResource("18_kkjfg")
 centered = false
 
-[node name="@Sprite2D@14" type="Sprite2D" parent="." unique_id=1236363938]
+[node name="@Sprite2D@14" type="Sprite2D" parent="." unique_id=776994277]
 position = Vector2(318, 226)
 texture = ExtResource("18_kkjfg")
 centered = false
 
-[node name="@Sprite2D@15" type="Sprite2D" parent="." unique_id=1614026724]
+[node name="@Sprite2D@15" type="Sprite2D" parent="." unique_id=889313192]
 position = Vector2(318, 225)
 texture = ExtResource("18_kkjfg")
 centered = false
 
-[node name="@Sprite2D@16" type="Sprite2D" parent="." unique_id=656258393]
+[node name="@Sprite2D@16" type="Sprite2D" parent="." unique_id=1178892140]
 position = Vector2(318, 224)
 texture = ExtResource("18_kkjfg")
 centered = false
 
-[node name="arrozCenoura" type="Sprite2D" parent="." unique_id=180466104]
+[node name="arrozCenoura" type="Sprite2D" parent="." unique_id=1188044737]
 position = Vector2(344, 225)
 texture = ExtResource("19_2h8an")
 centered = false
 
-[node name="cozinheira" type="AnimatedSprite2D" parent="." unique_id=119847982]
+[node name="cozinheira" type="AnimatedSprite2D" parent="." unique_id=1843271021]
 position = Vector2(390, 181)
 sprite_frames = ExtResource("20_adns2")
 animation = &"baixo"
 frame = 1
 centered = false
 
-[node name="garcom" type="AnimatedSprite2D" parent="." unique_id=1958950731]
+[node name="garcom" type="AnimatedSprite2D" parent="." unique_id=959016281]
 position = Vector2(228, 157)
 sprite_frames = ExtResource("21_7frpd")
 animation = &"baixo"
 frame = 1
 centered = false
 
-[node name="cliente_01" type="AnimatedSprite2D" parent="." unique_id=95339345]
+[node name="cliente_01" type="AnimatedSprite2D" parent="." unique_id=2091945947]
 position = Vector2(112, 118)
 sprite_frames = ExtResource("22_cpjrn")
 animation = &"baixo"

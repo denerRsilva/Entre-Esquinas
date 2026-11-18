@@ -80,3 +80,5 @@
   não remover silenciosamente suporte a ARM32/x86_64 do preset universal.
 
 - Limpeza: não duplicar APKs com nomes diferentes no Git. Manter universal e ARM64; gerar o ZIP completo de sprites sob demanda, conforme `docs/arte/EXPORTAR-SPRITES.md`. Não recolocar cópias de atlas em docs; apontar para a fonte única.
+
+- Feedback visual de 18/11: o primeiro redesenho foi rejeitado por aparência genérica e perspectiva inconsistente. Não tratá-lo como direção aprovada. A revisão 2 de fogão/pia/geladeira está em `docs/arte/redesenho32/REVISAO-COZINHA.md`: tampos profundos vistos de cima, frentes curtas, volumes/bevels e desgaste em clusters. Verificação de canvas não substitui avaliação artística.

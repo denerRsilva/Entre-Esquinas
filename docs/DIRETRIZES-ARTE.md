@@ -91,3 +91,13 @@ contém 135 PNGs desenhados no tamanho final, com cena Godot editável separada.
 A imagem conceitual gerada serve de referência, não de folha reduzida. Os
 originais permanecem preservados; as referências do jogo ainda não foram trocadas.
 O mapa de tamanhos identifica quais peças já têm redesenho disponível.
+
+## Correção de perspectiva e acabamento — revisão 2
+
+O proprietário rejeitou o primeiro lote por excesso de simplificação e pelo
+fogão frontal em relação à pia vista de cima. Os originais anteriores continuam
+a referência de qualidade. Conferir as peças lado a lado: tampos com profundidade
+visível, bocas elípticas, cuba com paredes internas e topo da geladeira aparente;
+frentes orientadas para baixo, sem mudar para isométrico. Usar bevels, reflexos
+e desgaste em grupos de pixels para dar volume. [Revisão dos aparelhos](arte/redesenho32/REVISAO-COZINHA.md).
+Os testes de dimensões são técnicos e não significam aprovação visual do lote.

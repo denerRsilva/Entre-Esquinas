@@ -1,6 +1,9 @@
 extends SceneTree
 ## New pixel clusters drawn on final-size canvases. No source image is loaded or resized.
 const C = {
+ "iron0":"292624","iron1":"473e36","iron2":"66594d","iron3":"8e7a65","iron4":"b39b80","iron5":"d0b590",
+ "enamel0":"756555","enamel1":"a58e74","enamel2":"c6ae8d","enamel3":"e2ccaa","enamel4":"f2dfbe","enamel5":"fff0d2",
+ "brass0":"61432c","brass1":"986332","brass2":"c18d47","brass3":"e5b86d","brass4":"ffdc96",
  "ink":"30271f","dark":"493323","wood0":"61402b","wood1":"805033","wood2":"a36a3c","wood3":"bf864a","wood4":"dda362","wood5":"edc080",
  "metal0":"2e3432","metal1":"484d48","metal2":"686e63","metal3":"91968a","metal4":"bbc0ad",
  "ivory0":"8f785c","ivory1":"b9a17e","ivory2":"dfccaa","ivory3":"f1e1bf","ivory4":"fff0d2",
@@ -95,41 +98,105 @@ func board(knife: bool=true):
   poly([19,8,25,4,28,4,28,7,21,17,18,16],"ink");poly([20,9,26,5,27,5,26,8,21,15,19,15],"metal4");line(21,9,26,5,"ivory4");line(18,17,15,22,"ink");line(19,17,16,22,"wood1");px(17,20,"wood3")
 func stove(lit: bool=false):
  begin(64,64)
- # Empty cooktop: the simulation supplies the actual pot.
- box(42,2,14,23,"ink");box(44,3,10,21,"metal1");box(45,4,2,18,"metal2");box(43,1,12,3,"ink");box(44,1,10,1,"metal3")
- box(4,26,56,33,"ink");box(5,28,54,29,"metal1");box(6,29,52,2,"metal3");box(6,53,52,3,"metal2")
- box(3,22,58,9,"ink");box(4,23,56,6,"metal2");box(5,23,54,1,"metal3");box(7,28,49,1,"metal1")
- for x in [15,31]:oval(x,26,6,2,"metal0");box(x-3,25,6,1,"ink")
- box(9,34,29,18,"ink");box(11,36,25,14,"metal2");box(12,37,23,12,"orange0" if lit else "metal0")
+ # Same elevated projection as the sink: 20px top plane, short front below it.
+ # The silhouette has bevels and rounded cast-iron corners, not a frontal icon.
+ poly([7,37,57,37,59,41,59,58,56,61,8,61,5,58,5,41],"ink")
+ box(7,40,50,18,"iron1");box(8,42,48,14,"iron2");box(8,42,2,13,"iron3");box(55,42,2,14,"iron0")
+ box(7,57,50,3,"iron0");box(9,57,46,1,"iron3");box(10,59,44,1,"iron2")
+ for x in [8,51]:
+  poly([x,59,x+6,59,x+6,63,x+1,63,x,62],"iron0");box(x+1,60,4,2,"iron2");px(x+1,60,"iron3")
+ # Inset fire door, hinges, bronze-worn bevels, corner fasteners.
+ poly([12,43,35,43,38,46,38,54,35,57,12,57,9,54,9,46],"iron0")
+ poly([13,44,34,44,37,46,37,53,34,56,13,56,10,53,10,47],"iron3")
+ box(13,45,21,10,"iron1");box(14,46,19,8,"orange0" if lit else "iron0")
  if lit:
-  box(13,38,21,10,"orange2");box(15,39,17,7,"yellow");box(17,39,4,6,"ivory4");box(27,40,3,5,"orange3")
- for x in [17,25]:box(x,37,2,12,"metal1")
- box(12,42,23,2,"metal1");box(41,35,14,15,"ink");box(42,36,12,13,"metal2");box(44,38,8,1,"metal3");box(44,43,3,2,"metal0")
- for x in [7,52]:box(x,58,5,4,"ink");box(x+1,58,3,2,"metal2")
- px(49,48,"rust1");px(50,47,"rust0");box(8,51,3,1,"rust0")
-func fridge(opened: bool=false):
- begin(64 if opened else 32,64)
- var x := 26 if opened else 3;var w := 30 if opened else 26
- poly([x+4,2,x+w-4,2,x+w,6,x+w,60,x+2,62,x,58,x,7],"ink")
- box(x+1,8,w-2,51,"ivory1");box(x+3,5,w-6,3,"ivory3");box(x+2,8,w-4,2,"ivory4");box(x+w-3,11,1,45,"ivory0")
- if opened:
-  box(x+4,12,w-8,43,"metal0");box(x+5,13,w-10,40,"ivory0")
-  for y in [24,38,52]:box(x+4,y,w-8,3,"ivory3");box(x+5,y+2,w-10,1,"ivory0")
-  poly([x,8,8,17,7,59,x,57],"ink");poly([x-1,11,10,18,9,56,x-1,54],"ivory2");line(11,20,10,53,"ivory4");line(23,15,23,53,"ivory0")
+  box(15,47,17,6,"orange2");box(16,47,14,5,"yellow");box(17,48,3,3,"ivory4");box(23,48,4,4,"orange3");px(30,51,"orange1");box(15,52,17,1,"orange1")
  else:
-  box(x+2,11,w-5,45,"ivory2");box(x+3,12,2,39,"ivory3");box(x+20,25,2,20,"ink");box(x+21,26,1,18,"ivory4")
-  poly([8,17,13,17,13,21,11,21,10,24,7,23,7,19],"rust1");box(19,47,4,4,"rust1");px(22,46,"rust2");box(8,52,4,3,"rust1")
- box(x+5,61,4,2,"metal0");box(x+w-9,61,4,2,"metal0")
+  box(15,47,17,6,"black");box(16,48,3,4,"iron1");box(24,48,6,3,"iron1")
+ for x in [20,27]:box(x,46,1,8,"iron1");px(x,46,"iron3")
+ box(14,49,19,1,"iron1")
+ for p in [[12,45],[35,45],[12,54],[35,54]]:px(p[0],p[1],"iron5");px(p[0]+1,p[1]+1,"iron0")
+ for y in [46,52]:box(8,y,2,3,"iron0");px(8,y,"iron4")
+ # Smaller service door, separate from the firebox.
+ box(41,44,13,13,"iron0");box(42,45,11,11,"iron3");box(43,46,9,9,"iron1");box(44,47,7,1,"iron2");box(44,50,2,4,"iron0");box(45,50,1,3,"iron4")
+ # Broad cooktop: visible back, front bevel and curved edge highlights.
+ poly([8,21,55,21,61,25,62,28,62,38,58,42,6,42,2,38,2,27,4,24],"iron0")
+ poly([8,22,55,22,60,26,60,37,57,40,7,40,4,37,4,27],"iron3")
+ poly([9,24,54,24,58,27,58,36,55,38,8,38,6,36,6,28],"iron2")
+ box(10,23,42,1,"iron4");box(8,39,48,1,"iron5");box(9,40,46,1,"iron1");box(4,28,1,8,"iron4");box(59,29,1,7,"iron1")
+ for cx in [18,40]:
+  oval(cx,32,11,6,"iron0");oval(cx,31.5,10,5,"iron3");oval(cx,32,9,4,"iron0");oval(cx,32,8,3,"iron2");oval(cx,32,5,2,"iron0");oval(cx,31,4,2,"iron3");box(cx-2,30,4,1,"iron4")
+ for p in [[8,26],[56,37],[7,37]]:px(p[0],p[1],"iron5");px(p[0]+1,p[1]+1,"iron0")
+ # Deliberate worn clusters, not uniform noise or smooth gradients.
+ for p in [[28,25],[29,27],[11,38],[53,30],[46,39],[7,34]]:
+  box(p[0],p[1],2,1,"rust0");px(p[0],p[1]+1,"rust1")
+ px(30,25,"iron4");box(13,40,3,1,"iron3");px(53,56,"rust1");px(8,57,"rust0")
+ # Chimney opening is an ellipse, reinforcing the same elevated viewpoint.
+ oval(53,25,8,4,"iron0");oval(53,24,7,3,"iron3");box(47,5,12,19,"iron0");box(48,6,10,17,"iron2");box(49,7,2,15,"iron3");box(56,7,2,16,"iron1")
+ box(49,12,1,3,"rust1");box(50,11,1,2,"rust0");px(55,19,"rust0");box(48,22,10,2,"iron1");oval(53,6,7,4,"iron0");oval(53,5,6,3,"iron4");oval(53,5,4,2,"black");box(50,3,4,1,"iron5")
+func fridge(opened: bool=false):
+ begin(32,64)
+ # Rounded top plane occupies twelve rows; the door sits beneath its shoulder.
+ poly([9,1,23,1,27,4,29,8,29,57,27,61,6,62,3,58,3,9,5,5],"ink")
+ poly([9,2,23,2,27,6,27,13,24,16,7,16,5,13,5,8],"enamel2")
+ poly([10,3,22,3,25,6,25,12,8,12,6,10,7,7],"enamel3")
+ box(11,3,11,1,"enamel5");box(8,5,1,3,"enamel4");box(7,11,18,1,"enamel4");box(9,13,16,1,"enamel5");box(7,15,18,1,"enamel0")
+ poly([8,16,24,16,27,19,27,56,25,59,22,61,8,61,5,58,5,20],"enamel0")
+ poly([9,17,23,17,26,20,26,55,24,58,21,59,9,59,6,57,6,21],"enamel3")
+ box(9,18,13,1,"enamel5");box(7,22,1,32,"enamel4");box(25,23,1,30,"enamel2");box(8,57,15,1,"enamel2");box(10,58,11,1,"enamel1")
+ # Side gasket, tiny trim and highlights on the rounded shell.
+ box(4,24,1,31,"enamel1");px(5,18,"enamel5");px(6,19,"enamel4");box(28,16,1,40,"enamel1")
+ # Worn enamel in three recognizable chipped patches.
+ poly([9,24,13,24,13,25,15,25,15,28,12,28,12,31,9,30,8,28,8,26],"rust0")
+ poly([9,25,13,25,14,27,11,28,10,30,9,28],"rust1");px(8,25,"enamel1");px(12,24,"rust2")
+ poly([8,50,10,50,10,53,13,52,14,55,12,58,8,58,6,56,7,53],"rust0");poly([8,52,10,53,13,53,12,56,8,57,7,55],"rust1");px(10,57,"rust2")
+ box(22,45,2,2,"rust1");px(23,44,"rust0");px(20,23,"rust2");px(8,11,"rust1");px(24,8,"enamel2")
+ # A real metal handle with brackets and a bright thin edge, not a black slot.
+ box(23,32,4,16,"iron0");box(24,33,2,14,"iron2");box(24,34,1,12,"iron4");px(25,33,"iron5");px(25,47,"iron3");box(23,32,3,2,"iron3");box(23,47,3,2,"iron3")
+ box(7,62,4,2,"iron0");box(23,61,4,3,"iron0");px(8,62,"iron2");px(24,61,"iron2")
+ if opened:
+  # Compose the newly drawn shell at native size; never sample the old sheet.
+  var body := im;begin(64,64);im.blit_rect(body,Rect2i(0,0,32,64),Vector2i(28,0))
+  # Empty recessed interior replaces the closed door and its handle.
+  poly([37,20,52,20,55,23,55,55,52,59,37,59,34,55,34,23],"enamel0")
+  box(36,23,18,32,"enamel1");box(38,24,14,30,"enamel2");box(36,24,2,30,"enamel0");box(53,24,1,31,"enamel0")
+  for y in [30,42,54]:box(35,y,20,3,"enamel0");box(36,y,18,2,"enamel3");box(37,y,16,1,"enamel5")
+  box(34,19,21,39,"enamel0");box(36,21,17,34,"enamel1");box(37,22,15,32,"enamel2");box(36,22,2,31,"enamel0")
+  for y in [31,43,55]:box(34,y,21,3,"enamel4");box(35,y+2,19,1,"enamel1");box(36,y-1,17,1,"enamel0")
+  poly([32,16,9,24,7,28,7,60,10,63,31,57],"ink");poly([31,18,10,26,9,29,9,59,11,60,30,55],"enamel2");poly([28,23,12,29,12,54,27,50],"enamel1")
+  line(11,28,11,57,"enamel5");line(13,30,13,53,"enamel0");line(15,30,25,27,"enamel3");line(15,51,25,48,"enamel3");line(30,22,30,54,"enamel5")
+  box(10,45,2,5,"rust1");px(12,48,"rust0")
 func sink():
- table();box(4,30,56,28,"ink");box(6,32,52,24,"wood1")
- for x in [8,33]:box(x,34,23,20,"wood0");box(x+1,35,21,18,"wood2");box(x+2,35,19,1,"wood3");box(x+3,37,1,14,"wood1")
- box(27,41,2,4,"wood4");box(35,41,2,4,"wood4")
- box(2,12,60,21,"ink");box(3,13,58,18,"ivory1");box(4,13,56,2,"ivory3");box(5,29,54,2,"ivory2")
- box(17,17,30,11,"ivory0");box(19,18,26,8,"blue0");box(20,18,24,1,"ivory0");box(21,20,22,5,"blue1");box(22,20,20,1,"blue2")
- for x in [6,49]:
-  for y in [18,21,24]:box(x,y,9,1,"ivory0");box(x,y-1,8,1,"ivory2")
- box(30,3,4,15,"ink");box(31,4,2,12,"metal3");box(33,2,8,4,"ink");box(34,3,6,2,"metal3");box(39,5,4,5,"ink");box(40,5,2,4,"metal2")
- for x in [11,49]:box(x,10,4,6,"metal1");box(x-1,10,6,2,"wood3");px(x+1,10,"wood5")
+ begin(64,64)
+ # The rear edge, lip and base align with the stove's work surface.
+ poly([6,37,58,37,59,41,59,59,56,62,8,62,5,59,5,41],"ink")
+ box(7,42,50,17,"wood1");box(8,43,48,15,"wood2");box(8,43,2,15,"wood3");box(55,43,2,16,"wood0")
+ for x in [10,33]:
+  box(x,44,21,14,"wood0");box(x+1,45,19,12,"wood3");box(x+2,46,17,10,"wood1");box(x+3,47,15,8,"wood2");box(x+3,47,14,1,"wood4");box(x+16,48,1,6,"wood0");box(x+4,48,1,5,"wood3")
+  line(x+7,49,x+7,52,"wood1");line(x+8,52,x+9,53,"wood1");px(x+9,54,"wood3");box(x+11,49,2,1,"wood3")
+ box(8,59,48,2,"wood0");box(10,59,44,1,"wood3")
+ for x in [7,52]:box(x,61,5,3,"ink");box(x+1,61,3,1,"wood2")
+ for x in [28,34]:box(x,49,3,4,"wood0");px(x+1,49,"brass3");box(x+1,50,1,2,"brass2")
+ # Raised enamel rim and broad horizontal plane, same depth as the cooktop.
+ poly([8,21,56,21,61,25,62,28,62,38,58,43,6,43,2,38,2,28,4,25],"enamel0")
+ poly([8,22,55,22,59,26,60,29,60,37,57,40,7,40,4,37,4,29],"enamel3")
+ box(10,22,42,1,"enamel5");box(5,28,1,8,"enamel5");box(8,40,48,2,"enamel2");box(9,40,46,1,"enamel4");px(59,37,"enamel1")
+ # Deep empty basin: wall, floor and a small drain; no painted water.
+ poly([20,25,44,25,48,28,48,35,44,39,20,39,16,35,16,29],"enamel4")
+ poly([21,26,43,26,47,29,47,34,43,38,21,38,17,34,17,30],"enamel0")
+ box(21,27,22,3,"enamel1");box(19,30,26,5,"enamel2");box(18,30,2,4,"enamel1");box(44,29,2,5,"enamel1");box(22,34,20,3,"enamel3");box(24,36,16,1,"enamel2")
+ oval(33,35,3,2,"enamel0");oval(33,35,2,1,"iron2");px(32,34,"enamel4");px(33,35,"iron0")
+ for x in [7,50]:
+  for y in [28,32,36]:box(x,y,7,1,"enamel1");box(x,y-1,7,1,"enamel5");px(x+6,y,"enamel0")
+ # Three purposeful chips on the folded front lip.
+ poly([6,37,9,37,9,38,12,38,11,41,7,41,5,39],"rust1");px(6,37,"rust0");px(10,40,"rust2");box(54,38,3,2,"rust1");px(55,37,"rust0");px(42,41,"rust1")
+ # Brass cross valves, curved tap and its circular foot show the same view.
+ for x in [13,49]:
+  oval(x,23,4,2,"brass0");oval(x,22,3,1,"brass2");box(x-1,18,3,4,"brass1");box(x-3,16,7,2,"iron0");box(x-2,16,5,1,"brass2");box(x,14,2,6,"brass1");px(x,15,"brass3");px(x+1,17,"brass4")
+ oval(31,23,5,2,"brass0");oval(31,22,4,1,"brass2")
+ poly([28,23,28,10,30,6,33,3,37,3,40,5,42,9,42,14,37,14,37,10,35,8,33,9,33,23],"iron0")
+ poly([29,22,29,10,31,7,34,4,37,4,39,6,41,9,41,13,38,13,38,9,35,6,32,9,32,22],"brass1")
+ line(30,11,30,21,"brass3");line(31,8,34,5,"brass4");box(34,5,3,1,"brass3");box(39,8,1,4,"brass2");box(38,13,3,1,"brass0")
 func rack(full: bool=false,cabinet: bool=false):
  begin(32,64);box(3,4,26,57,"ink");box(5,6,22,52,"wood0")
  for y in [7,23,39,55]:box(5,y,22,4,"ink");box(5,y,22,2,"wood3");box(6,y,20,1,"wood4")
@@ -401,7 +468,7 @@ func run():
   for remove in [false,true]:item_action(base,remove);save(base+("_retirar" if remove else "_inserir"),"icones",[0,0])
  for id in ["confirmar","cancelar","martelo","livro","mesa","lavar"]:control(id);save(id,"icones",[0,0])
  FileAccess.open(out+"/manifesto.json",FileAccess.WRITE).store_string(JSON.stringify({"unit":32,"method":"redrawn directly using integer pixel clusters; no Image.load or resize in authoring","integrated_in_game":false,"entries":entries},"\t"))
- compose_previews();compose_details();make_scene();print("REDESENHO 32: ",entries.size()," PNGs originais; personagens em 32x32 por frame; sem reduzir imagens-fonte.");quit()
+ compose_previews();compose_details();compose_appliances();make_scene();print("REDESENHO 32: ",entries.size()," PNGs originais; personagens em 32x32 por frame; sem reduzir imagens-fonte.");quit()
 func kettle():
  begin();oval(16,21,10,8,"ink");oval(16,20,9,7,"rust1");oval(14,18,6,4,"rust2");box(11,14,8,1,"wood4");poly([8,18,3,14,1,15,3,21,8,24],"ink");poly([7,19,3,16,4,20,7,22],"rust2");oval(17,12,10,9,"ink");oval(17,12,7,6,"wood0");box(9,15,15,8,"rust1");oval(16,15,8,3,"metal0");oval(16,14,7,2,"metal2");box(14,10,5,4,"ink");box(15,10,3,2,"metal3")
 func frying_pan():
@@ -483,7 +550,7 @@ func compose_previews():
   room.blend_rect(art["parede_azulejo_superior" if x>=9 else "parede_reboco_superior"],Rect2i(0,0,32,32),Vector2i(x*32,0));room.blend_rect(art["parede_azulejo_inferior" if x>=9 else "parede_lambril"],Rect2i(0,0,32,32),Vector2i(x*32,32))
  for y in range(11):
   for x in [0,15]:room.blend_rect(art["viga_vertical_a"],Rect2i(0,0,32,32),Vector2i(x*32,y*32))
- var places := [["janela",82,0],["prateleira_potes",171,24],["planta_pendente",249,1],["geladeira_fechada",288,40],["fogao_aceso",320,40],["panela_vazia",333,38],["pia",384,40],["estante_panelas_vazia",449,40],["panela_vazia",449,44],["panela_vazia",449,61],["mesa_jantar",64,112],["cadeira_costas",64,87],["cadeira_costas",96,87],["cadeira_frente",64,177],["cadeira_frente",96,177],["tapete",171,112],["mesa_jantar",176,225],["cadeira_costas",176,201],["cadeira_costas",208,201],["cadeira_frente",176,289],["cadeira_frente",208,289],["mesa_trabalho",320,225],["mesa_trabalho",416,225],["kit_corte",431,225],["vaso_folhagem",36,60],["vaso_folhagem",39,285],["lanterna_acesa",38,9],["lanterna_acesa",247,9],["prato_limpo",318,227],["prato_limpo",318,226],["prato_limpo",318,225],["prato_limpo",318,224],["arrozCenoura",344,225]]
+ var places := [["janela",82,0],["prateleira_potes",171,24],["planta_pendente",249,1],["geladeira_fechada",288,40],["fogao_aceso",320,40],["panela_vazia",322,42],["pia",384,40],["estante_panelas_vazia",449,40],["panela_vazia",449,44],["panela_vazia",449,61],["mesa_jantar",64,112],["cadeira_costas",64,87],["cadeira_costas",96,87],["cadeira_frente",64,177],["cadeira_frente",96,177],["tapete",171,112],["mesa_jantar",176,225],["cadeira_costas",176,201],["cadeira_costas",208,201],["cadeira_frente",176,289],["cadeira_frente",208,289],["mesa_trabalho",320,225],["mesa_trabalho",416,225],["kit_corte",431,225],["vaso_folhagem",36,60],["vaso_folhagem",39,285],["lanterna_acesa",38,9],["lanterna_acesa",247,9],["prato_limpo",318,227],["prato_limpo",318,226],["prato_limpo",318,225],["prato_limpo",318,224],["arrozCenoura",344,225]]
  for x in range(1,15):
   if x!=4:room.blend_rect(art["parede_frontal"],Rect2i(0,0,32,32),Vector2i(x*32,320))
  for p in places:room.blend_rect(art[p[0]],Rect2i(Vector2i.ZERO,art[p[0]].get_size()),Vector2i(p[1],p[2]))
@@ -551,3 +618,9 @@ func compose_details():
  for pair in [["fogao_apagado",0,0],["fogao_aceso",64,0],["prato_limpo",0,64],["prato_sujo",32,64],["caldoBatata",64,64],["arrozCenoura",96,64]]:
   var source: Image = art[pair[0]];sheet.blend_rect(source,Rect2i(Vector2i.ZERO,source.get_size()),Vector2i(pair[1],pair[2]))
  sheet.resize(768,576,Image.INTERPOLATE_NEAREST);sheet.save_png(out+"/previas/previa-prato-fogao-6x.png")
+
+func compose_appliances():
+ var sheet := Image.create(224,96,false,Image.FORMAT_RGBA8);sheet.fill(Color("252a25"))
+ for pair in [["fogao_aceso",12,16],["pia",92,16],["geladeira_fechada",180,16]]:
+  var sprite: Image = art[pair[0]];sheet.blend_rect(sprite,Rect2i(Vector2i.ZERO,sprite.get_size()),Vector2i(pair[1],pair[2]))
+ sheet.save_png(out+"/previas/cozinha-revisao2-nativa.png");sheet.resize(1120,480,Image.INTERPOLATE_NEAREST);sheet.save_png(out+"/previas/previa-cozinha-revisao2-5x.png")

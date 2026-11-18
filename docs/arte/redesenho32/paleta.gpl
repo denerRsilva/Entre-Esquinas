@@ -1,57 +1,74 @@
 GIMP Palette
-Name: Entre Esquinas — Redesenho 32
+Name: Entre Esquinas — Redesenho32 R2
 Columns: 8
-# Shared material palette
- 48  39  31	ink
- 73  51  35	dark
- 97  64  43	wood0
-128  80  51	wood1
-163 106  60	wood2
-191 134  74	wood3
-221 163  98	wood4
-237 192 128	wood5
- 46  52  50	metal0
- 72  77  72	metal1
-104 110  99	metal2
-145 150 138	metal3
-187 192 173	metal4
-143 120  92	ivory0
-185 161 126	ivory1
-223 204 170	ivory2
-241 225 191	ivory3
-255 240 210	ivory4
-120  74  50	rust0
-169 107  67	rust1
-196 140  88	rust2
- 72  78  73	stone0
-102 106  96	stone1
-129 132 119	stone2
-161 161 141	stone3
- 53  73  47	green0
- 82 102  59	green1
-119 141  72	green2
-161 182  94	green3
-195 203 125	green4
-110  52  48	red0
-155  79  62	red1
-191 114  81	red2
-218 155 104	red3
-152  69  31	orange0
-194 105  40	orange1
-229 144  52	orange2
-255 193  91	orange3
-255 226 139	yellow
- 52  76  78	blue0
- 78 112 112	blue1
-119 149 139	blue2
-164 182 164	blue3
-139  85  52	skin0
-188 129  80	skin1
-223 169 110	skin2
-241 199 145	skin3
-167  95  79	pink0
-213 139 117	pink1
-235 179 155	pink2
- 78  59  75	purple0
-120  83 105	purple1
- 24  31  29	black
+#
+ 41  38  36 iron0
+ 71  62  54 iron1
+102  89  77 iron2
+142 122 101 iron3
+179 155 128 iron4
+208 181 144 iron5
+117 101  85 enamel0
+165 142 116 enamel1
+198 174 141 enamel2
+226 204 170 enamel3
+242 223 190 enamel4
+255 240 210 enamel5
+ 97  67  44 brass0
+152  99  50 brass1
+193 141  71 brass2
+229 184 109 brass3
+255 220 150 brass4
+ 48  39  31 ink
+ 73  51  35 dark
+ 97  64  43 wood0
+128  80  51 wood1
+163 106  60 wood2
+191 134  74 wood3
+221 163  98 wood4
+237 192 128 wood5
+ 46  52  50 metal0
+ 72  77  72 metal1
+104 110  99 metal2
+145 150 138 metal3
+187 192 173 metal4
+143 120  92 ivory0
+185 161 126 ivory1
+223 204 170 ivory2
+241 225 191 ivory3
+255 240 210 ivory4
+120  74  50 rust0
+169 107  67 rust1
+196 140  88 rust2
+ 72  78  73 stone0
+102 106  96 stone1
+129 132 119 stone2
+161 161 141 stone3
+ 53  73  47 green0
+ 82 102  59 green1
+119 141  72 green2
+161 182  94 green3
+195 203 125 green4
+110  52  48 red0
+155  79  62 red1
+191 114  81 red2
+218 155 104 red3
+152  69  31 orange0
+194 105  40 orange1
+229 144  52 orange2
+255 193  91 orange3
+255 226 139 yellow
+ 52  76  78 blue0
+ 78 112 112 blue1
+119 149 139 blue2
+164 182 164 blue3
+139  85  52 skin0
+188 129  80 skin1
+223 169 110 skin2
+241 199 145 skin3
+167  95  79 pink0
+213 139 117 pink1
+235 179 155 pink2
+ 78  59  75 purple0
+120  83 105 purple1
+ 24  31  29 black

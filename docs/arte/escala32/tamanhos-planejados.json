@@ -30,7 +30,9 @@
       "status": "redrawn_available_not_integrated",
       "redrawn_files": [
         "docs/arte/redesenho32/png/moveis/fogao_aceso.png"
-      ]
+      ],
+      "visual_revision": 2,
+      "visual_notes": "Revisado após feedback de perspectiva/frontalidade e acabamento; não integrado nem aprovado automaticamente por testes."
     },
     {
       "name": "fogao_apagado",
@@ -53,7 +55,9 @@
       "status": "redrawn_available_not_integrated",
       "redrawn_files": [
         "docs/arte/redesenho32/png/moveis/fogao_apagado.png"
-      ]
+      ],
+      "visual_revision": 2,
+      "visual_notes": "Revisado após feedback de perspectiva/frontalidade e acabamento; não integrado nem aprovado automaticamente por testes."
     },
     {
       "name": "geladeira_fechada",
@@ -76,7 +80,9 @@
       "status": "redrawn_available_not_integrated",
       "redrawn_files": [
         "docs/arte/redesenho32/png/moveis/geladeira_fechada.png"
-      ]
+      ],
+      "visual_revision": 2,
+      "visual_notes": "Revisado após feedback de perspectiva/frontalidade e acabamento; não integrado nem aprovado automaticamente por testes."
     },
     {
       "name": "geladeira_aberta",
@@ -99,7 +105,9 @@
       "status": "redrawn_available_not_integrated",
       "redrawn_files": [
         "docs/arte/redesenho32/png/moveis/geladeira_aberta.png"
-      ]
+      ],
+      "visual_revision": 2,
+      "visual_notes": "Revisado após feedback de perspectiva/frontalidade e acabamento; não integrado nem aprovado automaticamente por testes."
     },
     {
       "name": "preparo_estudo",
@@ -403,7 +411,9 @@
       "status": "redrawn_available_not_integrated",
       "redrawn_files": [
         "docs/arte/redesenho32/png/moveis/pia.png"
-      ]
+      ],
+      "visual_revision": 2,
+      "visual_notes": "Revisado após feedback de perspectiva/frontalidade e acabamento; não integrado nem aprovado automaticamente por testes."
     },
     {
       "name": "lixeira",
