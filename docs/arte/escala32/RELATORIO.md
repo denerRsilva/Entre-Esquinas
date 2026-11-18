@@ -146,3 +146,45 @@ ComandasUI, AnotarPedidosUI, EquilibrioUI, PlaytestDoZeroUI e CatalogoSecoesUI.
 O kit importa, abre e valida seu TileSet 32px, 96 células de piso e dimensões dos
 objetos. Original comercial não integra o ZIP. Não houve teste em telefone físico.
 Os resultados finais de exportação são registrados junto dos APKs abaixo.
+
+
+## Exportação .55 concluída
+
+| Pacote | Tamanho | Comparação com .54 universal |
+|---|---:|---:|
+| .54 universal anterior | 99,52 MiB | referência |
+| .55 universal, três arquiteturas | 92,01 MiB | −7,55% |
+| .55 ARM64 | 37,68 MiB | −62,14%, também por distribuir só ARM64 |
+
+A redução de 99,52 para 92,01 MiB vem da limpeza de texturas; a diferença
+adicional do ARM64 vem das bibliotecas do motor não distribuídas nessa variante.
+As entradas comprimidas de texturas caíram de 18,32 para 10,82 MiB.
+[Inventário depois](medicao-depois.json) e [hashes/arquiteturas](apks-verificados.json).
+
+Na sala de refúgio recém-iniciada e pausada, janela 1280×720, o monitor de
+memória de texturas da Godot caiu de **147,68 para 134,04 MiB**, diferença de
+**13,64 MiB**. Medição em processos separados, após 25 quadros, Godot 4.6.3,
+Compatibility/Mesa llvmpipe no Linux. Não é RAM total do processo nem uma medição
+em telefone. [Registro do ensaio](memoria-texturas.json). O atlas das barras tem
+16KiB RGBA8 teóricos; a alocação reportada pelo motor inclui sua representação
+importada e custos adicionais.
+
+Os dois APKs passaram na verificação ZIP e de assinatura v2/v3, conservando
+exatamente o certificado da .54. Ambos são versão 21255. As três bibliotecas
+nativas da universal são idênticas às anteriores; ARM64 contém somente sua
+arquitetura. Todos os assets do jogo são idênticos entre as duas variantes.
+Dez texturas excluídas foram conferidas pelo nome exato, as demais texturas
+anteriores mantêm os hashes e o atlas compacto é a única textura nova no APK.
+Não há JavaScript nem QA nos pacotes.
+
+Além dos testes de fonte, os assets reais do APK universal foram extraídos para
+um diretório temporário. Somente o harness QA foi acrescentado, sem substituir
+scripts compilados, projeto ou texturas do pacote. O PlaytestDoZeroUI passou com
+zero falhas: novo jogo, anotação, preparo/empratamento, atendimento, limpeza,
+almoço e mercador. CatalogoSecoesUI também passou com zero falhas nos assets
+exportados, conferindo o catálogo. Isso verifica as dependências da exportação no Linux; não
+substitui instalação e playtest em Android físico.
+
+Downloads: [ARM64](../../../build/Android/EntreEsquinas-arm64.apk),
+[universal](../../../build/Android/EntreEsquinas.apk) e
+[kit editável de arte](../kit-taverna-nativo-32px.zip).

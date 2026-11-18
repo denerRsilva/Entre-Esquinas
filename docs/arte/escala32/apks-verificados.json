@@ -1,0 +1,53 @@
+{
+  "source_commit": "7e762e3",
+  "version": "0.21.2-godot.55",
+  "version_code": 21255,
+  "signing_certificate_sha256": "b66cc994c1e0440b0b17facf6484bcd3dac90b63ed61c977ccc9606a523b3dbe",
+  "baseline_mib": 99.518992424,
+  "variants": {
+    "EntreEsquinas.apk": {
+      "bytes": 96474631,
+      "mib": 92.00537776947021,
+      "sha256": "439c40e86065f2180f4bd802642ef4b207280c1f60c3de4ff71d2cc2f3759497",
+      "architectures": [
+        "arm64-v8a",
+        "armeabi-v7a",
+        "x86_64"
+      ],
+      "compressed_groups_bytes": {
+        "other": 2894467,
+        "arm64-v8a": 25192038,
+        "armeabi-v7a": 28803211,
+        "x86_64": 28164455,
+        "textures": 11344902
+      }
+    },
+    "EntreEsquinas-arm64.apk": {
+      "bytes": 39507155,
+      "mib": 37.67695903778076,
+      "sha256": "c78436e2ff0ff56f3f5e15761e0429635d32d21c86c74eb27e89126b6eeed6b7",
+      "architectures": [
+        "arm64-v8a"
+      ],
+      "compressed_groups_bytes": {
+        "other": 2894139,
+        "arm64-v8a": 25192038,
+        "textures": 11344902
+      }
+    }
+  },
+  "checks": {
+    "zip_integrity": "both passed",
+    "signature": "v2/v3 verified; same certificate as .54",
+    "signer_sha256": "b66cc994c1e0440b0b17facf6484bcd3dac90b63ed61c977ccc9606a523b3dbe",
+    "universal_libraries": "all three identical to .54",
+    "asset_equivalence": "all assets identical between universal and ARM64",
+    "excluded_textures": "exact ten listed exclusions; all remaining texture hashes unchanged; compact atlas added",
+    "javascript_and_qa_in_apk": false,
+    "extracted_apk_assets_linux_tests": {
+      "PlaytestDoZeroUI": 0,
+      "CatalogoSecoesUI": 0
+    },
+    "physical_android_tested": false
+  }
+}

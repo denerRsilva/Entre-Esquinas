@@ -1,0 +1,368 @@
+{
+  "source_pngs": [
+    {
+      "path": "godot/arte/cozinheira-12-poses-64.png",
+      "width": 192,
+      "height": 256,
+      "png_bytes": 36591,
+      "rgba8_bytes": 196608
+    },
+    {
+      "path": "godot/arte/cozinheira-12-poses.png",
+      "width": 1086,
+      "height": 1448,
+      "png_bytes": 534756,
+      "rgba8_bytes": 6290112
+    },
+    {
+      "path": "godot/arte/cozinheira-grade.png",
+      "width": 1256,
+      "height": 1256,
+      "png_bytes": 918112,
+      "rgba8_bytes": 6310144
+    },
+    {
+      "path": "godot/arte/esquina-atlas.png",
+      "width": 1254,
+      "height": 1254,
+      "png_bytes": 1212934,
+      "rgba8_bytes": 6290064
+    },
+    {
+      "path": "godot/arte/esquina-cook-source.png",
+      "width": 1254,
+      "height": 1254,
+      "png_bytes": 928069,
+      "rgba8_bytes": 6290064
+    },
+    {
+      "path": "godot/arte/esquina-food.png",
+      "width": 1536,
+      "height": 1024,
+      "png_bytes": 1470253,
+      "rgba8_bytes": 6291456
+    },
+    {
+      "path": "godot/arte/esquina-frame.png",
+      "width": 64,
+      "height": 64,
+      "png_bytes": 6067,
+      "rgba8_bytes": 16384
+    },
+    {
+      "path": "godot/arte/esquina-tools.png",
+      "width": 480,
+      "height": 112,
+      "png_bytes": 37541,
+      "rgba8_bytes": 215040
+    },
+    {
+      "path": "godot/arte/esquina-walk.png",
+      "width": 1233,
+      "height": 1276,
+      "png_bytes": 961766,
+      "rgba8_bytes": 6293232
+    },
+    {
+      "path": "godot/arte/inicio-32.png",
+      "width": 288,
+      "height": 32,
+      "png_bytes": 1321,
+      "rgba8_bytes": 36864
+    },
+    {
+      "path": "godot/arte/modular/bancadas-modulares-revisadas.png",
+      "width": 1536,
+      "height": 1024,
+      "png_bytes": 1468642,
+      "rgba8_bytes": 6291456
+    },
+    {
+      "path": "godot/arte/modular/bancadas-piskel.png",
+      "width": 1536,
+      "height": 1024,
+      "png_bytes": 851695,
+      "rgba8_bytes": 6291456
+    },
+    {
+      "path": "godot/arte/modular/kit-empratamento-utensilios.png",
+      "width": 1536,
+      "height": 1024,
+      "png_bytes": 935161,
+      "rgba8_bytes": 6291456
+    },
+    {
+      "path": "godot/arte/modular/kits-mesa.png",
+      "width": 1774,
+      "height": 887,
+      "png_bytes": 338450,
+      "rgba8_bytes": 6294152
+    },
+    {
+      "path": "godot/arte/modular/mesa-trabalho.png",
+      "width": 1439,
+      "height": 1093,
+      "png_bytes": 999561,
+      "rgba8_bytes": 6291308
+    },
+    {
+      "path": "godot/arte/modular/mesas-bancadas-base-comum-concept.png",
+      "width": 1536,
+      "height": 1024,
+      "png_bytes": 1644761,
+      "rgba8_bytes": 6291456
+    },
+    {
+      "path": "godot/arte/modular/prato-vazio.png",
+      "width": 1499,
+      "height": 1049,
+      "png_bytes": 758164,
+      "rgba8_bytes": 6289804
+    },
+    {
+      "path": "godot/arte/taverna/alimentos.png",
+      "width": 1536,
+      "height": 1024,
+      "png_bytes": 1526080,
+      "rgba8_bytes": 6291456
+    },
+    {
+      "path": "godot/arte/taverna/arquitetura.png",
+      "width": 1536,
+      "height": 1024,
+      "png_bytes": 2215704,
+      "rgba8_bytes": 6291456
+    },
+    {
+      "path": "godot/arte/taverna/cliente-01-estudo-sprites.png",
+      "width": 1254,
+      "height": 1254,
+      "png_bytes": 970326,
+      "rgba8_bytes": 6290064
+    },
+    {
+      "path": "godot/arte/taverna/cliente-02-estudo-sprites.png",
+      "width": 1254,
+      "height": 1254,
+      "png_bytes": 999378,
+      "rgba8_bytes": 6290064
+    },
+    {
+      "path": "godot/arte/taverna/cliente-03-estudo-sprites.png",
+      "width": 1254,
+      "height": 1254,
+      "png_bytes": 986236,
+      "rgba8_bytes": 6290064
+    },
+    {
+      "path": "godot/arte/taverna/cozinheira.png",
+      "width": 1254,
+      "height": 1254,
+      "png_bytes": 795236,
+      "rgba8_bytes": 6290064
+    },
+    {
+      "path": "godot/arte/taverna/decoracao.png",
+      "width": 1374,
+      "height": 1145,
+      "png_bytes": 1666886,
+      "rgba8_bytes": 6292920
+    },
+    {
+      "path": "godot/arte/taverna/garcom-estudo-sprites.png",
+      "width": 1254,
+      "height": 1254,
+      "png_bytes": 936142,
+      "rgba8_bytes": 6290064
+    },
+    {
+      "path": "godot/arte/taverna/moveis.png",
+      "width": 1374,
+      "height": 1145,
+      "png_bytes": 1271547,
+      "rgba8_bytes": 6292920
+    },
+    {
+      "path": "godot/arte/ui/barras-compactas-32.png",
+      "width": 128,
+      "height": 32,
+      "png_bytes": 545,
+      "rgba8_bytes": 16384
+    },
+    {
+      "path": "godot/arte/ui/comanda-aprovada.png",
+      "width": 1774,
+      "height": 887,
+      "png_bytes": 1095931,
+      "rgba8_bytes": 6294152
+    },
+    {
+      "path": "godot/arte/ui/modern-ui-32.png",
+      "width": 1952,
+      "height": 1376,
+      "png_bytes": 191738,
+      "rgba8_bytes": 10743808
+    },
+    {
+      "path": "godot/mundo/restaurant.png",
+      "width": 960,
+      "height": 640,
+      "png_bytes": 33866,
+      "rgba8_bytes": 2457600
+    },
+    {
+      "path": "godot/mundo/stock.png",
+      "width": 960,
+      "height": 640,
+      "png_bytes": 10678,
+      "rgba8_bytes": 2457600
+    },
+    {
+      "path": "godot/mundo/street.png",
+      "width": 960,
+      "height": 640,
+      "png_bytes": 15069,
+      "rgba8_bytes": 2457600
+    },
+    {
+      "path": "godot/personagens/Garcom.png",
+      "width": 192,
+      "height": 256,
+      "png_bytes": 24625,
+      "rgba8_bytes": 196608
+    },
+    {
+      "path": "godot/personagens/Logistica.png",
+      "width": 192,
+      "height": 256,
+      "png_bytes": 25151,
+      "rgba8_bytes": 196608
+    },
+    {
+      "path": "godot/personagens/Moradora.png",
+      "width": 192,
+      "height": 256,
+      "png_bytes": 24664,
+      "rgba8_bytes": 196608
+    }
+  ],
+  "png_bytes": 25893646,
+  "rgba8_all_exported_sources_theoretical_bytes": 163907096,
+  "note": "RGBA8 is a theoretical sum, not measured resident RAM/VRAM. Large atlases can be valid when composed from native cells.",
+  "apk": {
+    "bytes": 96474631,
+    "compressed_groups": {
+      "other": 2894467,
+      "engine/arm64-v8a": 25192038,
+      "engine/armeabi-v7a": 28803211,
+      "engine/x86_64": 28164455,
+      "textures": 11344902
+    },
+    "textures": [
+      {
+        "path": "assets/.godot/imported/bancadas-piskel.png-34aad09f9cf1889318ad53210b6eb5f0.ctex",
+        "compressed_bytes": 404998
+      },
+      {
+        "path": "assets/.godot/imported/kits-mesa.png-6cf2a75acbdcc67829afd7f3903b1f53.ctex",
+        "compressed_bytes": 208224
+      },
+      {
+        "path": "assets/.godot/imported/mesa-trabalho.png-bb2b8a6a426c704866569159fd0cf520.ctex",
+        "compressed_bytes": 631510
+      },
+      {
+        "path": "assets/.godot/imported/modulos.svg-734e20d61d360cc46ebd009531372e1c.ctex",
+        "compressed_bytes": 474
+      },
+      {
+        "path": "assets/.godot/imported/prato-vazio.png-40af62082c86ae882d652eceb1093d08.ctex",
+        "compressed_bytes": 481880
+      },
+      {
+        "path": "assets/.godot/imported/alimentos.png-6e945d6ccaa547711f0536418fe16dad.ctex",
+        "compressed_bytes": 1194292
+      },
+      {
+        "path": "assets/.godot/imported/arquitetura.png-b51d6026eaf3904583b96b3cf300236e.ctex",
+        "compressed_bytes": 1710066
+      },
+      {
+        "path": "assets/.godot/imported/cliente-01-estudo-sprites.png-b72b3602a6dfb511e889331834c01173.ctex",
+        "compressed_bytes": 715634
+      },
+      {
+        "path": "assets/.godot/imported/cliente-02-estudo-sprites.png-8208ced7c58908aaa803505fac0ccc9f.ctex",
+        "compressed_bytes": 747504
+      },
+      {
+        "path": "assets/.godot/imported/cliente-03-estudo-sprites.png-3b93aad7944b7e5504275f5876943962.ctex",
+        "compressed_bytes": 760632
+      },
+      {
+        "path": "assets/.godot/imported/cozinheira.png-6f4376405488f466fa1c16b514c43f63.ctex",
+        "compressed_bytes": 612892
+      },
+      {
+        "path": "assets/.godot/imported/decoracao.png-65f0ce749ad3c4e9646b905fd7b50623.ctex",
+        "compressed_bytes": 1257456
+      },
+      {
+        "path": "assets/.godot/imported/garcom-estudo-sprites.png-9028df1f3c991e52589474719b8d5840.ctex",
+        "compressed_bytes": 719930
+      },
+      {
+        "path": "assets/.godot/imported/moveis.png-6bad23556113c4c0780348258715f91f.ctex",
+        "compressed_bytes": 993282
+      },
+      {
+        "path": "assets/.godot/imported/barras-compactas-32.png-aad2f24b8fca5df574e912b5b2a597f7.ctex",
+        "compressed_bytes": 408
+      },
+      {
+        "path": "assets/.godot/imported/comanda-aprovada.png-3af3ce70cfc7444adc2ecd0471b96c7d.ctex",
+        "compressed_bytes": 722764
+      },
+      {
+        "path": "assets/.godot/imported/cozinheira-12-poses-64.png-0742fc046fc97d3d5fdf70c78e81cb7b.ctex",
+        "compressed_bytes": 33104
+      },
+      {
+        "path": "assets/.godot/imported/esquina-frame.png-ce0b5667370b76b3bacbb27ecfa9c7b8.ctex",
+        "compressed_bytes": 5724
+      },
+      {
+        "path": "assets/.godot/imported/esquina-tools.png-8b00af17e44a4b1991a311c4fa71a292.ctex",
+        "compressed_bytes": 30360
+      },
+      {
+        "path": "assets/.godot/imported/inicio-32.png-a45a1427727dafc201bcfaf18c48af72.ctex",
+        "compressed_bytes": 874
+      },
+      {
+        "path": "assets/.godot/imported/restaurant.png-226492222c6ff22225df4b8491484b0f.ctex",
+        "compressed_bytes": 22370
+      },
+      {
+        "path": "assets/.godot/imported/stock.png-555272e65982f06450d994b046ecc1dc.ctex",
+        "compressed_bytes": 1474
+      },
+      {
+        "path": "assets/.godot/imported/street.png-1957c4c3ff25c4a97733f7499bdcd426.ctex",
+        "compressed_bytes": 13266
+      },
+      {
+        "path": "assets/.godot/imported/Garcom.png-c8779730088a866c2bfab5e52efaa4d0.ctex",
+        "compressed_bytes": 25994
+      },
+      {
+        "path": "assets/.godot/imported/Logistica.png-b16c9f0e8455b158c55bf8ebec09b773.ctex",
+        "compressed_bytes": 25122
+      },
+      {
+        "path": "assets/.godot/imported/Moradora.png-f9148628da1a31cf5c30f68cef0e3d2f.ctex",
+        "compressed_bytes": 24668
+      }
+    ]
+  }
+}
