@@ -9,6 +9,10 @@ func run():
 		var state := patched(fixtures.base,test.input)
 		# Successful instant washing is superseded by PiaTarefasUI.
 		if patched(fixtures.base,test.expected.patch).message=="Prato limpo nas mãos.":retired+=1;continue
+		# .57 removed the kitchen divider; this legacy blocked-cell snapshot is retired.
+		if test.operation=="pointerDown" and state.get("singleRoom",false):
+			var cell:Dictionary=test.params[0].world
+			if int(floor(cell.x))==14 and int(floor(cell.y)) in [7,8,9]:retired+=1;continue
 		if test.operation=="primaryObjectAction" and state.player.get("hand")!=null and str(state.player.hand.item).begins_with("pot_"):
 			var target = preload("res://simulacao/nativa/Construcao.gd").find(state.objects,test.params[0])
 			# Returning a full pot to an empty stove is covered by ApoioPanelasUI.

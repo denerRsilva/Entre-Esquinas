@@ -1,5 +1,6 @@
 extends Node2D
 ## Art layers use the same geometry as the simulation; decorations on walls are non-blocking.
+const INTERIOR=preload("res://arte/interiores/ambientes32.png")
 const WALLS=preload("res://arte/modular/modulos.svg")
 const ARCH=preload("res://arte/taverna/arquitetura.png")
 const DECOR=preload("res://arte/taverna/decoracao.png")
@@ -15,28 +16,29 @@ func set_layout(value:bool,single:bool):
 	for y in range(16):
 		for x in range(24):
 			if compact and (x<4 or y<(6 if single_room else 2)):floor_layer.erase_cell(Vector2i(x,y))
-			else:floor_layer.set_cell(Vector2i(x,y),0 if x<14 else 1,Vector2i.ZERO)
+			else:floor_layer.set_cell(Vector2i(x,y),0 if x<14 else 1,Vector2i(x%3,y%2) if x<14 else Vector2i(x%2,y%2))
 	queue_redraw()
 func _ready():
 	cuts=JSON.parse_string(FileAccess.get_file_as_string("res://arte/taverna/recortes.json"))
 	var floor_layer := TileMapLayer.new()
 	floor_layer.name = "Piso"
 	floor_layer.z_index = -1
-	floor_layer.scale = Vector2.ONE * (40.0 / 128.0)
+	floor_layer.scale = Vector2.ONE * 1.25
 	floor_layer.tile_set = TileSet.new()
-	floor_layer.tile_set.tile_size = Vector2i(128,128)
-	for origin in [Vector2(270,24),Vector2(809,24)]:
+	floor_layer.tile_set.tile_size = Vector2i(32,32)
+	for region in [Rect2(0,0,96,64),Rect2(96,0,64,64)]:
 		var texture := AtlasTexture.new()
-		texture.atlas = ARCH
-		texture.region = Rect2(origin,Vector2(128,128))
+		texture.atlas = INTERIOR
+		texture.region = region
 		var source := TileSetAtlasSource.new()
 		source.texture = texture
-		source.texture_region_size = Vector2i(128,128)
-		source.create_tile(Vector2i.ZERO)
+		source.texture_region_size = Vector2i(32,32)
+		for tx in int(region.size.x/32):
+			for ty in 2:source.create_tile(Vector2i(tx,ty))
 		floor_layer.tile_set.add_source(source)
 	for y in range(16):
 		for x in range(24):
-			floor_layer.set_cell(Vector2i(x,y),0 if x<14 else 1,Vector2i.ZERO)
+			floor_layer.set_cell(Vector2i(x,y),0 if x<14 else 1,Vector2i(x%3,y%2) if x<14 else Vector2i(x%2,y%2))
 	add_child(floor_layer)
 	queue_redraw()
 func asset(tex:Texture2D, source:Array, target:Rect2):
@@ -51,6 +53,8 @@ func _draw():
 	for x in range(4 if compact else 0,24,2):
 		asset(WALLS,[0,0,32,32],Rect2(x*40,top,40,62))
 		asset(WALLS,[0,0,32,32],Rect2(x*40+40,top,40,62))
+	if single_room:
+		for x in range(14,23):asset(INTERIOR,[0,64,32,64],Rect2(x*40,top,40,80))
 	# Continuous side walls: only plaster repeats, never the horizontal wall's plinth.
 	var spans := [[left,top+40,600],[920,top+40,600]] if single_room else [[left,top+40,600],[920,top+40,600],[560,top+40,280],[560,320,600]]
 	for span in spans:

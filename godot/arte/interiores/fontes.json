@@ -1,0 +1,84 @@
+[
+  {
+    "file": "cozinha32.png",
+    "original": "1_Interiors/32x32/Theme_Sorter_32x32/12_Kitchen_32x32.png",
+    "driveId": "17fAt035eTy1nwrwGsJB1M0WdonUfd8sj",
+    "unit": 32,
+    "source_sha256": "0c9adf1da0909833f1c7ab1cc8354981f6f3a2940a47f2c7da427099e0f5728e",
+    "source_bytes": 111911,
+    "regions": [
+      [
+        256,
+        352,
+        64,
+        64,
+        0,
+        0
+      ],
+      [
+        256,
+        224,
+        64,
+        32,
+        64,
+        0
+      ],
+      [
+        320,
+        232,
+        64,
+        32,
+        64,
+        32
+      ],
+      [
+        288,
+        736,
+        32,
+        96,
+        128,
+        0
+      ]
+    ],
+    "sha256": "78352c43c504667fd07411c650d1b7b2bcf36e30c64afa244215babacea34eed",
+    "bytes": 2193,
+    "packing": "Lossless native pixel regions; no resampling."
+  },
+  {
+    "file": "ambientes32.png",
+    "original": "1_Interiors/32x32/Room_Builder_32x32.png",
+    "driveId": "14sj-3JmA336jR9sadQVLV0DxLttl9BMJ",
+    "unit": 32,
+    "source_sha256": "607ae5c61bb6c35c3e9b6087d67554ae9cb1428ede6614cdf6952ead53bf6b0d",
+    "source_bytes": 401590,
+    "regions": [
+      [
+        1216,
+        672,
+        96,
+        64,
+        0,
+        0
+      ],
+      [
+        1472,
+        992,
+        64,
+        64,
+        96,
+        0
+      ],
+      [
+        864,
+        800,
+        32,
+        64,
+        0,
+        64
+      ]
+    ],
+    "sha256": "3e68fc60faa77f87ca2f44149d767298cde2117212baca48992f50ac7023fa4e",
+    "bytes": 1177,
+    "packing": "Lossless native pixel regions; no resampling."
+  }
+]

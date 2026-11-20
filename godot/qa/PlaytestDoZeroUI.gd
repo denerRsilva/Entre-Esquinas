@@ -131,8 +131,16 @@ func run():
 	var portal: Dictionary = g.session.MOVE.PORTALS.restaurant[0]
 	await world(Vector2(portal.x*40+20,portal.y*40+20))
 	check(s.player.room=="street","Sai pela porta usando o mapa")
-	var seller: Dictionary = s.residents.filter(func(v):return v.id=="beto")[0]
-	await world(Vector2(seller.x*40+20,seller.y*40+6))
+	var city=g.exterior.city
+	var map_button:Button=city.ui.get_node("Tela").find_children("*","Button",true,false).filter(func(b):return b.text=="Mapa")[0]
+	await tap(map_button.get_global_rect().get_center())
+	var destination:Button=city.ui.map.legend.find_children("*","Button",true,false).filter(func(b):return b.text.contains("Mercador de ingredientes"))[0]
+	city.ui.map.legend.ensure_control_visible(destination);await layout();await tap(destination.get_global_rect().get_center())
+	Engine.time_scale=12;Engine.physics_ticks_per_second=240;Engine.max_physics_steps_per_frame=64
+	for i in 16000:
+		await physics_frame
+		if g.session.modal=="market":break
+	Engine.time_scale=1;Engine.physics_ticks_per_second=60;g.tick(0)
 	check(g.session.modal=="market","Visita o mercador pela janela real")
 	var before: float = s.cash
 	check(await choose("Comprar 5 Batata · $10") and s.cash==before-10 and s.market.stock.batata==7,"Compra reposição pelo mouse com dinheiro ganho no almoço")

@@ -20,3 +20,20 @@ THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+
+
+Modern Exteriors, Modern Interiors e Modern User Interface — LimeZu
+https://limezu.itch.io/modernexteriors
+https://limezu.itch.io/moderninteriors
+https://limezu.itch.io/modernuserinterface
+Pacotes comerciais adquiridos pelo proprietário do projeto. Artes usadas como
+parte do jogo; não são um pacote para redistribuição ou revenda.
+
+MODERN INTERIORS FULL VERSION LICENSE
+YOU CAN:
+-Edit and use the asset in any commercial  or non commercial project
+-Use the asset in any commercial  or non commercial project
+YOU CAN'T:
+- Resell or distribute the asset to others
+- Edit and resell the asset to others
+- Credits required (limezu.itch.io)

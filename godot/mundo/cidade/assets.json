@@ -1,0 +1,932 @@
+{
+  "banco": {
+    "file": "assets/banco.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/20_Subway_and_Train_Station_Singles_32x32/ME_Singles_Subway_and_Train_Station_32x32_Two_Seats_Green_Bench_Frontal_1.png",
+    "sha256": "f793319cb91916c66987b24014d3a160750b16d52e45231bb2aa99ce9aa26724",
+    "size": [
+      64,
+      32
+    ]
+  },
+  "asfalto": {
+    "file": "assets/asfalto.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/2_City_Terrains_Singles_32x32/ME_Singles_City_Terrains_32x32_Asphalt_1_Variation_24.png",
+    "sha256": "e96272f522e44e4cff04d95fa6d9dd59b653ee48360db8b3366cbc3751bc5aa7",
+    "size": [
+      64,
+      64
+    ]
+  },
+  "calcada": {
+    "file": "assets/calcada.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/2_City_Terrains_Singles_32x32/ME_Singles_City_Terrains_32x32_Sidewalk_1_27.png",
+    "sha256": "b8951a6630053bfba13a4c7364a0f163f15e83e3e9430b7a73cc5ea79341b32d",
+    "size": [
+      64,
+      64
+    ]
+  },
+  "canteiro": {
+    "file": "assets/canteiro.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/17_Garden_Singles_32x32/ME_Singles_Garden_32x32_Bush_1.png",
+    "sha256": "e7962b1e9e0db0dff0e9ae941638b40915baf56418285c1984b54645f970e842",
+    "size": [
+      32,
+      32
+    ]
+  },
+  "arbusto": {
+    "file": "assets/arbusto.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/17_Garden_Singles_32x32/ME_Singles_Garden_32x32_Bush_19.png",
+    "sha256": "c0cb820dd0429a00b7c65aa7e7631ed30dfa64d32ed8e564411f491e562434ce",
+    "size": [
+      64,
+      64
+    ]
+  },
+  "estufa_base": {
+    "file": "assets/estufa_base.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/17_Garden_Singles_32x32/ME_Singles_Garden_32x32_Large_Greenhouse_Layer_1.png",
+    "sha256": "604b24d39646e4702d8a98abb2e87703fa946391c43942928c565abf8ffc6125",
+    "size": [
+      256,
+      256
+    ]
+  },
+  "regador": {
+    "file": "assets/regador.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/17_Garden_Singles_32x32/ME_Singles_Garden_32x32_Green_Watering_Can_Left_Full.png",
+    "sha256": "efce0503b831ba006480408fbe425eb50a34e35232e30b5931ffee3b24fba518",
+    "size": [
+      64,
+      32
+    ]
+  },
+  "estufa_vidro": {
+    "file": "assets/estufa_vidro.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/17_Garden_Singles_32x32/ME_Singles_Garden_32x32_Large_Greenhouse_Layer_2.png",
+    "sha256": "4ead2ae718b9c03cd7a64a08b67e6bd01461bf7bca569af8c63d582f9d606a4b",
+    "size": [
+      256,
+      256
+    ]
+  },
+  "caixa_vazia": {
+    "file": "assets/caixa_vazia.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/17_Garden_Singles_32x32/ME_Singles_Garden_32x32_Wood_Box_Empty.png",
+    "sha256": "4cac820e963e9d4ee640f5ce2f739bb83de8b3777beb7363ac00de24fbc2f488",
+    "size": [
+      64,
+      64
+    ]
+  },
+  "casa_rustica": {
+    "file": "assets/casa_rustica.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/24_Additional_Houses_Singles_32x32/24_Additional_Houses_Country_House_32x32.png",
+    "sha256": "7c0ca32c35d7c528d7e4fe46a91384ca4109320277de5096d12a0c3d1d95c0df",
+    "size": [
+      576,
+      512
+    ]
+  },
+  "gerador": {
+    "file": "assets/gerador.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/24_Additional_Houses_Singles_32x32/24_Additional_Houses_Post_Apocalyptic_House_Generator_1_32x32.png",
+    "sha256": "48946dbcba21b9023100a4318ea21260099b110af1caa4dc95a67a40d7b8180b",
+    "size": [
+      96,
+      64
+    ]
+  },
+  "placa_solar": {
+    "file": "assets/placa_solar.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/24_Additional_Houses_Singles_32x32/24_Additional_Houses_Post_Apocalyptic_House_Solar_Panels_1_32x32.png",
+    "sha256": "7f339f8d624326fddff0ac1de89a852a7a6122825af4dbd43a7e2fbbaca89343",
+    "size": [
+      96,
+      128
+    ]
+  },
+  "moinho_base": {
+    "file": "assets/moinho_base.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/24_Additional_Houses_Singles_32x32/24_Additional_Houses_Post_Apocalyptic_House_Wind_Mill_No_Propeller_32x32.png",
+    "sha256": "e8a5ef28cec272ab94047c30f971bf578cd84ac3be1ccb9b230679eccaaa3cbd",
+    "size": [
+      128,
+      256
+    ]
+  },
+  "moradia_a": {
+    "file": "assets/moradia_a.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/24_Additional_Houses_Singles_32x32/24_Additional_Houses_Terraced_House_1_32x32.png",
+    "sha256": "e6139b5093ff60524a29266b22c5e752acb6a2c24d4b736532ef079262d98535",
+    "size": [
+      384,
+      480
+    ]
+  },
+  "moradia_b": {
+    "file": "assets/moradia_b.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/24_Additional_Houses_Singles_32x32/24_Additional_Houses_Terraced_House_4_32x32.png",
+    "sha256": "88bf3604f1809c90b38d9430d5f3e4466bba51d849164eb61292178a20a470ac",
+    "size": [
+      384,
+      480
+    ]
+  },
+  "taverna": {
+    "file": "assets/taverna.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/24_Additional_Houses_Singles_32x32/24_Additional_Houses_Post_Apocalyptic_House_1_32x32.png",
+    "sha256": "e54ca7f6429ee88f8f41b85475f038e5b81023b4bd1992032e2d112e2235f148",
+    "size": [
+      416,
+      320
+    ]
+  },
+  "oficina": {
+    "file": "assets/oficina.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/4_Generic_Building_Singles_32x32/ME_Singles_Generic_Building_32x32_Hardware_Store_Example.png",
+    "sha256": "a2a749b25844224ebe212ccdb5471764581abc519aea98fa8693bf0009adbab5",
+    "size": [
+      256,
+      288
+    ]
+  },
+  "torre": {
+    "file": "assets/torre.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/23_MIlitary_Base_Singles_32x32/23_MIlitary_Base_32x32_Watch_Tower.png",
+    "sha256": "4517b31e151c8ac8afb3d723f6572a5f2f19a0468d026aac093212bd19b6e6b4",
+    "size": [
+      192,
+      480
+    ]
+  },
+  "saco_h": {
+    "file": "assets/saco_h.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/23_MIlitary_Base_Singles_32x32/23_MIlitary_Base_32x32_Sandbag_Pile_Top_Middle_Modular.png",
+    "sha256": "30c2bdcc19b6f037de9875c712b5bfff7e39844a6498c57bac94006b8b12d1cb",
+    "size": [
+      64,
+      64
+    ]
+  },
+  "pneus": {
+    "file": "assets/pneus.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/23_MIlitary_Base_Singles_32x32/23_MIlitary_Base_32x32_Tires_Pile_1.png",
+    "sha256": "5d63fcdefa5c0812c9cfa2b591264cd0c7c5a6c6a60723803baa54f8a1e24f40",
+    "size": [
+      64,
+      96
+    ]
+  },
+  "caixa_militar": {
+    "file": "assets/caixa_militar.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/23_MIlitary_Base_Singles_32x32/23_MIlitary_Base_32x32_Military_Tent_Box_Closed.png",
+    "sha256": "dd5d5bc5187da1ac36d1bc9453a3b28c58be1e4a374c7094c28ce83f5128c211",
+    "size": [
+      96,
+      32
+    ]
+  },
+  "enfermaria": {
+    "file": "assets/enfermaria.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/23_MIlitary_Base_Singles_32x32/23_MIlitary_Base_32x32_Military_Tent_Brown.png",
+    "sha256": "d954f336da2e5f1b6b4c0d018cafee57322b8967e7b65959cc4a79e27ae3531a",
+    "size": [
+      384,
+      416
+    ]
+  },
+  "carrinho_comida": {
+    "file": "assets/carrinho_comida.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/10_Vehicles_Singles_32x32/ME_Singles_Vehicles_32x32_Fruit_Flowers_Cart_1.png",
+    "sha256": "d758f6c6ed379d1d0ce22581ddab2c94508b86bdd9479e64392a03ccefb6cc48",
+    "size": [
+      96,
+      128
+    ]
+  },
+  "mercado": {
+    "file": "assets/mercado.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/9_Shopping_Center_and_Markets_Singles_32x32/ME_Singles_Shopping_Center_and_Markets_32x32_Market_Medium_5.png",
+    "sha256": "be2cce2a2e4d3162036e55d83f2b129818aa88f41b7a887ed8168d609e011520",
+    "size": [
+      224,
+      288
+    ]
+  },
+  "reconstrucao": {
+    "file": "assets/reconstrucao.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/8_Worksite_Singles_32x32/ME_Singles_Worksite_32x32_Building_Skeleton_2.png",
+    "sha256": "8b078a95591e174e4a391480e9e68e14f7f90abb6150d81303db3cd8ff888fae",
+    "size": [
+      224,
+      320
+    ]
+  },
+  "cone": {
+    "file": "assets/cone.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/8_Worksite_Singles_32x32/ME_Singles_Worksite_32x32_Cone_1.png",
+    "sha256": "fba5af5399fc7c3393c40339933818f606c8bd9dd545444b4a35ffdf203f7ffa",
+    "size": [
+      32,
+      32
+    ]
+  },
+  "caixa_ferramentas": {
+    "file": "assets/caixa_ferramentas.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/8_Worksite_Singles_32x32/ME_Singles_Worksite_32x32_Tool_Box_1.png",
+    "sha256": "55c8c4ed63e62d3dcc22442d60b2186acae1b1773c7f29ad0aecb37a15e30ce6",
+    "size": [
+      64,
+      64
+    ]
+  },
+  "carro_velho": {
+    "file": "assets/carro_velho.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/3_City_Props_Singles_32x32/ME_Singles_City_Props_32x32_Car_Wreck_1.png",
+    "sha256": "1b92d3ee08f717989547cde465947e7417224f096b847fc08c97322a661e017f",
+    "size": [
+      128,
+      96
+    ]
+  },
+  "carro_velho_b": {
+    "file": "assets/carro_velho_b.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/3_City_Props_Singles_32x32/ME_Singles_City_Props_32x32_Car_Wreck_4.png",
+    "sha256": "f04a9d46eb407fbd83f3fdf9231038596f2d114c34eea1c4aa074f2a3fb927bb",
+    "size": [
+      128,
+      128
+    ]
+  },
+  "ferro_velho": {
+    "file": "assets/ferro_velho.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/3_City_Props_Singles_32x32/ME_Singles_City_Props_32x32_Power_House_1.png",
+    "sha256": "6cb015f8fb1358d7fa2adb46110f848c51c0daf46fc7aea337763113c0754ffa",
+    "size": [
+      224,
+      256
+    ]
+  },
+  "sucata": {
+    "file": "assets/sucata.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/3_City_Props_Singles_32x32/ME_Singles_City_Props_32x32_Scrap_Metal_Pile_1.png",
+    "sha256": "a6a9ca9d87e2af5cf62de4511b23c616f8136155942bb9e0608da9fb8e2d1757",
+    "size": [
+      160,
+      96
+    ]
+  },
+  "poste": {
+    "file": "assets/poste.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/3_City_Props_Singles_32x32/ME_Singles_City_Props_32x32_Street_Lamp_1.png",
+    "sha256": "878548b68ffe792156575fe5a8891281be08361464732a3fa2707df4b524481e",
+    "size": [
+      64,
+      128
+    ]
+  },
+  "arvore_b": {
+    "file": "assets/arvore_b.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/3_City_Props_Singles_32x32/ME_Singles_City_Props_32x32_Tree_1.png",
+    "sha256": "c1adaa0c22e2bb674ac17904298767002155b2f0e0adde47ec6d1f7c6cfdd9ed",
+    "size": [
+      64,
+      96
+    ]
+  },
+  "arvore_a": {
+    "file": "assets/arvore_a.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/3_City_Props_Singles_32x32/ME_Singles_City_Props_32x32_Tree_12.png",
+    "sha256": "0b464908ba5c22260c7d69d6299e8c809fe137967aa54aef55a1a0d1b03aa97c",
+    "size": [
+      96,
+      128
+    ]
+  },
+  "cerca_01": {
+    "file": "assets/cerca_01.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/1_Terrains_and_Fences_Singles_32x32/ME_Singles_Terrains_and_Fences_32x32_Fence_2_1.png",
+    "sha256": "2a7dd0b574092851e97d52915d72ac0cee0233b3952fe34182b26ebe6c36264d",
+    "size": [
+      32,
+      64
+    ]
+  },
+  "cerca_03": {
+    "file": "assets/cerca_03.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/1_Terrains_and_Fences_Singles_32x32/ME_Singles_Terrains_and_Fences_32x32_Fence_2_3.png",
+    "sha256": "4356079be10bf23e63853bdf7bda4ed0414c9276fa1b97fcba76ab5cf44a9eec",
+    "size": [
+      32,
+      64
+    ]
+  },
+  "cerca_04": {
+    "file": "assets/cerca_04.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/1_Terrains_and_Fences_Singles_32x32/ME_Singles_Terrains_and_Fences_32x32_Fence_2_4.png",
+    "sha256": "d6039c9669cd4ef524a8bcb5552e0c1d3cba4df7be5a550b32d1ff8155953c2f",
+    "size": [
+      32,
+      64
+    ]
+  },
+  "cerca_05": {
+    "file": "assets/cerca_05.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/1_Terrains_and_Fences_Singles_32x32/ME_Singles_Terrains_and_Fences_32x32_Fence_2_5.png",
+    "sha256": "a086a96a0c6f7780b5c8d2d693e48734a2f8045ecd5de5c7815fbeb7dd8eb8a6",
+    "size": [
+      32,
+      64
+    ]
+  },
+  "cerca_06": {
+    "file": "assets/cerca_06.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/1_Terrains_and_Fences_Singles_32x32/ME_Singles_Terrains_and_Fences_32x32_Fence_2_6.png",
+    "sha256": "4d06722507c2adb89b88fa32ee33a8f6cad2854c6edf1a4b3b3c315486ebf6d5",
+    "size": [
+      32,
+      64
+    ]
+  },
+  "cerca_09": {
+    "file": "assets/cerca_09.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/1_Terrains_and_Fences_Singles_32x32/ME_Singles_Terrains_and_Fences_32x32_Fence_2_9.png",
+    "sha256": "a5e7d05de200c0bf4b417432246b7bc385bf9ca06a636cecf7df338aecebb922",
+    "size": [
+      32,
+      64
+    ]
+  },
+  "grama_01": {
+    "file": "assets/grama_01.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/1_Terrains_and_Fences_Singles_32x32/ME_Singles_Terrains_and_Fences_32x32_Grass_1_1.png",
+    "sha256": "17eade3004160081af7d41a2f5f161ec86af5df123782a6d75ecf72c409fd60f",
+    "size": [
+      32,
+      32
+    ]
+  },
+  "grama_10": {
+    "file": "assets/grama_10.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/1_Terrains_and_Fences_Singles_32x32/ME_Singles_Terrains_and_Fences_32x32_Grass_1_10.png",
+    "sha256": "d0e9ba4c09400fa4875299e00ec54f65d30af212d5fcc4042b493dc33fc62fec",
+    "size": [
+      32,
+      32
+    ]
+  },
+  "grama_11": {
+    "file": "assets/grama_11.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/1_Terrains_and_Fences_Singles_32x32/ME_Singles_Terrains_and_Fences_32x32_Grass_1_11.png",
+    "sha256": "4befe26d221fa242b258c628b039b07f4eb44a71cfefc0f5ca328f84ef412fe9",
+    "size": [
+      32,
+      32
+    ]
+  },
+  "grama_12": {
+    "file": "assets/grama_12.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/1_Terrains_and_Fences_Singles_32x32/ME_Singles_Terrains_and_Fences_32x32_Grass_1_12.png",
+    "sha256": "b0a6c8365768e706d5ed08c4a5db31eadd8c41dbaca8421892966dbd50ea866d",
+    "size": [
+      32,
+      32
+    ]
+  },
+  "grama_16": {
+    "file": "assets/grama_16.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/1_Terrains_and_Fences_Singles_32x32/ME_Singles_Terrains_and_Fences_32x32_Grass_1_16.png",
+    "sha256": "9ce4a5083f625b868970ff5cde65698e34da7438ccfb1079650b584666ab9783",
+    "size": [
+      32,
+      32
+    ]
+  },
+  "grama_17": {
+    "file": "assets/grama_17.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/1_Terrains_and_Fences_Singles_32x32/ME_Singles_Terrains_and_Fences_32x32_Grass_1_17.png",
+    "sha256": "b12e31e2a4fb61f1765c076efaa75bc2afb787754561fffebc886879a08fb41f",
+    "size": [
+      32,
+      32
+    ]
+  },
+  "grama_21": {
+    "file": "assets/grama_21.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/1_Terrains_and_Fences_Singles_32x32/ME_Singles_Terrains_and_Fences_32x32_Grass_1_21.png",
+    "sha256": "596d21ab7ee1eb499b075624f8ae23515de86d167da1c2fd38d8c855c5186cb7",
+    "size": [
+      32,
+      32
+    ]
+  },
+  "grama_03": {
+    "file": "assets/grama_03.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/1_Terrains_and_Fences_Singles_32x32/ME_Singles_Terrains_and_Fences_32x32_Grass_1_3.png",
+    "sha256": "0012633bdf339c9f83105d226dccf0bc5639e5cfeb8d0fdbc0fef9d4f0500c68",
+    "size": [
+      32,
+      32
+    ]
+  },
+  "grama_04": {
+    "file": "assets/grama_04.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/1_Terrains_and_Fences_Singles_32x32/ME_Singles_Terrains_and_Fences_32x32_Grass_1_4.png",
+    "sha256": "530b8c77aa975775eeb5240d991206b919f7efa6f516e869ff8c536d57f8b77f",
+    "size": [
+      32,
+      32
+    ]
+  },
+  "grama_06": {
+    "file": "assets/grama_06.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/1_Terrains_and_Fences_Singles_32x32/ME_Singles_Terrains_and_Fences_32x32_Grass_1_6.png",
+    "sha256": "da8d491dd110ee4fee623f5bb66b58ed2a51febf8f7c4a5f5addf47dba110aac",
+    "size": [
+      32,
+      32
+    ]
+  },
+  "grama_07": {
+    "file": "assets/grama_07.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/1_Terrains_and_Fences_Singles_32x32/ME_Singles_Terrains_and_Fences_32x32_Grass_1_7.png",
+    "sha256": "1ae7122380bf2d2a81ac7d1a4eb152b4533fd49721ca64a8e6a98570f90c5e45",
+    "size": [
+      32,
+      32
+    ]
+  },
+  "grama_08": {
+    "file": "assets/grama_08.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/1_Terrains_and_Fences_Singles_32x32/ME_Singles_Terrains_and_Fences_32x32_Grass_1_8.png",
+    "sha256": "4e1356bcbbe9e526430fea43f63d01202e9a1fb1653ad3d970159ab46d48e813",
+    "size": [
+      32,
+      32
+    ]
+  },
+  "cerca_02": {
+    "file": "assets/cerca_02.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/1_Terrains_and_Fences_Singles_32x32/ME_Singles_Terrains_and_Fences_32x32_Fence_2_2.png",
+    "sha256": "4d06722507c2adb89b88fa32ee33a8f6cad2854c6edf1a4b3b3c315486ebf6d5",
+    "size": [
+      32,
+      64
+    ]
+  },
+  "grama_13": {
+    "file": "assets/grama_13.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/1_Terrains_and_Fences_Singles_32x32/ME_Singles_Terrains_and_Fences_32x32_Grass_1_13.png",
+    "sha256": "2e189e7d883aed07e2d5409d521df559af1e60a0f7fe525e20d760b5fac4707b",
+    "size": [
+      32,
+      32
+    ]
+  },
+  "grama_14": {
+    "file": "assets/grama_14.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/1_Terrains_and_Fences_Singles_32x32/ME_Singles_Terrains_and_Fences_32x32_Grass_1_14.png",
+    "sha256": "391507e53567d9c766bd83995dc8511a33eb9e5f1c6b0ccebd4c27696a479753",
+    "size": [
+      32,
+      32
+    ]
+  },
+  "grama_15": {
+    "file": "assets/grama_15.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/1_Terrains_and_Fences_Singles_32x32/ME_Singles_Terrains_and_Fences_32x32_Grass_1_15.png",
+    "sha256": "f1656e0eae4c69a20c53bb11e56a4f19cf02f85e002280d0bdcca99dcc3f2316",
+    "size": [
+      32,
+      32
+    ]
+  },
+  "grama_18": {
+    "file": "assets/grama_18.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/1_Terrains_and_Fences_Singles_32x32/ME_Singles_Terrains_and_Fences_32x32_Grass_1_18.png",
+    "sha256": "595d1545b3d7de4de121a1400e38d1b0b7a7e2c31567fd559deb005654ad11ec",
+    "size": [
+      32,
+      32
+    ]
+  },
+  "grama_19": {
+    "file": "assets/grama_19.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/1_Terrains_and_Fences_Singles_32x32/ME_Singles_Terrains_and_Fences_32x32_Grass_1_19.png",
+    "sha256": "bcf6fe297dad9a4e8a496a0ff436d173df4c2d6970e493e9d5d2dbee0b1d9cc6",
+    "size": [
+      32,
+      32
+    ]
+  },
+  "grama_02": {
+    "file": "assets/grama_02.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/1_Terrains_and_Fences_Singles_32x32/ME_Singles_Terrains_and_Fences_32x32_Grass_1_2.png",
+    "sha256": "88cde9d2557eaf58f6812283c452f3e7d4edb3cd52acdbb0213c2e412e7d4d54",
+    "size": [
+      32,
+      32
+    ]
+  },
+  "grama_20": {
+    "file": "assets/grama_20.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/1_Terrains_and_Fences_Singles_32x32/ME_Singles_Terrains_and_Fences_32x32_Grass_1_20.png",
+    "sha256": "d17983089c33f3b5b9c2a58a85e8b67d34b7c9c6e5250966ac59370eeed93494",
+    "size": [
+      32,
+      32
+    ]
+  },
+  "grama_22": {
+    "file": "assets/grama_22.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/1_Terrains_and_Fences_Singles_32x32/ME_Singles_Terrains_and_Fences_32x32_Grass_1_22.png",
+    "sha256": "58cd7f088a024758c4350180ddc284cdee14487094313b9f4501be5fda23ef91",
+    "size": [
+      32,
+      32
+    ]
+  },
+  "grama_05": {
+    "file": "assets/grama_05.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/1_Terrains_and_Fences_Singles_32x32/ME_Singles_Terrains_and_Fences_32x32_Grass_1_5.png",
+    "sha256": "540cba975d170d4e003c3722b54ac6d61a7517b6b3c7dc084c610a4a424f0140",
+    "size": [
+      32,
+      32
+    ]
+  },
+  "grama_09": {
+    "file": "assets/grama_09.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/1_Terrains_and_Fences_Singles_32x32/ME_Singles_Terrains_and_Fences_32x32_Grass_1_9.png",
+    "sha256": "fbb005560350836a7a058381d679cf6d09ab48488739bc7b7591a83abdda524f",
+    "size": [
+      32,
+      32
+    ]
+  },
+  "moita": {
+    "file": "assets/moita.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/1_Terrains_and_Fences_Singles_32x32/ME_Singles_Terrains_and_Fences_32x32_Props_Grass_1.png",
+    "sha256": "36f23d1d36a23732ae2f0922ba352e8c6fd327b30cc919f8e260c880266d92a5",
+    "size": [
+      32,
+      32
+    ]
+  },
+  "mesa": {
+    "file": "assets/mesa.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/11_Camping_Singles_32x32/ME_Singles_Camping_32x32_Benched_Table_1.png",
+    "sha256": "2b64e419371ce13773f44a0d9e713a6ffba7c264d811751d1c6d00a4cce070d4",
+    "size": [
+      64,
+      64
+    ]
+  },
+  "trailer_b": {
+    "file": "assets/trailer_b.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/11_Camping_Singles_32x32/ME_Singles_Camping_32x32_Mobile_House_Medium_2.png",
+    "sha256": "281be3150cbe32ea06597c04e60c7652935766d3927a875ef079a474fa5bbdfd",
+    "size": [
+      256,
+      192
+    ]
+  },
+  "caixa_comida": {
+    "file": "assets/caixa_comida.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/11_Camping_Singles_32x32/ME_Singles_Camping_32x32_Fish_Crate_1.png",
+    "sha256": "701dc13b7b815f172a32bec99b377c5eb11114a33c0696f756e4d44a5b1d38ff",
+    "size": [
+      64,
+      64
+    ]
+  },
+  "trailer_a": {
+    "file": "assets/trailer_a.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/11_Camping_Singles_32x32/ME_Singles_Camping_32x32_Mobile_House_Big_1.png",
+    "sha256": "844b946e47b24b43c2b3f0578a2508012ebb64c7fcf7b846e4271272c8fb0b37",
+    "size": [
+      320,
+      192
+    ]
+  },
+  "barril": {
+    "file": "assets/barril.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/11_Camping_Singles_32x32/ME_Singles_Camping_32x32_Pier_Barrel_1.png",
+    "sha256": "b09d76a5662ffeaf36a23ba1bf892554e9e59bb9058ebfaf7e6a3a7716370efa",
+    "size": [
+      32,
+      32
+    ]
+  },
+  "caixote": {
+    "file": "assets/caixote.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/11_Camping_Singles_32x32/ME_Singles_Camping_32x32_Pier_Crates_1.png",
+    "sha256": "7c2bd0e747f0f13ae03347ba25fef4d3508370893e90abae02598134963964d4",
+    "size": [
+      32,
+      32
+    ]
+  },
+  "arvore_c": {
+    "file": "assets/arvore_c.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/11_Camping_Singles_32x32/ME_Singles_Camping_32x32_Tree_100.png",
+    "sha256": "f852fc71c3fe789e1077be454abce21e37518dfad59dcb602f548350664103be",
+    "size": [
+      128,
+      160
+    ]
+  },
+  "viajante_1": {
+    "file": "assets/viajante_1.png",
+    "archive": "Character_Generator_Addons_32x32.rar",
+    "original": "Character_Generator_Addons_32x32/Characters_32x32/Modern_Exteriors_Characters_Postman_32x32_1.png",
+    "sha256": "a60c104f6237eff212530c1b00777c61879fefc037d264b3b61a8ceaf5fc08fd",
+    "size": [
+      768,
+      128
+    ],
+    "source_sha256": "9af8a8830baafe441999c64ab1d03208deccaa6ad2320be14458e4d6af4e1627",
+    "crop": [
+      0,
+      0,
+      768,
+      128
+    ]
+  },
+  "viajante_2": {
+    "file": "assets/viajante_2.png",
+    "archive": "Character_Generator_Addons_32x32.rar",
+    "original": "Character_Generator_Addons_32x32/Characters_32x32/Modern_Exteriors_Characters_Postman_32x32_2.png",
+    "sha256": "0da00ad2e63c99b7cf5bf06088aa45d1049f91d63b1670c4372e3f387f7571c1",
+    "size": [
+      768,
+      128
+    ],
+    "source_sha256": "ae343a06c217d6d9133ccc3e7fb53cbb29faac54aa0bdee03a8f9df72fb1b411",
+    "crop": [
+      0,
+      0,
+      768,
+      128
+    ]
+  },
+  "viajante_3": {
+    "file": "assets/viajante_3.png",
+    "archive": "Character_Generator_Addons_32x32.rar",
+    "original": "Character_Generator_Addons_32x32/Characters_32x32/Modern_Exteriors_Characters_Postman_32x32_3.png",
+    "sha256": "6545b09eb163ac517429800abe4bbb3ed3c64100d743717c999d7f4f6e995996",
+    "size": [
+      768,
+      128
+    ],
+    "source_sha256": "56728d555f7d82f7d1fd35631b0e72105a334ffa36c06f13f4110ac5f3467f48",
+    "crop": [
+      0,
+      0,
+      768,
+      128
+    ]
+  },
+  "morador_1": {
+    "file": "assets/morador_1.png",
+    "archive": "Character_Generator_Addons_32x32.rar",
+    "original": "Character_Generator_Addons_32x32/Characters_32x32/Modern_Exteriors_Characters_Scout_32x32_1.png",
+    "sha256": "ac3c72da5c9b84a4c7be2c34ed033fdac75ec34949966d276292f490cd6627eb",
+    "size": [
+      768,
+      128
+    ],
+    "source_sha256": "0345a94168da8b1ad144dc783d820c5f210705ec702c082331796623f958035a",
+    "crop": [
+      0,
+      0,
+      768,
+      128
+    ]
+  },
+  "morador_2": {
+    "file": "assets/morador_2.png",
+    "archive": "Character_Generator_Addons_32x32.rar",
+    "original": "Character_Generator_Addons_32x32/Characters_32x32/Modern_Exteriors_Characters_Scout_32x32_2.png",
+    "sha256": "ccd6cfb5aba7a89ae4bcffe41320149a430a8a943c08af4bd3f63f2799351e90",
+    "size": [
+      768,
+      128
+    ],
+    "source_sha256": "b7eec4ea81aa6e5d10b89e44e64fc5ac4c195c5dfd3519b54700dfb624498b40",
+    "crop": [
+      0,
+      0,
+      768,
+      128
+    ]
+  },
+  "morador_3": {
+    "file": "assets/morador_3.png",
+    "archive": "Character_Generator_Addons_32x32.rar",
+    "original": "Character_Generator_Addons_32x32/Characters_32x32/Modern_Exteriors_Characters_Scout_32x32_3.png",
+    "sha256": "fd14b1fdb747954633419ef574aca370e73dd43e66b61c9b46273dcd5f140b96",
+    "size": [
+      768,
+      128
+    ],
+    "source_sha256": "3d36abebcdb32c58e9a5110cf1bb5d5893ed7cb87e807263a6941403d6ae26b1",
+    "crop": [
+      0,
+      0,
+      768,
+      128
+    ]
+  },
+  "morador_4": {
+    "file": "assets/morador_4.png",
+    "archive": "Character_Generator_Addons_32x32.rar",
+    "original": "Character_Generator_Addons_32x32/Characters_32x32/Modern_Exteriors_Characters_Scout_32x32_4.png",
+    "sha256": "f5e7d518387a5e7eb0d4f3d4cac8eaf0d02b1e8a9bf072ad6f242d27b058ce43",
+    "size": [
+      768,
+      128
+    ],
+    "source_sha256": "a68796ee98ce36637c7a7d0d346dcfa01167d5557ce56c5191577700f0e1cc94",
+    "crop": [
+      0,
+      0,
+      768,
+      128
+    ]
+  },
+  "morador_5": {
+    "file": "assets/morador_5.png",
+    "archive": "Character_Generator_Addons_32x32.rar",
+    "original": "Character_Generator_Addons_32x32/Characters_32x32/Modern_Exteriors_Characters_Scout_32x32_5.png",
+    "sha256": "e75650720f8d7d0792df9cba412b5b3eae55820ce3a02e55919aa3879d860123",
+    "size": [
+      768,
+      128
+    ],
+    "source_sha256": "aade26b5d8fa9b2f2495df2a6023d3f0b9b523ba8e94c5e5a98072406e40b74d",
+    "crop": [
+      0,
+      0,
+      768,
+      128
+    ]
+  },
+  "morador_6": {
+    "file": "assets/morador_6.png",
+    "archive": "Character_Generator_Addons_32x32.rar",
+    "original": "Character_Generator_Addons_32x32/Characters_32x32/Modern_Exteriors_Characters_Scout_32x32_6.png",
+    "sha256": "d93737875c97241b8c69e8b24e516974b8063e0e29f19d694f688213f378d2d6",
+    "size": [
+      768,
+      128
+    ],
+    "source_sha256": "6836d173c313b509dd3e4e1bad7d2600900525692600b9d48d410a028a33f93a",
+    "crop": [
+      0,
+      0,
+      768,
+      128
+    ]
+  },
+  "moinho_anim": {
+    "file": "assets/moinho_anim.png",
+    "archive": "Animated_32x32.rar",
+    "original": "Animated_32x32/Animated_sheets_32x32/Additional_Houses_Wind_Mill_Blades_32x32.png",
+    "sha256": "d2b181211fcb89dcc9bd5310b00f6a082719b978b2f12dcc603f8fa0b97bb271",
+    "size": [
+      512,
+      128
+    ]
+  },
+  "fogueira_anim": {
+    "file": "assets/fogueira_anim.png",
+    "archive": "Animated_32x32.rar",
+    "original": "Animated_32x32/Animated_sheets_32x32/Campfire_32x32.png",
+    "sha256": "d2aed911d4cf53e70a23d73ce8482e5a367154fda6a9daf93eb3cb7f7ee3d557",
+    "size": [
+      192,
+      64
+    ]
+  },
+  "fonte_anim": {
+    "file": "assets/fonte_anim.png",
+    "archive": "Animated_32x32.rar",
+    "original": "Animated_32x32/Animated_sheets_32x32/Garden_Fountain_1_32x32.png",
+    "sha256": "dee000a4efa46a8cbeeefc678003cd0c264172326ecfb5145363f686e5bb2dc8",
+    "size": [
+      384,
+      96
+    ]
+  },
+  "ui": {
+    "file": "assets/ui.png",
+    "archive": "modernuserinterface-win.zip",
+    "original": "32x32/Modern_UI_Style_1_32x32.png",
+    "sha256": "e48280c35be033e548a18d1ab5171598837106244aac1ee47d48f9790a6350a2",
+    "size": [
+      64,
+      64
+    ],
+    "source_sha256": "377cc56789fc83a3508f165b93416f8c0876b12dd8f3d966273ab8e5235e187d",
+    "crop": [
+      112,
+      256,
+      64,
+      64
+    ]
+  },
+  "terra_detalhe_7": {
+    "file": "assets/terra_detalhe_7.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/1_Terrains_and_Fences_Singles_32x32/ME_Singles_Terrains_and_Fences_32x32_Props_Dirt_7.png",
+    "sha256": "21ca394d67350af9a1201ff1537d22a16f0adc3420255098f0549ace1956a495",
+    "size": [
+      32,
+      32
+    ]
+  },
+  "terra_detalhe_1": {
+    "file": "assets/terra_detalhe_1.png",
+    "archive": "ME_Theme_Sorter_32x32.rar",
+    "original": "ME_Theme_Sorter_32x32/1_Terrains_and_Fences_Singles_32x32/ME_Singles_Terrains_and_Fences_32x32_Props_Dirt_1.png",
+    "sha256": "9bff8702d757ccb31be6e3fc179ad2610e0f426c61bd007b9e6a2ca1d31b521a",
+    "size": [
+      32,
+      32
+    ]
+  }
+}

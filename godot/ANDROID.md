@@ -2,7 +2,7 @@
 
 A compilação universal fica em `../build/Android/EntreEsquinas.apk`, com SHA-256 em `SHA256SUMS`. A opção ARM64 fica em `EntreEsquinas-arm64.apk`, com `SHA256SUMS-arm64`. A cópia idêntica com sufixo `-gdscript` foi retirada na limpeza; o jogo continua inteiramente em GDScript. No GitHub, baixe o arquivo completo pelo botão **Download raw file**.
 
-Versão atual: `com.entreesquinas.restaurante`, `0.21.2-godot.57` (21257), Android 7.0+, orientação horizontal e toque emulando mouse. A assinatura de depuração é a mesma do APK anterior. Não é necessário recompilar extensões C/C++ ou QuickJS.
+Versão atual: `com.entreesquinas.restaurante`, `0.21.2-godot.58` (21258), Android 7.0+, orientação horizontal e toque emulando mouse. A assinatura de depuração é a mesma do APK anterior. Não é necessário recompilar extensões C/C++ ou QuickJS.
 
 ## Exportar
 
@@ -98,3 +98,11 @@ continuam com sua população. [Escopo do teste](../docs/teste-50-moradores.md).
 Novo jogo adota a disposição da referência; divisória ao lado do fogão removida
 do cenário e da navegação. Saves existentes mantêm os móveis em suas posições.
 [Detalhes e validação](../docs/cozinha-inicial-57.md).
+
+
+## Cidade e cozinha .58
+
+Cidade aprovada integrada à campanha, mercado presencial, viagem com itens e
+save de posição externa. Fogão, pia, geladeira, piso e revestimento com recortes
+nativos do Modern Interiors. Atlas compactados sem reduzir pixels.
+[Escopo, edição, prévias e validação](../docs/cidade-cozinha-58.md).

@@ -86,3 +86,13 @@
 - Refinamento atual: trabalhar poucas sprites por vez. O pedido seguinte focou somente um fogão em canvas 64×64 (2×2 blocos de 32), permitindo áreas vazias. O estudo 3 está em `docs/arte/fogao-64-r3`; não expandir automaticamente a revisão aos outros móveis.
 
 - Experimento .56 autorizado: novos jogos começam com 50 moradores; não recalibrar intervalos, estoques, receitas, preços, horários, status ou contratação. Saves anteriores conservam sua população. `initialPopulation` distingue a base antiga3 da nova50; crescimento continua +1 nas primeiras três vitórias. A arte está pausada neste trabalho.
+
+- Integração .58 autorizada: o exterior jogável usa `godot/mundo/cidade/Cidade.tscn`,
+  com Piso32 editável, objetos e destinos salvos na cena. A cozinha usa seleção
+  do Modern Interiors pago, com fontes/recortes registrados e créditos LimeZu.
+  Não importar os pacotes completos para `res://`. Preservar a resolução nativa;
+  recortar e empacotar sem reamostrar. O pedido atual retoma a arte da cozinha.
+- `cityVisit` é um campo opcional do save, independente da grade interna40.
+  Não ampliar as coordenadas da simulação antiga para caber a cidade. O mercado
+  abre após a aproximação física no exterior; estoque e custos continuam nativos.
+  Oficinas e horta ainda são cenário, sem novos sistemas de produção.

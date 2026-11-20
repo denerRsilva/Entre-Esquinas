@@ -13,7 +13,7 @@ func measure(blocked: bool) -> Dictionary:
 	var chair = sim.BUILD.find(s.objects,c.seat)
 	c.x=chair.x;c.y=chair.y;c.goal=null;c.state="waiting";sim.service.begin(s,c,"service")
 	if blocked:
-		for y in range(10,15):PARTIDA.add_object(s,"counterH",14,y)
+		for y in range(7,15):PARTIDA.add_object(s,"counterH",14,y) # Full barrier after the .57 divider removal.
 		w.x=18;w.y=11
 	var begin := Time.get_ticks_usec()
 	for i in 30:sim.service.customer_access(s,w,c)

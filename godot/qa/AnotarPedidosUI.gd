@@ -40,7 +40,7 @@ func run():
 	for zoom in [0.7,1.5,2.0]:
 		root.size=Vector2i(960,432);await layout();g.session.set_zoom(zoom)
 		var c: Dictionary = await visitor(initial,1)
-		g.session.state.player.x=11;g.session.state.player.y=7;g.session.state.player.goal=null;g.session.state.player.motion=null;g.session.state.player.erase("settled");g.tick(0)
+		g.session.state.player.x=11;g.session.state.player.y=9;g.session.state.player.goal=null;g.session.state.player.motion=null;g.session.state.player.erase("settled");g.tick(0)
 		var target: Dictionary = g.session.CAMERA.screen_point(c.x*40+20,c.y*40-12,g.session.rect,g.session.viewport,g.session.camera)
 		check(Rect2(Vector2.ZERO,Vector2(root.size)).has_point(Vector2(target.x,target.y)),"Rosto está visível antes do toque no zoom "+str(zoom))
 		await click_world(Vector2(c.x*40+20,c.y*40-12))

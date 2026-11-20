@@ -87,6 +87,9 @@ func run():
 		# The kit now owns exact plate drawing, replacing the old grouped side icons.
 		var normalized: Array = without_old_plate_stacks(actual,test.state)
 		var expected: Array = without_old_plate_stacks(test.expected,test.state)
+		if test.state.get("singleRoom",false):
+			var old_divider=func(c):return not (c[0]=="line" and c[1]==560 and c[2] in [280,320,360] and c[5]=="#33584766")
+			normalized=normalized.filter(old_divider);expected=expected.filter(old_divider)
 		if not equivalent(normalized,expected):
 			FileAccess.open("/tmp/esquinas-cena-size-actual.json",FileAccess.WRITE).store_string(JSON.stringify(normalized))
 			FileAccess.open("/tmp/esquinas-cena-size-expected.json",FileAccess.WRITE).store_string(JSON.stringify(expected))

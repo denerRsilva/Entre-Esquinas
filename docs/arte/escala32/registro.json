@@ -1156,6 +1156,534 @@
       "height": 32,
       "cell": 32,
       "method": "explicit native pixel clusters; 2x2 assembly for one stove"
+    },
+    {
+      "path": "godot/mundo/cidade/assets/arbusto.png",
+      "width": 64,
+      "height": 64,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/arvore_a.png",
+      "width": 96,
+      "height": 128,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/arvore_b.png",
+      "width": 64,
+      "height": 96,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/arvore_c.png",
+      "width": 128,
+      "height": 160,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/asfalto.png",
+      "width": 64,
+      "height": 64,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/banco.png",
+      "width": 64,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/barril.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/caixa_comida.png",
+      "width": 64,
+      "height": 64,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/caixa_ferramentas.png",
+      "width": 64,
+      "height": 64,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/caixa_militar.png",
+      "width": 96,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/caixa_vazia.png",
+      "width": 64,
+      "height": 64,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/caixote.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/calcada.png",
+      "width": 64,
+      "height": 64,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/canteiro.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/carrinho_comida.png",
+      "width": 96,
+      "height": 128,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/carro_velho.png",
+      "width": 128,
+      "height": 96,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/carro_velho_b.png",
+      "width": 128,
+      "height": 128,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/casa_rustica.png",
+      "width": 576,
+      "height": 512,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/cerca_01.png",
+      "width": 32,
+      "height": 64,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/cerca_02.png",
+      "width": 32,
+      "height": 64,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/cerca_03.png",
+      "width": 32,
+      "height": 64,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/cerca_04.png",
+      "width": 32,
+      "height": 64,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/cerca_05.png",
+      "width": 32,
+      "height": 64,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/cerca_06.png",
+      "width": 32,
+      "height": 64,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/cerca_09.png",
+      "width": 32,
+      "height": 64,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/cone.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/enfermaria.png",
+      "width": 384,
+      "height": 416,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/estufa_base.png",
+      "width": 256,
+      "height": 256,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/estufa_vidro.png",
+      "width": 256,
+      "height": 256,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/ferro_velho.png",
+      "width": 224,
+      "height": 256,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/fogueira_anim.png",
+      "width": 192,
+      "height": 64,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/fonte_anim.png",
+      "width": 384,
+      "height": 96,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/gerador.png",
+      "width": 96,
+      "height": 64,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/grama_01.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/grama_02.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/grama_03.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/grama_04.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/grama_05.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/grama_06.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/grama_07.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/grama_08.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/grama_09.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/grama_10.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/grama_11.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/grama_12.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/grama_13.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/grama_14.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/grama_15.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/grama_16.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/grama_17.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/grama_18.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/grama_19.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/grama_20.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/grama_21.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/grama_22.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/mercado.png",
+      "width": 224,
+      "height": 288,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/mesa.png",
+      "width": 64,
+      "height": 64,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/moinho_anim.png",
+      "width": 512,
+      "height": 128,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/moinho_base.png",
+      "width": 128,
+      "height": 256,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/moita.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/moradia_a.png",
+      "width": 384,
+      "height": 480,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/moradia_b.png",
+      "width": 384,
+      "height": 480,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/morador_1.png",
+      "width": 768,
+      "height": 128,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/morador_2.png",
+      "width": 768,
+      "height": 128,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/morador_3.png",
+      "width": 768,
+      "height": 128,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/morador_4.png",
+      "width": 768,
+      "height": 128,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/morador_5.png",
+      "width": 768,
+      "height": 128,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/morador_6.png",
+      "width": 768,
+      "height": 128,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/oficina.png",
+      "width": 256,
+      "height": 288,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/placa_solar.png",
+      "width": 96,
+      "height": 128,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/pneus.png",
+      "width": 64,
+      "height": 96,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/poste.png",
+      "width": 64,
+      "height": 128,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/reconstrucao.png",
+      "width": 224,
+      "height": 320,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/regador.png",
+      "width": 64,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/saco_h.png",
+      "width": 64,
+      "height": 64,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/sucata.png",
+      "width": 160,
+      "height": 96,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/taverna.png",
+      "width": 416,
+      "height": 320,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/terra_detalhe_1.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/terra_detalhe_7.png",
+      "width": 32,
+      "height": 32,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/torre.png",
+      "width": 192,
+      "height": 480,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/trailer_a.png",
+      "width": 320,
+      "height": 192,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/trailer_b.png",
+      "width": 256,
+      "height": 192,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/ui.png",
+      "width": 64,
+      "height": 64,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/viajante_1.png",
+      "width": 768,
+      "height": 128,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/viajante_2.png",
+      "width": 768,
+      "height": 128,
+      "cell": 32
+    },
+    {
+      "path": "godot/mundo/cidade/assets/viajante_3.png",
+      "width": 768,
+      "height": 128,
+      "cell": 32
+    },
+    {
+      "path": "godot/arte/interiores/ambientes32.png",
+      "width": 160,
+      "height": 128,
+      "cell": 32
+    },
+    {
+      "path": "godot/arte/interiores/cozinha32.png",
+      "width": 160,
+      "height": 96,
+      "cell": 32
     }
   ],
   "legacy": [

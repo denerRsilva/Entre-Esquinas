@@ -76,3 +76,8 @@ Na .57, `InicioUI` também confere posições do novo kit, as duas mesas inferio
 passagem/navegação e construção na antiga divisória. As fixtures de construção
 foram atualizadas somente nos casos que tocam a área removida (x14, y7–9);
 uma rota muda seu penúltimo ponto porque agora pode cruzar esse espaço.
+
+
+`CidadeIntegradaUI.gd` valida a cidade real em SubViewport: travessias pela porta,
+comércio, item carregado, salvar/carregar fora da taverna, retorno à cozinha,
+clique, mapa, toque e telas de PC/celular. `--capture` grava evidências em /tmp.

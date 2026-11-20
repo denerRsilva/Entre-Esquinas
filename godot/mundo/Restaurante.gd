@@ -7,6 +7,7 @@ var frame_data:Dictionary
 var values:Dictionary={}
 var focused := true
 var view_size := Vector2.ZERO
+var exterior
 var tone_cache: Dictionary = {}
 @onready var hud=$HUD
 @onready var palco=$Mapa/Palco
@@ -20,6 +21,7 @@ func _ready() -> void:
 	active=true
 	get_viewport().size_changed.connect(resize_view)
 	resize_view()
+	exterior=preload("res://mundo/VisitaCidade.gd").new();exterior.name="Cidade";add_child(exterior);move_child(exterior,get_node("HUD").get_index());exterior.bind(self)
 	tick(0)
 
 func resize_view() -> void:
@@ -84,9 +86,12 @@ func toggle_fullscreen() -> void:
 func queue_command(e:Dictionary) -> void:
 	if e.get("id","")=="fullscreenBtn":
 		toggle_fullscreen();return
+	if exterior and exterior.visiting and e.get("id","") in ["zoomOut","zoomIn"]:
+		exterior.city.adjust_zoom(-0.25 if e.id=="zoomOut" else 0.25);exterior.remember();return
 	events.append(e)
 
 func tick(dt:float) -> void:
+	if exterior:exterior.remember()
 	var batch:=events.duplicate();events.clear()
 	var packet:Dictionary=session.step(dt,batch)
 	if packet.is_empty():
@@ -104,6 +109,7 @@ func tick(dt:float) -> void:
 			session.notify("Não foi possível gravar o salvamento no disco.",true)
 	palco.paint(packet)
 	hud.sync(packet)
+	if exterior:exterior.sync()
 	for frequency in packet.sounds: play_tone(frequency)
 
 func play_tone(hz:float) -> void:
@@ -126,7 +132,7 @@ func _process(delta:float) -> void:
 	if events.is_empty() and frame_data.get("modal","")!="" and not frame_data.get("liveInventory",false):return
 	# Update on every rendered frame; a timer threshold can skip alternating
 	# frames when the monitor delta is slightly below 1/60 second.
-	tick(delta)
+	tick(0 if exterior and exterior.visiting and exterior.city.ui.map.visible else delta)
 
 func map_input(event:InputEvent) -> void:
 	if not active or frame_data.get("modal","")!="":return
@@ -143,6 +149,8 @@ func _input(event:InputEvent) -> void:
 	if not active or not event is InputEventKey or event.echo:return
 	if event.keycode==KEY_F11 and event.pressed:
 		toggle_fullscreen();return
+	if exterior and exterior.visiting and session.modal.is_empty():
+		return # SubViewportContainer already forwards this event once.
 	var editing := get_viewport().gui_get_focus_owner() is LineEdit
 	if editing and event.pressed and event.keycode != KEY_ESCAPE:return
 	var names={KEY_UP:"arrowup",KEY_DOWN:"arrowdown",KEY_LEFT:"arrowleft",KEY_RIGHT:"arrowright",KEY_ESCAPE:"escape",KEY_W:"w",KEY_S:"s",KEY_A:"a",KEY_D:"d",KEY_E:"e",KEY_R:"r"}
@@ -155,9 +163,11 @@ func _notification(what:int) -> void:
 		events.clear()
 		session.focus(false)
 		palco.pause_actors()
+		if exterior:exterior.sync()
 	elif what==NOTIFICATION_APPLICATION_FOCUS_IN and active:
 		focused = true
 		session.focus(true)
+		if exterior:exterior.sync()
 
 func _exit_tree() -> void:
 	$Sinais.stop()
