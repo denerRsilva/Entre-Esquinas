@@ -1,0 +1,20 @@
+config_version=5
+[application]
+config/name="Entre Esquinas — Cidade do Refúgio"
+config/version="estudo-cidade.1"
+run/main_scene="res://Cidade.tscn"
+run/max_fps=60
+[display]
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/size/window_width_override=1280
+window/size/window_height_override=720
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+[input_devices]
+pointing/emulate_mouse_from_touch=true
+[rendering]
+renderer/rendering_method="gl_compatibility"
+textures/canvas_textures/default_texture_filter=0
+2d/snap/snap_2d_transforms_to_pixel=true
+environment/defaults/default_clear_color=Color(0.065,0.08,0.095,1)

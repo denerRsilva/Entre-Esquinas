@@ -1,0 +1,17 @@
+CIDADE DO REFÚGIO — ENTRE ESQUINAS
+
+Abra projeto/project.godot na Godot 4.6.3 Standard e pressione F5.
+Ou extraia CidadeRefugio32-Godot.zip, que contém o mesmo projeto portátil.
+Veja o mapa completo e os detalhes na pasta previas, fora do res:// do jogo.
+
+O mapa fica na branch mapa/cidade-refugio para avaliação, sem substituir a
+campanha/taverna existente. O projeto é GDScript; nenhuma parte HTML/JavaScript
+foi reintroduzida. São 80x64 tiles, 14 destinos e 17 figurantes visuais.
+O jogo principal conserva seus 50 moradores e todos os parâmetros anteriores.
+
+WASD/setas ou clique/toque: explorar. M/Mapa: selecionar destinos.
+L/Luz: dia e noite. +/-: zoom. Arraste o canto inferior esquerdo para joystick.
+
+A cena é editável na Godot. Mover um objeto move sua colisão; Marker2D guarda
+as entradas. Os serviços são cenográficos nesta etapa. Detalhes, licenças e
+limites constam em projeto/LEIA-ME.txt; verificações em projeto/validacao.json.

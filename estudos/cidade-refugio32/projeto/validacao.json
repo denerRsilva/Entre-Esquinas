@@ -1,0 +1,505 @@
+{
+  "cached_paths": 78,
+  "checks": [
+    {
+      "check": "TileMap editável em 32px",
+      "passed": true
+    },
+    {
+      "check": "Mapa completo de 80x64 células",
+      "passed": true
+    },
+    {
+      "check": "Destino acessível: taverna",
+      "passed": true
+    },
+    {
+      "check": "Destino acessível: moradias_oeste",
+      "passed": true
+    },
+    {
+      "check": "Destino acessível: moradias_norte",
+      "passed": true
+    },
+    {
+      "check": "Destino acessível: moradias_leste",
+      "passed": true
+    },
+    {
+      "check": "Destino acessível: mercador",
+      "passed": true
+    },
+    {
+      "check": "Destino acessível: carpinteiro",
+      "passed": true
+    },
+    {
+      "check": "Destino acessível: ferro_velho",
+      "passed": true
+    },
+    {
+      "check": "Destino acessível: enfermaria",
+      "passed": true
+    },
+    {
+      "check": "Destino acessível: reconstrucao",
+      "passed": true
+    },
+    {
+      "check": "Destino acessível: acolhimento",
+      "passed": true
+    },
+    {
+      "check": "Destino acessível: campamento",
+      "passed": true
+    },
+    {
+      "check": "Destino acessível: horta",
+      "passed": true
+    },
+    {
+      "check": "Destino acessível: praca",
+      "passed": true
+    },
+    {
+      "check": "Destino acessível: portao",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Rota de morador sem obstáculo",
+      "passed": true
+    },
+    {
+      "check": "Clique na fachada encontra a entrada da taverna",
+      "passed": true
+    },
+    {
+      "check": "Destino de fachada é a porta, não o telhado",
+      "passed": true
+    },
+    {
+      "check": "Travessia real até taverna",
+      "passed": true
+    },
+    {
+      "check": "Travessia real até mercador",
+      "passed": true
+    },
+    {
+      "check": "Travessia real até carpinteiro",
+      "passed": true
+    },
+    {
+      "check": "Travessia real até campamento",
+      "passed": true
+    },
+    {
+      "check": "Travessia real até acolhimento",
+      "passed": true
+    },
+    {
+      "check": "Travessia real até portao",
+      "passed": true
+    },
+    {
+      "check": "Travessia real até horta",
+      "passed": true
+    },
+    {
+      "check": "Travessia real até ferro_velho",
+      "passed": true
+    },
+    {
+      "check": "Travessia real até enfermaria",
+      "passed": true
+    },
+    {
+      "check": "Travessia real até moradias_leste",
+      "passed": true
+    },
+    {
+      "check": "Travessia real até moradias_norte",
+      "passed": true
+    },
+    {
+      "check": "Travessia real até moradias_oeste",
+      "passed": true
+    },
+    {
+      "check": "Travessia real até reconstrucao",
+      "passed": true
+    },
+    {
+      "check": "Travessia real até praca",
+      "passed": true
+    },
+    {
+      "check": "M abre o mapa de navegação",
+      "passed": true
+    },
+    {
+      "check": "Mapa suspende joystick para não interceptar toques",
+      "passed": true
+    },
+    {
+      "check": "Mapa não move o personagem ao consultar",
+      "passed": true
+    },
+    {
+      "check": "Escolher destino no mapa fecha e traça caminho",
+      "passed": true
+    },
+    {
+      "check": "Último destino é alcançável na lista rolável com alvo de 44px",
+      "passed": true
+    },
+    {
+      "check": "Botão do último destino escolhe o portão correto",
+      "passed": true
+    },
+    {
+      "check": "Teclado cancela o caminho automático",
+      "passed": true
+    },
+    {
+      "check": "Joystick por toque move o morador",
+      "passed": true
+    },
+    {
+      "check": "Soltar toque interrompe o joystick",
+      "passed": true
+    },
+    {
+      "check": "L alterna a noite",
+      "passed": true
+    },
+    {
+      "check": "Postes iluminam a cidade à noite",
+      "passed": true
+    },
+    {
+      "check": "L restaura o dia e desliga as luzes",
+      "passed": true
+    },
+    {
+      "check": "Limite físico impede sair do mapa",
+      "passed": true
+    },
+    {
+      "check": "17 moradores visuais independentes da campanha",
+      "passed": true
+    },
+    {
+      "check": "Moradores caminham e pausam em seus destinos",
+      "passed": true
+    },
+    {
+      "check": "Cache de caminhos limitado",
+      "passed": true
+    },
+    {
+      "check": "Cena permanece abaixo de 4 mil nós",
+      "passed": true
+    },
+    {
+      "check": "Botão dentro da tela (1280, 720): Mapa",
+      "passed": true
+    },
+    {
+      "check": "Botão dentro da tela (1280, 720): Luz",
+      "passed": true
+    },
+    {
+      "check": "Botão dentro da tela (1280, 720): −",
+      "passed": true
+    },
+    {
+      "check": "Botão dentro da tela (1280, 720): +",
+      "passed": true
+    },
+    {
+      "check": "Botão dentro da tela (2340, 1080): Mapa",
+      "passed": true
+    },
+    {
+      "check": "Botão dentro da tela (2340, 1080): Luz",
+      "passed": true
+    },
+    {
+      "check": "Botão dentro da tela (2340, 1080): −",
+      "passed": true
+    },
+    {
+      "check": "Botão dentro da tela (2340, 1080): +",
+      "passed": true
+    },
+    {
+      "check": "Mover objeto no editor também move sua colisão e navegação",
+      "passed": true
+    },
+    {
+      "check": "Marker editável atualiza o destino do mapa",
+      "passed": true
+    },
+    {
+      "check": "Piso pintado no TileMap atualiza a leitura do mapa",
+      "passed": true
+    }
+  ],
+  "failures": 0,
+  "nodes": 2792,
+  "platform": "Linux/Godot 4.6.3; toque simulado; sem aparelho Android",
+  "reachable_cells": 3811
+}

@@ -1,0 +1,60 @@
+ENTRE ESQUINAS — CIDADE DO REFÚGIO / ESTUDO JOGÁVEL
+
+Abra project.godot na Godot 4.6.3 Standard e pressione F5.
+
+CONTROLES
+WASD ou setas: andar. Clique/toque no chão: caminhar até o local.
+Clique numa fachada: aproximar-se da entrada. M ou botão Mapa: destinos.
+Toque num destino do mapa para traçar caminho. L ou Luz: avaliar dia/noite.
++ / - / roda do mouse: zoom. No toque, arraste o canto inferior esquerdo
+para usar o joystick. Escape fecha o mapa. Não há combate controlável.
+
+A CIDADE
+80 x 64 tiles de 32px: 2.560 x 2.048 unidades. Entrada ao sul, praça e taverna
+no centro, moradias ao norte. Mercado, reconstrução e carpintaria ao oeste;
+enfermaria, ferro-velho, horta e estufa ao leste; abrigo de viajantes e vigia
+próximos da chegada. Os caminhos formam um circuito com atalhos.
+Há 14 destinos, 17 personagens visuais, pausas, afastamento leve de multidões,
+água/fogo/moinho animados, postes noturnos e transparência de fachadas quando
+o jogador passa atrás. Os caminhos são calculados numa grade e reutilizados.
+
+EDITAR NA GODOT
+Piso32: TileMapLayer com TileSet de 32px, pintável no editor.
+Objetos: cada peça tem nome e sua própria BaseFisica. Mover a peça move a
+colisão. A navegação lê as colisões reais da cena ao iniciar.
+Destinos: mova o Marker2D de uma entrada para ajustar seu ponto de acesso.
+O mapa de navegação lê os destinos, objetos e pisos salvos na cena.
+Cidade.tscn guarda a composição; ela não depende de gerar tudo a cada frame.
+GerarCidade.gd RECONSTRÓI e substitui a cena a partir de cidade.json.
+Para manter alterações manuais, não execute esse gerador novamente.
+ferramentas/PlanejarCidade.py recria os dados de composição iniciais.
+
+ESCOPO
+Este é um projeto separado para avaliar o mapa. Lojas, carpintaria, enfermaria,
+abrigo e horta são espaços cenográficos; ainda não oferecem compra, fabricação,
+colheita, cura, novas contratações ou entrada em interiores. A iluminação é
+alternada manualmente para avaliação, não simula o calendário da campanha.
+Os 17 personagens são figurantes locais. Nada altera a população de 50, o
+saldo, horários, receitas, o GDD ou os salvamentos do jogo principal.
+
+VALIDAÇÃO
+VerificarCidade.gd testa caminhos e colisões reais até os 14 destinos, clique
+pela câmera, seleção no mapa, teclado, toque simulado, limites do mundo,
+dia/noite, botões em tela larga e edição de objeto/destino/piso no editor.
+Veja validacao.json. Testado em Linux; sem teste físico em Android.
+
+CRÉDITOS E PROVENIÊNCIA
+Assets: LimeZu / Modern Exteriors e Modern User Interface.
+https://limezu.itch.io/modernexteriors
+https://limezu.itch.io/modernuserinterface
+Licenças em licencas. Créditos obrigatórios. Não revenda ou distribua o acervo
+como pacote de assets. Este projeto contém somente as imagens utilizadas.
+assets.json registra arquivos originais, origem e SHA-256. Nenhum PNG foi
+reduzido, esticado ou recomprimido. Objetos maiores combinam blocos de 32px;
+este pack usa personagens em quadros nativos 32x64, sem cortar cabeça/pés.
+
+CAPTURAS
+Godot --path . -- --capture-all gera imagens em dados de usuário/previas.
+Pode indicar uma pasta com --capture-dir=/caminho/absoluto.
+As prévias da entrega ficam fora do projeto, para não serem importadas nem
+pesarem numa futura exportação do jogo.
