@@ -1,0 +1,33 @@
+{
+  "sourceCommit": "6c24eaf",
+  "godot": "4.6.3",
+  "version": "0.21.2-godot.58",
+  "certificateSha256": "b66cc994c1e0440b0b17facf6484bcd3dac90b63ed61c977ccc9606a523b3dbe",
+  "nativeSuitesPassed": 61,
+  "exportedPackSmokePassed": true,
+  "physicalAndroidTested": false,
+  "apks": [
+    {
+      "file": "EntreEsquinas.apk",
+      "bytes": 97060532,
+      "sha256": "b57a19cf0d8666ccfc7e2a6afc04cd9b489137beba8aeab3afc3361bd60057f9",
+      "architectures": [
+        "arm64-v8a",
+        "armeabi-v7a",
+        "x86_64"
+      ],
+      "version": "0.21.2-godot.58",
+      "code": 21258
+    },
+    {
+      "file": "EntreEsquinas-arm64.apk",
+      "bytes": 40093056,
+      "sha256": "e6d0014be38ccdb69001371b7a694b2fc97bd5c018566175db8af303b7d7d764",
+      "architectures": [
+        "arm64-v8a"
+      ],
+      "version": "0.21.2-godot.58",
+      "code": 21258
+    }
+  ]
+}

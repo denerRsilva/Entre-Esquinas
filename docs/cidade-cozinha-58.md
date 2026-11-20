@@ -90,3 +90,8 @@ nem cobre os botões inferiores do HUD.
 A auditoria de arte confere os canvases registrados e a de migração mantém zero
 JavaScript. APKs universal e ARM64 têm a mesma identidade e assinatura anteriores.
 Instalação e desempenho em aparelho Android físico ainda precisam ser avaliados.
+
+O pacote exportado também iniciou fora do editor: carregou a cidade, entrou
+no mercado, comprou ingredientes, serializou a partida e retornou à cozinha.
+Os APKs passaram na verificação de assinatura e conteúdo. Universal: 97.060.532
+bytes; ARM64: 40.093.056 bytes. [Metadados e hashes](cidade-cozinha-58/compilacao.json).
